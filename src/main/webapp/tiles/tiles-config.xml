@@ -1,0 +1,71 @@
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+	
+	<definition name="main" template="/vistas/templates/main.jsp">
+		<put-attribute name="titulo" value="LISTA DE CANDIDATOS PARA ELECCIONES DEL COMITÉ DE SEGURIDAD Y SALUD EN EL TRABAJO" />
+		<put-attribute name="cabecera" value="/vistas/templates/cabecera.jsp" />
+		<put-attribute name="pie" value="/vistas/templates/pie.jsp" />
+	</definition>
+	
+	<definition name="main_login" template="/vistas/templates/main_login.jsp">
+		<put-attribute name="titulo" value="SIGAMM" />
+		<put-attribute name="pie" value="/vistas/templates/pie.jsp" />
+	</definition>
+	
+	<definition name="error" extends="main_login">
+		<put-attribute name="contenido" value="/error.jsp" />
+	</definition>
+	
+	<definition name="login" extends="main_login">
+		<put-attribute name="contenido" value="/login.jsp" />
+	</definition>
+	
+	<definition name="resetear" extends="main_login">
+		<put-attribute name="contenido" value="/cambiarClave.jsp" />
+	</definition>
+	
+	<definition name="inicio" extends="main">
+		<put-attribute name="contenido" value="/vistas/index.jsp" />
+	</definition>
+	 
+	<definition name="muestra" extends="main">
+		<put-attribute name="contenido" value="/vistas/muestra.jsp" />
+		<put-attribute name="titulo" value="Detalle del Usuario" />
+	</definition>
+	
+	<!-- REPORTES -->
+	<definition name="reportes/reporteVisitas" extends="main">
+		<put-attribute name="contenido" value="/vistas/reportes/reporteVisitas.jsp" />
+		<put-attribute name="titulo" value="Reporte de Visitas" />
+	</definition>
+	
+	<definition name="reportes/reporteEleccionesResultado" extends="main">
+		<put-attribute name="contenido" value="/vistas/reportes/reporteEleccionesResultado.jsp" />
+		<put-attribute name="titulo" value="Reporte Resultado Elecciones" />
+	</definition>
+	
+	<definition name="reportes/reporteEleccionesResumen" extends="main">
+		<put-attribute name="contenido" value="/vistas/reportes/reporteEleccionesResumen.jsp" />
+		<put-attribute name="titulo" value="Reporte Resumen Elecciones" />
+	</definition>
+	
+	<definition name="reportes/reporteEleccionesUt" extends="main">
+		<put-attribute name="contenido" value="/vistas/reportes/reporteEleccionesUt.jsp" />
+		<put-attribute name="titulo" value="Reporte Elecciones por Unidad Territorial" />
+	</definition>
+	
+	<!-- MANTENIMIENTO -->
+	<definition name="mantenimiento/usuarios" extends="main">
+		<put-attribute name="contenido" value="/vistas/mantenimiento/usuarios.jsp" />
+		<put-attribute name="titulo" value="Reporte de Usuarios" />
+	</definition>
+	
+	<definition name="mantenimiento/puesto" extends="main">
+		<put-attribute name="contenido" value="/vistas/mantenimiento/puesto.jsp" />
+		<put-attribute name="titulo" value="Reporte de Puestos" />
+	</definition>
+	
+</tiles-definitions>
