@@ -27,15 +27,25 @@
 		 border-top-right-radius: 5px;
 	}
 	.boton {
-	  background:none;
-	  border:0;
-	  margin:0;
-	  padding:0;
-	  outline:0 none;
+		background:none;
+	  	border:0;
+	  	margin:0;
+	  	padding:0;
+	  	outline:0 none;
+	}
+	
+	.tablaCabecera{
+		background-color: #428bca;
+		color:white;
+        /*font-family:Tahoma, Geneva, sans-serif;*/
+        /*font-size:12px;*/
+        font-weight: bold;
 	}
 </style>
 <script>
 $(document).ready(function(){	
+	
+	$('[data-toggle="popover"]').popover({ placement : 'right', trigger: "hover" });
 	
 	$.ajax({
         type: "POST",
@@ -77,7 +87,7 @@ function buscarUsuarioXDni(){
         cache : false,
         data: parametros,
         success: function(result){
-            select = "";
+            select = "<option value='0'>Seleccionar</option>";
         	$.each(result.rows, function(id, obj){
                 
                 select += "<option value=" + obj.codigoPuesto + " >" + obj.nroPuesto + "</option>"; 
@@ -93,10 +103,12 @@ function buscarUsuarioXDni(){
 function colorEtiquetas(){
 	
 	$("#lblpuesto").css("color", "black");
-	$("#lblgiroComercial").css("color", "black");
+	$("#lblconcepto").css("color", "black");
+	$("#lblmonto").css("color", "black");
 	
 	$("#lblpuesto-img").hide();
-	$("#lblgiroComercial-img").hide();
+	$("#lblconcepto-img").hide();
+	$("#lblmonto-img").hide();
 	
 }
 
@@ -122,59 +134,86 @@ function nuevoCobro(){
 	$("#btnBuscar").attr("disabled", false);
 	
 	buscarUsuarioXDni();
+	
+	var tabla = document.getElementById("tabla_resultado");
+	var filasTabla = tabla.rows.length;
+	
+	for(var i = 0; i < filasTabla - 1; i++) {
+		
+ 		if(i > 0){
+ 			
+ 			tabla.deleteRow(1);
+ 			
+ 		}
+ 		
+ 	}
+	
+	$("#totalesLetras").html("");
+	$("#totales").html("");
+	$("#btnAgregar").attr("disabled", false);
+ 	
 }
 
 function guardar(){
 	
 	var ruta = obtenerContexto();
-			
+	
 	jsonObj = [];
 	var parametros = new Object();
 	parametros.codigoUsuario = $("#codigoUsuario").val();
-	parametros.nroPuesto = $("#puesto").val();
-	parametros.codigoPuesto = $("#codigoPuesto").val();
+	parametros.serie = "0001";
+	parametros.secuencia = "00002";
+	
+    $("#tabla_resultado tbody tr").each(function (item) {
+        var this_row = $(this);
+        var numero = $.trim(this_row.find('td:eq(0)').html());
+        var codConcepto = $.trim(this_row.find('td:eq(1)').html());
+        var desConcepto = $.trim(this_row.find('td:eq(2)').html());
+        var monto = $.trim(this_row.find('td:eq(3)').html());
+        var codPuesto = $.trim(this_row.find('td:eq(4)').html());
 		
+        if(monto != "Monto" || codPuesto != "Cod.Puesto" || codConcepto != "Cod.Concepto"){
+	        objetos = {};
+	        objetos.codigoPuesto = codPuesto;
+	        objetos.codigoConcepto = codConcepto;
+	        objetos.monto = monto;
+	        jsonObj.push(objetos);
+        }
+        
+    });
+    
+    parametros.facturacionDetalle = JSON.stringify(jsonObj);
+	
 	$.ajax({
 		type: "POST",
 	    async:false,
-	    url: "grabar-puesto.json",
+	    url: "grabar-facturacion.json",
 	    cache : false,
 	    data: parametros,
 	    success: function(result){
-	            
-	        if(result.camposObligatorios.length == 0){
-                	
-            	$('#puesto_modal').modal('hide');
-            	
-	            $.gritter.add({
-					// (string | mandatory) the heading of the notification
-					title: 'Mensaje',
-					// (string | mandatory) the text inside the notification
-					text: result.mensaje,
-					// (string | optional) the image to display on the left
-					image: "/" + ruta + "/recursos/images/confirm.png",
-					// (bool | optional) if you want it to fade out on its own or just sit there
-					sticky: false,
-					// (int | optional) the time you want it to be alive for before fading out
-					time: ''
-				});
-	            
-	            //cargarPuestos();
-	            
-			}else{
-                	
-            	colorEtiquetas();
-            	fila = "";
-            	$.each(result.camposObligatorios, function(id, obj){
-                        
-                	$("#" + obj.nombreCampo).css("color", "red");
-                    $("#" + obj.nombreCampo + "-img").show();
-                    $("#" + obj.nombreCampo + "-img").attr("data-content", obj.descripcion);
-                        
-				});
-                	
-			}
-                
+	        
+	    	//alert("idFacturacion : " + result.idFacturacion + "\nLenCamposObligatorios : " + result.camposObligatorios.length);
+	    	
+	    	$.gritter.add({
+				// (string | mandatory) the heading of the notification
+				title: 'Mensaje',
+				// (string | mandatory) the text inside the notification
+				text: result.mensaje,
+				// (string | optional) the image to display on the left
+				image: "/" + ruta + "/recursos/images/confirm.png",
+				// (bool | optional) if you want it to fade out on its own or just sit there
+				sticky: false,
+				// (int | optional) the time you want it to be alive for before fading out
+				time: ''
+			});
+	    	
+	    	if(result.idFacturacion > 0){
+		    	
+				$("#btnAgregar").attr("disabled", true);		    	
+				$(".btnEliminar").attr("disabled", true);
+					
+		    }
+	    	
 		}
 	});
 }
@@ -216,26 +255,64 @@ function agregarConcepto(){
 	var ruta = obtenerContexto();
 	codigoConcepto = $("#codigoConcepto").val();
 	descripcionConcepto = $("#concepto").val();
+	codigoPuesto = $("#codigoPuesto").val();
 	monto = $("#monto").val();
 	
-	if(monto == ""){
-		alert("Debe agregar un nombre.")
+	if(codigoPuesto == 0){
+		
+		colorEtiquetas();
+		
+		$("#lblpuesto").css("color", "red");
+        $("#lblpuesto-img").show();
+        $("#lblpuesto-img").attr("data-content", "Seleccione un Puesto.");
+        
+	}else if(codigoConcepto == 0){
+		
+		colorEtiquetas();
+		
+		$("#lblconcepto").css("color", "red");
+        $("#lblconcepto-img").show();
+        $("#lblconcepto-img").attr("data-content", "Seleccione un Concepto.");
+        
+	}else if(monto == ""){
+		
+		colorEtiquetas();
+		
+        $("#lblmonto").css("color", "red");
+        $("#lblmonto-img").show();
+        $("#lblmonto-img").attr("data-content", "Ingrese un monto valido.");
+        
 	}else{
-		$('#tabla_resultado tbody tr:last').after(
-			"<tr>" +
-            "<td align='right'>1</td>" + 
-            "<td align='center'>" + codigoConcepto + "</td>" +
-			"<td align='left'>" + descripcionConcepto + "</td>" +
-			"<td align='right'>" + monto + "</td>" +
-			"<td align='center'>" +
-			"<button type='button' class='boton' onclick='eliminarFila(this);'>" +
-				"<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' alt='Eliminar' />" +
-			"</button></td>" +
-			"</tr>");
+		if(validarSiNumero(monto)){
 			
-		$("#monto").val("");
-		$("#concepto").val("");
-		$("#codigoConcepto").val("0");
+			colorEtiquetas();
+			
+			$('#tabla_resultado tbody tr:last').after(
+				"<tr>" +
+	            "<td align='right'>1</td>" + 
+	            "<td align='center' style='display:none;'>" + codigoConcepto + "</td>" +
+				"<td align='left'>" + descripcionConcepto + "</td>" +
+				"<td align='right'>" + monto + "</td>" +
+				"<td align='center' style='display:none;'>" + codigoPuesto + "</td>" +
+				"<td align='center'>" +
+				"<button type='button' class='boton btnEliminar' onclick='eliminarFila(this);'>" +
+					"<img src='/"+ruta+"/recursos/images/icons/eliminar_16x16.png' alt='Eliminar' />" +
+				"</button></td>" +
+				"</tr>");
+				
+			$("#monto").val("");
+			$("#concepto").val("");
+			$("#codigoConcepto").val("0");
+			
+		}else{
+			
+			colorEtiquetas();
+			
+			$("#lblmonto").css("color", "red");
+            $("#lblmonto-img").show();
+            $("#lblmonto-img").attr("data-content", "Ingrese un monto valido.");
+            
+		}
 	}
 	
 	calculoTotal();
@@ -248,13 +325,13 @@ function calculoTotal(){
         var this_row = $(this);
         var monto = $.trim(this_row.find('td:eq(3)').html());
 		if(monto != "" && monto != "Monto"){
-			console.log("[" + monto + "]");
+			//console.log("[" + monto + "]");
 			total = parseFloat(total) + parseFloat(monto);
 		}
     });
 	
 	$("#totalesLetras").html(NumeroALetras(total));
-	$("#totales").html(total);
+	$("#totales").html(total.toFixed(2));
 }
 
 function eliminarFila(t){
@@ -264,6 +341,24 @@ function eliminarFila(t){
     var table = tr.parentNode;
 	table.removeChild(tr);
 	calculoTotal();
+	
+}
+
+function validarSiNumero(numero){
+	
+	//if (!/^([0-9])*$/.test(numero)){
+	if (!/^([0-9])*[.]?[0-9]*$/.test(numero)){
+		return false;	
+	}else{
+		return true;
+	}
+	
+}
+	
+function cargarPuestos(){
+	
+	puesto = $("#puesto").val();
+	$("#codigoPuesto").val(puesto);
 	
 }
 </script>
@@ -282,12 +377,12 @@ function eliminarFila(t){
 				<img src="recursos/images/icons/nuevo_16x16.png" alt="Nuevo" />&nbsp;Nuevo
 			</button>
 			&nbsp;
-			<button type="button" class="btn btn-primary" onclick="guardar(1)">
+			<button type="button" class="btn btn-primary" onclick="guardar()">
 				<img src="recursos/images/icons/guardar_16x16.png" alt="Buscar" />&nbsp;Guardar
 			</button>
 			&nbsp;
 			<button type="button" class="btn btn-primary">
-				<img src="recursos/images/icons/guardar_16x16.png" alt="Reservar" />&nbsp;Reservar
+				<img src="recursos/images/icons/reservar2_16x16.png" alt="Reservar" />&nbsp;Reservar
 			</button>
 		</td>
 	</tr>
@@ -370,7 +465,7 @@ function eliminarFila(t){
 		<td width="5px">&nbsp;</td>
 		<td><b>:</b></td>
 		<td width="5px">&nbsp;</td>
-		<td><select id="puesto" class="form-control" /></td>
+		<td><select id="puesto" class="form-control" onchange="cargarPuestos();" /></td>
 		<td valign="top"><img id="lblpuesto-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 	</tr>
 	<tr>
@@ -388,7 +483,7 @@ function eliminarFila(t){
 		<td width="5px">&nbsp;</td>
 		<td><b>:</b></td>
 		<td width="5px">&nbsp;</td>
-		<td><input type="text" id="monto" class="form-control" maxlength="4" /></td>
+		<td><input type="text" id="monto" class="form-control" maxlength="6" /></td>
 		<td valign="top"><img id="lblmonto-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 	</tr>
 	<tr>
@@ -398,8 +493,8 @@ function eliminarFila(t){
 		<td>&nbsp;</td>
 		<td width="5px">&nbsp;</td>
 		<td>
-			<button type="button" class="btn btn-primary" onclick="agregarConcepto()">
-				<img src="recursos/images/icons/guardar_16x16.png" alt="Agregar" />&nbsp;Agregar
+			<button type="button" id="btnAgregar" class="btn btn-primary" onclick="agregarConcepto()">
+				<img src="recursos/images/icons/agregar2_16x16.png" alt="Agregar" />&nbsp;Agregar
 			</button>
 		</td>
 		<td valign="top">&nbsp;</td>
@@ -409,17 +504,18 @@ function eliminarFila(t){
 	</tr>
 	<tr>
 		<td colspan="7">
-			<table border="1" width="100%" id="tabla_resultado" cellspacing="1" cellpadding="1" class="tabla" width="50%">
+			<table border="1" width="100%" id="tabla_resultado" cellspacing="5" cellpadding="5" class="tabla" width="50%">
 				<tr>
-					<td align="center">Nro</td>
-					<td align="center">Cod.Concepto</td>
-					<td align="center">Desc.Concepto</td>
-					<td align="center">Monto</td>
-					<td align="center">Accion</td>
+					<td align="center" class="tablaCabecera">Nro</td>
+					<td align="center" class="tablaCabecera" style="display:none;">Cod.Concepto</td>
+					<td align="center" class="tablaCabecera">Desc.Concepto</td>
+					<td align="center" class="tablaCabecera">Monto</td>
+					<td align="center" class="tablaCabecera" style="display:none;">Cod.Puesto</td>
+					<td align="center" class="tablaCabecera">Accion</td>
 				</tr>
 				<tfoot>
 				<tr>
-					<td colspan="3" align="left"><b><span id="totalesLetras" /></b></td>
+					<td colspan="2" align="left"><b><span id="totalesLetras" /></b></td>
 					<td align="right"><b><span id="totales" /></b></td>
 					<td align="center"></td>
 				</tr>
