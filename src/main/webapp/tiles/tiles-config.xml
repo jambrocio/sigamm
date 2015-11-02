@@ -68,4 +68,10 @@
 		<put-attribute name="titulo" value="Reporte de Puestos" />
 	</definition>
 	
+	<!-- FACTURACION -->
+	<definition name="facturacion/cobro" extends="main">
+		<put-attribute name="contenido" value="/vistas/facturacion/cobro.jsp" />
+		<put-attribute name="titulo" value="Facturacion" />
+	</definition>
+	
 </tiles-definitions>

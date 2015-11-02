@@ -22,7 +22,10 @@
 		<property name="username" value="SIGAMM" />
 		<property name="password" value="virgo1984" />
 		<property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+		<!-- 
 		<property name="url" value="jdbc:oracle:thin:@192.168.30.187:1521:xe" />
+		 -->
+		<property name="url" value="jdbc:oracle:thin:@192.168.131.134:1521:xe" />
 	</bean>
 	
 	 

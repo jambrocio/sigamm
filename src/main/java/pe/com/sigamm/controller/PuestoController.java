@@ -106,7 +106,7 @@ private static final Logger log = Logger.getLogger(PuestoController.class);
 	@RequestMapping(value = "/reporte-puestos.json", method = RequestMethod.POST, produces="application/json")
 	public @ResponseBody ResponseListBean<Puesto> reportePuestos(
 			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
-			@RequestParam(value = "rows", defaultValue = "5") Integer registros,
+			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
 			@RequestParam(value = "dni", defaultValue = "0") String dni){
 		
 		ResponseListBean<Puesto> response = new ResponseListBean<Puesto>();

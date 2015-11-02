@@ -149,8 +149,16 @@
 		</dependency>
 		
 		<!-- driver para oracle -->
+		<!-- 
 		<dependency>
 			<groupId>pe.com.pension65.drivers</groupId>
+			<artifactId>oracle</artifactId>
+			<version>6.0</version>
+		</dependency>
+		-->
+		
+		<dependency>
+			<groupId>oracle.driver</groupId>
 			<artifactId>oracle</artifactId>
 			<version>6.0</version>
 		</dependency>

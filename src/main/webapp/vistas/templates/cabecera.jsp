@@ -24,6 +24,7 @@
 <script type="text/javascript" src="recursos/js/jquery.autocomplete.js"></script>
 <script type="text/javascript" src="recursos/js/jQueryRotateCompressed.2.2.js"></script>
 <script type="text/javascript" src="recursos/js/util.js"></script>
+<script type="text/javascript" src="recursos/js/convertidor.js"></script>
 
 <link rel="stylesheet" type="text/css" media="screen" href="recursos/js/jqgrid/css/ui.jqgrid.css" />
 
