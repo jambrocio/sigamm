@@ -73,5 +73,12 @@
 		<put-attribute name="contenido" value="/vistas/facturacion/cobro.jsp" />
 		<put-attribute name="titulo" value="Facturacion" />
 	</definition>
+
+	<!-- SERVICIOS -->
+	<definition name="servicios/recibo_luz" extends="main">
+		<put-attribute name="contenido" value="/vistas/servicios/recibo_luz.jsp" />
+		<put-attribute name="titulo" value="Recibo de Luz Original" />
+	</definition>
+
 	
 </tiles-definitions>
