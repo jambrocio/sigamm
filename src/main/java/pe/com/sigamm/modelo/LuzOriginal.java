@@ -1,16 +1,14 @@
 package pe.com.sigamm.modelo; 
 
-import java.util.Date;
 
 public class LuzOriginal {
 	
-	int numLecturaInicial;
-	int numLecturaFinal;
-	double numMonto;
-	double numCostoWatts;
-	Date fecPeriodo;
-	double numPendienteFac;
-	int numEstado;
+	int codigoReciboLuzOriginal;
+	String periodo;
+	String fecVencimiento;
+	String fecEmision;
+	double costoWats;
+	int estado;
 	double repoManCnx;
 	double cargoFijo;
 	double alumPublic;
@@ -22,22 +20,22 @@ public class LuzOriginal {
 	double redonMesAct;
 	double redonMesAnt;
 	double interesConv;
-	double energActFraptaActual;	
-	double energActFraptaAnteri;
-	double energActFraptaDifer;
-	double energActFraptaFactor;
-	double energActFraptaConsu;
-	double energActFraptaConfa;
-	double energActFraptaPreuni;
-	double energActFraptaTotal;
-	double energActHorptaActu;
-	double energActHorptaAnt;
-	double energActHorptaDif;
-	double energActHorptaFac;
-	double energActHorptaCons;
-	double energActHorptaConfac;
-	double energActHorptaPreuni;
-	double energActHorptaTotal;
+	double energActFraPtaActual;	
+	double energActFraPtaAnteri;
+	double energActFraPtaDifer;
+	double energActFraPtaFactor;
+	double energActFraPtaConsu;
+	double energActFraPtaConfa;
+	double energActFraPtaPreuni;
+	double energActFraPtaTotal;
+	double energActHorPtaActu;
+	double energActHorPtaAnt;
+	double energActHorPtaDif;
+	double energActHorPtaFac;
+	double energActHorPtaCons;
+	double energActHorPtaConfac;
+	double energActHorPtaPreuni;
+	double energActHorPtaTotal;
 	double energReacInicial;
 	double energReacAnteri;
 	double energReacDifere;
@@ -46,65 +44,52 @@ public class LuzOriginal {
 	double energReacFaccons;
 	double energReacPreuni;
 	double energReacTotal;
-	double potenCiafpIni;
-	double potenCiafpAnte;
-	double potenCiafpDif;
-	double potenCiafpFac;
-	double potenCiafpCons;
-	double potenCiahpAct;
-	double potenCiahpAnt;
-	double potenCiahpDif;
-	double potenCiahpFac;
-	double potenCiahpCons;
+	double potenciaFpIni;
+	double potenciaFpAnte;
+	double potenciaFpDif;
+	double potenciaFpFac;
+	double potenciaFpCons;
+	double potenciaHpAct;
+	double potenciaHpAnt;
+	double potenciaHpDif;
+	double potenciaHpFac;
+	double potenciaHpCons;
 	double potUsoRedDistConfac;
 	double potUsoRedDistPreuni;
-	double potGenfpConfac;
-	double potGenfppReuni;
+	double potGenFpConfac;
+	double potGenFppReuni;
 	double potUsoRedDistTotal;
-	double potGenfpTotal;
-	Date fecVencimiento;
-	Date fecEmision;
-	public int getNumLecturaInicial() {
-		return numLecturaInicial;
+	double potGenFpTotal;
+	
+	public String getPeriodo() {
+		return periodo;
 	}
-	public void setNumLecturaInicial(int numLecturaInicial) {
-		this.numLecturaInicial = numLecturaInicial;
+	public void setPeriodo(String periodo) {
+		this.periodo = periodo;
 	}
-	public int getNumLecturaFinal() {
-		return numLecturaFinal;
+	public String getFecVencimiento() {
+		return fecVencimiento;
 	}
-	public void setNumLecturaFinal(int numLecturaFinal) {
-		this.numLecturaFinal = numLecturaFinal;
+	public void setFecVencimiento(String fecVencimiento) {
+		this.fecVencimiento = fecVencimiento;
 	}
-	public double getNumMonto() {
-		return numMonto;
+	public String getFecEmision() {
+		return fecEmision;
 	}
-	public void setNumMonto(double numMonto) {
-		this.numMonto = numMonto;
+	public void setFecEmision(String fecEmision) {
+		this.fecEmision = fecEmision;
 	}
-	public double getNumCostoWatts() {
-		return numCostoWatts;
+	public double getCostoWats() {
+		return costoWats;
 	}
-	public void setNumCostoWatts(double numCostoWatts) {
-		this.numCostoWatts = numCostoWatts;
+	public void setCostoWats(double costoWats) {
+		this.costoWats = costoWats;
 	}
-	public Date getFecPeriodo() {
-		return fecPeriodo;
+	public int getEstado() {
+		return estado;
 	}
-	public void setFecPeriodo(Date fecPeriodo) {
-		this.fecPeriodo = fecPeriodo;
-	}
-	public double getNumPendienteFac() {
-		return numPendienteFac;
-	}
-	public void setNumPendienteFac(double numPendienteFac) {
-		this.numPendienteFac = numPendienteFac;
-	}
-	public int getNumEstado() {
-		return numEstado;
-	}
-	public void setNumEstado(int numEstado) {
-		this.numEstado = numEstado;
+	public void setEstado(int estado) {
+		this.estado = estado;
 	}
 	public double getRepoManCnx() {
 		return repoManCnx;
@@ -172,101 +157,101 @@ public class LuzOriginal {
 	public void setInteresConv(double interesConv) {
 		this.interesConv = interesConv;
 	}
-	public double getEnergActFraptaActual() {
-		return energActFraptaActual;
+	public double getEnergActFraPtaActual() {
+		return energActFraPtaActual;
 	}
-	public void setEnergActFraptaActual(double energActFraptaActual) {
-		this.energActFraptaActual = energActFraptaActual;
+	public void setEnergActFraPtaActual(double energActFraPtaActual) {
+		this.energActFraPtaActual = energActFraPtaActual;
 	}
-	public double getEnergActFraptaAnteri() {
-		return energActFraptaAnteri;
+	public double getEnergActFraPtaAnteri() {
+		return energActFraPtaAnteri;
 	}
-	public void setEnergActFraptaAnteri(double energActFraptaAnteri) {
-		this.energActFraptaAnteri = energActFraptaAnteri;
+	public void setEnergActFraPtaAnteri(double energActFraPtaAnteri) {
+		this.energActFraPtaAnteri = energActFraPtaAnteri;
 	}
-	public double getEnergActFraptaDifer() {
-		return energActFraptaDifer;
+	public double getEnergActFraPtaDifer() {
+		return energActFraPtaDifer;
 	}
-	public void setEnergActFraptaDifer(double energActFraptaDifer) {
-		this.energActFraptaDifer = energActFraptaDifer;
+	public void setEnergActFraPtaDifer(double energActFraPtaDifer) {
+		this.energActFraPtaDifer = energActFraPtaDifer;
 	}
-	public double getEnergActFraptaFactor() {
-		return energActFraptaFactor;
+	public double getEnergActFraPtaFactor() {
+		return energActFraPtaFactor;
 	}
-	public void setEnergActFraptaFactor(double energActFraptaFactor) {
-		this.energActFraptaFactor = energActFraptaFactor;
+	public void setEnergActFraPtaFactor(double energActFraPtaFactor) {
+		this.energActFraPtaFactor = energActFraPtaFactor;
 	}
-	public double getEnergActFraptaConsu() {
-		return energActFraptaConsu;
+	public double getEnergActFraPtaConsu() {
+		return energActFraPtaConsu;
 	}
-	public void setEnergActFraptaConsu(double energActFraptaConsu) {
-		this.energActFraptaConsu = energActFraptaConsu;
+	public void setEnergActFraPtaConsu(double energActFraPtaConsu) {
+		this.energActFraPtaConsu = energActFraPtaConsu;
 	}
-	public double getEnergActFraptaConfa() {
-		return energActFraptaConfa;
+	public double getEnergActFraPtaConfa() {
+		return energActFraPtaConfa;
 	}
-	public void setEnergActFraptaConfa(double energActFraptaConfa) {
-		this.energActFraptaConfa = energActFraptaConfa;
+	public void setEnergActFraPtaConfa(double energActFraPtaConfa) {
+		this.energActFraPtaConfa = energActFraPtaConfa;
 	}
-	public double getEnergActFraptaPreuni() {
-		return energActFraptaPreuni;
+	public double getEnergActFraPtaPreuni() {
+		return energActFraPtaPreuni;
 	}
-	public void setEnergActFraptaPreuni(double energActFraptaPreuni) {
-		this.energActFraptaPreuni = energActFraptaPreuni;
+	public void setEnergActFraPtaPreuni(double energActFraPtaPreuni) {
+		this.energActFraPtaPreuni = energActFraPtaPreuni;
 	}
-	public double getEnergActFraptaTotal() {
-		return energActFraptaTotal;
+	public double getEnergActFraPtaTotal() {
+		return energActFraPtaTotal;
 	}
-	public void setEnergActFraptaTotal(double energActFraptaTotal) {
-		this.energActFraptaTotal = energActFraptaTotal;
+	public void setEnergActFraPtaTotal(double energActFraPtaTotal) {
+		this.energActFraPtaTotal = energActFraPtaTotal;
 	}
-	public double getEnergActHorptaActu() {
-		return energActHorptaActu;
+	public double getEnergActHorPtaActu() {
+		return energActHorPtaActu;
 	}
-	public void setEnergActHorptaActu(double energActHorptaActu) {
-		this.energActHorptaActu = energActHorptaActu;
+	public void setEnergActHorPtaActu(double energActHorPtaActu) {
+		this.energActHorPtaActu = energActHorPtaActu;
 	}
-	public double getEnergActHorptaAnt() {
-		return energActHorptaAnt;
+	public double getEnergActHorPtaAnt() {
+		return energActHorPtaAnt;
 	}
-	public void setEnergActHorptaAnt(double energActHorptaAnt) {
-		this.energActHorptaAnt = energActHorptaAnt;
+	public void setEnergActHorPtaAnt(double energActHorPtaAnt) {
+		this.energActHorPtaAnt = energActHorPtaAnt;
 	}
-	public double getEnergActHorptaDif() {
-		return energActHorptaDif;
+	public double getEnergActHorPtaDif() {
+		return energActHorPtaDif;
 	}
-	public void setEnergActHorptaDif(double energActHorptaDif) {
-		this.energActHorptaDif = energActHorptaDif;
+	public void setEnergActHorPtaDif(double energActHorPtaDif) {
+		this.energActHorPtaDif = energActHorPtaDif;
 	}
-	public double getEnergActHorptaFac() {
-		return energActHorptaFac;
+	public double getEnergActHorPtaFac() {
+		return energActHorPtaFac;
 	}
-	public void setEnergActHorptaFac(double energActHorptaFac) {
-		this.energActHorptaFac = energActHorptaFac;
+	public void setEnergActHorPtaFac(double energActHorPtaFac) {
+		this.energActHorPtaFac = energActHorPtaFac;
 	}
-	public double getEnergActHorptaCons() {
-		return energActHorptaCons;
+	public double getEnergActHorPtaCons() {
+		return energActHorPtaCons;
 	}
-	public void setEnergActHorptaCons(double energActHorptaCons) {
-		this.energActHorptaCons = energActHorptaCons;
+	public void setEnergActHorPtaCons(double energActHorPtaCons) {
+		this.energActHorPtaCons = energActHorPtaCons;
 	}
-	public double getEnergActHorptaConfac() {
-		return energActHorptaConfac;
+	public double getEnergActHorPtaConfac() {
+		return energActHorPtaConfac;
 	}
-	public void setEnergActHorptaConfac(double energActHorptaConfac) {
-		this.energActHorptaConfac = energActHorptaConfac;
+	public void setEnergActHorPtaConfac(double energActHorPtaConfac) {
+		this.energActHorPtaConfac = energActHorPtaConfac;
 	}
-	public double getEnergActHorptaPreuni() {
-		return energActHorptaPreuni;
+	public double getEnergActHorPtaPreuni() {
+		return energActHorPtaPreuni;
 	}
-	public void setEnergActHorptaPreuni(double energActHorptaPreuni) {
-		this.energActHorptaPreuni = energActHorptaPreuni;
+	public void setEnergActHorPtaPreuni(double energActHorPtaPreuni) {
+		this.energActHorPtaPreuni = energActHorPtaPreuni;
 	}
-	public double getEnergActHorptaTotal() {
-		return energActHorptaTotal;
+	public double getEnergActHorPtaTotal() {
+		return energActHorPtaTotal;
 	}
-	public void setEnergActHorptaTotal(double energActHorptaTotal) {
-		this.energActHorptaTotal = energActHorptaTotal;
+	public void setEnergActHorPtaTotal(double energActHorPtaTotal) {
+		this.energActHorPtaTotal = energActHorPtaTotal;
 	}
 	public double getEnergReacInicial() {
 		return energReacInicial;
@@ -316,65 +301,65 @@ public class LuzOriginal {
 	public void setEnergReacTotal(double energReacTotal) {
 		this.energReacTotal = energReacTotal;
 	}
-	public double getPotenCiafpIni() {
-		return potenCiafpIni;
+	public double getPotenciaFpIni() {
+		return potenciaFpIni;
 	}
-	public void setPotenCiafpIni(double potenCiafpIni) {
-		this.potenCiafpIni = potenCiafpIni;
+	public void setPotenciaFpIni(double potenciaFpIni) {
+		this.potenciaFpIni = potenciaFpIni;
 	}
-	public double getPotenCiafpAnte() {
-		return potenCiafpAnte;
+	public double getPotenciaFpAnte() {
+		return potenciaFpAnte;
 	}
-	public void setPotenCiafpAnte(double potenCiafpAnte) {
-		this.potenCiafpAnte = potenCiafpAnte;
+	public void setPotenciaFpAnte(double potenciaFpAnte) {
+		this.potenciaFpAnte = potenciaFpAnte;
 	}
-	public double getPotenCiafpDif() {
-		return potenCiafpDif;
+	public double getPotenciaFpDif() {
+		return potenciaFpDif;
 	}
-	public void setPotenCiafpDif(double potenCiafpDif) {
-		this.potenCiafpDif = potenCiafpDif;
+	public void setPotenciaFpDif(double potenciaFpDif) {
+		this.potenciaFpDif = potenciaFpDif;
 	}
-	public double getPotenCiafpFac() {
-		return potenCiafpFac;
+	public double getPotenciaFpFac() {
+		return potenciaFpFac;
 	}
-	public void setPotenCiafpFac(double potenCiafpFac) {
-		this.potenCiafpFac = potenCiafpFac;
+	public void setPotenciaFpFac(double potenciaFpFac) {
+		this.potenciaFpFac = potenciaFpFac;
 	}
-	public double getPotenCiafpCons() {
-		return potenCiafpCons;
+	public double getPotenciaFpCons() {
+		return potenciaFpCons;
 	}
-	public void setPotenCiafpCons(double potenCiafpCons) {
-		this.potenCiafpCons = potenCiafpCons;
+	public void setPotenciaFpCons(double potenciaFpCons) {
+		this.potenciaFpCons = potenciaFpCons;
 	}
-	public double getPotenCiahpAct() {
-		return potenCiahpAct;
+	public double getPotenciaHpAct() {
+		return potenciaHpAct;
 	}
-	public void setPotenCiahpAct(double potenCiahpAct) {
-		this.potenCiahpAct = potenCiahpAct;
+	public void setPotenciaHpAct(double potenciaHpAct) {
+		this.potenciaHpAct = potenciaHpAct;
 	}
-	public double getPotenCiahpAnt() {
-		return potenCiahpAnt;
+	public double getPotenciaHpAnt() {
+		return potenciaHpAnt;
 	}
-	public void setPotenCiahpAnt(double potenCiahpAnt) {
-		this.potenCiahpAnt = potenCiahpAnt;
+	public void setPotenciaHpAnt(double potenciaHpAnt) {
+		this.potenciaHpAnt = potenciaHpAnt;
 	}
-	public double getPotenCiahpDif() {
-		return potenCiahpDif;
+	public double getPotenciaHpDif() {
+		return potenciaHpDif;
 	}
-	public void setPotenCiahpDif(double potenCiahpDif) {
-		this.potenCiahpDif = potenCiahpDif;
+	public void setPotenciaHpDif(double potenciaHpDif) {
+		this.potenciaHpDif = potenciaHpDif;
 	}
-	public double getPotenCiahpFac() {
-		return potenCiahpFac;
+	public double getPotenciaHpFac() {
+		return potenciaHpFac;
 	}
-	public void setPotenCiahpFac(double potenCiahpFac) {
-		this.potenCiahpFac = potenCiahpFac;
+	public void setPotenciaHpFac(double potenciaHpFac) {
+		this.potenciaHpFac = potenciaHpFac;
 	}
-	public double getPotenCiahpCons() {
-		return potenCiahpCons;
+	public double getPotenciaHpCons() {
+		return potenciaHpCons;
 	}
-	public void setPotenCiahpCons(double potenCiahpCons) {
-		this.potenCiahpCons = potenCiahpCons;
+	public void setPotenciaHpCons(double potenciaHpCons) {
+		this.potenciaHpCons = potenciaHpCons;
 	}
 	public double getPotUsoRedDistConfac() {
 		return potUsoRedDistConfac;
@@ -388,17 +373,17 @@ public class LuzOriginal {
 	public void setPotUsoRedDistPreuni(double potUsoRedDistPreuni) {
 		this.potUsoRedDistPreuni = potUsoRedDistPreuni;
 	}
-	public double getPotGenfpConfac() {
-		return potGenfpConfac;
+	public double getPotGenFpConfac() {
+		return potGenFpConfac;
 	}
-	public void setPotGenfpConfac(double potGenfpConfac) {
-		this.potGenfpConfac = potGenfpConfac;
+	public void setPotGenFpConfac(double potGenFpConfac) {
+		this.potGenFpConfac = potGenFpConfac;
 	}
-	public double getPotGenfppReuni() {
-		return potGenfppReuni;
+	public double getPotGenFppReuni() {
+		return potGenFppReuni;
 	}
-	public void setPotGenfppReuni(double potGenfppReuni) {
-		this.potGenfppReuni = potGenfppReuni;
+	public void setPotGenFppReuni(double potGenFppReuni) {
+		this.potGenFppReuni = potGenFppReuni;
 	}
 	public double getPotUsoRedDistTotal() {
 		return potUsoRedDistTotal;
@@ -406,24 +391,17 @@ public class LuzOriginal {
 	public void setPotUsoRedDistTotal(double potUsoRedDistTotal) {
 		this.potUsoRedDistTotal = potUsoRedDistTotal;
 	}
-	public double getPotGenfpTotal() {
-		return potGenfpTotal;
+	public double getPotGenFpTotal() {
+		return potGenFpTotal;
 	}
-	public void setPotGenfpTotal(double potGenfpTotal) {
-		this.potGenfpTotal = potGenfpTotal;
+	public void setPotGenFpTotal(double potGenFpTotal) {
+		this.potGenFpTotal = potGenFpTotal;
 	}
-	public Date getFecVencimiento() {
-		return fecVencimiento;
+	public int getCodigoReciboLuzOriginal() {
+		return codigoReciboLuzOriginal;
 	}
-	public void setFecVencimiento(Date fecVencimiento) {
-		this.fecVencimiento = fecVencimiento;
+	public void setCodigoReciboLuzOriginal(int codigoReciboLuzOriginal) {
+		this.codigoReciboLuzOriginal = codigoReciboLuzOriginal;
 	}
-	public Date getFecEmision() {
-		return fecEmision;
-	}
-	public void setFecEmision(Date fecEmision) {
-		this.fecEmision = fecEmision;
-	}
-	
 	
 }
