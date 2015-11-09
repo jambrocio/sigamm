@@ -10,6 +10,8 @@ public class Puesto {
 	String nombreFull;
 	String nombreGiro;
 	int reciboLuz;
+	double total;
+	int reciboLuzCreado;
 	
 	public int getCodigoPuesto() {
 		return codigoPuesto;
@@ -58,6 +60,18 @@ public class Puesto {
 	}
 	public void setReciboLuz(int reciboLuz) {
 		this.reciboLuz = reciboLuz;
+	}
+	public double getTotal() {
+		return total;
+	}
+	public void setTotal(double total) {
+		this.total = total;
+	}
+	public int getReciboLuzCreado() {
+		return reciboLuzCreado;
+	}
+	public void setReciboLuzCreado(int reciboLuzCreado) {
+		this.reciboLuzCreado = reciboLuzCreado;
 	}
 	
 }

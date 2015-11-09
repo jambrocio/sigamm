@@ -436,3 +436,129 @@ END;
   -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 
 END PKG_RECIBO_LUZ_ORIG;
+
+
+
+
+  CREATE TABLE "ACMMH"."SIS_RECIBOLUZ_SOCIO" 
+   (	"CODIGOSOCIO" NUMBER(*,0) NOT NULL ENABLE, 
+	"CODIGORECIBO" NUMBER(*,0) NOT NULL ENABLE, 
+	"CORRELATIVO" NUMBER(*,0) NOT NULL ENABLE, 
+	"LECTURAINICIAL" NUMBER(*,0), 
+	"LECTURAFINAL" NUMBER(*,0), 
+	"CONSUMOMES" NUMBER(*,0), 
+	"CARGOFIJO" NUMBER(9,2), 
+	"ALUMBRADOPUBLICO" NUMBER(9,2), 
+	"CARGOENERGIA" NUMBER(9,2), 
+	"SUBTOTALMES" NUMBER(9,2), 
+	"IGV" NUMBER(9,2), 
+	"TOTALMES" NUMBER(9,2), 
+	"USOEQUIPO" NUMBER(9,2), 
+	"SERVICIOMANTENIMIENTO" NUMBER(9,2), 
+	"APORTELEY" NUMBER(9,2), 
+	"RECARGO" NUMBER(9,2), 
+	"REDONDEO" NUMBER(9,2), 
+	"TOTAL" NUMBER(9,2), 
+	"ESTADO" NUMBER DEFAULT 1, 
+	"DEUDAANTERIOR" NUMBER(9,2) DEFAULT 0.00, 
+	"FECHACARGA" TIMESTAMP (6) DEFAULT systimestamp, 
+	"IMPRESO" NUMBER DEFAULT 0, 
+	 CONSTRAINT "SIS_RECIBOLUZ_SOCIO_PK" PRIMARY KEY ("CORRELATIVO", "CODIGOSOCIO", "CODIGORECIBO")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+
+  
+  
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+  create or replace PACKAGE "PKG_RECIBO_LUZ_SOCIO" AS
+TYPE CUR_LIST IS REF CURSOR;
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+  PROCEDURE SP_REPORTE_PUESTO_LUZ_SOCIO(vi_pagina       IN  NUMBER,
+                              vi_registros              IN  NUMBER,
+                              vi_codigo_puesto          IN  NUMBER,
+                              vo_total_registros        OUT NUMBER,
+                              vo_result                 OUT SYS_REFCURSOR);
+  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+END PKG_RECIBO_LUZ_SOCIO;
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+
+
+
+
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+create or replace PACKAGE BODY "PKG_RECIBO_LUZ_SOCIO" 
+AS
+
+  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+  PROCEDURE SP_REPORTE_PUESTO_LUZ_SOCIO(vi_pagina       IN  NUMBER,
+                              vi_registros              IN  NUMBER,
+                              vi_codigo_puesto          IN  NUMBER,
+                              vo_total_registros        OUT NUMBER,
+                              vo_result                 OUT SYS_REFCURSOR) AS
+  vl_inicio NUMBER;
+  vl_fin    NUMBER;                              
+  BEGIN
+    
+    vl_fin := vi_pagina * vi_registros;
+    vl_inicio := vl_fin - (vi_registros - 1);
+    
+    dbms_output.put_line ('INICIO : ' || vl_inicio); 
+    dbms_output.put_line ('FIN : ' || vl_fin); 
+    
+    IF vi_codigo_puesto = '0' THEN
+    
+        SELECT COUNT(*) INTO vo_total_registros
+        FROM sis_puesto p;
+        
+        OPEN vo_result FOR
+            SELECT codigo_puesto, codigo_usuario, nro_puesto, codigo_giro, estado, recibo_luz, total, recibo_luz_creado
+            FROM (
+                SELECT codigo_puesto, codigo_usuario, nro_puesto, codigo_giro, estado, recibo_luz, total, recibo_luz_creado, ROWNUM numfila
+                FROM (
+                      SELECT codigo_puesto, codigo_usuario, nro_puesto, codigo_giro, estado, recibo_luz,
+                            nvl((SELECT total FROM sis_reciboluz_socio 
+                                WHERE codigosocio = nro_puesto and codigorecibo in (SELECT cod_orgrecibo_luz FROM sis_reciboluz_org) ),0) total,
+                            nvl((SELECT 1 FROM sis_reciboluz_socio 
+                                WHERE codigosocio = nro_puesto and codigorecibo in (SELECT cod_orgrecibo_luz FROM sis_reciboluz_org) ),0) recibo_luz_creado
+                      FROM sis_puesto p
+                      WHERE recibo_luz = 1
+                ) A
+            ) B
+            WHERE numfila BETWEEN vl_inicio AND vl_fin;
+            
+    ELSE
+    
+        SELECT COUNT(*) INTO vo_total_registros
+        FROM sis_puesto p
+        WHERE p.codigo_puesto = vi_codigo_puesto;
+        
+        OPEN vo_result FOR
+            SELECT codigo_puesto, codigo_usuario, nro_puesto, codigo_giro, estado, recibo_luz, total, recibo_luz_creado
+            FROM (
+                SELECT codigo_puesto, codigo_usuario, nro_puesto, codigo_giro, estado, recibo_luz, total, recibo_luz_creado, ROWNUM numfila
+                FROM (
+                      SELECT codigo_puesto, codigo_usuario, nro_puesto, codigo_giro, estado, recibo_luz,
+                            nvl((SELECT total FROM sis_reciboluz_socio 
+                                WHERE codigosocio = nro_puesto and codigorecibo in (SELECT cod_orgrecibo_luz FROM sis_reciboluz_org) ),0) total,
+                            nvl((SELECT 1 FROM sis_reciboluz_socio 
+                                WHERE codigosocio = nro_puesto and codigorecibo in (SELECT cod_orgrecibo_luz FROM sis_reciboluz_org) ),0) recibo_luz_creado
+                      FROM sis_puesto p
+                      WHERE p.codigo_puesto = vi_codigo_puesto and recibo_luz = 1
+                ) A
+            ) B
+            WHERE numfila BETWEEN vl_inicio AND vl_fin;
+        
+    END IF;
+  END SP_REPORTE_PUESTO_LUZ_SOCIO;
+  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+END PKG_RECIBO_LUZ_SOCIO;
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --

@@ -391,6 +391,10 @@ function cargarReciboLuzOriginal(){
 function generarReciboLuzSocio(codigoReciboLuzOriginal){
 	console.log("Generar Recibo Luz Socios - [codigoReciboLuzOriginal] : " + codigoReciboLuzOriginal);
 	
+	alert(codigoReciboLuzOriginal);
+	$("#nroRecibo").text(codigoReciboLuzOriginal);
+	alert($("#nroRecibo").text());
+	
 	$('#recibos_luz_socios_modal').modal({
 		backdrop: 'static',
 		keyboard: false
@@ -415,21 +419,21 @@ function cargarReciboLuzSocio(){
 		var opciones = "<center>";
 			
 			opciones += "<a href=javascript:editarReciboLuzSocio(";
-			opciones += rowObject.codigoOrgReciboLuz + "') >";
+			opciones += rowObject.codigoPuesto + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Luz Socio'/>";
 			opciones += "</a>";
 			
 			opciones += "&nbsp;&nbsp;";
 			
 			opciones += "<a href=javascript:eliminarReciboLuzSocio(";
-			opciones += rowObject.codigoOrgReciboLuz + "') >";
+			opciones += rowObject.codigoPuesto + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Recibo Luz Socio'/>";
 			opciones += "</a>";
 			
 			opciones += "&nbsp;&nbsp;";
 			
 			opciones += "<a href=javascript:generarReciboLuzSocio('";
-			opciones += rowObject.codigoReciboLuzOriginal + "') >";
+			opciones += rowObject.codigoPuesto + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/agregar2_24x24.png' border='0' title='Crear Recibo Luz Socio'/>";
 			opciones += "</a>";			
 			
@@ -439,14 +443,14 @@ function cargarReciboLuzSocio(){
 				
 	};
 	
-	jQuery("#grillaLuzSocio").jqGrid(
+	jQuery("#grillaReciboLuz").jqGrid(
 	{
 		url : 'reporte-recibo-luz-puesto.json',
 		datatype : "json",
 		mtype: 'POST',
 		height: 'auto',
 		width: 'auto',
-		colNames : ['Código Puesto', 'Código Usuario', 'Nro. Puesto', 'Giro','Puesto', 'Opciones'],
+		colNames : ['Código Puesto', 'Código Usuario', 'Nro. Puesto', 'Giro','Recibo Luz','Total', 'Opciones'],
 		colModel : [{
 			name : 'codigoPuesto',
 			index: 'codigoPuesto',
@@ -463,7 +467,7 @@ function cargarReciboLuzSocio(){
 			name : 'nroPuesto',
 			index: 'nroPuesto',
 			sortable:false,
-			width: 100,
+			width: 80,
 			align: 'left'
 		},{
 			name : 'codigoGiro',
@@ -475,24 +479,39 @@ function cargarReciboLuzSocio(){
 			name : 'reciboLuz',
 			index: 'reciboLuz',
 			sortable:false,
-			width: 150,
+			width: 80,
+			align: 'center'
+		},{
+			name : 'total',
+			index: 'total',
+			sortable:false,
+			width: 80,
 			align: 'center'
 		},{					
-			name:'codigoPuesto',
-			index:'codigoPuesto',
+			name:'opciones',
+			index:'opciones',
 			width:100,
 			sortable:false,
 			search: false,
 			formatter:formatterBotones
 		}],								
 		rowNum : 20,
-		pager : '#grillaLuzSocio',
+		pager : '#pgrillaReciboLuz',
 		sortname : 'codigoPuesto',
 		autowidth: true,
 		rownumbers: true,
 		viewrecords : true,
 		sortorder : "codigoPuesto",				
-		caption : "Recibo de Luz Socios"				
+		caption : "Recibo de Luz Socios",
+		afterInsertRow: function(rowId, data, item){
+			//alert(rowId + ' - ' + data + ' - ' + item.total);
+			if (item.total == 0)
+				//$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color' : 'red'  });
+				$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+			else 
+				$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
+		}
+
 
 	}).trigger('reloadGrid');
 }
@@ -822,7 +841,7 @@ function cargarReciboLuzSocio(){
 		
 			<table border="0" width="100%" cellpadding="0" cellspacing="0">
 				<tr>
-					<td colspan="4">&nbsp;</td>
+					<td colspan="4" style="color:red"><b>&nbsp;RECIBO DE LUZ ORIGINAL NRO. <span id="nroRecibo"></span></b></td>
 				</tr>
 				<tr>
 					<td width="150"><b>RECIBO LUZ SOCIOS<b/></td>
@@ -842,8 +861,8 @@ function cargarReciboLuzSocio(){
 				</tr>
 				<tr>
 					<td colspan="4">
-						<table id="grillaLuzSocio"></table>
-						<div id="pgrillaLuzSocio"></div>
+						<table id="grillaReciboLuz"></table>
+						<div id="pgrillaReciboLuz"></div>
 					</td>
 				</tr>
 			</table>	
@@ -858,6 +877,46 @@ function cargarReciboLuzSocio(){
 		</div>
 	</div>
 </div>
+
+
+<!-- Ventana Modal Recibo Luz Ppor cada Socio -->
+<div class="modal fade" id="recibos_luz_por_socio_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width: 800px">
+		<div class="modal-content">
+		
+		<div class="modal-header modal-header-primary">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title">Recibos de Luz de Socio</h4>
+		</div>
+
+		<div class="modal-body">
+		
+			<table border="0" width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td colspan="4">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="150"><b>RECIBO DE LUZ SOCIO<b/></td>
+					<td width="10">:</td>
+					<td width="200"></td>
+					<td>&nbsp;&nbsp;</td>
+				</tr>
+				<tr>
+					<td colspan="4">&nbsp;</td>
+				</tr>
+			</table>	
+		
+		</div>
+		
+		<div class="modal-footer">
+			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="">Grabar</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+		</div>
+		
+		</div>
+	</div>
+</div>
+
 
 </body>
 </html>
