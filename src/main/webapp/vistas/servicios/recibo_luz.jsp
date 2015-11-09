@@ -10,10 +10,6 @@
 		background-color:rgb(189,252,152);
 		color:rgb(0,0,0);
 	}
-
-	/*.ui-datepicker-calendar {
-    	display: none;
-    }*/
 	
 </style>
 <title></title>
@@ -320,6 +316,13 @@ function cargarReciboLuzOriginal(){
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Puesto'/>";
 			opciones += "</a>";
 			
+			opciones += "&nbsp;&nbsp;";
+			
+			opciones += "<a href=javascript:generarReciboLuzSocio('";
+			opciones += rowObject.codigoReciboLuzOriginal + "') >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/reciboLuz_24x24.png' border='0' title='Generar Recibo Luz Socio'/>";
+			opciones += "</a>";			
+			
 			opciones += "</center>";
 			
 		return opciones;
@@ -384,6 +387,115 @@ function cargarReciboLuzOriginal(){
 	}).trigger('reloadGrid');
 }
 
+
+function generarReciboLuzSocio(codigoReciboLuzOriginal){
+	console.log("Generar Recibo Luz Socios - [codigoReciboLuzOriginal] : " + codigoReciboLuzOriginal);
+	
+	$('#recibos_luz_socios_modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	});
+	
+	$("#tituloRegistro").html("Generar Recibo Luz Socios");
+	
+	colorEtiquetas();
+	
+	$("#codigoReciboLuzOriginal").val(codigoReciboLuzOriginal);
+	
+	buscarUsuario();
+	cargarReciboLuzSocio();
+	
+}
+
+function cargarReciboLuzSocio(){
+	
+	var ruta = obtenerContexto();
+	var formatterBotones = function(cellVal,options,rowObject)
+	{	
+		var opciones = "<center>";
+			
+			opciones += "<a href=javascript:editarReciboLuzSocio(";
+			opciones += rowObject.codigoOrgReciboLuz + "') >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Luz Socio'/>";
+			opciones += "</a>";
+			
+			opciones += "&nbsp;&nbsp;";
+			
+			opciones += "<a href=javascript:eliminarReciboLuzSocio(";
+			opciones += rowObject.codigoOrgReciboLuz + "') >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Recibo Luz Socio'/>";
+			opciones += "</a>";
+			
+			opciones += "&nbsp;&nbsp;";
+			
+			opciones += "<a href=javascript:generarReciboLuzSocio('";
+			opciones += rowObject.codigoReciboLuzOriginal + "') >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/agregar2_24x24.png' border='0' title='Crear Recibo Luz Socio'/>";
+			opciones += "</a>";			
+			
+			opciones += "</center>";
+			
+		return opciones;
+				
+	};
+	
+	jQuery("#grillaLuzSocio").jqGrid(
+	{
+		url : 'reporte-recibo-luz-puesto.json',
+		datatype : "json",
+		mtype: 'POST',
+		height: 'auto',
+		width: 'auto',
+		colNames : ['Código Puesto', 'Código Usuario', 'Nro. Puesto', 'Giro','Puesto', 'Opciones'],
+		colModel : [{
+			name : 'codigoPuesto',
+			index: 'codigoPuesto',
+			sortable:false,
+			width: 90,
+			align: 'center'
+		},{
+			name : 'codigoUsuario',
+			index: 'codigoUsuario',
+			sortable:false,
+			width: 100,
+			align: 'left'
+		},{
+			name : 'nroPuesto',
+			index: 'nroPuesto',
+			sortable:false,
+			width: 100,
+			align: 'left'
+		},{
+			name : 'codigoGiro',
+			index: 'codigoGiro',
+			sortable:false,
+			width: 150,
+			align: 'center'
+		},{
+			name : 'reciboLuz',
+			index: 'reciboLuz',
+			sortable:false,
+			width: 150,
+			align: 'center'
+		},{					
+			name:'codigoPuesto',
+			index:'codigoPuesto',
+			width:100,
+			sortable:false,
+			search: false,
+			formatter:formatterBotones
+		}],								
+		rowNum : 20,
+		pager : '#grillaLuzSocio',
+		sortname : 'codigoPuesto',
+		autowidth: true,
+		rownumbers: true,
+		viewrecords : true,
+		sortorder : "codigoPuesto",				
+		caption : "Recibo de Luz Socios"				
+
+	}).trigger('reloadGrid');
+}
 </script>
 </head>
 <body id="body">
@@ -395,60 +507,7 @@ function cargarReciboLuzOriginal(){
 	<input type='hidden' id='fecemisionx'/>	
 	<input type="hidden" id="costoWatsx"/>
 	<input type="hidden" id="estadox"/>
-	<!--
-	<input type='hidden' name='repomancnx' id='repomancnx'/>
-	<input type='hidden' name='cargofijo' id='cargofijo'/>
-	<input type='hidden' name='energActFraPtaactual' id='energActFraPtaactual'/>
-	<input type='hidden' name='energActFraPtaanteri' id='energActFraPtaanteri'/>
-	<input type='hidden' name='energActFraPtadifer' id='energActFraPtadifer'/>
-	<input type='hidden' name='energActFraPtafactor' id='energActFraPtafactor'/>
-	<input type='hidden' name='energActFraPtaconsu' id='energActFraPtaconsu'/>
-	<input type='hidden' name='energActFraPtaconfa' id='energActFraPtaconfa'/>
-	<input type='hidden' name='energActFraPtapreuni' id='energActFraPtapreuni'/>
-	<input type='hidden' name='energActFraPtatotal' id='energActFraPtatotal'/>
-	<input type='hidden' name='energActHorPtaactu' id='energActHorPtaactu'/>
-	<input type='hidden' name='energActHorPtaant' id='energActHorPtaant'/>
-	<input type='hidden' name='energActHorPtadif' id='energActHorPtadif'/>
-	<input type='hidden' name='energActHorPtafac' id='energActHorPtafac'/>
-	<input type='hidden' name='energActHorPtacons' id='energActHorPtacons'/>
-	<input type='hidden' name='energActHorPtaconfac' id='energActHorPtaconfac'/>
-	<input type='hidden' name='energActHorPtapreuni' id='energActHorPtapreuni'/>
-	<input type='hidden' name='energActHorPtatotal' id='energActHorPtatotal'/>
-	<input type='hidden' name='energReacinicial' id='energReacinicial'/>
-	<input type='hidden' name='energReacanteri' id='energReacanteri'/>
-	<input type='hidden' name='energReacdifere' id='energReacdifere'/>
-	<input type='hidden' name='energReacfactor' id='energReacfactor'/>
-	<input type='hidden' name='energReacconsu' id='energReacconsu'/>
-	<input type='hidden' name='energReacfaccons' id='energReacfaccons'/>
-	<input type='hidden' name='energReacpreuni' id='energReacpreuni'/>
-	<input type='hidden' name='energReactotal' id='energReactotal'/>	
-	<input type='hidden' name='interesconvenio' id='interesconvenio'/>
-	<input type='hidden' name='potenciaFpini' id='potenciaFpini'/>
-	<input type='hidden' name='potenciaFpante' id='potenciaFpante'/>
-	<input type='hidden' name='potenciaFpdif' id='potenciaFpdif'/>
-	<input type='hidden' name='potenciaFpfac' id='potenciaFpfac'/>
-	<input type='hidden' name='potenciaFpcons' id='potenciaFpcons'/>
-	<input type='hidden' name='potenciaHpact' id='potenciaHpact'/>
-	<input type='hidden' name='potenciaHpant' id='potenciaHpant'/>
-	<input type='hidden' name='potenciaHpdif' id='potenciaHpdif'/>
-	<input type='hidden' name='potenciaHpfac' id='potenciaHpfac'/>
-	<input type='hidden' name='potenciaHpcons' id='potenciaHpcons'/>
-	<input type='hidden' name='potUsoRedDistconfac' id='potUsoRedDistconfac'/>
-	<input type='hidden' name='potUsoRedDistpreuni' id='potUsoRedDistpreuni'/>
-	<input type='hidden' name='potUsoRedDisttotal' id='potUsoRedDisttotal'/>
-	<input type='hidden' name='potGenFpconfac' id='potGenFpconfac'/>
-	<input type='hidden' name='potGenFppreuni' id='potGenFppreuni'/>
-	<input type='hidden' name='potGenFptotal' id='potGenFptotal'/>	
-	<input type='hidden' name='alumpublic' id='alumpublic'/>
-	<input type='hidden' name='subtotalmes' id='subtotalmes'/>
-	<input type='hidden' name='igv' id='igv'/>
-	<input type='hidden' name='totalmesact' id='totalmesact'/>
-	<input type='hidden' name='aporteley' id='aporteley'/>
-	<input type='hidden' name='cuotaconv' id='cuotaconv'/>
-	<input type='hidden' name='redonmesant' id='redonmesant'/>
-	<input type='hidden' name='redonmesact' id='redonmesact'/>
-	<input type='hidden' name='total' id='total'/>
-	 -->
+
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td colspan="4">&nbsp;</td>
@@ -461,13 +520,13 @@ function cargarReciboLuzOriginal(){
 			<button type="button" class="btn btn-primary" onclick="buscarRecibo()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 			</button>&nbsp;&nbsp;
-			<button type="button" class="btn btn-primary" onclick="nuevoRecibo()">
+			<!-- button type="button" class="btn btn-primary" onclick="nuevoRecibo()">
+				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
+			</button -->
+			<button class="btn btn-primary" data-toggle="modal" data-target="#luz_original_modal" onclick="nuevoRecibos()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
 			</button>
-			<button class="btn btn-info" data-toggle="modal" data-target="#luz_original_modal" onclick="nuevoRecibos()">
-				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
-			</button>
-			<button class="btn btn-info" onclick="cargarReciboLuzOriginal()">
+			<button class="btn btn-primary" onclick="cargarReciboLuzOriginal()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Actualizar" />&nbsp;Actualizar
 			</button>
 		</td>
@@ -747,76 +806,58 @@ function cargarReciboLuzOriginal(){
 		</div>
 	</div>
 </div>
+ 
 
-<!-- div class="modal fade" id="puesto_modal" role="dialog" data-keyboard="false" data-backdrop="static">
-	<div class="modal-dialog">
-		
+<!-- Ventana Modal para Recibo Luz Socios -->
+<div class="modal fade" id="recibos_luz_socios_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width: 800px">
 		<div class="modal-content">
-			<div class="modal-header modal-header-primary">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title"><span id="tituloRegistro" /></h4>
-			</div>
-			<div class="modal-body">
-				
-					<table border="0" style="width: 800px;">
-						<tr>
-							<td colspan="9" align="right">&nbsp;</td>
-						</tr>
-						<tr>
-							<td colspan="9" align="left">
-								<button type="button" class="btn btn-primary" onclick="guardar(1)">
-									<img src="recursos/images/icons/guardar_16x16.png" alt="Buscar" />&nbsp;Guardar
-								</button>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="9" align="right">&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lblrecibo" style="width: 130px"><b>FECHA RECIBO</b></span></td>
-							<td width="3px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="3px">&nbsp;</td>
-							<td><input type="text" id="dniBuscar" class="form-control" maxlength="8" /></td>
-							<td valign="top" colspan="3">&nbsp;&nbsp;
-								<button type="button" class="btn btn-primary" onclick="buscarUsuario()">
-									<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
-								</button>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="9">&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><label style="width: 150px">Lectura Inicial</label></td>
-							<td width="3px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="3px">&nbsp;</td>
-							<td><input type='text' name='txtLecturaInih' id='txtLecturaInih' class='text ui-widget-content ui-corner-all' size="10" tabindex="1" onchange="calculaConsumoMes(this,txtLecturaFinh)"/></td>
-							<td width="50px">&nbsp;</td>
-							<td><label style="width: 150px">Lectura Final</label></td>
-							<td width="3px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="3px">&nbsp;</td>
-							<td><input type='text' name='txtLecturaFinh' id='txtLecturaFinh' class='text ui-widget-content ui-corner-all'  size="10"  tabindex="2" onchange="calculaConsumoMes(txtLecturaInih,this)"/></td>
-							<td width="10px">&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td colspan="6"><b>(*) Campos Obligatorios</b></td>
-						</tr>
-					</table>
-
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-			</div>
+		
+		<div class="modal-header modal-header-primary">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title">Listado de Recibos de Luz de Socios</h4>
 		</div>
-		  
+
+		<div class="modal-body">
+		
+			<table border="0" width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td colspan="4">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="150"><b>RECIBO LUZ SOCIOS<b/></td>
+					<td width="10">:</td>
+					<td width="200"><input type="text" id="reciboLuzSocioBuscara" class="text ui-widget-content ui-corner-all" maxlength="8" /></td>
+					<td>&nbsp;&nbsp;
+						<button type="button" class="btn btn-primary" onclick="buscarReciboLuzSocio()">
+							<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
+						</button>&nbsp;&nbsp;
+						<button class="btn btn-info" onclick="cargarReciboLuzSocio()">
+							<img src="recursos/images/icons/buscar_16x16.png" alt="Actualizar" />&nbsp;Actualizar
+						</button>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4">&nbsp;</td>
+				</tr>
+				<tr>
+					<td colspan="4">
+						<table id="grillaLuzSocio"></table>
+						<div id="pgrillaLuzSocio"></div>
+					</td>
+				</tr>
+			</table>	
+		
+		</div>
+		
+		<div class="modal-footer">
+			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="">Grabar</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+		</div>
+		
+		</div>
 	</div>
-</div--> 
+</div>
 
 </body>
 </html>

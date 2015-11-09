@@ -9,6 +9,7 @@ public class Puesto {
 	String dni;
 	String nombreFull;
 	String nombreGiro;
+	int reciboLuz;
 	
 	public int getCodigoPuesto() {
 		return codigoPuesto;
@@ -51,6 +52,12 @@ public class Puesto {
 	}
 	public void setNombreGiro(String nombreGiro) {
 		this.nombreGiro = nombreGiro;
+	}
+	public int getReciboLuz() {
+		return reciboLuz;
+	}
+	public void setReciboLuz(int reciboLuz) {
+		this.reciboLuz = reciboLuz;
 	}
 	
 }

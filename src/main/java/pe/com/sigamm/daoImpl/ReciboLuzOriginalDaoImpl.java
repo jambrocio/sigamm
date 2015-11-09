@@ -34,7 +34,6 @@ public class ReciboLuzOriginalDaoImpl implements ReciboLuzOriginalDao {
 	
 	@Override
 	public Retorno grabarReciboLuzOriginal(LuzOriginal luzoriginal) {
-		// TODO Auto-generated method stub
 		Retorno retorno = new Retorno();
 		try{
 			System.out.println("Grabando Recibo Luz Original");

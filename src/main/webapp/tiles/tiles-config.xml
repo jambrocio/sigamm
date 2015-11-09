@@ -5,7 +5,7 @@
 <tiles-definitions>
 	
 	<definition name="main" template="/vistas/templates/main.jsp">
-		<put-attribute name="titulo" value="LISTA DE CANDIDATOS PARA ELECCIONES DEL COMITÉ DE SEGURIDAD Y SALUD EN EL TRABAJO" />
+		<put-attribute name="titulo" value="BIENVENIDOS AL SISTEMA" />
 		<put-attribute name="cabecera" value="/vistas/templates/cabecera.jsp" />
 		<put-attribute name="pie" value="/vistas/templates/pie.jsp" />
 	</definition>

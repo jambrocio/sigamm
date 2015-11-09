@@ -17,4 +17,6 @@ public interface PuestoDao {
 	
 	public Retorno eliminarPuesto(Puesto puesto);
 	
+	public ReportePuesto reportePuestoLuz(int pagina, int registros, int codigoPuesto);
+	
 }

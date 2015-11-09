@@ -42,11 +42,17 @@ public class PuestoBusImpl implements PuestoBus {
 		
 		return puestoDao.reportePuesto(pagina, registros, dni);
 	}
-
+	
 	@Override
 	public Retorno eliminarPuesto(Puesto puesto) {
 		
 		return puestoDao.eliminarPuesto(puesto);
+	}
+
+	@Override
+	public ReportePuesto reportePuestoLuz(int pagina, int registros, int codigoPuesto) {
+		
+		return puestoDao.reportePuestoLuz(pagina, registros, codigoPuesto);
 	}
 
 }

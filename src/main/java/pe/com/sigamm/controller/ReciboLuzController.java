@@ -38,6 +38,9 @@ public class ReciboLuzController {
 	private ReciboLuzOriginalBus reciboLuzOriginalBus;
 	
 	@Autowired
+	private PuestoBus puestoBus;
+	
+	@Autowired
 	private DatosSession datosSession;
 	
 	@RequestMapping(value = "/recibo_luz", method=RequestMethod.GET)
@@ -97,4 +100,28 @@ public class ReciboLuzController {
 		
 		return response;
 	}
+	
+	@RequestMapping(value = "/reporte-recibo-luz-puesto.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody ResponseListBean<Puesto> reporteReciboLuzPuesto(
+			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
+			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
+			@RequestParam(value = "codigoPuesto", defaultValue = "0") Integer codigoPuesto){
+		
+		ResponseListBean<Puesto> response = new ResponseListBean<Puesto>();
+		
+		ReportePuesto reporte = puestoBus.reportePuestoLuz(pagina, registros, codigoPuesto);
+		
+		Integer totalReciboPuestoLuz = reporte.getTotalRegistros(); 
+		
+		response.setPage(pagina);
+		response.setRecords(totalReciboPuestoLuz);
+		
+		//total de paginas a mostrar
+		response.setTotal(OperadoresUtil.obtenerCociente(totalReciboPuestoLuz, registros));
+				
+		response.setRows(reporte.getListaPuesto());
+		
+		return response;
+	}
+		
 }

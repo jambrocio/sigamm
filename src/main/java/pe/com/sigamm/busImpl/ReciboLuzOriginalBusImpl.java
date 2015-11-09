@@ -17,7 +17,7 @@ import pe.com.sigamm.modelo.Retorno;
 public class ReciboLuzOriginalBusImpl implements ReciboLuzOriginalBus {
 
 	Gson gson = new Gson();
-	private static final Logger log = Logger.getLogger(PuestoBusImpl.class);
+	private static final Logger log = Logger.getLogger(ReciboLuzOriginalBusImpl.class);
 	
 	@Resource
 	private ReciboLuzOriginalDao reciboLuzOriginalDao;
