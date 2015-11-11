@@ -74,4 +74,5 @@ public class Puesto {
 		this.reciboLuzCreado = reciboLuzCreado;
 	}
 	
+	
 }

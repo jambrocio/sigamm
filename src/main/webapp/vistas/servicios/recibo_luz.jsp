@@ -33,7 +33,6 @@
 		 border-top-left-radius: 5px;
 		 border-top-right-radius: 5px;
 	}
-	
 
 </style>
 <script>
@@ -391,9 +390,7 @@ function cargarReciboLuzOriginal(){
 function generarReciboLuzSocio(codigoReciboLuzOriginal){
 	console.log("Generar Recibo Luz Socios - [codigoReciboLuzOriginal] : " + codigoReciboLuzOriginal);
 	
-	alert(codigoReciboLuzOriginal);
 	$("#nroRecibo").text(codigoReciboLuzOriginal);
-	alert($("#nroRecibo").text());
 	
 	$('#recibos_luz_socios_modal').modal({
 		backdrop: 'static',
@@ -432,9 +429,9 @@ function cargarReciboLuzSocio(){
 			
 			opciones += "&nbsp;&nbsp;";
 			
-			opciones += "<a href=javascript:generarReciboLuzSocio('";
+			opciones += "<a href=javascript:generarReciboLuzXSocio('";
 			opciones += rowObject.codigoPuesto + "') >";
-			opciones += "<img src='/"+ruta+"/recursos/images/icons/agregar2_24x24.png' border='0' title='Crear Recibo Luz Socio'/>";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/agregar2_24x24.png' border='0' title='Crear Recibo de Luz por Socio'/>";
 			opciones += "</a>";			
 			
 			opciones += "</center>";
@@ -515,17 +512,98 @@ function cargarReciboLuzSocio(){
 
 	}).trigger('reloadGrid');
 }
+
+
+function generarReciboLuzXSocio(codigoPuesto){
+	console.log("Generar Recibo de Luz X Socios - [codigo Socio] : " + codigoPuesto);
+	
+	//alert(codigoPuesto);
+	/*$("#nroRecibo").text(codigoReciboLuzOriginal);
+	alert($("#nroRecibo").text());*/
+	
+	$("#numeroPuesto").text(codigoPuesto);
+	
+	$('#recibos_luz_por_socio_modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	});
+	
+	//$("#codigoPuesto").html(" - PUESTO [" + codigoPuestoesto + "]");
+	
+	colorEtiquetas();
+	
+	/*$("#codigoReciboLuzOriginal").val(codigoReciboLuzOriginal);
+	
+	buscarUsuario();*/
+	cargarDatosReciboLuzSocio();
+	
+}
+
+function cargarDatosReciboLuzSocio(){
+	codigoPuesto = $("#numeroPuesto").val();
+	
+	var parametros = new Object();
+	parametros.codigoPuesto = codigoPuesto;
+	
+	$.ajax({
+        type: "POST",
+        async:false,
+        url: "buscar-usuario-puesto-giro.json",
+        cache : false,
+        data: parametros,
+        success: function(result){
+            //console.log(result.userid);
+        	//alert("Resultado : [" + result.codigo + "]");
+        	/*$("#userid").val(result.userid);
+        	$("#dni").val(result.dni);
+        	$("#apePaterno").val(result.apellidoPaterno);
+        	$("#apeMaterno").val(result.apellidoMaterno);
+        	$("#nombres").val(result.nombres);
+        	$("#telefono").val(result.telefono);
+        	$("#codigoUsuario").val(result.codigoUsuario);
+        	
+        	buscarUsuarioXDni();
+        	
+        	$("#btnBuscar").attr("disabled", true);*/
+        	
+        }
+    });
+}
+
+
+function operaciones(valor){
+	var valores = valor;
+	var respuesta;
+	//alert(valores);
+	
+	if (valores=='L'){
+		respuesta = parseInt($("#lecturaActual").val()) - parseInt($("#lecturaAnterior").val());
+		if (!isNaN(respuesta))
+			$("#consumoMes").html(respuesta);
+		else
+			$("#consumoMes").html(0);
+	}else if (valores=='R'){
+		respuesta = parseFloat($("#cargoPorEnergia").val()) + parseFloat($("#alumbradoPublico").val()) + parseFloat($("#mantenimiento").val()) + parseFloat($("#deudaAnterior").val()) + parseFloat($("#reconexion").val());
+		if (!isNaN(respuesta))
+			$("#totalDeLuz").html(respuesta);
+		else
+			$("#totalDeLuz").html(0.00);
+	}else{
+		$("#lecturaActual").html(0);
+		$("#lecturaAnterior").html(0);
+		$("#consumoMes").html(0);
+		$("#cargoPorEnergia").html(0);
+		$("#alumbradoPublico").html(0);
+		$("#mantenimiento").html(0);
+		$("#deudaAnterior").html(0);
+		$("#reconexion").html(0);
+		$("#totalDeLuz").html(0.00);
+	}
+	
+}
 </script>
 </head>
 <body id="body">
-	<input type="hidden" id="codigoReciboLuz" />
-	<input type="hidden" name="metodo" />
-	
-	<input type="hidden" id="periodox"/>
-	<input type='hidden' id='fecvencimientox'/>
-	<input type='hidden' id='fecemisionx'/>	
-	<input type="hidden" id="costoWatsx"/>
-	<input type="hidden" id="estadox"/>
 
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
@@ -536,7 +614,7 @@ function cargarReciboLuzSocio(){
 		<td width="10">:</td>
 		<td width="200"><input type="text" id="reciboBuscara" class="form-control" maxlength="8" /></td>
 		<td>&nbsp;&nbsp;
-			<button type="button" class="btn btn-primary" onclick="buscarRecibo()">
+			<button type="button" class="btn btn-primary" onclick="cargarReciboLuzOriginal()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 			</button>&nbsp;&nbsp;
 			<!-- button type="button" class="btn btn-primary" onclick="nuevoRecibo()">
@@ -545,9 +623,11 @@ function cargarReciboLuzSocio(){
 			<button class="btn btn-primary" data-toggle="modal" data-target="#luz_original_modal" onclick="nuevoRecibos()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
 			</button>
+			<!-- 
 			<button class="btn btn-primary" onclick="cargarReciboLuzOriginal()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Actualizar" />&nbsp;Actualizar
 			</button>
+			 -->
 		</td>
 	</tr>
 	<tr>
@@ -848,12 +928,14 @@ function cargarReciboLuzSocio(){
 					<td width="10">:</td>
 					<td width="200"><input type="text" id="reciboLuzSocioBuscara" class="text ui-widget-content ui-corner-all" maxlength="8" /></td>
 					<td>&nbsp;&nbsp;
-						<button type="button" class="btn btn-primary" onclick="buscarReciboLuzSocio()">
+						<button type="button" class="btn btn-primary" onclick="cargarReciboLuzSocio()">
 							<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 						</button>&nbsp;&nbsp;
+						<!-- 
 						<button class="btn btn-info" onclick="cargarReciboLuzSocio()">
 							<img src="recursos/images/icons/buscar_16x16.png" alt="Actualizar" />&nbsp;Actualizar
 						</button>
+						 -->
 					</td>
 				</tr>
 				<tr>
@@ -881,7 +963,7 @@ function cargarReciboLuzSocio(){
 
 <!-- Ventana Modal Recibo Luz Ppor cada Socio -->
 <div class="modal fade" id="recibos_luz_por_socio_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog" style="width: 800px">
+	<div class="modal-dialog" style="width: 400px">
 		<div class="modal-content">
 		
 		<div class="modal-header modal-header-primary">
@@ -891,21 +973,94 @@ function cargarReciboLuzSocio(){
 
 		<div class="modal-body">
 		
-			<table border="0" width="100%" cellpadding="0" cellspacing="0">
+			<table border="0" width="100%" cellpadding="0" cellspacing="0"></tr>
 				<tr>
-					<td colspan="4">&nbsp;</td>
-				</tr>
-				<tr>
-					<td width="150"><b>RECIBO DE LUZ SOCIO<b/></td>
-					<td width="10">:</td>
-					<td width="200"></td>
-					<td>&nbsp;&nbsp;</td>
+					<td colspan="4"><b>RECIBO DE LUZ <span id="codigoPuesto"></span><b/></td>
 				</tr>
 				<tr>
 					<td colspan="4">&nbsp;</td>
 				</tr>
-			</table>	
-		
+			</table>
+			<table border="1" width="100%">
+				<tr>
+					<td>
+						<table border="0" width="100%">
+							<tr>
+								<td width="40%"><b>ASOCIADO (A) :</b></td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td><b>Nº PUESTO :</b></td>
+								<td><div id="numeroPuesto" style="color: blue; width: 100px;" align="left"></div></td>
+							</tr>
+							<tr>
+								<td><b>SECTOR :</b></td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td><b>GIRO :</b></td>
+								<td>&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<table border="0" width="100%">
+							<tr>
+								<td width="40%"><b>Periodo :</b></td>
+								<td align="center">&nbsp;</td>
+							</tr>
+							<tr>
+								<td><b>Lectura Anterior :</b></td>
+								<td><input type='text' id='lecturaAnterior' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('L');" style="text-align: center;"/></td>
+							</tr>
+							<tr>
+								<td><b>Lectura Actual :</b></td>
+								<td><input type='text' id='lecturaActual' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('L');" style="text-align: center;"/></td>
+							</tr>
+							<tr>
+								<td><b>Consumo de Mes :</b></td>
+								<td><div id="consumoMes" style="border: 2px solid blue; width: 100px;" align="center"></div></td>
+							</tr>
+						</table>
+						
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<table border="0" width="100%">
+							<tr>
+								<td width="40%"><b>Cargo por Energía :</b></td>
+								<td><input type='text' id='cargoPorEnergia' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
+							</tr>
+							<tr>
+								<td><b>Alumbrado Público :</b></td>
+								<td><input type='text' id='alumbradoPublico' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
+							</tr>
+							<tr>
+								<td><b>Mantenimiento :</b></td>
+								<td><input type='text' id='mantenimiento' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
+							</tr>
+							<tr>
+								<td><b>Deuda Anterior :</b></td>
+								<td><input type='text' id='deudaAnterior' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
+							</tr>
+							<tr>
+								<td><b>Reconexión :</b></td>
+								<td><input type='text' id='reconexion' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
+							</tr>
+							<tr>
+								<td><b>TOTAL DE LUZ</b></td>
+								<td><div id="totalDeLuz" style="border: 2px solid blue; width: 100px;" align="center"></div></td>
+							</tr>
+						</table>
+						
+					</td>
+				</tr>
+			</table>
+		  
+		  
 		</div>
 		
 		<div class="modal-footer">

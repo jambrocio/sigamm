@@ -24,12 +24,16 @@ public class ReciboLuzOriginalBusImpl implements ReciboLuzOriginalBus {
 	
 	@Override
 	public Retorno grabarReciboLuzOriginal(LuzOriginal luzoriginal) {
+		
 		return reciboLuzOriginalDao.grabarReciboLuzOriginal(luzoriginal);
+		
 	}
 
 	@Override
 	public ReporteReciboLuzOriginal reporteReciboLuzOriginal(int pagina,int registros, String codigoReciboLuzOriginal) {
+		
 		return reciboLuzOriginalDao.reporteReciboLuzOriginal(pagina, registros, codigoReciboLuzOriginal);
+		
 	}
 
 }
