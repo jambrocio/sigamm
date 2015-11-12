@@ -19,4 +19,6 @@ public interface PuestoDao {
 	
 	public ReportePuesto reportePuestoLuz(int pagina, int registros, int codigoPuesto);
 	
+	public ReportePuesto reportePuestoxPto(int pagina, int registros, String codigoPuesto);
+	
 }

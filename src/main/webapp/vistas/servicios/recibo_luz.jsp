@@ -390,13 +390,7 @@ function cargarReciboLuzOriginal(){
 function generarReciboLuzSocio(codigoReciboLuzOriginal){
 	console.log("Generar Recibo Luz Socios - [codigoReciboLuzOriginal] : " + codigoReciboLuzOriginal);
 	
-<<<<<<< HEAD
 	$("#nroRecibo").text(codigoReciboLuzOriginal);
-=======
-	/*alert(codigoReciboLuzOriginal);
-	$("#nroRecibo").text(codigoReciboLuzOriginal);
-	alert($("#nroRecibo").text());*/
->>>>>>> 00fee089ed9bcd2c11ac10d22a0762b5910238cb
 	
 	$('#recibos_luz_socios_modal').modal({
 		backdrop: 'static',
@@ -527,11 +521,8 @@ function generarReciboLuzXSocio(codigoPuesto){
 	/*$("#nroRecibo").text(codigoReciboLuzOriginal);
 	alert($("#nroRecibo").text());*/
 	
-<<<<<<< HEAD
 	$("#numeroPuesto").text(codigoPuesto);
 	
-=======
->>>>>>> 00fee089ed9bcd2c11ac10d22a0762b5910238cb
 	$('#recibos_luz_por_socio_modal').modal({
 		backdrop: 'static',
 		keyboard: false
@@ -542,15 +533,14 @@ function generarReciboLuzXSocio(codigoPuesto){
 	colorEtiquetas();
 	
 	/*$("#codigoReciboLuzOriginal").val(codigoReciboLuzOriginal);
-	
-<<<<<<< HEAD
 	buscarUsuario();*/
-	cargarDatosReciboLuzSocio();
+	cargarDatosReciboLuzSocio(codigoPuesto);
 	
 }
 
-function cargarDatosReciboLuzSocio(){
-	codigoPuesto = $("#numeroPuesto").val();
+function cargarDatosReciboLuzSocio(codigoPuesto){	
+
+	//alert(codigoPuesto);
 	
 	var parametros = new Object();
 	parametros.codigoPuesto = codigoPuesto;
@@ -562,22 +552,20 @@ function cargarDatosReciboLuzSocio(){
         cache : false,
         data: parametros,
         success: function(result){
-            //console.log(result.userid);
-        	//alert("Resultado : [" + result.codigo + "]");
-        	/*$("#userid").val(result.userid);
-        	$("#dni").val(result.dni);
-        	$("#apePaterno").val(result.apellidoPaterno);
-        	$("#apeMaterno").val(result.apellidoMaterno);
-        	$("#nombres").val(result.nombres);
-        	$("#telefono").val(result.telefono);
-        	$("#codigoUsuario").val(result.codigoUsuario);
+            console.log(result);
+        	//alert("Resultado : [" + result.rows + "]");
         	
-        	buscarUsuarioXDni();
-        	
-        	$("#btnBuscar").attr("disabled", true);*/
+        	$.each(result.rows, function(key,val) {
+            	$("#nombreFull").text(val.nombreFull);
+            	$("#numeroPuesto").text(val.numeroPuesto);
+            	$("#nombreSector").text(val.nombreSector);
+            	$("#nombreGiro").text(val.nombreGiro);        	
+        	});
         	
         }
     });
+	
+	$("#lecturaAnterior").focus();
 }
 
 
@@ -610,19 +598,121 @@ function operaciones(valor){
 		$("#totalDeLuz").html(0.00);
 	}
 	
-=======
-	buscarUsuario();
-	cargarReciboLuzSocio();*/
-	
 }
 
 
-function operaConsumoMes(){
-	var respuesta;
-	respuesta = parseInt($("#lecturaActual").val()) - parseInt($("#lecturaAnterior").val());
-	alert(respuesta);
-	$("#consumoMes").val(respuesta);
->>>>>>> 00fee089ed9bcd2c11ac10d22a0762b5910238cb
+function guardarRecibo(){
+	
+	var ruta = obtenerContexto();
+	
+	jsonObj = [];
+	var parametros = new Object();
+	parametros.periodo = $("#periodo").val();
+	parametros.fecVencimiento = $("#fecvencimiento").val();
+	parametros.fecEmision = $("#fecemision").val();
+	parametros.costoWats = $("#costowats").val();
+	parametros.estado = $("#estado").val();
+	parametros.repoManCnx = $("#repomancnx").val();
+	parametros.cargoFijo = $("#cargofijo").val();
+	parametros.alumPublic = $("#alumpublic").val();
+	parametros.subTotalMes = $("#subtotalmes").val();
+	parametros.igv = $("#igv").val();
+	parametros.totalMesAct = $("#totalmesact").val();
+	parametros.aporteLey = $("#aporteley").val();
+	parametros.cuotaConv = $("#cuotaconv").val();
+	parametros.redonMesAnt = $("#redonmesant").val();
+	parametros.redonMesAct = $("#redonmesact").val();
+	parametros.interesConv = $("#interesconvenio").val();	
+	
+	parametros.energActFraPtaActual = $("#energactfraptaactual").val();
+	parametros.energActFraPtaAnteri = $("#energactfraptaanteri").val();
+	parametros.energActFraPtaDifer = $("#energactfraptadifer").val();
+	parametros.energActFraPtaFactor = $("#energactfraptafactor").val();
+	parametros.energActFraPtaConsu = $("#energactfraptaconsu").val();
+	parametros.energActFraPtaConfa = $("#energactfraptaconfa").val();
+	parametros.energActFraPtaPreuni = $("#energactfraptapreuni").val();
+	parametros.energActFraPtaTotal = $("#energactfraptatotal").val();
+	parametros.energActHorPtaActu = $("#energacthorptaactu").val();
+	parametros.energActHorPtaAnt = $("#energacthorptaant").val();
+	parametros.energActHorPtaDif = $("#energacthorptadif").val();
+	parametros.energActHorPtaFac = $("#energacthorptafac").val();
+	parametros.energActHorPtaCons = $("#energacthorptacons").val();
+	parametros.energActHorPtaConfac = $("#energacthorptaconfac").val();
+	parametros.energActHorPtaPreuni = $("#energacthorptapreuni").val();
+	parametros.energActHorPtaTotal = $("#energacthorptatotal").val();
+	parametros.energReacInicial = $("#energreacinicial").val();
+	parametros.energReacAnteri = $("#energreacanteri").val();
+	parametros.energReacDifere = $("#energreacdifere").val();
+	parametros.energReacFactor = $("#energreacfactor").val();
+	parametros.energReacConsu = $("#energreacconsu").val();
+	parametros.energReacFaccons = $("#energreacfaccons").val();
+	parametros.energReacPreuni = $("#energreacpreuni").val();
+	parametros.energReacTotal = $("#energreactotal").val();
+	
+	parametros.potenciaFpIni = $("#potenciafpini").val();
+	parametros.potenciaFpAnte = $("#potenciafpante").val();
+	parametros.potenciaFpDif = $("#potenciafpdif").val();
+	parametros.potenciaFpFac = $("#potenciafpfac").val();
+	parametros.potenciaFpCons = $("#potenciafpcons").val();
+	parametros.potenciaHpAct = $("#potenciahpact").val();
+	parametros.potenciaHpAnt = $("#potenciahpant").val();
+	parametros.potenciaHpDif = $("#potenciahpdif").val();
+	parametros.potenciaHpFac = $("#potenciahpfac").val();
+	parametros.potenciaHpCons = $("#potenciahpcons").val();
+	parametros.potUsoRedDistConfac = $("#potusoreddistconfac").val();
+	parametros.potUsoRedDistPreuni = $("#potusoreddistpreuni").val();
+	parametros.potUsoRedDistTotal = $("#potusoreddisttotal").val();
+	parametros.potGenFpConfac = $("#potgenfpconfac").val();
+	parametros.potGenFpPreuni = $("#potgenfppreuni").val();
+	parametros.potGenFpTotal = $("#potgenfptotal").val();
+
+	parametros.total = $("#total").val();
+
+		
+	$.ajax({
+		type: "POST",
+	    async:false,
+	    url: "grabar-luz-original.json",
+	    cache : false,
+	    data: parametros,
+	    success: function(result){
+	            
+	        if(result.camposObligatorios.length == 0){
+                	
+            	$('#luz_original_modal').modal('hide');
+            	
+	            $.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Mensaje',
+					// (string | mandatory) the text inside the notification
+					text: result.mensaje,
+					// (string | optional) the image to display on the left
+					image: "/" + ruta + "/recursos/images/confirm.png",
+					// (bool | optional) if you want it to fade out on its own or just sit there
+					sticky: false,
+					// (int | optional) the time you want it to be alive for before fading out
+					time: ''
+				});
+	            
+	            cargarReciboLuzOriginal();
+	            
+			}else{
+                	
+            	colorEtiquetas();
+            	fila = "";
+            	$.each(result.camposObligatorios, function(id, obj){
+                        
+                	$("#" + obj.nombreCampo).css("color", "red");
+                    $("#" + obj.nombreCampo + "-img").show();
+                    $("#" + obj.nombreCampo + "-img").attr("data-content", obj.descripcion);
+                        
+				});
+                	
+			}
+                
+		}
+	});
+	
 }
 </script>
 </head>
@@ -1009,28 +1099,20 @@ function operaConsumoMes(){
 					<td>
 						<table border="0" width="100%">
 							<tr>
-<<<<<<< HEAD
 								<td width="40%"><b>ASOCIADO (A) :</b></td>
-=======
-								<td><b>ASOCIADO (A) :</b></td>
->>>>>>> 00fee089ed9bcd2c11ac10d22a0762b5910238cb
-								<td>&nbsp;</td>
+								<td><div id="nombreFull" style="color: blue; font-size:10px;" align="left"></div></td>
 							</tr>
 							<tr>
 								<td><b>Nº PUESTO :</b></td>
-<<<<<<< HEAD
 								<td><div id="numeroPuesto" style="color: blue; width: 100px;" align="left"></div></td>
-=======
-								<td>&nbsp;</td>
->>>>>>> 00fee089ed9bcd2c11ac10d22a0762b5910238cb
 							</tr>
 							<tr>
 								<td><b>SECTOR :</b></td>
-								<td>&nbsp;</td>
+								<td><div id="nombreSector" style="color: blue; width: 100px;" align="left"></div></td>
 							</tr>
 							<tr>
 								<td><b>GIRO :</b></td>
-								<td>&nbsp;</td>
+								<td><div id="nombreGiro" style="color: blue; font-size:10px;" align="left"></div></td>
 							</tr>
 						</table>
 					</td>
@@ -1039,7 +1121,6 @@ function operaConsumoMes(){
 					<td>
 						<table border="0" width="100%">
 							<tr>
-<<<<<<< HEAD
 								<td width="40%"><b>Periodo :</b></td>
 								<td align="center">&nbsp;</td>
 							</tr>
@@ -1054,28 +1135,10 @@ function operaConsumoMes(){
 							<tr>
 								<td><b>Consumo de Mes :</b></td>
 								<td><div id="consumoMes" style="border: 2px solid blue; width: 100px;" align="center"></div></td>
-=======
-								<td><b>Periodo :</b></td>
-								<td>&nbsp;</td>
 							</tr>
-							<tr>
-								<td><b>Lectura Anterior :</b></td>
-								<td><input type='text' id='lecturaAnterior' size='10' class='text ui-widget-content ui-corner-all' onblur="operaConsumoMes();"/></td>
-							</tr>
-							<tr>
-								<td><b>Lectura Actual :</b></td>
-								<td><input type='text' id='lecturaActual' size='10' class='text ui-widget-content ui-corner-all' onblur="operaConsumoMes();"/></td>
-							</tr>
-							<tr>
-								<td><b>Consumo de Mes :</b></td>
-								<td><span id="consumoMes"></span></td>
->>>>>>> 00fee089ed9bcd2c11ac10d22a0762b5910238cb
-							</tr>
-						</table>
-						
+						</table>		
 					</td>
 				</tr>
-<<<<<<< HEAD
 				<tr>
 					<td>
 						<table border="0" width="100%">
@@ -1107,15 +1170,13 @@ function operaConsumoMes(){
 						
 					</td>
 				</tr>
-=======
->>>>>>> 00fee089ed9bcd2c11ac10d22a0762b5910238cb
 			</table>
 		  
 		  
 		</div>
 		
 		<div class="modal-footer">
-			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="">Grabar</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="guardarRecibo()">Grabar</button>
 			<button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
 		</div>
 		

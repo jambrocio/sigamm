@@ -128,21 +128,21 @@ public class ReciboLuzController {
 	public @ResponseBody ResponseListBean<Puesto> reporteUsuarioPuestoGiro(
 			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
 			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
-			@RequestParam(value = "codigoPuesto", defaultValue = "0") Integer codigoPuesto){
+			@RequestParam(value = "codigoPuesto", defaultValue = "0") String codigoPuesto){
 		
 		ResponseListBean<Puesto> response = new ResponseListBean<Puesto>();
 		
-		ReportePuesto reporte = puestoBus.reportePuesto(pagina, registros, "42596272");
+		ReportePuesto reporte = puestoBus.reportePuestoxPto(pagina, registros, codigoPuesto);
 		
-		/*Integer totalReciboPuestoLuz = reporte.getTotalRegistros(); 
+		Integer totalReciboPuestoxPto = reporte.getTotalRegistros(); 
 		
 		response.setPage(pagina);
-		response.setRecords(totalReciboPuestoLuz);
+		response.setRecords(totalReciboPuestoxPto);
 		
 		//total de paginas a mostrar
-		response.setTotal(OperadoresUtil.obtenerCociente(totalReciboPuestoLuz, registros));
+		response.setTotal(OperadoresUtil.obtenerCociente(totalReciboPuestoxPto, registros));
 				
-		response.setRows(reporte.getListaPuesto());*/
+		response.setRows(reporte.getListaPuesto());
 		
 		return response;
 	}
