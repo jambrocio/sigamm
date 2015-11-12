@@ -390,7 +390,13 @@ function cargarReciboLuzOriginal(){
 function generarReciboLuzSocio(codigoReciboLuzOriginal){
 	console.log("Generar Recibo Luz Socios - [codigoReciboLuzOriginal] : " + codigoReciboLuzOriginal);
 	
+<<<<<<< HEAD
 	$("#nroRecibo").text(codigoReciboLuzOriginal);
+=======
+	/*alert(codigoReciboLuzOriginal);
+	$("#nroRecibo").text(codigoReciboLuzOriginal);
+	alert($("#nroRecibo").text());*/
+>>>>>>> 00fee089ed9bcd2c11ac10d22a0762b5910238cb
 	
 	$('#recibos_luz_socios_modal').modal({
 		backdrop: 'static',
@@ -521,8 +527,11 @@ function generarReciboLuzXSocio(codigoPuesto){
 	/*$("#nroRecibo").text(codigoReciboLuzOriginal);
 	alert($("#nroRecibo").text());*/
 	
+<<<<<<< HEAD
 	$("#numeroPuesto").text(codigoPuesto);
 	
+=======
+>>>>>>> 00fee089ed9bcd2c11ac10d22a0762b5910238cb
 	$('#recibos_luz_por_socio_modal').modal({
 		backdrop: 'static',
 		keyboard: false
@@ -534,6 +543,7 @@ function generarReciboLuzXSocio(codigoPuesto){
 	
 	/*$("#codigoReciboLuzOriginal").val(codigoReciboLuzOriginal);
 	
+<<<<<<< HEAD
 	buscarUsuario();*/
 	cargarDatosReciboLuzSocio();
 	
@@ -600,6 +610,19 @@ function operaciones(valor){
 		$("#totalDeLuz").html(0.00);
 	}
 	
+=======
+	buscarUsuario();
+	cargarReciboLuzSocio();*/
+	
+}
+
+
+function operaConsumoMes(){
+	var respuesta;
+	respuesta = parseInt($("#lecturaActual").val()) - parseInt($("#lecturaAnterior").val());
+	alert(respuesta);
+	$("#consumoMes").val(respuesta);
+>>>>>>> 00fee089ed9bcd2c11ac10d22a0762b5910238cb
 }
 </script>
 </head>
@@ -986,12 +1009,20 @@ function operaciones(valor){
 					<td>
 						<table border="0" width="100%">
 							<tr>
+<<<<<<< HEAD
 								<td width="40%"><b>ASOCIADO (A) :</b></td>
+=======
+								<td><b>ASOCIADO (A) :</b></td>
+>>>>>>> 00fee089ed9bcd2c11ac10d22a0762b5910238cb
 								<td>&nbsp;</td>
 							</tr>
 							<tr>
 								<td><b>Nº PUESTO :</b></td>
+<<<<<<< HEAD
 								<td><div id="numeroPuesto" style="color: blue; width: 100px;" align="left"></div></td>
+=======
+								<td>&nbsp;</td>
+>>>>>>> 00fee089ed9bcd2c11ac10d22a0762b5910238cb
 							</tr>
 							<tr>
 								<td><b>SECTOR :</b></td>
@@ -1008,6 +1039,7 @@ function operaciones(valor){
 					<td>
 						<table border="0" width="100%">
 							<tr>
+<<<<<<< HEAD
 								<td width="40%"><b>Periodo :</b></td>
 								<td align="center">&nbsp;</td>
 							</tr>
@@ -1022,11 +1054,28 @@ function operaciones(valor){
 							<tr>
 								<td><b>Consumo de Mes :</b></td>
 								<td><div id="consumoMes" style="border: 2px solid blue; width: 100px;" align="center"></div></td>
+=======
+								<td><b>Periodo :</b></td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td><b>Lectura Anterior :</b></td>
+								<td><input type='text' id='lecturaAnterior' size='10' class='text ui-widget-content ui-corner-all' onblur="operaConsumoMes();"/></td>
+							</tr>
+							<tr>
+								<td><b>Lectura Actual :</b></td>
+								<td><input type='text' id='lecturaActual' size='10' class='text ui-widget-content ui-corner-all' onblur="operaConsumoMes();"/></td>
+							</tr>
+							<tr>
+								<td><b>Consumo de Mes :</b></td>
+								<td><span id="consumoMes"></span></td>
+>>>>>>> 00fee089ed9bcd2c11ac10d22a0762b5910238cb
 							</tr>
 						</table>
 						
 					</td>
 				</tr>
+<<<<<<< HEAD
 				<tr>
 					<td>
 						<table border="0" width="100%">
@@ -1058,6 +1107,8 @@ function operaciones(valor){
 						
 					</td>
 				</tr>
+=======
+>>>>>>> 00fee089ed9bcd2c11ac10d22a0762b5910238cb
 			</table>
 		  
 		  
