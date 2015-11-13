@@ -21,8 +21,10 @@ import pe.com.sigamm.bean.ReporteReciboLuzOriginal;
 import pe.com.sigamm.bean.ResponseListBean;
 import pe.com.sigamm.bus.PuestoBus;
 import pe.com.sigamm.bus.ReciboLuzOriginalBus;
+import pe.com.sigamm.bus.ReciboLuzSocioBus;
 import pe.com.sigamm.modelo.LuzOriginal;
 import pe.com.sigamm.modelo.Puesto;
+import pe.com.sigamm.modelo.ReciboLuzSocio;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.Constantes;
@@ -39,6 +41,9 @@ public class ReciboLuzController {
 	
 	@Autowired
 	private PuestoBus puestoBus;
+
+	@Autowired
+	private ReciboLuzSocioBus reciboLuzSocioBus;
 	
 	@Autowired
 	private DatosSession datosSession;
@@ -146,4 +151,35 @@ public class ReciboLuzController {
 		
 		return response;
 	}
+	
+	@RequestMapping(value = "/grabar-luz-x-socio.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String grabarReciboLuzxSocio(ReciboLuzSocio reciboLuzSocio){
+		
+		Gson gson = new Gson();
+		List<CamposObligatorios> camposObligatorios = new ArrayList<CamposObligatorios>();
+		
+		
+		int codigo = 0;
+		String mensaje = "";
+		String listaObligatorios = gson.toJson(camposObligatorios);
+		
+		if(camposObligatorios.size() > 0){
+			
+			codigo = 0;
+			
+		}else{
+			
+			Retorno retorno = reciboLuzSocioBus.grabarReciboLuzxSocio(reciboLuzSocio);
+			codigo = retorno.getCodigo();
+			mensaje = retorno.getMensaje();
+		}
+		 
+		String resultado = "{\"idUsuario\":" + codigo + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + mensaje + "\"}";
+		
+		
+		return resultado;
+	}
+	
+	
+	
 }

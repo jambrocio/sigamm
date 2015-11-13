@@ -607,72 +607,33 @@ function guardarRecibo(){
 	
 	jsonObj = [];
 	var parametros = new Object();
-	parametros.periodo = $("#periodo").val();
-	parametros.fecVencimiento = $("#fecvencimiento").val();
-	parametros.fecEmision = $("#fecemision").val();
-	parametros.costoWats = $("#costowats").val();
-	parametros.estado = $("#estado").val();
-	parametros.repoManCnx = $("#repomancnx").val();
+	parametros.codigoSocio = $("#codigoSocio").val();
+	parametros.codigoRecibo = $("#codigoRecibo").val();
+	parametros.lecturaInicial = $("#lecturaInicial").val();
+	parametros.lecturaFinal = $("#lecturaFinal").val();
+	parametros.consumoMes = $("#consumoMes").val();
 	parametros.cargoFijo = $("#cargofijo").val();
-	parametros.alumPublic = $("#alumpublic").val();
-	parametros.subTotalMes = $("#subtotalmes").val();
-	parametros.igv = $("#igv").val();
+	parametros.alumbradoPublico = $("#alumbradoPublico").val();
+	parametros.cargoEnergia = $("#cargoEnergia").val();
+	parametros.subtotalMes = $("#subtotalMes").val();
 	parametros.totalMesAct = $("#totalmesact").val();
-	parametros.aporteLey = $("#aporteley").val();
-	parametros.cuotaConv = $("#cuotaconv").val();
-	parametros.redonMesAnt = $("#redonmesant").val();
-	parametros.redonMesAct = $("#redonmesact").val();
-	parametros.interesConv = $("#interesconvenio").val();	
-	
-	parametros.energActFraPtaActual = $("#energactfraptaactual").val();
-	parametros.energActFraPtaAnteri = $("#energactfraptaanteri").val();
-	parametros.energActFraPtaDifer = $("#energactfraptadifer").val();
-	parametros.energActFraPtaFactor = $("#energactfraptafactor").val();
-	parametros.energActFraPtaConsu = $("#energactfraptaconsu").val();
-	parametros.energActFraPtaConfa = $("#energactfraptaconfa").val();
-	parametros.energActFraPtaPreuni = $("#energactfraptapreuni").val();
-	parametros.energActFraPtaTotal = $("#energactfraptatotal").val();
-	parametros.energActHorPtaActu = $("#energacthorptaactu").val();
-	parametros.energActHorPtaAnt = $("#energacthorptaant").val();
-	parametros.energActHorPtaDif = $("#energacthorptadif").val();
-	parametros.energActHorPtaFac = $("#energacthorptafac").val();
-	parametros.energActHorPtaCons = $("#energacthorptacons").val();
-	parametros.energActHorPtaConfac = $("#energacthorptaconfac").val();
-	parametros.energActHorPtaPreuni = $("#energacthorptapreuni").val();
-	parametros.energActHorPtaTotal = $("#energacthorptatotal").val();
-	parametros.energReacInicial = $("#energreacinicial").val();
-	parametros.energReacAnteri = $("#energreacanteri").val();
-	parametros.energReacDifere = $("#energreacdifere").val();
-	parametros.energReacFactor = $("#energreacfactor").val();
-	parametros.energReacConsu = $("#energreacconsu").val();
-	parametros.energReacFaccons = $("#energreacfaccons").val();
-	parametros.energReacPreuni = $("#energreacpreuni").val();
-	parametros.energReacTotal = $("#energreactotal").val();
-	
-	parametros.potenciaFpIni = $("#potenciafpini").val();
-	parametros.potenciaFpAnte = $("#potenciafpante").val();
-	parametros.potenciaFpDif = $("#potenciafpdif").val();
-	parametros.potenciaFpFac = $("#potenciafpfac").val();
-	parametros.potenciaFpCons = $("#potenciafpcons").val();
-	parametros.potenciaHpAct = $("#potenciahpact").val();
-	parametros.potenciaHpAnt = $("#potenciahpant").val();
-	parametros.potenciaHpDif = $("#potenciahpdif").val();
-	parametros.potenciaHpFac = $("#potenciahpfac").val();
-	parametros.potenciaHpCons = $("#potenciahpcons").val();
-	parametros.potUsoRedDistConfac = $("#potusoreddistconfac").val();
-	parametros.potUsoRedDistPreuni = $("#potusoreddistpreuni").val();
-	parametros.potUsoRedDistTotal = $("#potusoreddisttotal").val();
-	parametros.potGenFpConfac = $("#potgenfpconfac").val();
-	parametros.potGenFpPreuni = $("#potgenfppreuni").val();
-	parametros.potGenFpTotal = $("#potgenfptotal").val();
-
+	parametros.igv = $("#igv").val();
+	parametros.totalMes = $("#totalMes").val();
+	parametros.usoEquipo = $("#usoEquipo").val();
+	parametros.servicioMantenimiento = $("#servicioMantenimiento").val();
+	parametros.aporteLey = $("#aporteLey").val();
+	parametros.recargo = $("#regarco").val();
+	parametros.redondeo = $("#redondeo").val();
 	parametros.total = $("#total").val();
-
+	parametros.estado = $("#estado").val();
+	parametros.deudaAnterior = $("#deudaAnterior").val();
+	parametros.fechaCarga = $("#fechaCarga").val();
+	parametros.impreso = $("#impreso").val();	
 		
 	$.ajax({
 		type: "POST",
 	    async:false,
-	    url: "grabar-luz-original.json",
+	    url: "grabar-luz-x-socio.json",
 	    cache : false,
 	    data: parametros,
 	    success: function(result){
@@ -712,6 +673,8 @@ function guardarRecibo(){
                 
 		}
 	});
+	
+	cargarReciboLuzSocio();
 	
 }
 </script>
