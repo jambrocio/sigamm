@@ -21,10 +21,8 @@ import pe.com.sigamm.bean.ReporteReciboLuzOriginal;
 import pe.com.sigamm.bean.ResponseListBean;
 import pe.com.sigamm.bus.PuestoBus;
 import pe.com.sigamm.bus.ReciboLuzOriginalBus;
-import pe.com.sigamm.bus.ReciboLuzSocioBus;
 import pe.com.sigamm.modelo.LuzOriginal;
 import pe.com.sigamm.modelo.Puesto;
-import pe.com.sigamm.modelo.ReciboLuzSocio;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.Constantes;
@@ -42,8 +40,8 @@ public class ReciboLuzController {
 	@Autowired
 	private PuestoBus puestoBus;
 	
-	@Autowired
-	private ReciboLuzSocioBus reciboLuzSocioBus;
+	/*@Autowired
+	private ReciboLuzSocioBus reciboLuzSocioBus;*/
 	
 	@Autowired
 	private DatosSession datosSession;
