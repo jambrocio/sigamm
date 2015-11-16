@@ -6,6 +6,7 @@ public class ReciboLuzSocio {
 	
 	int codigoSocio;
 	int codigoRecibo;
+	int correlativo;
 	int lecturaInicial;
 	int lecturaFinal;
 	double consumoMes;
@@ -18,6 +19,7 @@ public class ReciboLuzSocio {
 	double usoEquipo;
 	double servicioMantenimiento;
 	double aporteLey;
+	double reconexion;
 	double recargo;
 	double redondeo;
 	double total;
@@ -144,6 +146,18 @@ public class ReciboLuzSocio {
 	}
 	public void setFechaCarga(Date fechaCarga) {
 		this.fechaCarga = fechaCarga;
+	}
+	public int getCorrelativo() {
+		return correlativo;
+	}
+	public void setCorrelativo(int correlativo) {
+		this.correlativo = correlativo;
+	}
+	public double getReconexion() {
+		return reconexion;
+	}
+	public void setReconexion(double reconexion) {
+		this.reconexion = reconexion;
 	}
 
 }

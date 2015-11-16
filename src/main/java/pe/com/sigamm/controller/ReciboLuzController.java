@@ -41,7 +41,7 @@ public class ReciboLuzController {
 	
 	@Autowired
 	private PuestoBus puestoBus;
-
+	
 	@Autowired
 	private ReciboLuzSocioBus reciboLuzSocioBus;
 	
@@ -151,35 +151,5 @@ public class ReciboLuzController {
 		
 		return response;
 	}
-	
-	@RequestMapping(value = "/grabar-luz-x-socio.json", method = RequestMethod.POST, produces="application/json")
-	public @ResponseBody String grabarReciboLuzxSocio(ReciboLuzSocio reciboLuzSocio){
-		
-		Gson gson = new Gson();
-		List<CamposObligatorios> camposObligatorios = new ArrayList<CamposObligatorios>();
-		
-		
-		int codigo = 0;
-		String mensaje = "";
-		String listaObligatorios = gson.toJson(camposObligatorios);
-		
-		if(camposObligatorios.size() > 0){
-			
-			codigo = 0;
-			
-		}else{
-			
-			Retorno retorno = reciboLuzSocioBus.grabarReciboLuzxSocio(reciboLuzSocio);
-			codigo = retorno.getCodigo();
-			mensaje = retorno.getMensaje();
-		}
-		 
-		String resultado = "{\"idUsuario\":" + codigo + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + mensaje + "\"}";
-		
-		
-		return resultado;
-	}
-	
-	
 	
 }
