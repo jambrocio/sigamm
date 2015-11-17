@@ -30,7 +30,7 @@ public class ReciboSocioLuzDaoImpl implements ReciboLuzSocioDao {
 	private DatosSession datosSession;
 	
 	@Override
-	public Retorno grabarReciboLuzSocio(ReciboLuzSocio reciboLuzSocio) {
+	public Retorno grabarReciboLuzxSocio(ReciboLuzSocio reciboLuzSocio) {
 		Retorno retorno = new Retorno();
 		try{
 			System.out.println("Grabando Recibo Luz Socio");
