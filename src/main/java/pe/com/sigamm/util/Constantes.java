@@ -21,6 +21,10 @@ public class Constantes {
 	public static final String PUESTO_OBLIGATORIO			= "Nro. de Puesto es obligatorio.";
 	public static final String PADRON_OBLIGATORIO			= "Padron es obligatorio.";
 	
+	public static final String DNI_NUMERO					= "DNI debe contener solo numeros.";
+	public static final String PUESTO_NUMERO     			= "Nro. de Puesto debe contener solo numeros.";
+	public static final String PADRON_NUMERO     			= "Padron debe contener solo numeros.";
+	
 	public static final String ETIQUETA_USUARIO			= "lblusuario";
 	public static final String ETIQUETA_DNI				= "lbldni";
 	public static final String ETIQUETA_APEPAT			= "lblapepat";

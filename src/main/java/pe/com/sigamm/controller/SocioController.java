@@ -1,5 +1,6 @@
 package pe.com.sigamm.controller;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,19 +14,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.gson.Gson;
-
 import pe.com.sigamm.bean.CamposObligatorios;
+import pe.com.sigamm.bean.DetalleServicio;
+import pe.com.sigamm.bean.Imei;
 import pe.com.sigamm.bean.ReporteSocio;
 import pe.com.sigamm.bean.ResponseListBean;
 import pe.com.sigamm.bus.SocioBus;
-import pe.com.sigamm.modelo.Puesto;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.modelo.Socio;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.Constantes;
 import pe.com.sigamm.util.OperadoresUtil;
 import pe.com.sigamm.util.Util;
+import pe.com.sigamm.util.Validar;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 @Controller
 public class SocioController {
@@ -82,6 +86,10 @@ private static final Logger log = Logger.getLogger(SocioController.class);
 		
 		if(socio.getDni() == null || socio.getDni().equals("")){
 			camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_DNI, Constantes.DNI_OBLIGATORIO));
+		}else{
+			if(!Validar.esNumero(socio.getDni())){
+				camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_DNI, Constantes.DNI_NUMERO));
+			}
 		}
 		
 		if(socio.getApellidoPaterno() == null || socio.getApellidoPaterno().equals("")){
@@ -110,16 +118,25 @@ private static final Logger log = Logger.getLogger(SocioController.class);
 		
 		if(socio.getNroPuesto() == null || socio.getNroPuesto().equals("")){
 			camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_PUESTO, Constantes.PUESTO_OBLIGATORIO));
+		}else{
+			if(!Validar.esNumero(socio.getNroPuesto())){
+				camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_PUESTO, Constantes.PUESTO_NUMERO));
+			}
 		}
 		
 		if(socio.getPadron() == null || socio.getPadron().equals("")){
 			camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_PADRON, Constantes.PADRON_OBLIGATORIO));
+		}else{
+			if(!Validar.esNumero(socio.getPadron())){
+				camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_PADRON, Constantes.PADRON_NUMERO));
+			}
 		}
 		
 		
 		int codigo = 0;
 		String mensaje = "";
 		String listaObligatorios = gson.toJson(camposObligatorios);
+		String codigoRetorno = "";
 		
 		if(camposObligatorios.size() > 0){
 			
@@ -130,12 +147,34 @@ private static final Logger log = Logger.getLogger(SocioController.class);
 			Retorno retorno = socioBus.grabarSocio(socio);
 			codigo = retorno.getCodigo();
 			mensaje = retorno.getMensaje();
+			codigoRetorno = retorno.getIndicador();
 		}
 		 
-		String resultado = "{\"idUsuario\":" + codigo + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + mensaje + "\"}";
+		//String resultado = "{\"idUsuario\":" + codigo + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + mensaje + "\"}";
+		String resultado = "{\"idUsuario\":" + codigo + ",\"camposObligatorios\":" + listaObligatorios + ",\"codigoRetorno\":\"" + codigoRetorno + "\",\"mensaje\":\"" + mensaje + "\"}";
 		
 		
 		return resultado;
+	}
+	
+	@RequestMapping(value = "/eliminar-socio.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String eliminarSocio(Socio socio){
+		
+		Retorno retorno = socioBus.eliminarSocio(socio);
+		int codigo = retorno.getCodigo();
+		String mensaje = retorno.getMensaje();
+		String codigoRetorno = retorno.getIndicador();
+		
+		//String resultado = "{\"idUsuario\":" + codigo + ",\"mensaje\":\"" + mensaje + "\"}";
+		String resultado = "{\"idUsuario\":" + codigo + ",\"codigoRetorno\":\"" + codigoRetorno + "\",\"mensaje\":\"" + mensaje + "\"}";
+		
+		return resultado;
+	}
+	
+	@RequestMapping(value = "/cargar-servicios.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String cargarServicios(Socio socio){
+		
+		return socioBus.opcionesServicios(socio.getCodigoSocio());
 	}
 	
 }

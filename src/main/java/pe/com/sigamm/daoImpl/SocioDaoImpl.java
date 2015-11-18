@@ -15,8 +15,12 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
+import pe.com.sigamm.bean.DetalleServicio;
 import pe.com.sigamm.bean.ReporteSocio;
+import pe.com.sigamm.bean.ServiciosDetalle;
 import pe.com.sigamm.dao.SocioDao;
+import pe.com.sigamm.modelo.MenuPrincipal;
+import pe.com.sigamm.modelo.Puesto;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.modelo.Socio;
 import pe.com.sigamm.session.DatosSession;
@@ -124,12 +128,12 @@ public class SocioDaoImpl implements SocioDao {
 			MapSqlParameterSource parametros = new MapSqlParameterSource();
 			parametros.addValue("vi_codigo_socio", 				socio.getCodigoSocio());
 			parametros.addValue("vi_dni", 						socio.getDni() != null ? socio.getDni() : "");
-			parametros.addValue("vi_apellido_paterno", 			socio.getApellidoPaterno() != null ? socio.getApellidoPaterno() : "");
-			parametros.addValue("vi_apellido_materno", 			socio.getApellidoMaterno() != null ? socio.getApellidoMaterno() : "");
-			parametros.addValue("vi_nombres", 					socio.getNombres() != null ? socio.getNombres() : "");
+			parametros.addValue("vi_apellido_paterno", 			socio.getApellidoPaterno() != null ? socio.getApellidoPaterno().toUpperCase() : "");
+			parametros.addValue("vi_apellido_materno", 			socio.getApellidoMaterno() != null ? socio.getApellidoMaterno().toUpperCase() : "");
+			parametros.addValue("vi_nombres", 					socio.getNombres() != null ? socio.getNombres().toUpperCase() : "");
 			parametros.addValue("vi_fec_nac", 					socio.getFechaNacimiento() != null ? socio.getFechaNacimiento() : "");
 			parametros.addValue("vi_fec_ingreso", 				socio.getFechaIngreso() != null ? socio.getFechaIngreso() : "");
-			parametros.addValue("vi_correo", 					socio.getCorreo() != null ? socio.getCorreo() : "");
+			parametros.addValue("vi_correo", 					socio.getCorreo() != null ? socio.getCorreo().toUpperCase() : "");
 			parametros.addValue("vi_telefono", 					socio.getTelefono() != null ? socio.getTelefono() : "");
 			parametros.addValue("vi_celular", 					socio.getCelular() != null ? socio.getCelular() : "");
 			parametros.addValue("vi_codigo_giro", 				socio.getCodigoGiro());
@@ -139,11 +143,11 @@ public class SocioDaoImpl implements SocioDao {
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
 			
-			int codigoPuesto = (Integer) result.get("vo_codigo_socio");
+			int codigoSocio = (Integer) result.get("vo_codigo_socio");
 			String indicador = (String) result.get("vo_indicador");
 			String mensaje = (String) result.get("vo_mensaje");
 			
-			retorno.setCodigo(codigoPuesto);
+			retorno.setCodigo(codigoSocio);
 			retorno.setIndicador(indicador);
 			retorno.setMensaje(mensaje);
 			
@@ -156,6 +160,109 @@ public class SocioDaoImpl implements SocioDao {
 		}
 		
 		return retorno;
+		
+	}
+
+	@Override
+	public Retorno eliminarSocio(Socio socio) {
+		
+		Retorno retorno = new Retorno();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_SOCIO");
+			jdbcCall.withProcedureName("SP_ELIMINAR_SOCIO").declareParameters(
+				new SqlParameter("vi_codigo_socio", 			Types.INTEGER),
+				new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
+				
+				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
+				new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
+				
+            
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_socio", 			socio.getCodigoSocio());
+			parametros.addValue("vi_codigo_usuario", 		datosSession.getCodigoUsuario());
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
+		
+	}
+
+	@Override
+	public List<ServiciosDetalle> opcionesServicios(int codigoSocio) {
+		
+		jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+		jdbcCall.withCatalogName("PKG_SOCIO");
+		jdbcCall.withProcedureName("SP_LISTA_OPCIONES_SERVICIOS");
+		jdbcCall.addDeclaredParameter(new SqlOutParameter("vo_result", OracleTypes.CURSOR,new BeanPropertyRowMapper(ServiciosDetalle.class)));
+		
+		MapSqlParameterSource parametros = new MapSqlParameterSource();
+		parametros.addValue("vi_codigo_socio", codigoSocio);
+		
+		Map<String,Object> results = jdbcCall.execute(parametros);
+		List<ServiciosDetalle> lista = (List<ServiciosDetalle>) results.get("vo_result");
+		return  lista;
+		
+	}
+
+	@Override
+	public void grabarSocioServicio(int codigoSocio, DetalleServicio detalle) {
+		
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_SOCIO");
+			jdbcCall.withProcedureName("SP_GRABAR_SOCIO_SERVICIO").declareParameters(
+				new SqlParameter("vi_codigo_socio", 			Types.INTEGER),
+				new SqlParameter("vi_codigo_servicio_detalle", 	Types.INTEGER));
+				
+            
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_socio", 				codigoSocio);
+			parametros.addValue("vi_codigo_servicio_detalle", 	detalle.getCodigoServicioDetalle());
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+		}catch(Exception e){
+			
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+	}
+
+	@Override
+	public void eliminarSocioServicio(int codigoSocio) {
+		
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_SOCIO");
+			jdbcCall.withProcedureName("SP_ELIMINAR_SOCIO_SERVICIO").declareParameters(
+				new SqlParameter("vi_codigo_socio", 			Types.INTEGER));
+				
+            
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_socio", 			codigoSocio);
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+		}catch(Exception e){
+			
+			LoggerCustom.errorApp(this, "", e);
+		}
 		
 	}
 

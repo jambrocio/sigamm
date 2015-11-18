@@ -30,6 +30,8 @@
 <script>
 $(document).ready(function(){	
 	
+	$('[data-toggle="popover"]').popover({ placement : 'right', trigger: "hover" });
+	
 	$("#fecnac").datepicker({
 	    changeMonth: true,
 		changeYear: true,
@@ -96,6 +98,56 @@ function colorEtiquetas(){
 	
 }
 
+function cargarServicios(){
+	
+	var parametros = new Object();
+	parametros.codigoSocio 		= $("#codigoSocio").val();
+	
+	$.ajax({
+        type: "POST",
+        async: false,
+        url: "cargar-servicios.json",
+        cache: false,
+        data: parametros,
+        success: function(result){
+        		
+        	var menuOpciones = "<table id='tablaServicios' border=0 width='100%'>";
+    		$.each(result, function(keyM, servicio) {
+    		    menuOpciones += "<tr><td colspan=3><b>" + servicio.nombreServicio + "</b></td></tr>";
+    		    $.each(servicio.detalle,function(keyN, detalle) {
+    		    	menuOpciones += "<tr>";
+    		    	menuOpciones += "<td>&nbsp;&nbsp;</td>";
+    		    	menuOpciones += "<td align='center'><input type='checkbox' id='chk_" + detalle.codigoServicioDetalle + "'></td>";
+    		    	menuOpciones += "<td style='display:none'>chk_" + detalle.codigoServicioDetalle + "</td>";
+    		    	menuOpciones += "<td style='display:none'>" + detalle.codigoServicioDetalle + "</td>";
+    		    	menuOpciones += "<td>&nbsp;&nbsp;";
+    		    	menuOpciones += detalle.nombreDetalle;
+    		    	menuOpciones += "</td>";
+    		    	menuOpciones += "</tr>";
+    		    	
+    		    });
+    		});
+    		menuOpciones += "</table>";
+    		
+    		$("#servicios").html(menuOpciones);
+    		
+    		$.each(result, function(keyM, servicio) {
+    		    $.each(servicio.detalle,function(keyN, detalle) {
+    		    	if(detalle.seleccionado == 1){
+    		    		$("#chk_" + detalle.codigoServicioDetalle).attr("checked", true);
+    		    	}
+    		    	
+    		    	if(detalle.obligatorio == 1){
+    		    		$("#chk_" + detalle.codigoServicioDetalle).attr("disabled", true);
+    		    	}
+    		    	
+    		    });
+    		    
+    		});
+        }
+    });
+}
+
 function nuevoSocio(){
 	
 	$('#socio_modal').modal({
@@ -123,6 +175,8 @@ function nuevoSocio(){
 	$("#padron").val("");
 	$("#fecnac").val("");
 	$("#fecingreso").val("");
+	
+	cargarServicios();
 }
 
 function guardar(){
@@ -131,36 +185,75 @@ function guardar(){
 			
 	jsonObj = [];
 	var parametros = new Object();
-	parametros.codigoGiro = $("#codigoGiro").val();
-	parametros.nroPuesto = $("#puesto").val();
-	parametros.codigoSocio = $("#codigoSocio").val();
-		
+	parametros.codigoGiro 		= $("#codigoGiro").val();
+	parametros.nroPuesto 		= $("#puesto").val();
+	parametros.codigoSocio 		= $("#codigoSocio").val();
+	parametros.dni 				= $("#dni").val();
+	parametros.apellidoPaterno 	= $("#apePaterno").val();
+	parametros.apellidoMaterno 	= $("#apeMaterno").val();
+	parametros.nombres 			= $("#nombres").val();
+	parametros.fechaNacimiento 	= $("#fecnac").val();
+	parametros.fechaIngreso 	= $("#fecingreso").val();
+	parametros.padron 			= $("#padron").val();
+	parametros.telefono 		= $("#telefono").val();
+	parametros.celular 			= $("#celular").val();
+	parametros.correo 			= "";
+	
+	$("#tablaServicios tr").each(function (item) {
+        var this_row = $(this);
+        var nombreCheck = $.trim(this_row.find('td:eq(2)').html());
+        var codigoDetalle = $.trim(this_row.find('td:eq(3)').html());
+        
+        if(nombreCheck != ""){
+        	
+        	//console.log("nombreCheck : [" + nombreCheck + "] - codigoDetalle : " + codigoDetalle);
+        	
+        	if($("#" + nombreCheck).is(':checked')){  
+                //console.log("Está activado");
+                
+                objetos = {};
+                objetos.codigoServicioDetalle = codigoDetalle;
+                jsonObj.push(objetos);
+                
+            }   
+        	
+        }
+        
+    });
+	
+	parametros.listaDetalle = JSON.stringify(jsonObj);
+	
 	$.ajax({
 		type: "POST",
 	    async:false,
-	    url: "grabar-puesto.json",
+	    url: "grabar-socio.json",
 	    cache : false,
 	    data: parametros,
 	    success: function(result){
 	            
 	        if(result.camposObligatorios.length == 0){
-                	
-            	$('#socio_modal').modal('hide');
-            	
+                
+	        	imagen = "";
+	        	if(result.codigoRetorno == "00"){
+            		$('#socio_modal').modal('hide');
+            		imagen = "ok";
+            		cargarSocios();
+	        	}else{
+	        		imagen = "advertencia";
+	        	}
+	        	
 	            $.gritter.add({
 					// (string | mandatory) the heading of the notification
 					title: 'Mensaje',
 					// (string | mandatory) the text inside the notification
 					text: result.mensaje,
 					// (string | optional) the image to display on the left
-					image: "/" + ruta + "/recursos/images/confirm.png",
+					image: "/" + ruta + "/recursos/images/" + imagen + ".png",
 					// (bool | optional) if you want it to fade out on its own or just sit there
 					sticky: false,
 					// (int | optional) the time you want it to be alive for before fading out
 					time: ''
 				});
-	            
-	            cargarSocios();
 	            
 			}else{
                 	
@@ -178,6 +271,7 @@ function guardar(){
                 
 		}
 	});
+	
 }
 
 function buscarSocioEdicion(){
@@ -227,9 +321,11 @@ function editarSocio(codigoSocio, nroPuesto, codigoGiro, dni, nombreGiro){
 	buscarSocioEdicion();
 	//cargarSocios();
 	
+	cargarServicios();
+	
 }
 
-function eliminarPuesto(codigoSocio, nombre, nroPuesto){
+function eliminarSocio(codigoSocio, nombre, nroPuesto){
 	
 	//console.log("Eliminar Puesto - [codigoPuesto] : " + codigoPuesto);
 	//cargarPuestos();
@@ -250,7 +346,7 @@ function eliminarPuesto(codigoSocio, nombre, nroPuesto){
 		$.ajax({
 			type: "POST",
 		    async:false,
-		    url: "eliminar-puesto.json",
+		    url: "eliminar-socio.json",
 		    cache : false,
 		    data: parametros,
 		    success: function(result){
@@ -319,7 +415,7 @@ function cargarSocios(){
 		mtype: 'POST',
 		height: 'auto',
 		width: 'auto',
-		colNames : ['DNI', 'Nombres', 'Giro', 'Puesto', 'Opciones'],
+		colNames : ['DNI', 'Nombres', 'Giro', 'Fec.Ingreso', 'Padron', 'Puesto', 'Opciones'],
 		colModel : [{
 			name : 'dni',
 			index: 'dni',
@@ -338,6 +434,18 @@ function cargarSocios(){
 			sortable:false,
 			width: 100,
 			align: 'left'
+		},{
+			name : 'fechaIngreso',
+			index: 'fechaIngreso',
+			sortable:false,
+			width: 100,
+			align: 'center'
+		},{
+			name : 'padron',
+			index: 'padron',
+			sortable:false,
+			width: 100,
+			align: 'center'
 		},{
 			name : 'nroPuesto',
 			index: 'nroPuesto',
@@ -429,7 +537,7 @@ function buscarSocio(){
 						</tr>
 						<tr>
 							<td colspan="7" align="left">
-								<button type="button" class="btn btn-primary" onclick="guardar(1)">
+								<button type="button" class="btn btn-primary" onclick="guardar()">
 									<img src="recursos/images/icons/guardar_16x16.png" alt="Buscar" />&nbsp;Guardar
 								</button>
 							</td>
@@ -511,7 +619,7 @@ function buscarSocio(){
 						</tr>
 						<tr>
 							<td width="10px">&nbsp;</td>
-							<td><span id="lbltelefono"><b>Giro Comercial (*)</b></span></td>
+							<td><span id="lblgiroComercial"><b>Giro Comercial (*)</b></span></td>
 							<td width="5px">&nbsp;</td>
 							<td><b>:</b></td>
 							<td width="5px">&nbsp;</td>
@@ -520,7 +628,7 @@ function buscarSocio(){
 						</tr>
 						<tr>
 							<td width="10px">&nbsp;</td>
-							<td><span id="lbltelefono"><b>Puesto (*)</b></span></td>
+							<td><span id="lblpuesto"><b>Puesto (*)</b></span></td>
 							<td width="5px">&nbsp;</td>
 							<td><b>:</b></td>
 							<td width="5px">&nbsp;</td>
@@ -535,6 +643,22 @@ function buscarSocio(){
 							<td width="5px">&nbsp;</td>
 							<td><input type="text" id="padron" class="form-control" maxlength="4" /></td>
 							<td valign="top"><img id="lblpadron-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td><b>Servicios</b></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td colspan="3">&nbsp;</td>
+						</tr>
+						<tr>
+							<td colspan="7">&nbsp;</td>
+						</tr>
+						<tr>
+							<td colspan="4">&nbsp;</td>
+							<td colspan="3">
+								<div id="servicios" />
+							</td>
 						</tr>
 						<tr>
 							<td colspan="7">&nbsp;</td>

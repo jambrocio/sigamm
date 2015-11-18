@@ -21,9 +21,7 @@ import pe.com.sigamm.modelo.GiroComercial;
 import pe.com.sigamm.modelo.Puesto;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.session.DatosSession;
-import pe.com.sigamm.util.Constantes;
 import pe.com.sigamm.util.LoggerCustom;
-import pe.com.sigamm.util.Seguridad;
 
 @Repository
 public class PuestoDaoImpl implements PuestoDao {
@@ -241,4 +239,5 @@ public class PuestoDaoImpl implements PuestoDao {
 		
 		return  reporte;
 	}
+
 }

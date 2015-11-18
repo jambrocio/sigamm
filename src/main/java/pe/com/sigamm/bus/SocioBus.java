@@ -12,4 +12,7 @@ public interface SocioBus {
 
 	public Retorno grabarSocio(Socio socio);
 	
+	public Retorno eliminarSocio(Socio socio);
+	
+	public String opcionesServicios(int codigoSocio);
 }
