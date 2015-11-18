@@ -68,6 +68,11 @@
 		<put-attribute name="titulo" value="Reporte de Puestos" />
 	</definition>
 	
+	<definition name="mantenimiento/socio" extends="main">
+		<put-attribute name="contenido" value="/vistas/mantenimiento/socio.jsp" />
+		<put-attribute name="titulo" value="Reporte de Socios" />
+	</definition>
+	
 	<!-- FACTURACION -->
 	<definition name="facturacion/cobro" extends="main">
 		<put-attribute name="contenido" value="/vistas/facturacion/cobro.jsp" />
