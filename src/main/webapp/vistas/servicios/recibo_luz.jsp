@@ -473,8 +473,8 @@ function cargarReciboLuzSocio(){
 			width: 150,
 			align: 'center'
 		},{
-			name : 'reciboLuz',
-			index: 'reciboLuz',
+			name : 'reciboLuzCreado',
+			index: 'reciboLuzCreado',
 			sortable:false,
 			width: 80,
 			align: 'center'
@@ -502,11 +502,11 @@ function cargarReciboLuzSocio(){
 		caption : "Recibo de Luz Socios",
 		afterInsertRow: function(rowId, data, item){
 			//alert(rowId + ' - ' + data + ' - ' + item.total);
-			if (item.total == 0)
+			if (item.reciboLuzCreado == 0)
 				//$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color' : 'red'  });
-				$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
 			else 
-				$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
 		}
 
 
@@ -521,7 +521,7 @@ function generarReciboLuzXSocio(codigoPuesto){
 	/*$("#nroRecibo").text(codigoReciboLuzOriginal);
 	alert($("#nroRecibo").text());*/
 	
-	$("#numeroPuesto").text(codigoPuesto);
+	$("#codigoPuestoSocio").text(codigoPuesto);
 	
 	$('#recibos_luz_por_socio_modal').modal({
 		backdrop: 'static',
@@ -556,46 +556,47 @@ function cargarDatosReciboLuzSocio(codigoPuesto){
         	//alert("Resultado : [" + result.rows + "]");
         	
         	$.each(result.rows, function(key,val) {
-            	$("#nombreFull").text(val.nombreFull);
-            	$("#numeroPuesto").text(val.numeroPuesto);
-            	$("#nombreSector").text(val.nombreSector);
-            	$("#nombreGiro").text(val.nombreGiro);        	
+            	$("#nombreSocio").text(val.nombreFull);
+            	$("#puestoSocio").text(val.nroPuesto);
+            	$("#sectorSocio").text(val.nombreSector);
+            	$("#giroSocio").text(val.nombreGiro);        	
         	});
         	
         }
     });
 	
-	$("#lecturaAnterior").focus();
+	$("#lecturaInicialSocio").focus();
 }
 
 
 function operaciones(valor){
 	var valores = valor;
 	var respuesta;
-	//alert(valores);
+//	alert(valores);
 	
 	if (valores=='L'){
-		respuesta = parseInt($("#lecturaActual").val()) - parseInt($("#lecturaAnterior").val());
+		respuesta = parseInt($("#lecturaFinalSocio").val()) - parseInt($("#lecturaInicialSocio").val());
 		if (!isNaN(respuesta))
-			$("#consumoMes").html(respuesta);
+			$("#consumoMesSocio").html(respuesta);
 		else
-			$("#consumoMes").html(0);
+			$("#consumoMesSocio").html(0);
 	}else if (valores=='R'){
-		respuesta = parseFloat($("#cargoPorEnergia").val()) + parseFloat($("#alumbradoPublico").val()) + parseFloat($("#mantenimiento").val()) + parseFloat($("#deudaAnterior").val()) + parseFloat($("#reconexion").val());
+		respuesta = parseFloat($("#lecturaFinalSocio").val()) + parseFloat($("#alumbradoPublicoSocio").val()) + parseFloat($("#servicioMantenimientoSocio").val()) + parseFloat($("#deudaAnteriorSocio").val()) + parseFloat($("#reconexionSocio").val());
+		//alert(respuesta);
 		if (!isNaN(respuesta))
-			$("#totalDeLuz").html(respuesta);
+			$("#totalSocio").html(respuesta);
 		else
-			$("#totalDeLuz").html(0.00);
+			$("#totalSocio").html(0.00);
 	}else{
-		$("#lecturaActual").html(0);
-		$("#lecturaAnterior").html(0);
-		$("#consumoMes").html(0);
-		$("#cargoPorEnergia").html(0);
-		$("#alumbradoPublico").html(0);
-		$("#mantenimiento").html(0);
-		$("#deudaAnterior").html(0);
-		$("#reconexion").html(0);
-		$("#totalDeLuz").html(0.00);
+		$("#lecturaInicialSocio").html(0);
+		$("#lecturaFinalSocio").html(0);
+		$("#consumoMesSocio").html(0);
+		$("#cargoEnergiaSocio").html(0);
+		$("#alumbradoPublicoSocio").html(0);
+		$("#servicioMantenimientoSocio").html(0);
+		$("#deudaAnteriorSocio").html(0);
+		$("#reconexionSocio").html(0);
+		$("#totalSocio").html(0.00);
 	}
 	
 }
@@ -605,14 +606,16 @@ function guardarRecibo(){
 	
 	var ruta = obtenerContexto();
 	
+	alert("PUESTO: " + $("#puestoSocio").html() +" - CODIGO: "+ $("#codigoPuestoSocio").text() );
+	
 	jsonObj = [];
 	var parametros = new Object();
-	parametros.codigoSocio = $("#codigoSocio").val();
-	parametros.codigoRecibo = $("#codigoRecibo").val();
-	parametros.lecturaInicial = $("#lecturaInicial").val();
-	parametros.lecturaFinal = $("#lecturaFinal").val();
-	parametros.consumoMes = $("#consumoMes").val();
-	parametros.cargoFijo = $("#cargofijo").val();
+	parametros.codigoSocio = parseInt($("#codigoPuestoSocio").text());
+	//parametros.codigoRecibo = $("#codigoRecibo").val();
+	parametros.lecturaInicial = $("#lecturaInicialSocio").val();
+	parametros.lecturaFinal = $("#lecturaFinalSocio").val();
+	parametros.consumoMes = $("#consumoMesSocio").html();
+	/*parametros.cargoFijo = $("#cargofijo").val();
 	parametros.alumbradoPublico = $("#alumbradoPublico").val();
 	parametros.cargoEnergia = $("#cargoEnergia").val();
 	parametros.subtotalMes = $("#subtotalMes").val();
@@ -628,7 +631,7 @@ function guardarRecibo(){
 	parametros.estado = $("#estado").val();
 	parametros.deudaAnterior = $("#deudaAnterior").val();
 	parametros.fechaCarga = $("#fechaCarga").val();
-	parametros.impreso = $("#impreso").val();	
+	parametros.impreso = $("#impreso").val();*/	
 		
 	$.ajax({
 		type: "POST",
@@ -680,7 +683,7 @@ function guardarRecibo(){
 </script>
 </head>
 <body id="body">
-
+<input type="hidden" id="codigoPuestoSocio" />
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td colspan="4">&nbsp;</td>
@@ -1063,19 +1066,21 @@ function guardarRecibo(){
 						<table border="0" width="100%">
 							<tr>
 								<td width="40%"><b>ASOCIADO (A) :</b></td>
-								<td><div id="nombreFull" style="color: blue; font-size:10px;" align="left"></div></td>
+								<td><div id="nombreSocio" style="color: blue; font-size:10px;" align="left"></div></td>
 							</tr>
 							<tr>
 								<td><b>Nº PUESTO :</b></td>
-								<td><div id="numeroPuesto" style="color: blue; width: 100px;" align="left"></div></td>
+								<td>
+									<div id="puestoSocio" style="color: blue; width: 90px;" align="left"></div>								
+								</td>
 							</tr>
 							<tr>
 								<td><b>SECTOR :</b></td>
-								<td><div id="nombreSector" style="color: blue; width: 100px;" align="left"></div></td>
+								<td><div id="sectorSocio" style="color: blue; width: 100px;" align="left"></div></td>
 							</tr>
 							<tr>
 								<td><b>GIRO :</b></td>
-								<td><div id="nombreGiro" style="color: blue; font-size:10px;" align="left"></div></td>
+								<td><div id="giroSocio" style="color: blue; font-size:10px;" align="left"></div></td>
 							</tr>
 						</table>
 					</td>
@@ -1089,15 +1094,15 @@ function guardarRecibo(){
 							</tr>
 							<tr>
 								<td><b>Lectura Anterior :</b></td>
-								<td><input type='text' id='lecturaAnterior' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('L');" style="text-align: center;"/></td>
+								<td><input type='text' id='lecturaInicialSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('L');" style="text-align: center;"/></td>
 							</tr>
 							<tr>
 								<td><b>Lectura Actual :</b></td>
-								<td><input type='text' id='lecturaActual' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('L');" style="text-align: center;"/></td>
+								<td><input type='text' id='lecturaFinalSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('L');" style="text-align: center;"/></td>
 							</tr>
 							<tr>
 								<td><b>Consumo de Mes :</b></td>
-								<td><div id="consumoMes" style="border: 2px solid blue; width: 100px;" align="center"></div></td>
+								<td><div id="consumoMesSocio" style="border: 2px solid blue; width: 100px;" align="center"></div></td>
 							</tr>
 						</table>		
 					</td>
@@ -1107,27 +1112,27 @@ function guardarRecibo(){
 						<table border="0" width="100%">
 							<tr>
 								<td width="40%"><b>Cargo por Energía :</b></td>
-								<td><input type='text' id='cargoPorEnergia' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
+								<td><input type='text' id='cargoEnergiaSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
 							</tr>
 							<tr>
 								<td><b>Alumbrado Público :</b></td>
-								<td><input type='text' id='alumbradoPublico' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
+								<td><input type='text' id='alumbradoPublicoSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
 							</tr>
 							<tr>
 								<td><b>Mantenimiento :</b></td>
-								<td><input type='text' id='mantenimiento' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
+								<td><input type='text' id='servicioMantenimientoSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
 							</tr>
 							<tr>
 								<td><b>Deuda Anterior :</b></td>
-								<td><input type='text' id='deudaAnterior' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
+								<td><input type='text' id='deudaAnteriorSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
 							</tr>
 							<tr>
 								<td><b>Reconexión :</b></td>
-								<td><input type='text' id='reconexion' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
+								<td><input type='text' id='reconexionSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
 							</tr>
 							<tr>
 								<td><b>TOTAL DE LUZ</b></td>
-								<td><div id="totalDeLuz" style="border: 2px solid blue; width: 100px;" align="center"></div></td>
+								<td><div id="totalSocio" style="border: 2px solid blue; width: 100px;" align="center"></div></td>
 							</tr>
 						</table>
 						

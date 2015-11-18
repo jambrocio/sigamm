@@ -15,7 +15,7 @@ public interface PuestoBus {
 	
 	public ReportePuesto reportePuesto(int pagina, int registros, String dni);
 	
-	public ReportePuesto reportePuestoLuz(int pagina, int registros, int codigoPuesto);
+	public ReportePuesto reportePuestoLuz(int pagina, int registros, int codigoPuesto, int codigoRecibo);
 	
 	public ReportePuesto reportePuestoxPto(int pagina, int registros, String codigoPuesto);
 	

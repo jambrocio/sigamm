@@ -173,7 +173,7 @@ public class PuestoDaoImpl implements PuestoDao {
 	}
 
 	@Override
-	public ReportePuesto reportePuestoLuz(int pagina, int registros, int codigoPuesto) {
+	public ReportePuesto reportePuestoLuz(int pagina, int registros, int codigoPuesto, int codigoRecibo) {
 		ReportePuesto reporte = new ReportePuesto();
 		try{
 			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
@@ -182,7 +182,8 @@ public class PuestoDaoImpl implements PuestoDao {
 			jdbcCall.withProcedureName("SP_REPORTE_PUESTO_LUZ_SOCIO").declareParameters(
 					new SqlParameter("vi_pagina", 					Types.INTEGER),
 					new SqlParameter("vi_registros", 				Types.INTEGER),
-					new SqlParameter("vi_codigo_puesto", 			Types.VARCHAR),
+					new SqlParameter("vi_codigo_puesto", 			Types.INTEGER),
+					new SqlParameter("vi_codigo_recibo", 			Types.INTEGER),
 					
 					new SqlOutParameter("vo_total_registros", 		Types.INTEGER),
 					new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(Puesto.class)));
@@ -191,6 +192,7 @@ public class PuestoDaoImpl implements PuestoDao {
 			parametros.addValue("vi_pagina", 	pagina);
 			parametros.addValue("vi_registros", registros);
 			parametros.addValue("vi_codigo_puesto",codigoPuesto);
+			parametros.addValue("vi_codigo_recibo",codigoRecibo);
 			
 			Map<String,Object> results = jdbcCall.execute(parametros);
 			int totalRegistros = (Integer) results.get("vo_total_registros");
@@ -205,6 +207,7 @@ public class PuestoDaoImpl implements PuestoDao {
 		return  reporte;
 		
 	}
+
 
 	@Override
 	public ReportePuesto reportePuestoxPto(int pagina, int registros, String codigoPuesto) {

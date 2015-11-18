@@ -111,11 +111,12 @@ public class ReciboLuzController {
 	public @ResponseBody ResponseListBean<Puesto> reporteReciboLuzPuesto(
 			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
 			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
-			@RequestParam(value = "codigoPuesto", defaultValue = "0") Integer codigoPuesto){
+			@RequestParam(value = "codigoPuesto", defaultValue = "0") Integer codigoPuesto,
+			@RequestParam(value = "codigoRecibo", defaultValue = "3") Integer codigoRecibo){
 		
 		ResponseListBean<Puesto> response = new ResponseListBean<Puesto>();
 		
-		ReportePuesto reporte = puestoBus.reportePuestoLuz(pagina, registros, codigoPuesto);
+		ReportePuesto reporte = puestoBus.reportePuestoLuz(pagina, registros, codigoPuesto, codigoRecibo);
 		
 		Integer totalReciboPuestoLuz = reporte.getTotalRegistros(); 
 		
@@ -129,6 +130,8 @@ public class ReciboLuzController {
 		
 		return response;
 	}
+
+
 	
 	@RequestMapping(value = "/buscar-usuario-puesto-giro.json", method = RequestMethod.POST, produces="application/json")
 	public @ResponseBody ResponseListBean<Puesto> reporteUsuarioPuestoGiro(

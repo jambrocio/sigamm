@@ -50,9 +50,9 @@ public class PuestoBusImpl implements PuestoBus {
 	}
 
 	@Override
-	public ReportePuesto reportePuestoLuz(int pagina, int registros, int codigoPuesto) {
+	public ReportePuesto reportePuestoLuz(int pagina, int registros, int codigoPuesto, int codigoRecibo) {
 		
-		return puestoDao.reportePuestoLuz(pagina, registros, codigoPuesto);
+		return puestoDao.reportePuestoLuz(pagina, registros, codigoPuesto, codigoRecibo);
 	}
 
 	@Override

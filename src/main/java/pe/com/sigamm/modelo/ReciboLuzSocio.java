@@ -9,7 +9,7 @@ public class ReciboLuzSocio {
 	int correlativo;
 	int lecturaInicial;
 	int lecturaFinal;
-	double consumoMes;
+	int consumoMes;
 	double cargoFijo;
 	double alumbradoPublico;
 	double cargoEnergia;
@@ -26,6 +26,7 @@ public class ReciboLuzSocio {
 	double deudaAnterior;
 	double estado;
 	Date fechaCarga;
+	int reciboLuzCreado;
 	
 	public int getCodigoSocio() {
 		return codigoSocio;
@@ -39,6 +40,12 @@ public class ReciboLuzSocio {
 	public void setCodigoRecibo(int codigoRecibo) {
 		this.codigoRecibo = codigoRecibo;
 	}
+	public int getCorrelativo() {
+		return correlativo;
+	}
+	public void setCorrelativo(int correlativo) {
+		this.correlativo = correlativo;
+	}
 	public int getLecturaInicial() {
 		return lecturaInicial;
 	}
@@ -51,10 +58,10 @@ public class ReciboLuzSocio {
 	public void setLecturaFinal(int lecturaFinal) {
 		this.lecturaFinal = lecturaFinal;
 	}
-	public double getConsumoMes() {
+	public int getConsumoMes() {
 		return consumoMes;
 	}
-	public void setConsumoMes(double consumoMes) {
+	public void setConsumoMes(int consumoMes) {
 		this.consumoMes = consumoMes;
 	}
 	public double getCargoFijo() {
@@ -111,6 +118,12 @@ public class ReciboLuzSocio {
 	public void setAporteLey(double aporteLey) {
 		this.aporteLey = aporteLey;
 	}
+	public double getReconexion() {
+		return reconexion;
+	}
+	public void setReconexion(double reconexion) {
+		this.reconexion = reconexion;
+	}
 	public double getRecargo() {
 		return recargo;
 	}
@@ -147,17 +160,11 @@ public class ReciboLuzSocio {
 	public void setFechaCarga(Date fechaCarga) {
 		this.fechaCarga = fechaCarga;
 	}
-	public int getCorrelativo() {
-		return correlativo;
+	public int getReciboLuzCreado() {
+		return reciboLuzCreado;
 	}
-	public void setCorrelativo(int correlativo) {
-		this.correlativo = correlativo;
-	}
-	public double getReconexion() {
-		return reconexion;
-	}
-	public void setReconexion(double reconexion) {
-		this.reconexion = reconexion;
+	public void setReciboLuzCreado(int reciboLuzCreado) {
+		this.reciboLuzCreado = reciboLuzCreado;
 	}
 
 }
