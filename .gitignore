@@ -54,3 +54,5 @@ Temporary Items
 *.project
 .settings/org.eclipse.wst.validation.prefs
 *.class
+src/main/resources/spring/application-config.xml
+target/classes/pe/com/sigamm/controller/ReciboLuzController.class

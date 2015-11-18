@@ -381,7 +381,20 @@ function cargarReciboLuzOriginal(){
 		rownumbers: true,
 		viewrecords : true,
 		sortorder : "codigoReciboLuzOriginal",				
-		caption : "Recibo de Luz Original"				
+		caption : "Recibo de Luz Original",
+		afterInsertRow: function(rowId, data, item){
+			//alert(rowId + ' - ' + data + ' - ' + item.periodo);
+			var anio = item.periodo.substring(0,4);
+			var mes1 = item.periodo.substring(4,6);
+			var periodo = null;
+			var months = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO','JULIO', 'AGOSTO', 'SETIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+			for(var j=0;j<months.length;j++){
+				if (mes1==j+1)
+					periodo=months[j] + ' ' + anio;
+			}
+			$("#grilla").setCell(rowId, 'periodo', periodo, '' );
+		}
+
 
 	}).trigger('reloadGrid');
 }
@@ -409,28 +422,28 @@ function generarReciboLuzSocio(codigoReciboLuzOriginal){
 }
 
 function cargarReciboLuzSocio(){
-	
+	var recibo = $('#nroRecibo').html();
 	var ruta = obtenerContexto();
 	var formatterBotones = function(cellVal,options,rowObject)
 	{	
 		var opciones = "<center>";
 			
 			opciones += "<a href=javascript:editarReciboLuzSocio(";
-			opciones += rowObject.codigoPuesto + "') >";
+			opciones += rowObject.codigoPuesto + "','" + recibo + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Luz Socio'/>";
 			opciones += "</a>";
 			
 			opciones += "&nbsp;&nbsp;";
 			
 			opciones += "<a href=javascript:eliminarReciboLuzSocio(";
-			opciones += rowObject.codigoPuesto + "') >";
+			opciones += rowObject.codigoPuesto + "','" + recibo + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Recibo Luz Socio'/>";
 			opciones += "</a>";
 			
 			opciones += "&nbsp;&nbsp;";
 			
 			opciones += "<a href=javascript:generarReciboLuzXSocio('";
-			opciones += rowObject.codigoPuesto + "') >";
+			opciones += rowObject.codigoPuesto + "','" + recibo + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/agregar2_24x24.png' border='0' title='Crear Recibo de Luz por Socio'/>";
 			opciones += "</a>";			
 			
@@ -503,7 +516,6 @@ function cargarReciboLuzSocio(){
 		afterInsertRow: function(rowId, data, item){
 			//alert(rowId + ' - ' + data + ' - ' + item.total);
 			if (item.reciboLuzCreado == 0)
-				//$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color' : 'red'  });
 				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
 			else 
 				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
@@ -514,7 +526,7 @@ function cargarReciboLuzSocio(){
 }
 
 
-function generarReciboLuzXSocio(codigoPuesto){
+function generarReciboLuzXSocio(codigoPuesto,recibo){
 	console.log("Generar Recibo de Luz X Socios - [codigo Socio] : " + codigoPuesto);
 	
 	//alert(codigoPuesto);
@@ -522,28 +534,28 @@ function generarReciboLuzXSocio(codigoPuesto){
 	alert($("#nroRecibo").text());*/
 	
 	$("#codigoPuestoSocio").text(codigoPuesto);
+	$("#codigoReciboOriginal").text(recibo);
 	
 	$('#recibos_luz_por_socio_modal').modal({
 		backdrop: 'static',
 		keyboard: false
 	});
 	
-	//$("#codigoPuesto").html(" - PUESTO [" + codigoPuestoesto + "]");
-	
 	colorEtiquetas();
 	
 	/*$("#codigoReciboLuzOriginal").val(codigoReciboLuzOriginal);
 	buscarUsuario();*/
-	cargarDatosReciboLuzSocio(codigoPuesto);
+	cargarDatosReciboLuzSocio(codigoPuesto,recibo);
 	
 }
 
-function cargarDatosReciboLuzSocio(codigoPuesto){	
+function cargarDatosReciboLuzSocio(codigoPuesto,recibo){	
 
 	//alert(codigoPuesto);
 	
 	var parametros = new Object();
 	parametros.codigoPuesto = codigoPuesto;
+	parametros.reciboOriginal = recibo;
 	
 	$.ajax({
         type: "POST",
@@ -606,12 +618,12 @@ function guardarRecibo(){
 	
 	var ruta = obtenerContexto();
 	
-	alert("PUESTO: " + $("#puestoSocio").html() +" - CODIGO: "+ $("#codigoPuestoSocio").text() );
+	//alert("PUESTO: " + $("#puestoSocio").html() +" - CODIGO: "+ $("#codigoPuestoSocio").text() );
 	
 	jsonObj = [];
 	var parametros = new Object();
 	parametros.codigoSocio = parseInt($("#codigoPuestoSocio").text());
-	//parametros.codigoRecibo = $("#codigoRecibo").val();
+	parametros.codigoRecibo = $("#codigoReciboOriginal").text();
 	parametros.lecturaInicial = $("#lecturaInicialSocio").val();
 	parametros.lecturaFinal = $("#lecturaFinalSocio").val();
 	parametros.consumoMes = $("#consumoMesSocio").html();
@@ -684,6 +696,7 @@ function guardarRecibo(){
 </head>
 <body id="body">
 <input type="hidden" id="codigoPuestoSocio" />
+<input type="hidden" id="codigoReciboOriginal" />
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td colspan="4">&nbsp;</td>
