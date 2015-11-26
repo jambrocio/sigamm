@@ -9,8 +9,6 @@ import pe.com.sigamm.modelo.Retorno;
 
 public interface FacturacionBus {
 
-	public List<Concepto> listaConcepto();
-	
 	public Retorno grabarFacturacion(FacturacionCabecera facturacion, List<FacturacionDetalle> lista);
 	
 }

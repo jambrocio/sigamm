@@ -18,6 +18,7 @@ public class Socio {
 	String celular;
 	String correo;
 	String listaDetalle;
+	String nombreSector;
 	
 	public int getCodigoSocio() {
 		return codigoSocio;
@@ -115,5 +116,11 @@ public class Socio {
 	public void setListaDetalle(String listaDetalle) {
 		this.listaDetalle = listaDetalle;
 	}
-					
+	public String getNombreSector() {
+		return nombreSector;
+	}
+	public void setNombreSector(String nombreSector) {
+		this.nombreSector = nombreSector;
+	}
+						
 }

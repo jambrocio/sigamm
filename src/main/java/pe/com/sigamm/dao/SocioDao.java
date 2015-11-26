@@ -10,7 +10,7 @@ import pe.com.sigamm.modelo.Socio;
 
 public interface SocioDao {
 	
-	public ReporteSocio reporteSocio(int pagina, int registros, String dni);
+	public ReporteSocio reporteSocio(int pagina, int registros, String dni, int exportar);
 	
 	public Socio buscarSocio(Socio socio);
 	
@@ -23,5 +23,7 @@ public interface SocioDao {
 	public void grabarSocioServicio(int codigoSocio, DetalleServicio detalle);
 	
 	public void eliminarSocioServicio(int codigoSocio);
+	
+	public Socio buscarSocioPuesto(Socio socio);
 	
 }

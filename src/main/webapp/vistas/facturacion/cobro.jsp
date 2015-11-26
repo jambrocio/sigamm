@@ -47,68 +47,13 @@ $(document).ready(function(){
 	
 	$('[data-toggle="popover"]').popover({ placement : 'right', trigger: "hover" });
 	
-	$.ajax({
-        type: "POST",
-        async: false,
-        url: "listar-concepto.json",
-        cache: false,
-        success: function(result){
-        	
-        	$("#concepto").autocomplete(result, {
-                formatItem: function(item) {
-                    return item.nombreConcepto;
-                },
-                width: 460,
-                scroll: true,
-                matchContains: true,
-                minChars: 0//cuando se presiona el boton de flecha hacia abajo se muestra toda la lista
-            }).result(function(event, item) {
-            	
-            	$("#codigoConcepto").val(item.codigoConcepto);
-            	
-            });
-        	
-        }
-    });
-	
 });
-
-function buscarUsuarioXDni(){
-	
-	dni = $("#dniBuscar").val();
-	
-	var parametros = new Object();
-	parametros.dni = dni;
-	
-	$.ajax({
-        type: "POST",
-        async:false,
-        url: "reporte-puestos.json",
-        cache : false,
-        data: parametros,
-        success: function(result){
-            select = "<option value='0'>Seleccionar</option>";
-        	$.each(result.rows, function(id, obj){
-                
-                select += "<option value=" + obj.codigoPuesto + " >" + obj.nroPuesto + "</option>"; 
-                       
-			});
-			
-			$("#puesto").html(select);
-			
-        }
-    });
-}
 
 function colorEtiquetas(){
 	
-	$("#lblpuesto").css("color", "black");
-	$("#lblconcepto").css("color", "black");
-	$("#lblmonto").css("color", "black");
+	$("#lblservicio").css("color", "black");
 	
-	$("#lblpuesto-img").hide();
-	$("#lblconcepto-img").hide();
-	$("#lblmonto-img").hide();
+	$("#lblservicio-img").hide();
 	
 }
 
@@ -117,23 +62,16 @@ function nuevoCobro(){
 	colorEtiquetas();
 	
 	$("#codigoPuesto").val(0);
-	$("#codigoUsuario").val(0);
-	$("#codigoConcepto").val(0);
 	
 	$("#dniBuscar").val("");
-	$("#concepto").val("");
-	$("#monto").val("");
 	
 	$("#dni").val("");
-	$("#userid").val("");
 	$("#apePaterno").val("");
 	$("#apeMaterno").val("");
 	$("#nombres").val("");
 	$("#telefono").val("");
 	
 	$("#btnBuscar").attr("disabled", false);
-	
-	buscarUsuarioXDni();
 	
 	var tabla = document.getElementById("tabla_resultado");
 	var filasTabla = tabla.rows.length;
@@ -218,40 +156,66 @@ function guardar(){
 	});
 }
 
-function buscarUsuario(){
+function buscarPuesto(){
 	
-	dni = $("#dniBuscar").val();
+	puesto = $("#puestoBuscar").val();
 	
 	var parametros = new Object();
-	parametros.dni = dni;
+	parametros.nroPuesto = puesto;
 	
 	$.ajax({
         type: "POST",
         async:false,
-        url: "buscar-usuario.json",
+        url: "buscar-socio-puesto.json",
         cache : false,
         data: parametros,
         success: function(result){
-            //console.log(result.userid);
-        	//alert("Resultado : [" + result.codigo + "]");
-        	$("#userid").val(result.userid);
+            
         	$("#dni").val(result.dni);
         	$("#apePaterno").val(result.apellidoPaterno);
         	$("#apeMaterno").val(result.apellidoMaterno);
         	$("#nombres").val(result.nombres);
         	$("#telefono").val(result.telefono);
-        	$("#codigoUsuario").val(result.codigoUsuario);
+        	$("#codigoSocio").val(result.codigoSocio);
+        	$("#puesto").val(result.nroPuesto);
         	
-        	buscarUsuarioXDni();
-        	
-        	$("#btnBuscar").attr("disabled", true);
+        	cargarServicios();
         	
         }
     });
 }
 
-function agregarConcepto(){
+
+function cargarServicios(){
 	
+	var parametros = new Object();
+	parametros.codigoSocio = $("#codigoSocio").val();
+	
+	$.ajax({
+        type: "POST",
+        async: false,
+        url: "cargar-servicios.json",
+        cache: false,
+        data: parametros,
+        success: function(result){
+        	
+        	var optionServicios = "<option value=0>SELECCIONAR</option>";
+        	$.each(result, function(keyM, serv) {
+        		
+        		optionServicios += "<option value=" + serv.codigoServicio + ">" + serv.nombreServicio + "</option>";
+        		
+        	});
+        	
+        	$("#servicio").html(optionServicios);
+    		
+        }
+    });
+	
+}
+
+
+function agregarConcepto(){
+	/*	
 	var ruta = obtenerContexto();
 	codigoConcepto = $("#codigoConcepto").val();
 	descripcionConcepto = $("#concepto").val();
@@ -299,10 +263,6 @@ function agregarConcepto(){
 					"<img src='/"+ruta+"/recursos/images/icons/eliminar_16x16.png' alt='Eliminar' />" +
 				"</button></td>" +
 				"</tr>");
-				
-			$("#monto").val("");
-			$("#concepto").val("");
-			$("#codigoConcepto").val("0");
 			
 		}else{
 			
@@ -316,7 +276,9 @@ function agregarConcepto(){
 	}
 	
 	calculoTotal();
+	*/
 }
+
 
 function calculoTotal(){
 	
@@ -355,18 +317,10 @@ function validarSiNumero(numero){
 	
 }
 	
-function cargarPuestos(){
-	
-	puesto = $("#puesto").val();
-	$("#codigoPuesto").val(puesto);
-	
-}
 </script>
 </head>
 <body id="body">
-<input type="hidden" id="codigoPuesto" />
-<input type="hidden" id="codigoUsuario" />
-<input type="hidden" id="codigoConcepto" />
+<input type="hidden" id="codigoSocio" />
 <table border="0" style="width: 500px;">
 	<tr>
 		<td colspan="7" align="right">&nbsp;</td>
@@ -391,28 +345,19 @@ function cargarPuestos(){
 	</tr>
 	<tr>
 		<td width="10px">&nbsp;</td>
-		<td><span id="lbldni"><b>DNI</b></span></td>
+		<td><span id="lblNumeroPuesto"><b>Nro.Puesto</b></span></td>
 		<td width="5px">&nbsp;</td>
 		<td><b>:</b></td>
 		<td width="5px">&nbsp;</td>
-		<td><input type="text" id="dniBuscar" class="form-control" maxlength="8" /></td>
+		<td><input type="text" id="puestoBuscar" class="form-control" maxlength="4" /></td>
 		<td valign="top">&nbsp;&nbsp;
-			<button type="button" id="btnBuscar" class="btn btn-primary" onclick="buscarUsuario()">
+			<button type="button" id="btnBuscar" class="btn btn-primary" onclick="buscarPuesto()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 			</button>
 		</td>
 	</tr>
 	<tr>
 		<td colspan="7"><hr /></td>
-	</tr>
-	<tr>
-		<td width="10px">&nbsp;</td>
-		<td><span id="lblusuario"><b>Usuario</b></span></td>
-		<td width="5px">&nbsp;</td>
-		<td><b>:</b></td>
-		<td width="5px">&nbsp;</td>
-		<td><input type="text" id="userid" class="form-control" maxlength="20" disabled="disabled"/></td>
-		<td valign="top">&nbsp;</td>
 	</tr>
 	<tr>
 		<td width="10px">&nbsp;</td>
@@ -465,26 +410,17 @@ function cargarPuestos(){
 		<td width="5px">&nbsp;</td>
 		<td><b>:</b></td>
 		<td width="5px">&nbsp;</td>
-		<td><select id="puesto" class="form-control" onchange="cargarPuestos();" /></td>
-		<td valign="top"><img id="lblpuesto-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+		<td><input type="text" id="puesto" class="form-control" maxlength="9" disabled="disabled"/></td>
+		<td valign="top">&nbsp;</td>
 	</tr>
 	<tr>
 		<td width="10px">&nbsp;</td>
-		<td><span id="lblconcepto"><b>Concepto</b></span></td>
+		<td><span id="lblservicio"><b>Servicio</b></span></td>
 		<td width="5px">&nbsp;</td>
 		<td><b>:</b></td>
 		<td width="5px">&nbsp;</td>
-		<td><input type="text" id="concepto" class="form-control" maxlength="4" /></td>
-		<td valign="top"><img id="lblconcepto-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
-	</tr>
-	<tr>
-		<td width="10px">&nbsp;</td>
-		<td><span id="lblmonto"><b>Monto</b></span></td>
-		<td width="5px">&nbsp;</td>
-		<td><b>:</b></td>
-		<td width="5px">&nbsp;</td>
-		<td><input type="text" id="monto" class="form-control" maxlength="6" /></td>
-		<td valign="top"><img id="lblmonto-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+		<td><select id="servicio" class="form-control"></select></td>
+		<td valign="top"><img id="lblservicio-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 	</tr>
 	<tr>
 		<td width="10px">&nbsp;</td>
@@ -493,7 +429,7 @@ function cargarPuestos(){
 		<td>&nbsp;</td>
 		<td width="5px">&nbsp;</td>
 		<td>
-			<button type="button" id="btnAgregar" class="btn btn-primary" onclick="agregarConcepto()">
+			<button type="button" id="btnAgregar" class="btn btn-primary">
 				<img src="recursos/images/icons/agregar2_16x16.png" alt="Agregar" />&nbsp;Agregar
 			</button>
 		</td>

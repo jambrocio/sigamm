@@ -1,6 +1,5 @@
 package pe.com.sigamm.controller;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,10 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import pe.com.sigamm.bean.CamposObligatorios;
-import pe.com.sigamm.bean.DetalleServicio;
-import pe.com.sigamm.bean.Imei;
 import pe.com.sigamm.bean.ReporteSocio;
 import pe.com.sigamm.bean.ResponseListBean;
 import pe.com.sigamm.bus.SocioBus;
@@ -29,7 +27,6 @@ import pe.com.sigamm.util.Util;
 import pe.com.sigamm.util.Validar;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 @Controller
 public class SocioController {
@@ -57,7 +54,7 @@ private static final Logger log = Logger.getLogger(SocioController.class);
 		
 		ResponseListBean<Socio> response = new ResponseListBean<Socio>();
 		
-		ReporteSocio reporte = socioBus.reporteSocio(pagina, registros, dni);
+		ReporteSocio reporte = socioBus.reporteSocio(pagina, registros, dni, 0);
 		
 		Integer totalSocios = reporte.getTotalRegistros(); 
 		
@@ -177,4 +174,22 @@ private static final Logger log = Logger.getLogger(SocioController.class);
 		return socioBus.opcionesServicios(socio.getCodigoSocio());
 	}
 	
+	@RequestMapping(value = "/reporteSociosExcel", method = RequestMethod.GET)
+    public ModelAndView downloadExcel() {
+        
+		// create some sample data
+		ReporteSocio reporte = socioBus.reporteSocio(1, 1, "0", 1);
+		
+		List<Socio> lista = reporte.getListaSocio(); 
+		
+		// return a view which will be resolved by an excel view resolver
+        return new ModelAndView("excelView", "listaRegistros", lista);
+         
+    }
+	
+	@RequestMapping(value = "/buscar-socio-puesto.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody Socio buscarSocioPuesto(Socio socio){
+		
+		return socioBus.buscarSocioPuesto(socio);
+	}
 }

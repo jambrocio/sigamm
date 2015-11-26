@@ -4,16 +4,16 @@ import java.util.List;
 
 public class Servicio {
 
-	int codigoServico;
+	int codigoServicio;
 	String nombreServicio;
 	int ordenServicio;
 	List<DetalleServicio> detalle;
 	
-	public int getCodigoServico() {
-		return codigoServico;
+	public int getCodigoServicio() {
+		return codigoServicio;
 	}
-	public void setCodigoServico(int codigoServico) {
-		this.codigoServico = codigoServico;
+	public void setCodigoServicio(int codigoServicio) {
+		this.codigoServicio = codigoServicio;
 	}
 	public String getNombreServicio() {
 		return nombreServicio;

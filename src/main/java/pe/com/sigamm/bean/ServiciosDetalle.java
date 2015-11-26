@@ -2,7 +2,7 @@ package pe.com.sigamm.bean;
 
 public class ServiciosDetalle {
 
-	int codigoServico;
+	int codigoServicio;
 	String nombreServicio;
 	int ordenServicio;
 	int codigoServicioDetalle;
@@ -12,11 +12,11 @@ public class ServiciosDetalle {
 	int ordenDetalle;
 	int seleccionado;
 	
-	public int getCodigoServico() {
-		return codigoServico;
+	public int getCodigoServicio() {
+		return codigoServicio;
 	}
-	public void setCodigoServico(int codigoServico) {
-		this.codigoServico = codigoServico;
+	public void setCodigoServicio(int codigoServicio) {
+		this.codigoServicio = codigoServicio;
 	}
 	public String getNombreServicio() {
 		return nombreServicio;

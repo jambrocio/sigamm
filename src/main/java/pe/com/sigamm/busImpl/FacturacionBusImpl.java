@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import pe.com.sigamm.bus.FacturacionBus;
 import pe.com.sigamm.dao.FacturacionDao;
-import pe.com.sigamm.modelo.Concepto;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Retorno;
@@ -22,13 +21,6 @@ public class FacturacionBusImpl implements FacturacionBus {
 	@Resource
 	private FacturacionDao facturacionDao;
 	
-	@Override
-	public List<Concepto> listaConcepto() {
-		
-		return facturacionDao.listaConcepto();
-		
-	}
-
 	@Override
 	public Retorno grabarFacturacion(FacturacionCabecera facturacion, List<FacturacionDetalle> lista) {
 		

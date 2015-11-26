@@ -6,6 +6,7 @@ import java.util.Map;
 
 import oracle.jdbc.OracleTypes;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,15 +20,18 @@ import pe.com.sigamm.bean.DetalleServicio;
 import pe.com.sigamm.bean.ReporteSocio;
 import pe.com.sigamm.bean.ServiciosDetalle;
 import pe.com.sigamm.dao.SocioDao;
-import pe.com.sigamm.modelo.MenuPrincipal;
-import pe.com.sigamm.modelo.Puesto;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.modelo.Socio;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.LoggerCustom;
 
+import com.google.gson.Gson;
+
 @Repository
 public class SocioDaoImpl implements SocioDao {
+	
+	private static final Logger log = Logger.getLogger(SocioDaoImpl.class);
+	Gson gson = new Gson();
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -37,7 +41,7 @@ public class SocioDaoImpl implements SocioDao {
 	private DatosSession datosSession;
 	
 	@Override
-	public ReporteSocio reporteSocio(int pagina, int registros, String dni) {
+	public ReporteSocio reporteSocio(int pagina, int registros, String dni, int exportar) {
 		
 		ReporteSocio reporte = new ReporteSocio();
 		try{
@@ -47,14 +51,16 @@ public class SocioDaoImpl implements SocioDao {
 					new SqlParameter("vi_pagina", 					Types.INTEGER),
 					new SqlParameter("vi_registros", 				Types.INTEGER),
 					new SqlParameter("vi_dni", 						Types.VARCHAR),
+					new SqlParameter("vi_exportar", 				Types.INTEGER),
 					
 					new SqlOutParameter("vo_total_registros", 		Types.INTEGER),
 					new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(Socio.class)));
 			
 			MapSqlParameterSource parametros = new MapSqlParameterSource();
-			parametros.addValue("vi_pagina", 	pagina);
-			parametros.addValue("vi_registros", registros);
-			parametros.addValue("vi_dni", 		dni);
+			parametros.addValue("vi_pagina", 		pagina);
+			parametros.addValue("vi_registros", 	registros);
+			parametros.addValue("vi_dni", 			dni);
+			parametros.addValue("vi_exportar", 		exportar);
 			
 			Map<String,Object> results = jdbcCall.execute(parametros);
 			int totalRegistros = (Integer) results.get("vo_total_registros");
@@ -64,7 +70,7 @@ public class SocioDaoImpl implements SocioDao {
 			reporte.setListaSocio(lista);
 			
 		}catch(Exception e){
-			e.printStackTrace();
+			LoggerCustom.errorApp(this, "", e);
 		}
 		
 		return  reporte;
@@ -91,7 +97,7 @@ public class SocioDaoImpl implements SocioDao {
 			reporte = lista.get(0);
 			
 		}catch(Exception e){
-			e.printStackTrace();
+			LoggerCustom.errorApp(this, "", e);
 		}
 		
 		return  reporte;
@@ -146,6 +152,8 @@ public class SocioDaoImpl implements SocioDao {
 			int codigoSocio = (Integer) result.get("vo_codigo_socio");
 			String indicador = (String) result.get("vo_indicador");
 			String mensaje = (String) result.get("vo_mensaje");
+			
+			log.info("Codigo Retorno : [" + indicador + "] - Mensaje : [" + mensaje + "] - Registro Socio : [" + gson.toJson(socio) + "]");
 			
 			retorno.setCodigo(codigoSocio);
 			retorno.setIndicador(indicador);
@@ -263,6 +271,33 @@ public class SocioDaoImpl implements SocioDao {
 			
 			LoggerCustom.errorApp(this, "", e);
 		}
+		
+	}
+
+	@Override
+	public Socio buscarSocioPuesto(Socio socio) {
+		
+		Socio reporte = new Socio();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_SOCIO");
+			jdbcCall.withProcedureName("SP_BUSCAR_SOCIO_PUESTO").declareParameters(
+					new SqlParameter("vi_codigo_socio", 			Types.INTEGER),
+					new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(Socio.class)));
+			
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_numero_puesto", 	socio.getNroPuesto());
+			
+			Map<String,Object> results = jdbcCall.execute(parametros);
+			List<Socio> lista = (List<Socio>) results.get("vo_result");
+			
+			reporte = lista.get(0);
+			
+		}catch(Exception e){
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return  reporte;
 		
 	}
 

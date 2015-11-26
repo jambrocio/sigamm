@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -18,7 +17,7 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.springframework.web.servlet.view.document.AbstractExcelView;
 
-import pe.com.sigamm.modelo.RegistrosApp;
+import pe.com.sigamm.modelo.Socio;
 
 public class ExcelBuilder extends AbstractExcelView{
 	
@@ -32,7 +31,7 @@ public class ExcelBuilder extends AbstractExcelView{
             HSSFWorkbook workbook, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         // get data model which is passed by the Spring container
-        List<RegistrosApp> listaRegistros = (List<RegistrosApp>) model.get("listaRegistros");
+        List<Socio> listaRegistros = (List<Socio>) model.get("listaRegistros");
          
         // create a new Excel sheet
         HSSFSheet sheet = workbook.createSheet("Registros");
@@ -91,40 +90,31 @@ public class ExcelBuilder extends AbstractExcelView{
         header.createCell(0).setCellValue("Nro.");
         header.getCell(0).setCellStyle(csCabecera);
         
-        header.createCell(1).setCellValue("Unidad Territorial");
+        header.createCell(1).setCellValue("DNI");
         header.getCell(1).setCellStyle(csCabecera);
          
-        header.createCell(2).setCellValue("Dni");
+        header.createCell(2).setCellValue("Nombres");
         header.getCell(2).setCellStyle(csCabecera);
          
-        header.createCell(3).setCellValue("Ap.Paterno");
+        header.createCell(3).setCellValue("Giro");
         header.getCell(3).setCellStyle(csCabecera);
          
-        header.createCell(4).setCellValue("Ap.Materno");
+        header.createCell(4).setCellValue("Fecha Ingreso");
         header.getCell(4).setCellStyle(csCabecera);
          
-        header.createCell(5).setCellValue("Nombre");
+        header.createCell(5).setCellValue("Padron");
         header.getCell(5).setCellStyle(csCabecera);
         
-        header.createCell(6).setCellValue("Condicion");
+        header.createCell(6).setCellValue("Puesto");
         header.getCell(6).setCellStyle(csCabecera);
         
-        header.createCell(7).setCellValue("Operador");
+        header.createCell(7).setCellValue("Sector");
         header.getCell(7).setCellStyle(csCabecera);
         
-        header.createCell(8).setCellValue("Fecha Registro");
-        header.getCell(8).setCellStyle(csCabecera);
-        
-        header.createCell(9).setCellValue("Tipo Registro");
-        header.getCell(9).setCellStyle(csCabecera);
-        
-        header.createCell(10).setCellValue("Observacion");
-        header.getCell(10).setCellStyle(csCabecera);
-         
         // create data rows
         int rowCount = 1;
          
-        for (RegistrosApp registro : listaRegistros) {
+        for (Socio socio : listaRegistros) {
         	
         	Cell c = null;
             HSSFRow aRow = sheet.createRow(rowCount++);
@@ -134,43 +124,31 @@ public class ExcelBuilder extends AbstractExcelView{
     		c.setCellStyle(csRight);
     		
     		c = aRow.createCell(1);
-    		c.setCellValue(registro.getNombreUt());
+    		c.setCellValue(socio.getDni());
     		c.setCellStyle(csRight);
     		
     		c = aRow.createCell(2);
-    		c.setCellValue(registro.getDni());
+    		c.setCellValue(socio.getNombreFull());
     		c.setCellStyle(csRight);
     		
     		c = aRow.createCell(3);
-    		c.setCellValue(registro.getApPaterno());
+    		c.setCellValue(socio.getNombreGiro());
     		c.setCellStyle(csRight);
     		
     		c = aRow.createCell(4);
-    		c.setCellValue(registro.getApMaterno());
+    		c.setCellValue(socio.getFechaIngreso());
     		c.setCellStyle(csRight);
     		
     		c = aRow.createCell(5);
-    		c.setCellValue(registro.getNombre());
+    		c.setCellValue(socio.getPadron());
     		c.setCellStyle(csRight);
     		
     		c = aRow.createCell(6);
-    		c.setCellValue(registro.getCondicion());
+    		c.setCellValue(socio.getNroPuesto());
     		c.setCellStyle(csRight);
     		
     		c = aRow.createCell(7);
-    		c.setCellValue(registro.getCodigoOperador());
-    		c.setCellStyle(csRight);
-    		
-    		c = aRow.createCell(8);
-    		c.setCellValue(registro.getFechaRegistro());
-    		c.setCellStyle(csRight);
-    		
-    		c = aRow.createCell(9);
-    		c.setCellValue(registro.getDescripcionRegistro());
-    		c.setCellStyle(csRight);
-    		
-    		c = aRow.createCell(10);
-    		c.setCellValue(registro.getObservacion());
+    		c.setCellValue(socio.getNombreSector());
     		c.setCellStyle(csRight);
     		
         }

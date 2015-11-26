@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import pe.com.sigamm.bean.CamposObligatorios;
 import pe.com.sigamm.bus.FacturacionBus;
-import pe.com.sigamm.modelo.Concepto;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Retorno;
@@ -40,12 +39,6 @@ public class FacturacionController {
 		
 		return "facturacion/cobro";
 	
-	}
-	
-	@RequestMapping(value = "/listar-concepto.json", method = RequestMethod.POST, produces="application/json")
-	public @ResponseBody List<Concepto> listarConcepto(){
-		
-		return facturacionBus.listaConcepto();
 	}
 	
 	@RequestMapping(value = "/grabar-facturacion.json", method = RequestMethod.POST, produces="application/json")

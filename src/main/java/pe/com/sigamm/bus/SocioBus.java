@@ -6,7 +6,7 @@ import pe.com.sigamm.modelo.Socio;
 
 public interface SocioBus {
 
-	public ReporteSocio reporteSocio(int pagina, int registros, String dni);
+	public ReporteSocio reporteSocio(int pagina, int registros, String dni, int exportar);
 	
 	public Socio buscarSocio(Socio socio);
 
@@ -15,4 +15,7 @@ public interface SocioBus {
 	public Retorno eliminarSocio(Socio socio);
 	
 	public String opcionesServicios(int codigoSocio);
+	
+	public Socio buscarSocioPuesto(Socio socio);
+	
 }

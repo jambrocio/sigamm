@@ -31,9 +31,9 @@ public class SocioBusImpl implements SocioBus {
 	private SocioDao socioDao;
 	
 	@Override
-	public ReporteSocio reporteSocio(int pagina, int registros, String dni) {
+	public ReporteSocio reporteSocio(int pagina, int registros, String dni, int exportar) {
 		
-		return socioDao.reporteSocio(pagina, registros, dni);
+		return socioDao.reporteSocio(pagina, registros, dni, exportar);
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class SocioBusImpl implements SocioBus {
 			if(!descServicio.equals(tituloServicio)){
 				Servicio servicio = new Servicio();
 				servicio.setNombreServicio(descServicio);
-				servicio.setCodigoServico(servicios.getCodigoServico());
+				servicio.setCodigoServicio(servicios.getCodigoServicio());
 				servicio.setOrdenServicio(servicios.getOrdenServicio());
 				
 				listaDetalleServicio = new ArrayList<DetalleServicio>();
@@ -114,6 +114,13 @@ public class SocioBusImpl implements SocioBus {
 		}
 		
 		return gson.toJson(listaServicio);
+		
+	}
+
+	@Override
+	public Socio buscarSocioPuesto(Socio socio) {
+		
+		return socioDao.buscarSocioPuesto(socio);
 		
 	}
 

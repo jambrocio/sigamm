@@ -188,7 +188,7 @@ public class UsuariosDaoImpl implements UsuariosDao {
 			}	
 			
 			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
-			jdbcCall.withCatalogName("PKG_MANTENIMIENTO");
+			jdbcCall.withCatalogName("PKG_AUTENTICACION");
 			jdbcCall.withProcedureName("SP_RESETEAR_CLAVE").declareParameters(
 				new SqlParameter("vi_codigo_usuario", 		Types.INTEGER),
 				new SqlParameter("vi_clave", 				Types.VARCHAR),

@@ -415,7 +415,7 @@ function cargarSocios(){
 		mtype: 'POST',
 		height: 'auto',
 		width: 'auto',
-		colNames : ['DNI', 'Nombres', 'Giro', 'Fec.Ingreso', 'Padron', 'Puesto', 'Opciones'],
+		colNames : ['DNI', 'Nombres', 'Giro', 'Fec.Ingreso', 'Padron', 'Puesto', 'Sector', 'Opciones'],
 		colModel : [{
 			name : 'dni',
 			index: 'dni',
@@ -449,6 +449,12 @@ function cargarSocios(){
 		},{
 			name : 'nroPuesto',
 			index: 'nroPuesto',
+			sortable:false,
+			width: 150,
+			align: 'center'
+		},{
+			name : 'nombreSector',
+			index: 'nombreSector',
 			sortable:false,
 			width: 150,
 			align: 'center'
@@ -506,6 +512,9 @@ function buscarSocio(){
 			</button>&nbsp;&nbsp;
 			<button type="button" class="btn btn-primary" onclick="nuevoSocio()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
+			</button>
+			<button type="button" class="btn btn-primary">
+				<img src="recursos/images/icons/excel_16x16.png" alt="Exportar a Excel" />&nbsp;<a href="/sigamm/reporteSociosExcel" style="color:white">Exportar</a>
 			</button>
 		</td>
 	</tr>
