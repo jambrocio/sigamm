@@ -71,7 +71,7 @@ public class ReciboLuzOriginalDaoImpl implements ReciboLuzOriginalDao {
 					new SqlParameter("p_ENERGREACFACCONS",   	Types.NUMERIC),
 					new SqlParameter("p_ENERGREACPREUNI",		Types.NUMERIC),
 					new SqlParameter("p_ENERGREACTOTAL",		Types.NUMERIC),
-					new SqlParameter("p_INTERESCONVENIO",		Types.NUMERIC),
+					new SqlParameter("p_INTERESCOMPENSATORIO",	Types.NUMERIC),
 					new SqlParameter("p_POTENCIAFPINI",			Types.NUMERIC),
 					new SqlParameter("p_POTENCIAFPANTE",		Types.NUMERIC),
 					new SqlParameter("p_POTENCIAFPDIF",			Types.NUMERIC),
@@ -88,26 +88,21 @@ public class ReciboLuzOriginalDaoImpl implements ReciboLuzOriginalDao {
 					new SqlParameter("p_POTGENFPCONFAC",		Types.NUMERIC),
 					new SqlParameter("p_POTGENFPPREUNI",		Types.NUMERIC),
 					new SqlParameter("p_POTGENFPTOTAL",			Types.NUMERIC),
-					new SqlParameter("p_ALUMPUBLIC",			Types.NUMERIC),
+					new SqlParameter("p_ALUMBRADOPUBLICO",		Types.NUMERIC),
 					new SqlParameter("p_SUBTOTALMES",			Types.NUMERIC),
 					new SqlParameter("p_IGV",					Types.NUMERIC),
 					new SqlParameter("p_TOTALMESACT",			Types.NUMERIC),
 					new SqlParameter("p_APORTELEY",				Types.NUMERIC),
-					new SqlParameter("p_CUOTACONV",				Types.NUMERIC),
+					new SqlParameter("p_DEUDAANTERIOR",			Types.NUMERIC),
 					new SqlParameter("p_REDONMESANT",			Types.NUMERIC),
 					new SqlParameter("p_REDONMESACT",			Types.NUMERIC),
+					new SqlParameter("p_ALUMBRADOPUBLICOORIGINAL",	Types.NUMERIC),
 					
 					new SqlOutParameter("vo_codigo_recibo", 		Types.INTEGER),
 					new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
-					new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
-					/*new SqlParameter("p_NUM_MONTO",				Types.DOUBLE),
-					new SqlParameter("p_NUM_LECTURA_INICIAL",	Types.DOUBLE),
-					new SqlParameter("p_NUM_LECTURA_FINAL",		Types.DOUBLE),
-					new SqlParameter("p_NUM_PENDIENTE_FAC",		Types.DOUBLE));*/	
+					new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));	
 			
 			MapSqlParameterSource parametros = new MapSqlParameterSource();
-			/*parametros.addValue("vi_nro_puesto", 				luzoriginal.getNroPuesto() != null ? puesto.getNroPuesto() : "");
-			parametros.addValue("vi_codigo_usuario_registro", 	datosSession.getCodigoUsuario());*/
 
 			/*SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
 			String strFecha = "2007-12-25";
@@ -145,7 +140,7 @@ public class ReciboLuzOriginalDaoImpl implements ReciboLuzOriginalDao {
 			parametros.addValue("p_ENERGREACFACCONS",   		luzoriginal.getEnergReacFaccons());
 			parametros.addValue("p_ENERGREACPREUNI",			luzoriginal.getEnergReacPreuni());
 			parametros.addValue("p_ENERGREACTOTAL",				luzoriginal.getEnergReacTotal());
-			parametros.addValue("p_INTERESCONVENIO",			luzoriginal.getInteresConv());
+			parametros.addValue("p_INTERESCOMPENSATORIO",		luzoriginal.getInteresCompensatorio());
 			parametros.addValue("p_POTENCIAFPINI",				luzoriginal.getPotenciaFpIni());
 			parametros.addValue("p_POTENCIAFPANTE",				luzoriginal.getPotenciaFpAnte());
 			parametros.addValue("p_POTENCIAFPDIF",				luzoriginal.getPotenciaFpDif());
@@ -160,20 +155,17 @@ public class ReciboLuzOriginalDaoImpl implements ReciboLuzOriginalDao {
 			parametros.addValue("p_POTUSOREDDISTPREUNI",		luzoriginal.getPotUsoRedDistPreuni());
 			parametros.addValue("p_POTUSOREDDISTTOTAL",			luzoriginal.getPotUsoRedDistTotal());
 			parametros.addValue("p_POTGENFPCONFAC",				luzoriginal.getPotGenFpConfac());
-			parametros.addValue("p_POTGENFPPREUNI",				luzoriginal.getPotGenFppReuni());
+			parametros.addValue("p_POTGENFPPREUNI",				luzoriginal.getPotGenFpPreuni());
 			parametros.addValue("p_POTGENFPTOTAL",				luzoriginal.getPotGenFpTotal());
-			parametros.addValue("p_ALUMPUBLIC",					luzoriginal.getAlumPublic());
+			parametros.addValue("p_ALUMBRADOPUBLICO",			luzoriginal.getAlumbradoPublico());
 			parametros.addValue("p_SUBTOTALMES",				luzoriginal.getSubTotalMes());
 			parametros.addValue("p_IGV",						luzoriginal.getIgv());
 			parametros.addValue("p_TOTALMESACT",				luzoriginal.getTotalMesAct());
 			parametros.addValue("p_APORTELEY",					luzoriginal.getAporteLey());
-			parametros.addValue("p_CUOTACONV",					luzoriginal.getCuotaConv());
+			parametros.addValue("p_DEUDAANTERIOR",				luzoriginal.getDeudaAnterior());
 			parametros.addValue("p_REDONMESANT",				luzoriginal.getRedonMesAnt());
 			parametros.addValue("p_REDONMESACT",				luzoriginal.getRedonMesAct());
-			//parametros.addValue("p_NUM_MONTO",					luzoriginal.get));
-			//parametros.addValue("p_NUM_LECTURA_INICIAL",		luzoriginal.getNumLecturaInicial());
-			//parametros.addValue("p_NUM_LECTURA_FINAL",			luzoriginal.getNumLecturaFinal());
-			//parametros.addValue("p_NUM_PENDIENTE_FAC",			luzoriginal.getNumPendienteFac());
+			parametros.addValue("p_ALUMBRADOPUBLICOORIGINAL",	luzoriginal.getAlumbradoPublicoOriginal());
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
 			

@@ -36,6 +36,35 @@
 
 </style>
 <script>
+$(document).ready(function(){	
+	
+	cargarReciboLuzOriginal();
+	
+});
+
+
+$(function($){
+    $.datepicker.regional['es'] = {
+        closeText: 'Cerrar',
+        prevText: '<Ant',
+        nextText: 'Sig>',
+        currentText: 'Hoy',
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+        dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+        weekHeader: 'Sm',
+        dateFormat: 'dd/mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''
+    };
+    $.datepicker.setDefaults($.datepicker.regional['es']);
+});
+
+
 $(function() {
 	$("#periodo").datepicker({
         //dateFormat: 'mm-yy',
@@ -62,7 +91,7 @@ $(function() {
         });    
     });
          
-	$("#fecvencimiento").datepicker(
+	$("#fecVencimiento").datepicker(
             {   
                 changeMonth: true,
                 changeYear: false,
@@ -76,7 +105,7 @@ $(function() {
                     'Sep', 'Oct', 'Nov', 'Dic'] 
             });  
 
-	$("#fecemision").datepicker(
+	$("#fecEmision").datepicker(
             {   
                 changeMonth: true,
                 changeYear: false,
@@ -98,6 +127,8 @@ $(function() {
 });*/
 
 
+
+
 function colorEtiquetas(){
 	
 	$("#lblpuesto").css("color", "black");
@@ -117,15 +148,19 @@ function nuevoRecibos(){
 	
 	$("#tituloRegistro").html("Nuevo Recibo de Luz");
 */	
+
+	//alert("Nuevo Recibo Original");
 	colorEtiquetas();
 	
 	$("#periodo").val('');
 	$("#fecVencimiento").val('');
 	$("#fecEmision").val('');
 	$("#costoWats").val(0);
+	$("#alumbradoPublico").val(0);
+	$("#mantenimiento").val(0);
 	$("#estado").val(0);
-	$("#repomancnx").val(0);
-	$("#cargofijo").val(0);
+	$("#repoManCnx").val(0);
+	$("#cargoFijo").val(0);
 	$("#energActFraPtaActual").val(0);
 	$("#energActFraPtaAnteri").val(0);
 	$("#energActFraPtaDifer").val(0);
@@ -150,7 +185,7 @@ function nuevoRecibos(){
 	$("#energReacFaccons").val(0);
 	$("#energReacPreuni").val(0);
 	$("#energReacTotal").val(0);
-	$("#interesConvenio").val(0);
+	$("#interesCompensatorio").val(0);
 	$("#potenciaFpIni").val(0);
 	$("#potenciaFpAnte").val(0);
 	$("#potenciaFpDif").val(0);
@@ -167,12 +202,13 @@ function nuevoRecibos(){
 	$("#potGenFpConfac").val(0);
 	$("#potGenFpPreuni").val(0);
 	$("#potGenFpTotal").val(0);
-	$("#alumPublic").val(0);
 	$("#subTotalMes").val(0);
+	$("#alumbradoPublicoOriginal").val(0);
 	$("#igv").val(0);
 	$("#totalMesAct").val(0);
 	$("#aporteLey").val(0);
-	$("#cuotaConv").val(0);
+	$("#deudaAnterior").val(0);
+	$("#recargoMora").val(0);
 	$("#redonMesAnt").val(0);
 	$("#redonMesAct").val(0);
 	$("#total").val(0);
@@ -182,70 +218,73 @@ function guardar(){
 	
 	var ruta = obtenerContexto();
 
-	//alert("Periodo: "+$('#periodo').val() + "\nVencimiento: " + $('#fecvencimiento').val() + "\nEmision: " + $('#fecemision').val() + "\nCostoWats: " + $('#costowats').val() + "\nEstado: " + $('#estado').val());
+	//alert("periodo: "+$('#periodo').val() + "\nVencimiento: " + $('#fecvencimiento').val() + "\nEmision: " + $('#fecemision').val() + "\nCostoWats: " + $('#costowats').val() + "\nEstado: " + $('#estado').val());
 	//alert("Reposicion: "+$('#repomancnx').val() + "\nCargoFijo: " + $('#cargofijo').val() + "\nAlumbradoPublico: " + $('#alumpublic').val() + "\nSubTotalMes: " + $('#subtotalmes').val() + "\nIgv: " + $('#igv').val());
 	
 	jsonObj = [];
 	var parametros = new Object();
 	parametros.periodo = $("#periodo").val();
-	parametros.fecVencimiento = $("#fecvencimiento").val();
-	parametros.fecEmision = $("#fecemision").val();
-	parametros.costoWats = $("#costowats").val();
+	parametros.fecVencimiento = $("#fecVencimiento").val();
+	parametros.fecEmision = $("#fecEmision").val();
+	parametros.costoWats = $("#costoWats").val();
+	parametros.alumbradoPublico = $("#alumbradoPublico").val();
+	parametros.mantenimiento = $("#mantenimiento").val();
 	parametros.estado = $("#estado").val();
-	parametros.repoManCnx = $("#repomancnx").val();
-	parametros.cargoFijo = $("#cargofijo").val();
-	parametros.alumPublic = $("#alumpublic").val();
-	parametros.subTotalMes = $("#subtotalmes").val();
+	parametros.repoManCnx = $("#repoManCnx").val();
+	parametros.cargoFijo = $("#cargoFijo").val();
+	parametros.subTotalMes = $("#subTotalMes").val();
 	parametros.igv = $("#igv").val();
-	parametros.totalMesAct = $("#totalmesact").val();
-	parametros.aporteLey = $("#aporteley").val();
-	parametros.cuotaConv = $("#cuotaconv").val();
-	parametros.redonMesAnt = $("#redonmesant").val();
-	parametros.redonMesAct = $("#redonmesact").val();
-	parametros.interesConv = $("#interesconvenio").val();	
+	parametros.totalMesAct = $("#totalMesAct").val();
+	parametros.aporteLey = $("#aporteLey").val();
+	parametros.deudaAnterior = $("#deudaAnterior").val();
+	parametros.recargoMora = $("#recargoMora").val();
+	parametros.redonMesAnt = $("#redonMesAnt").val();
+	parametros.redonMesAct = $("#redonMesAct").val();
+	parametros.interesCompensatorio = $("#interesCompensatorio").val();	
 	
-	parametros.energActFraPtaActual = $("#energactfraptaactual").val();
-	parametros.energActFraPtaAnteri = $("#energactfraptaanteri").val();
-	parametros.energActFraPtaDifer = $("#energactfraptadifer").val();
-	parametros.energActFraPtaFactor = $("#energactfraptafactor").val();
-	parametros.energActFraPtaConsu = $("#energactfraptaconsu").val();
-	parametros.energActFraPtaConfa = $("#energactfraptaconfa").val();
-	parametros.energActFraPtaPreuni = $("#energactfraptapreuni").val();
-	parametros.energActFraPtaTotal = $("#energactfraptatotal").val();
-	parametros.energActHorPtaActu = $("#energacthorptaactu").val();
-	parametros.energActHorPtaAnt = $("#energacthorptaant").val();
-	parametros.energActHorPtaDif = $("#energacthorptadif").val();
-	parametros.energActHorPtaFac = $("#energacthorptafac").val();
-	parametros.energActHorPtaCons = $("#energacthorptacons").val();
-	parametros.energActHorPtaConfac = $("#energacthorptaconfac").val();
-	parametros.energActHorPtaPreuni = $("#energacthorptapreuni").val();
-	parametros.energActHorPtaTotal = $("#energacthorptatotal").val();
-	parametros.energReacInicial = $("#energreacinicial").val();
-	parametros.energReacAnteri = $("#energreacanteri").val();
-	parametros.energReacDifere = $("#energreacdifere").val();
-	parametros.energReacFactor = $("#energreacfactor").val();
-	parametros.energReacConsu = $("#energreacconsu").val();
-	parametros.energReacFaccons = $("#energreacfaccons").val();
-	parametros.energReacPreuni = $("#energreacpreuni").val();
-	parametros.energReacTotal = $("#energreactotal").val();
+	parametros.energActFraPtaActual = $("#energActFraPtaActual").val();
+	parametros.energActFraPtaAnteri = $("#energActFraPtaAnteri").val();
+	parametros.energActFraPtaDifer = $("#energActFraPtaDifer").val();
+	parametros.energActFraPtaFactor = $("#energActFraPtaFactor").val();
+	parametros.energActFraPtaConsu = $("#energActFraPtaConsu").val();
+	parametros.energActFraPtaConfa = $("#energActFraPtaConfa").val();
+	parametros.energActFraPtaPreuni = $("#energActFraPtaPreuni").val();
+	parametros.energActFraPtaTotal = $("#energActFraPtaTotal").val();
+	parametros.energActHorPtaActu = $("#energActHorPtaActu").val();
+	parametros.energActHorPtaAnt = $("#energActHorPtaAnt").val();
+	parametros.energActHorPtaDif = $("#energActHorPtaDif").val();
+	parametros.energActHorPtaFac = $("#energActHorPtaFac").val();
+	parametros.energActHorPtaCons = $("#energActHorPtaCons").val();
+	parametros.energActHorPtaConfac = $("#energActHorPtaConfac").val();
+	parametros.energActHorPtaPreuni = $("#energActHorPtaPreuni").val();
+	parametros.energActHorPtaTotal = $("#energActHorPtaTotal").val();
+	parametros.energReacInicial = $("#energReacInicial").val();
+	parametros.energReacAnteri = $("#energReacAnteri").val();
+	parametros.energReacDifere = $("#energReacDifere").val();
+	parametros.energReacFactor = $("#energReacFactor").val();
+	parametros.energReacConsu = $("#energReacConsu").val();
+	parametros.energReacFaccons = $("#energReacFaccons").val();
+	parametros.energReacPreuni = $("#energReacPreuni").val();
+	parametros.energReacTotal = $("#energReacTotal").val();
 	
-	parametros.potenciaFpIni = $("#potenciafpini").val();
-	parametros.potenciaFpAnte = $("#potenciafpante").val();
-	parametros.potenciaFpDif = $("#potenciafpdif").val();
-	parametros.potenciaFpFac = $("#potenciafpfac").val();
-	parametros.potenciaFpCons = $("#potenciafpcons").val();
-	parametros.potenciaHpAct = $("#potenciahpact").val();
-	parametros.potenciaHpAnt = $("#potenciahpant").val();
-	parametros.potenciaHpDif = $("#potenciahpdif").val();
-	parametros.potenciaHpFac = $("#potenciahpfac").val();
-	parametros.potenciaHpCons = $("#potenciahpcons").val();
-	parametros.potUsoRedDistConfac = $("#potusoreddistconfac").val();
-	parametros.potUsoRedDistPreuni = $("#potusoreddistpreuni").val();
-	parametros.potUsoRedDistTotal = $("#potusoreddisttotal").val();
-	parametros.potGenFpConfac = $("#potgenfpconfac").val();
-	parametros.potGenFpPreuni = $("#potgenfppreuni").val();
-	parametros.potGenFpTotal = $("#potgenfptotal").val();
-
+	parametros.potenciaFpIni = $("#potenciaFpIni").val();
+	parametros.potenciaFpAnte = $("#potenciaFpAnte").val();
+	parametros.potenciaFpDif = $("#potenciaFpDif").val();
+	parametros.potenciaFpFac = $("#potenciaFpFac").val();
+	parametros.potenciaFpCons = $("#potenciaFpCons").val();
+	parametros.potenciaHpAct = $("#potenciaHpAct").val();
+	parametros.potenciaHpAnt = $("#potenciaHpAnt").val();
+	parametros.potenciaHpDif = $("#potenciaHpDif").val();
+	parametros.potenciaHpFac = $("#potenciaHpFac").val();
+	parametros.potenciaHpCons = $("#potenciaHpCons").val();
+	parametros.potUsoRedDistConfac = $("#potUsoRedDistConfac").val();
+	parametros.potUsoRedDistPreuni = $("#potUsoRedDistPreuni").val();
+	parametros.potUsoRedDistTotal = $("#potUsoRedDistTotal").val();
+	parametros.potGenFpConfac = $("#potGenFpConfac").val();
+	parametros.potGenFpPreuni = $("#potGenFpPreuni").val();
+	parametros.potGenFpTotal = $("#potGenFpTotal").val();
+	parametros.alumbradoPublicoOriginal = $("#alumbradoPublicoOriginal").val();
+	
 	parametros.total = $("#total").val();
 
 		
@@ -335,7 +374,7 @@ function cargarReciboLuzOriginal(){
 		mtype: 'POST',
 		height: 'auto',
 		width: 'auto',
-		colNames : ['CodigoRecibo', 'Periodo', 'FechaEmision', 'FechaVencimiento','Total', 'Opciones'],
+		colNames : ['CodigoRecibo', 'Periodo', 'FechaEmision', 'FechaVencimiento','Total Mes Actual','Total Mes Anterior','Total', 'Opciones'],
 		colModel : [{
 			name : 'codigoReciboLuzOriginal',
 			index: 'codigoReciboLuzOriginal',
@@ -366,6 +405,18 @@ function cargarReciboLuzOriginal(){
 			sortable:false,
 			width: 150,
 			align: 'center'
+		},{
+			name : 'deudaAnterior',
+			index: 'deudaAnterior',
+			sortable:false,
+			width: 150,
+			align: 'center'
+		},{
+			name : 'total',
+			index: 'total',
+			sortable:false,
+			width: 150,
+			align: 'center'
 		},{					
 			name:'codigoReciboLuzOriginal',
 			index:'codigoReciboLuzOriginal',
@@ -382,6 +433,7 @@ function cargarReciboLuzOriginal(){
 		viewrecords : true,
 		sortorder : "codigoReciboLuzOriginal",				
 		caption : "Recibo de Luz Original",
+		formatoptions: {decimalSeperator : '.'},
 		afterInsertRow: function(rowId, data, item){
 			//alert(rowId + ' - ' + data + ' - ' + item.periodo);
 			var anio = item.periodo.substring(0,4);
@@ -422,28 +474,28 @@ function generarReciboLuzSocio(codigoReciboLuzOriginal){
 }
 
 function cargarReciboLuzSocio(){
-	var recibo = $('#nroRecibo').html();
+	
 	var ruta = obtenerContexto();
 	var formatterBotones = function(cellVal,options,rowObject)
 	{	
 		var opciones = "<center>";
 			
 			opciones += "<a href=javascript:editarReciboLuzSocio(";
-			opciones += rowObject.codigoPuesto + "','" + recibo + "') >";
+			opciones += rowObject.codigoPuesto + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Luz Socio'/>";
 			opciones += "</a>";
 			
 			opciones += "&nbsp;&nbsp;";
 			
 			opciones += "<a href=javascript:eliminarReciboLuzSocio(";
-			opciones += rowObject.codigoPuesto + "','" + recibo + "') >";
+			opciones += rowObject.codigoPuesto + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Recibo Luz Socio'/>";
 			opciones += "</a>";
 			
 			opciones += "&nbsp;&nbsp;";
 			
 			opciones += "<a href=javascript:generarReciboLuzXSocio('";
-			opciones += rowObject.codigoPuesto + "','" + recibo + "') >";
+			opciones += rowObject.codigoPuesto + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/agregar2_24x24.png' border='0' title='Crear Recibo de Luz por Socio'/>";
 			opciones += "</a>";			
 			
@@ -516,6 +568,7 @@ function cargarReciboLuzSocio(){
 		afterInsertRow: function(rowId, data, item){
 			//alert(rowId + ' - ' + data + ' - ' + item.total);
 			if (item.reciboLuzCreado == 0)
+				//$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color' : 'red'  });
 				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
 			else 
 				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
@@ -526,7 +579,7 @@ function cargarReciboLuzSocio(){
 }
 
 
-function generarReciboLuzXSocio(codigoPuesto,recibo){
+function generarReciboLuzXSocio(codigoPuesto){
 	console.log("Generar Recibo de Luz X Socios - [codigo Socio] : " + codigoPuesto);
 	
 	//alert(codigoPuesto);
@@ -534,28 +587,28 @@ function generarReciboLuzXSocio(codigoPuesto,recibo){
 	alert($("#nroRecibo").text());*/
 	
 	$("#codigoPuestoSocio").text(codigoPuesto);
-	$("#codigoReciboOriginal").text(recibo);
 	
 	$('#recibos_luz_por_socio_modal').modal({
 		backdrop: 'static',
 		keyboard: false
 	});
 	
+	//$("#codigoPuesto").html(" - PUESTO [" + codigoPuestoesto + "]");
+	
 	colorEtiquetas();
 	
 	/*$("#codigoReciboLuzOriginal").val(codigoReciboLuzOriginal);
 	buscarUsuario();*/
-	cargarDatosReciboLuzSocio(codigoPuesto,recibo);
+	cargarDatosReciboLuzSocio(codigoPuesto);
 	
 }
 
-function cargarDatosReciboLuzSocio(codigoPuesto,recibo){	
+function cargarDatosReciboLuzSocio(codigoPuesto){	
 
 	//alert(codigoPuesto);
 	
 	var parametros = new Object();
 	parametros.codigoPuesto = codigoPuesto;
-	parametros.reciboOriginal = recibo;
 	
 	$.ajax({
         type: "POST",
@@ -580,6 +633,53 @@ function cargarDatosReciboLuzSocio(codigoPuesto,recibo){
 	$("#lecturaInicialSocio").focus();
 }
 
+function floorFigure(figure, decimals){
+    if (!decimals) decimals = 2;
+    var d = Math.pow(10,decimals);
+    return (parseInt(figure*d)/d).toFixed(decimals);
+};
+
+function calculaCampos(valor){
+	var valores  = valor;
+	var subTotal = 0.0;
+	var igv      = 0.0;
+	var totalMes = 0.0;
+	var total    = 0.0;
+	
+	//alert(valor + " | " + $("#repoManCnx").val() + " | " + $("#cargoFijo").val());
+	
+	if (valores=='O'){
+		subTotal =	parseFloat($("#repoManCnx").val()) + parseFloat($("#cargoFijo").val())+ parseFloat($("#energActFraPtaTotal").val()) + parseFloat($("#energActHorPtaTotal").val()) + parseFloat($("#energReacTotal").val()) + parseFloat($("#interesCompensatorio").val()) + parseFloat($("#potUsoRedDistTotal").val()) + parseFloat($("#potGenFpTotal").val()) + parseFloat($("#alumbradoPublicoOriginal").val());
+		//alert("subTotal ["+floorFigure(subTotal)+"]");
+		if (!isNaN(subTotal))
+			$("#subTotalMes").val(floorFigure(subTotal));
+		else
+			$("#subTotalMes").val(0);
+		
+		igv = parseFloat(floorFigure(subTotal)*0.18);
+		//alert("igv ["+floorFigure(igv)+"]");
+		if (!isNaN(subTotal))
+			$("#igv").val(floorFigure(igv));
+		else
+			$("#igv").val(0);
+		
+		totalMes = parseFloat(floorFigure(subTotal)) + parseFloat(floorFigure(igv)) ;
+		//alert("totalMes ["+floorFigure(totalMes)+"]");
+		if (!isNaN(totalMes))
+			$("#totalMesAct").val(floorFigure(totalMes));
+		else
+			$("#totalMesAct").val(0);
+		
+	}else if (valores=='T'){
+		total =  parseFloat($("#totalMesAct").val()) + parseFloat($("#aporteLey").val()) + parseFloat($("#deudaAnterior").val()) + parseFloat($("#recargoMora").val()) + parseFloat($("#redonMesAnt").val()) + parseFloat($("#redonMesAct").val());
+		//alert("total ["+floorFigure(total)+"]");
+		if (!isNaN(total))
+			$("#total").val(floorFigure(total));
+		else
+			$("#total").val(0);
+	}
+
+}
 
 function operaciones(valor){
 	var valores = valor;
@@ -618,12 +718,12 @@ function guardarRecibo(){
 	
 	var ruta = obtenerContexto();
 	
-	//alert("PUESTO: " + $("#puestoSocio").html() +" - CODIGO: "+ $("#codigoPuestoSocio").text() );
+	alert("PUESTO: " + $("#puestoSocio").html() +" - CODIGO: "+ $("#codigoPuestoSocio").text() );
 	
 	jsonObj = [];
 	var parametros = new Object();
 	parametros.codigoSocio = parseInt($("#codigoPuestoSocio").text());
-	parametros.codigoRecibo = $("#codigoReciboOriginal").text();
+	//parametros.codigoRecibo = $("#codigoRecibo").val();
 	parametros.lecturaInicial = $("#lecturaInicialSocio").val();
 	parametros.lecturaFinal = $("#lecturaFinalSocio").val();
 	parametros.consumoMes = $("#consumoMesSocio").html();
@@ -696,7 +796,6 @@ function guardarRecibo(){
 </head>
 <body id="body">
 <input type="hidden" id="codigoPuestoSocio" />
-<input type="hidden" id="codigoReciboOriginal" />
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td colspan="4">&nbsp;</td>
@@ -747,21 +846,24 @@ function guardarRecibo(){
 			<table border="0" cellpadding="0" cellspacing="0" width="800px">
 				<tr>
 					<td><label><font size="2"><b>Periodo:</b></font></label></td>
-					<td><input type='text' id='periodo' class='text ui-widget-content ui-corner-all' size="10" tabindex="1"/>(mes/dia/año)</td>
+					<td><input type='text' id='periodo' class='text ui-widget-content ui-corner-all' size="10" tabindex="1"/>(mes/año)</td>
 					<td>&nbsp;</td>
 					<td><label><font size="2"><b>Fecha de Vencimiento:</b></font></label></td>
-					<td><input type='text' id='fecvencimiento' class='text ui-widget-content ui-corner-all' size="10" tabindex="2"/>(mes/dia/año)</td>
+					<td><input type='text' id='fecVencimiento' class='text ui-widget-content ui-corner-all' size="10" tabindex="2"/>(dia/mes/año)</td>
 				</tr>
 				<tr>
 					<td><label><font size="2"><b>Fecha de Emision:</b></font></label></td>
-					<td><input type='text' id='fecemision' class='text ui-widget-content ui-corner-all' size="10" tabindex="3"/>(mes/dia/año)</td>
+					<td><input type='text' id='fecEmision' class='text ui-widget-content ui-corner-all' size="10" tabindex="3"/>(dia/mes/año)</td>
 					<td>&nbsp;</td>
 					<td><label><font size="2"><b>Costo Wats:</b></font></label></td>	
-					<td><input type='text' id='costowats' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="4"/></td>
+					<td><input type='text' id='costoWats' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="4"/></td>
 				</tr>
 				<tr>
-					<td><label><font size="2"><b>Estado:</b></font></label></td>	
-					<td><input type="checkbox" id='estado' class='text ui-widget-content ui-corner-all' tabindex="5"/></td>			
+					<td><label><font size="2"><b>Alumbrado Público:</b></font></label></td>
+					<td><input type='text' id='alumbradoPublico' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="5"/></td>
+					<td>&nbsp;</td>
+					<td><label><font size="2"><b>Mantenimiento:</b></font></label></td>	
+					<td><input type='text' id='mantenimiento' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="6"/></td>
 				</tr>
 			</table>
 
@@ -786,7 +888,7 @@ function guardarRecibo(){
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsumosRepMan' id='ConsumosRepMan' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsFactRepMan' id='ConsFactRepMan' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='PrecUnitRepMan' id='PrecUnitRepMan' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='repomancnx' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos()" tabindex="6"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='repoManCnx' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos('O')"tabindex="6"/></td>
 				</tr>
 				<tr>
 					<td><font size="1">Cargo Fijo</font></td>
@@ -797,43 +899,43 @@ function guardarRecibo(){
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsumosCarFij' id='ConsumosCarFij' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsFactCarFij' id='ConsFactCarFij' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='PrecUnitCarFij' id='PrecUnitCarFij' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='cargofijo' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos()" tabindex="7"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='cargoFijo' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos('O')" tabindex="7"/></td>
 				</tr>
 				<tr>
 					<td><font size="1">Energ. Activa Fuera Punta (kwh)</font></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energactfraptaactual' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="8"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energactfraptaanteri' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="9"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energactfraptadifer' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="10"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energactfraptafactor' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="11"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energactfraptaconsu' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="12"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energactfraptaconfa' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="13"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energactfraptapreuni' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="14"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energactfraptatotal' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos()" tabindex="15"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energActFraPtaActual' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="8"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energActFraPtaAnteri' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="9"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energActFraPtaDifer' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="10"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energActFraPtaFactor' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="11"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energActFraPtaConsu' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="12"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energActFraPtaConfa' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="13"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energActFraPtaPreuni' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="14"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energActFraPtaTotal' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos('O')" tabindex="15"/></td>
 				</tr>
 				<tr>
 					<td><font size="1">Energ. Activa Horas Punta (kwh)</font></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energacthorptaactu' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="16"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energacthorptaant' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="17"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energacthorptadif' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="18"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energacthorptafac' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="19"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energacthorptacons' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="20"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energacthorptaconfac' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="21"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energacthorptapreuni' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="22"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energacthorptatotal' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos()" tabindex="23"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energActHorPtaActu' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="16"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energActHorPtaAnt' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="17"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energActHorPtaDif' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="18"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energActHorPtaFac' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="19"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energActHorPtaCons' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="20"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energActHorPtaConfac' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="21"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energActHorPtaPreuni' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="22"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energActHorPtaTotal' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos('O')" tabindex="23"/></td>
 				</tr>
 				<tr>
 					<td><font size="1">Energía Reactiva (kVARh)</font></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energreacinicial' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="24"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energreacanteri' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="25"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energreacdifere' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="26"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energreacfactor' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="27"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energreacconsu' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="28"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energreacfaccons' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="29"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energreacpreuni' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="30"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energreactotal' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos()" tabindex="31"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energReacInicial' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="24"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energReacAnteri' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="25"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energReacDifere' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="26"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energReacFactor' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="27"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energReacConsu' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="28"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energReacFaccons' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="29"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energReacPreuni' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="30"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='energReacTotal' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos('O')" tabindex="31"/></td>
 				</tr>
 				<tr>
-					<td><font size="1">Interés Convenio</font></td>
+					<td><font size="1">Interés Compensatorio</font></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='lecturaActIntCon' id='lecturaActIntCon' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='lecturaAntIntCon' id='lecturaAntIntCon' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='DiferenciaIntCon' id='DiferenciaIntCon' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
@@ -841,26 +943,26 @@ function guardarRecibo(){
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsumosIntCon' id='ConsumosIntCon' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsFactIntCon' id='ConsFactIntCon' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='PrecUnitIntCon' id='PrecUnitIntCon' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='interesconvenio' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos()" tabindex="32"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='interesCompensatorio' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos('O')" tabindex="32"/></td>
 				</tr>
 				<tr>
 					<td><font size="1">Potencia FP (KW)</font></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potenciafpini' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="33"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potenciafpante' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="34"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potenciafpdif' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="35"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potenciafpfac' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="36"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potenciafpcons' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="37"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potenciaFpIni' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="33"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potenciaFpAnte' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="34"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potenciaFpDif' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="35"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potenciaFpFac' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="36"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potenciaFpCons' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="37"/></td>
 					<td align="center">&nbsp;<!-- input type='text' name='ConsFactPotFP' id='ConsFactPotFP' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' name='PrecUnitPotFP' id='PrecUnitPotFP' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' name='ImporTotalPotFP' id='ImporTotalPotFP' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 				</tr>
 				<tr>
 					<td><font size="1">Potencia HP (KW)</font></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potenciahpact' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="38"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potenciahpant' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="39"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potenciahpdif' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="40"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potenciahpfac' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="41"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potenciahpcons' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="42"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potenciaHpAct' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="38"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potenciaHpAnt' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="39"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potenciaHpDif' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="40"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potenciaHpFac' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="41"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potenciaHpCons' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="42"/></td>
 					<td align="center">&nbsp;<!-- input type='text' name='ConsFactPotHP' id='ConsFactPotHP' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' name='PrecUnitPotHP' id='PrecUnitPotHP' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' name='ImporTotalPotHP' id='ImporTotalPotHP' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
@@ -872,9 +974,9 @@ function guardarRecibo(){
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='DiferenciaPotDis' id='DiferenciaPotDis' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='FactorPotDis' id='FactorPotDis' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsumosPotDis' id='ConsumosPotDis' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potusoreddistconfac' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="43"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potusoreddistpreuni' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="44"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potusoreddisttotal' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos()" tabindex="45"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potUsoRedDistConfac' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="43"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potUsoRedDistPreuni' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="44"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potUsoRedDistTotal' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos('O')" tabindex="45"/></td>
 				</tr>
 				<tr>
 					<td><font size="1">Potencia de Generación FP (KW)</font></td>
@@ -883,9 +985,9 @@ function guardarRecibo(){
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='DiferenciaPotGen' id='DiferenciaPotGen' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='FactorPotGen' id='FactorPotGen' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsumosPotGen' id='ConsumosPotGen' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potgenfpconfac' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="46"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potgenfppreuni' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="47"/></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potgenfptotal' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos()" tabindex="48"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potGenFpConfac' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="46"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potGenFpPreuni' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" tabindex="47"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='potGenFpTotal' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos('O')" tabindex="48"/></td>
 				</tr>
 				<tr>
 					<td><font size="1">Alumbrado Público</font></td>
@@ -896,7 +998,7 @@ function guardarRecibo(){
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsumosAluPub' id='ConsumosAluPub' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsFactAluPub' id='ConsFactAluPub' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='PrecUnitAluPub' id='PrecUnitAluPub' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='alumpublic' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos()" tabindex="49"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='alumbradoPublicoOriginal' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos('O')" tabindex="49"/></td>
 				</tr>
 				<tr>
 					<td><font size="1"><b>SUBTOTAL Mes Actual</b></font></td>
@@ -907,7 +1009,7 @@ function guardarRecibo(){
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsumosSubTot' id='ConsumosSubTot' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsFactSubTot' id='ConsFactSubTot' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='PrecUnitSubTot' id='PrecUnitSubTot' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='subtotalmes' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" readonly="readonly" tabindex="50"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='subTotalMes' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" readonly="readonly" tabindex="50"/></td>
 				</tr>
 				<tr>
 					<td><font size="1">I.G.V.</font></td>
@@ -929,7 +1031,7 @@ function guardarRecibo(){
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsumosTotMes' id='ConsumosTotMes' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsFactTotMes' id='ConsFactTotMes' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='PrecUnitTotMes' id='PrecUnitTotMes' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='totalmesact' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" readonly="readonly" tabindex="52"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='totalMesAct' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" readonly="readonly" tabindex="52"/></td>
 				</tr>
 				<tr>
 					<td><font size="1">Aporte Ley Nº 28749</font></td>
@@ -940,10 +1042,10 @@ function guardarRecibo(){
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsumosApoLey' id='ConsumosApoLey' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsFactApoLey' id='ConsFactApoLey' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='PrecUnitApoLey' id='PrecUnitApoLey' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='aporteley' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos()" tabindex="53"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='aporteLey' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos('T')" tabindex="53"/></td>
 				</tr>
 				<tr>
-					<td><font size="1">Cuota Convenio (10 cuotas)</font></td>
+					<td><font size="1">Deuda Anterior</font></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='lecturaActCuoCon' id='lecturaActCuoCon' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='lecturaAntCuoCon' id='lecturaAntCuoCon' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='DiferenciaCuoCon' id='DiferenciaCuoCon' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
@@ -951,7 +1053,18 @@ function guardarRecibo(){
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsumosCuoCon' id='ConsumosCuoCon' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsFactCuoCon' id='ConsFactCuoCon' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='PrecUnitCuoCon' id='PrecUnitCuoCon' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='cuotaconv' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos()" tabindex="54"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='deudaAnterior' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos('T')" tabindex="54"/></td>
+				</tr>
+				<tr>
+					<td><font size="1">Recargo por Mora</font></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='lecturaActCuoCon' id='lecturaActCuoCon' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='lecturaAntCuoCon' id='lecturaAntCuoCon' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='DiferenciaCuoCon' id='DiferenciaCuoCon' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='FactorCuoCon' id='FactorCuoCon' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsumosCuoCon' id='ConsumosCuoCon' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsFactCuoCon' id='ConsFactCuoCon' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='PrecUnitCuoCon' id='PrecUnitCuoCon' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='recargoMora' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos('T')" tabindex="55"/></td>
 				</tr>
 				<tr>
 					<td><font size="1">Redondeo Mes Anterior</font></td>
@@ -962,7 +1075,7 @@ function guardarRecibo(){
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsumosRedAnt' id='ConsumosRedAnt' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsFactRedAnt' id='ConsFactRedAnt' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='PrecUnitRedAnt' id='PrecUnitRedAnt' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='redonmesant' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos()" tabindex="55"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='redonMesAnt' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos('T')" tabindex="56"/></td>
 				</tr>
 				<tr>
 					<td><font size="1">Redondeo Mes Actual</font></td>
@@ -973,7 +1086,7 @@ function guardarRecibo(){
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsumosRedAct' id='ConsumosRedAct' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsFactRedAct' id='ConsFactRedAct' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
 					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='PrecUnitRedAct' id='PrecUnitRedAct' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
-					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='redonmesact' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos()" tabindex="56"/></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='redonMesAct' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos('T')" tabindex="57"/></td>
 				</tr>
 				<tr>
 					<td><label>Total:</label></td>
@@ -984,7 +1097,7 @@ function guardarRecibo(){
 					<td align="center">&nbsp;</td>
 					<td align="center">&nbsp;</td>
 					<td align="center">&nbsp;</td>	
-					<td align="center"><input type='text' name='total' class='texto' style='font-family:verdana;font-size:8px;' id='total' size="10" value="0" readonly="readonly" tabindex="57"/></td>
+					<td align="center"><input type='text' name='total' class='texto' style='font-family:verdana;font-size:8px;' id='total' size="10" value="0" readonly="readonly" tabindex="58"/></td>
 				</tr>
 			</table>
 		</div>

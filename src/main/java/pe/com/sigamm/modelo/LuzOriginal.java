@@ -11,15 +11,18 @@ public class LuzOriginal {
 	int estado;
 	double repoManCnx;
 	double cargoFijo;
-	double alumPublic;
+	double alumbradoPublico;
+	double alumbradoPublicoOriginal;
 	double subTotalMes;
 	double igv;
 	double totalMesAct;
 	double aporteLey;
-	double cuotaConv;
+	double deudaAnterior;
 	double redonMesAct;
 	double redonMesAnt;
-	double interesConv;
+	double recargoMora;
+	double total;
+	double interesCompensatorio;
 	double energActFraPtaActual;	
 	double energActFraPtaAnteri;
 	double energActFraPtaDifer;
@@ -57,7 +60,7 @@ public class LuzOriginal {
 	double potUsoRedDistConfac;
 	double potUsoRedDistPreuni;
 	double potGenFpConfac;
-	double potGenFppReuni;
+	double potGenFpPreuni;
 	double potUsoRedDistTotal;
 	double potGenFpTotal;
 	
@@ -103,12 +106,6 @@ public class LuzOriginal {
 	public void setCargoFijo(double cargoFijo) {
 		this.cargoFijo = cargoFijo;
 	}
-	public double getAlumPublic() {
-		return alumPublic;
-	}
-	public void setAlumPublic(double alumPublic) {
-		this.alumPublic = alumPublic;
-	}
 	public double getSubTotalMes() {
 		return subTotalMes;
 	}
@@ -133,12 +130,6 @@ public class LuzOriginal {
 	public void setAporteLey(double aporteLey) {
 		this.aporteLey = aporteLey;
 	}
-	public double getCuotaConv() {
-		return cuotaConv;
-	}
-	public void setCuotaConv(double cuotaConv) {
-		this.cuotaConv = cuotaConv;
-	}
 	public double getRedonMesAct() {
 		return redonMesAct;
 	}
@@ -150,12 +141,6 @@ public class LuzOriginal {
 	}
 	public void setRedonMesAnt(double redonMesAnt) {
 		this.redonMesAnt = redonMesAnt;
-	}
-	public double getInteresConv() {
-		return interesConv;
-	}
-	public void setInteresConv(double interesConv) {
-		this.interesConv = interesConv;
 	}
 	public double getEnergActFraPtaActual() {
 		return energActFraPtaActual;
@@ -379,12 +364,6 @@ public class LuzOriginal {
 	public void setPotGenFpConfac(double potGenFpConfac) {
 		this.potGenFpConfac = potGenFpConfac;
 	}
-	public double getPotGenFppReuni() {
-		return potGenFppReuni;
-	}
-	public void setPotGenFppReuni(double potGenFppReuni) {
-		this.potGenFppReuni = potGenFppReuni;
-	}
 	public double getPotUsoRedDistTotal() {
 		return potUsoRedDistTotal;
 	}
@@ -402,6 +381,48 @@ public class LuzOriginal {
 	}
 	public void setCodigoReciboLuzOriginal(int codigoReciboLuzOriginal) {
 		this.codigoReciboLuzOriginal = codigoReciboLuzOriginal;
+	}
+	public double getDeudaAnterior() {
+		return deudaAnterior;
+	}
+	public void setDeudaAnterior(double deudaAnterior) {
+		this.deudaAnterior = deudaAnterior;
+	}
+	public double getRecargoMora() {
+		return recargoMora;
+	}
+	public void setRecargoMora(double recargoMora) {
+		this.recargoMora = recargoMora;
+	}
+	public double getInteresCompensatorio() {
+		return interesCompensatorio;
+	}
+	public void setInteresCompensatorio(double interesCompensatorio) {
+		this.interesCompensatorio = interesCompensatorio;
+	}
+	public double getAlumbradoPublico() {
+		return alumbradoPublico;
+	}
+	public void setAlumbradoPublico(double alumbradoPublico) {
+		this.alumbradoPublico = alumbradoPublico;
+	}
+	public double getPotGenFpPreuni() {
+		return potGenFpPreuni;
+	}
+	public void setPotGenFpPreuni(double potGenFpPreuni) {
+		this.potGenFpPreuni = potGenFpPreuni;
+	}
+	public double getAlumbradoPublicoOriginal() {
+		return alumbradoPublicoOriginal;
+	}
+	public void setAlumbradoPublicoOriginal(double alumbradoPublicoOriginal) {
+		this.alumbradoPublicoOriginal = alumbradoPublicoOriginal;
+	}
+	public double getTotal() {
+		return total;
+	}
+	public void setTotal(double total) {
+		this.total = total;
 	}
 	
 }
