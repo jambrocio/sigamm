@@ -97,6 +97,7 @@ public class ReciboLuzOriginalDaoImpl implements ReciboLuzOriginalDao {
 					new SqlParameter("p_REDONMESANT",			Types.NUMERIC),
 					new SqlParameter("p_REDONMESACT",			Types.NUMERIC),
 					new SqlParameter("p_ALUMBRADOPUBLICOORIGINAL",	Types.NUMERIC),
+					new SqlParameter("p_RECARGOMORA",			Types.NUMERIC),
 					
 					new SqlOutParameter("vo_codigo_recibo", 		Types.INTEGER),
 					new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
@@ -166,6 +167,7 @@ public class ReciboLuzOriginalDaoImpl implements ReciboLuzOriginalDao {
 			parametros.addValue("p_REDONMESANT",				luzoriginal.getRedonMesAnt());
 			parametros.addValue("p_REDONMESACT",				luzoriginal.getRedonMesAct());
 			parametros.addValue("p_ALUMBRADOPUBLICOORIGINAL",	luzoriginal.getAlumbradoPublicoOriginal());
+			parametros.addValue("p_RECARGOMORA",				luzoriginal.getRecargoMora());
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
 			

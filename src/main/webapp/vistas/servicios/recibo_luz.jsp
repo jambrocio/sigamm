@@ -444,7 +444,7 @@ function cargarReciboLuzOriginal(){
 				if (mes1==j+1)
 					periodo=months[j] + ' ' + anio;
 			}
-			$("#grilla").setCell(rowId, 'periodo', periodo, '' );
+			//$("#grilla").setCell(rowId, 'periodo', periodo, '' );
 		}
 
 
