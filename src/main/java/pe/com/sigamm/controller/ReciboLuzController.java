@@ -112,7 +112,7 @@ public class ReciboLuzController {
 			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
 			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
 			@RequestParam(value = "codigoPuesto", defaultValue = "0") Integer codigoPuesto,
-			@RequestParam(value = "codigoRecibo", defaultValue = "3") Integer codigoRecibo){
+			@RequestParam(value = "codigoRecibo", defaultValue = "4") Integer codigoRecibo){
 		
 		ResponseListBean<Puesto> response = new ResponseListBean<Puesto>();
 		

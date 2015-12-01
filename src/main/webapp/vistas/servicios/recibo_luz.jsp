@@ -468,12 +468,15 @@ function generarReciboLuzSocio(codigoReciboLuzOriginal){
 	
 	$("#codigoReciboLuzOriginal").val(codigoReciboLuzOriginal);
 	
-	buscarUsuario();
+	alert("UNO " + codigoReciboLuzOriginal);
+	//buscarUsuario();
 	cargarReciboLuzSocio();
 	
 }
 
 function cargarReciboLuzSocio(){
+	
+	//alert("Mensaje: " + rowObject.codigoReciboLuzOriginal);
 	
 	var ruta = obtenerContexto();
 	var formatterBotones = function(cellVal,options,rowObject)
@@ -481,21 +484,21 @@ function cargarReciboLuzSocio(){
 		var opciones = "<center>";
 			
 			opciones += "<a href=javascript:editarReciboLuzSocio(";
-			opciones += rowObject.codigoPuesto + "') >";
+			opciones += rowObject.codigoRecibo + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Luz Socio'/>";
 			opciones += "</a>";
 			
 			opciones += "&nbsp;&nbsp;";
 			
 			opciones += "<a href=javascript:eliminarReciboLuzSocio(";
-			opciones += rowObject.codigoPuesto + "') >";
+			opciones += rowObject.codigoRecibo + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Recibo Luz Socio'/>";
 			opciones += "</a>";
 			
 			opciones += "&nbsp;&nbsp;";
 			
 			opciones += "<a href=javascript:generarReciboLuzXSocio('";
-			opciones += rowObject.codigoPuesto + "') >";
+			opciones += rowObject.codigoRecibo + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/agregar2_24x24.png' border='0' title='Crear Recibo de Luz por Socio'/>";
 			opciones += "</a>";			
 			
@@ -505,6 +508,11 @@ function cargarReciboLuzSocio(){
 				
 	};
 	
+	var parametros = new Object();
+	parametros.codigoRecibo = 4;
+	
+	alert(parametros.codigoRecibo);
+	
 	jQuery("#grillaReciboLuz").jqGrid(
 	{
 		url : 'reporte-recibo-luz-puesto.json',
@@ -512,6 +520,7 @@ function cargarReciboLuzSocio(){
 		mtype: 'POST',
 		height: 'auto',
 		width: 'auto',
+		data: parametros,
 		colNames : ['Código Puesto', 'Código Usuario', 'Nro. Puesto', 'Giro','Recibo Luz','Total', 'Opciones'],
 		colModel : [{
 			name : 'codigoPuesto',
