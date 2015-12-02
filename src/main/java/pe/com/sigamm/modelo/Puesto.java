@@ -1,7 +1,7 @@
 package pe.com.sigamm.modelo;
 
 public class Puesto {
-
+	int codigoSocio;
 	int codigoPuesto;
 	int codigoUsuario;
 	int codigoGiro;
@@ -15,7 +15,17 @@ public class Puesto {
 	int reciboLuz;
 	double total;
 	int reciboLuzCreado;
-	
+	int codigoServicioDetalle;
+	String periodoSocio;
+	double numCostoWatts;
+	double alumbradoPublico;
+	double mantenimiento;
+	public int getCodigoSocio() {
+		return codigoSocio;
+	}
+	public void setCodigoSocio(int codigoSocio) {
+		this.codigoSocio = codigoSocio;
+	}
 	public int getCodigoPuesto() {
 		return codigoPuesto;
 	}
@@ -33,6 +43,24 @@ public class Puesto {
 	}
 	public void setCodigoGiro(int codigoGiro) {
 		this.codigoGiro = codigoGiro;
+	}
+	public int getCodigoReciboOriginal() {
+		return codigoReciboOriginal;
+	}
+	public void setCodigoReciboOriginal(int codigoReciboOriginal) {
+		this.codigoReciboOriginal = codigoReciboOriginal;
+	}
+	public int getCodigoSector() {
+		return codigoSector;
+	}
+	public void setCodigoSector(int codigoSector) {
+		this.codigoSector = codigoSector;
+	}
+	public String getNombreSector() {
+		return nombreSector;
+	}
+	public void setNombreSector(String nombreSector) {
+		this.nombreSector = nombreSector;
 	}
 	public String getNroPuesto() {
 		return nroPuesto;
@@ -76,23 +104,35 @@ public class Puesto {
 	public void setReciboLuzCreado(int reciboLuzCreado) {
 		this.reciboLuzCreado = reciboLuzCreado;
 	}
-	public int getCodigoReciboOriginal() {
-		return codigoReciboOriginal;
+	public int getCodigoServicioDetalle() {
+		return codigoServicioDetalle;
 	}
-	public void setCodigoReciboOriginal(int codigoReciboOriginal) {
-		this.codigoReciboOriginal = codigoReciboOriginal;
+	public void setCodigoServicioDetalle(int codigoServicioDetalle) {
+		this.codigoServicioDetalle = codigoServicioDetalle;
 	}
-	public int getCodigoSector() {
-		return codigoSector;
+	public String getPeriodoSocio() {
+		return periodoSocio;
 	}
-	public void setCodigoSector(int codigoSector) {
-		this.codigoSector = codigoSector;
+	public void setPeriodoSocio(String periodoSocio) {
+		this.periodoSocio = periodoSocio;
 	}
-	public String getNombreSector() {
-		return nombreSector;
+	public double getNumCostoWatts() {
+		return numCostoWatts;
 	}
-	public void setNombreSector(String nombreSector) {
-		this.nombreSector = nombreSector;
+	public void setNumCostoWatts(double numCostoWatts) {
+		this.numCostoWatts = numCostoWatts;
+	}
+	public double getAlumbradoPublico() {
+		return alumbradoPublico;
+	}
+	public void setAlumbradoPublico(double alumbradoPublico) {
+		this.alumbradoPublico = alumbradoPublico;
+	}
+	public double getMantenimiento() {
+		return mantenimiento;
+	}
+	public void setMantenimiento(double mantenimiento) {
+		this.mantenimiento = mantenimiento;
 	}
 	
 }

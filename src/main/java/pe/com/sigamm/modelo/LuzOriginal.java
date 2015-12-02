@@ -22,6 +22,7 @@ public class LuzOriginal {
 	double redonMesAnt;
 	double recargoMora;
 	double total;
+	double mantenimiento;
 	double interesCompensatorio;
 	double energActFraPtaActual;	
 	double energActFraPtaAnteri;
@@ -423,6 +424,12 @@ public class LuzOriginal {
 	}
 	public void setTotal(double total) {
 		this.total = total;
+	}
+	public double getMantenimiento() {
+		return mantenimiento;
+	}
+	public void setMantenimiento(double mantenimiento) {
+		this.mantenimiento = mantenimiento;
 	}
 	
 }

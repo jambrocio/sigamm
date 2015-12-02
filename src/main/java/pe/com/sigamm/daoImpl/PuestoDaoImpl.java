@@ -225,9 +225,11 @@ public class PuestoDaoImpl implements PuestoDao {
 					new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(Puesto.class)));
 			
 			MapSqlParameterSource parametros = new MapSqlParameterSource();
-			parametros.addValue("vi_pagina", 	pagina);
-			parametros.addValue("vi_registros", registros);
-			parametros.addValue("vi_codigo_puesto",codigoSector);
+			parametros.addValue("vi_pagina", 	          pagina);
+			parametros.addValue("vi_registros",           registros);
+			parametros.addValue("vi_codigo_sector",       codigoSector);
+			parametros.addValue("vi_nro_puesto",          nroPuesto);
+			parametros.addValue("vi_codigo_luz_original", codigoReciboOriginal);
 			
 			Map<String,Object> results = jdbcCall.execute(parametros);
 			int totalRegistros = (Integer) results.get("vo_total_registros");

@@ -43,21 +43,17 @@ public class ReciboSocioLuzDaoImpl implements ReciboLuzSocioDao {
 					new SqlParameter("vi_lectura_inicial", 		Types.NUMERIC),
 					new SqlParameter("vi_lectura_final", 		Types.NUMERIC),
 					new SqlParameter("vi_consumo_mes", 			Types.NUMERIC),
-					new SqlParameter("vi_cargo_fijo", 			Types.NUMERIC),
 					new SqlParameter("vi_cargo_energia", 		Types.NUMERIC),
 					new SqlParameter("vi_alumbrado_publico", 	Types.NUMERIC),
 					new SqlParameter("vi_servicio_mantenimiento",Types.NUMERIC),
 					new SqlParameter("vi_deuda_anterior", 		Types.NUMERIC),
 					new SqlParameter("vi_reconexion", 			Types.NUMERIC),
-					new SqlParameter("vi_subtotal_mes", 		Types.NUMERIC),
-					new SqlParameter("vi_igv", 					Types.NUMERIC),
-					new SqlParameter("vi_total_mes", 			Types.NUMERIC),
-					new SqlParameter("vi_redondeo", 			Types.NUMERIC),
 					new SqlParameter("vi_total", 				Types.NUMERIC),
 					new SqlParameter("vi_estado", 				Types.NUMERIC),
-					new SqlParameter("vi_fecha_carga", 			Types.DATE),
-					new SqlParameter("vi_usuario_crea", 		Types.VARCHAR),
+					new SqlParameter("vi_usuario_carga", 		Types.VARCHAR),
+					new SqlParameter("vi_fecha_carga", 			Types.DATE),					
 					new SqlParameter("vi_usuario_modifica", 	Types.VARCHAR),	
+					new SqlParameter("vi_fecha_modifica", 		Types.DATE),
 					
 					new SqlOutParameter("vo_codigo_socio",  		Types.INTEGER),
 					new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
@@ -71,21 +67,17 @@ public class ReciboSocioLuzDaoImpl implements ReciboLuzSocioDao {
 			parametros.addValue("vi_lectura_inicial", 	reciboLuzSocio.getLecturaInicial());
 			parametros.addValue("vi_lectura_final", 	reciboLuzSocio.getLecturaFinal());
 			parametros.addValue("vi_consumo_mes", 		reciboLuzSocio.getConsumoMes());
-			parametros.addValue("vi_cargo_fijo", 		reciboLuzSocio.getCargoFijo());
 			parametros.addValue("vi_cargo_energia",		reciboLuzSocio.getCargoEnergia());
 			parametros.addValue("vi_alumbrado_publico",	reciboLuzSocio.getAlumbradoPublico());
 			parametros.addValue("vi_servicio_mantenimiento",reciboLuzSocio.getServicioMantenimiento());
 			parametros.addValue("vi_deuda_anterior",	reciboLuzSocio.getDeudaAnterior());
 			parametros.addValue("vi_reconexion",		reciboLuzSocio.getReconexion());
-			parametros.addValue("vi_subtotal_mes",		reciboLuzSocio.getSubtotalMes());
-			parametros.addValue("vi_igv",				reciboLuzSocio.getIgv());
-			parametros.addValue("vi_total_mes",			reciboLuzSocio.getTotalMes());
-			parametros.addValue("vi_redondeo",			reciboLuzSocio.getRedondeo());
 			parametros.addValue("vi_total",				reciboLuzSocio.getTotal());
 			parametros.addValue("vi_estado",			reciboLuzSocio.getEstado());
+			parametros.addValue("vi_usuario_carga",		datosSession.getCodigoUsuario());			
 			parametros.addValue("vi_fecha_carga",		reciboLuzSocio.getFechaCarga());
-			parametros.addValue("vi_usuario_crea",		datosSession.getCodigoUsuario());
 			parametros.addValue("vi_usuario_modifica",	null);
+			parametros.addValue("vi_fecha_modifica",	null);
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
 			
