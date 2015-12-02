@@ -56,8 +56,9 @@ public class PuestoBusImpl implements PuestoBus {
 	}
 
 	@Override
-	public ReportePuesto reportePuestoxPto(int pagina, int registros, String codigoPuesto) {
-		
-		return puestoDao.reportePuestoxPto(pagina, registros, codigoPuesto);
+	public ReportePuesto reportePuestoxPto(int pagina, int registros, int codigoSector, String nroPuesto, int codigoReciboOriginal) {
+	
+		return puestoDao.reportePuestoxPto(pagina, registros, codigoSector, nroPuesto, codigoReciboOriginal);
 	}
+
 }

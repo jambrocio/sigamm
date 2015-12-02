@@ -5,6 +5,9 @@ public class Puesto {
 	int codigoPuesto;
 	int codigoUsuario;
 	int codigoGiro;
+	int codigoReciboOriginal;
+	int codigoSector;
+	String nombreSector;
 	String nroPuesto;
 	String dni;
 	String nombreFull;
@@ -73,6 +76,23 @@ public class Puesto {
 	public void setReciboLuzCreado(int reciboLuzCreado) {
 		this.reciboLuzCreado = reciboLuzCreado;
 	}
-	
+	public int getCodigoReciboOriginal() {
+		return codigoReciboOriginal;
+	}
+	public void setCodigoReciboOriginal(int codigoReciboOriginal) {
+		this.codigoReciboOriginal = codigoReciboOriginal;
+	}
+	public int getCodigoSector() {
+		return codigoSector;
+	}
+	public void setCodigoSector(int codigoSector) {
+		this.codigoSector = codigoSector;
+	}
+	public String getNombreSector() {
+		return nombreSector;
+	}
+	public void setNombreSector(String nombreSector) {
+		this.nombreSector = nombreSector;
+	}
 	
 }

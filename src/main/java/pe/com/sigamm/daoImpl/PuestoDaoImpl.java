@@ -208,7 +208,7 @@ public class PuestoDaoImpl implements PuestoDao {
 
 
 	@Override
-	public ReportePuesto reportePuestoxPto(int pagina, int registros, String codigoPuesto) {
+	public ReportePuesto reportePuestoxPto(int pagina, int registros, int codigoSector, String nroPuesto, int codigoReciboOriginal) {
 		ReportePuesto reporte = new ReportePuesto();
 		try{
 			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
@@ -217,7 +217,9 @@ public class PuestoDaoImpl implements PuestoDao {
 			jdbcCall.withProcedureName("SP_REPORTE_PUESTO_X_PTO").declareParameters(
 					new SqlParameter("vi_pagina", 					Types.INTEGER),
 					new SqlParameter("vi_registros", 				Types.INTEGER),
-					new SqlParameter("vi_codigo_puesto", 			Types.VARCHAR),
+					new SqlParameter("vi_codigo_sector", 			Types.INTEGER),
+					new SqlParameter("vi_nro_puesto", 				Types.VARCHAR),
+					new SqlParameter("vi_codigo_luz_original", 		Types.INTEGER),
 					
 					new SqlOutParameter("vo_total_registros", 		Types.INTEGER),
 					new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(Puesto.class)));
@@ -225,7 +227,7 @@ public class PuestoDaoImpl implements PuestoDao {
 			MapSqlParameterSource parametros = new MapSqlParameterSource();
 			parametros.addValue("vi_pagina", 	pagina);
 			parametros.addValue("vi_registros", registros);
-			parametros.addValue("vi_codigo_puesto",codigoPuesto);
+			parametros.addValue("vi_codigo_puesto",codigoSector);
 			
 			Map<String,Object> results = jdbcCall.execute(parametros);
 			int totalRegistros = (Integer) results.get("vo_total_registros");

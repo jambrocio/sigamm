@@ -137,11 +137,13 @@ public class ReciboLuzController {
 	public @ResponseBody ResponseListBean<Puesto> reporteUsuarioPuestoGiro(
 			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
 			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
-			@RequestParam(value = "codigoPuesto", defaultValue = "0") String codigoPuesto){
+			@RequestParam(value = "codigoSector", defaultValue = "0") Integer codigoSector,
+			@RequestParam(value = "nroPuesto", defaultValue = "0") String nroPuesto,
+			@RequestParam(value = "codigoReciboOriginal", defaultValue = "0") Integer codigoReciboOriginal){
 		
 		ResponseListBean<Puesto> response = new ResponseListBean<Puesto>();
 		
-		ReportePuesto reporte = puestoBus.reportePuestoxPto(pagina, registros, codigoPuesto);
+		ReportePuesto reporte = puestoBus.reportePuestoxPto(pagina, registros, codigoSector, nroPuesto, codigoReciboOriginal);
 		
 		Integer totalReciboPuestoxPto = reporte.getTotalRegistros(); 
 		

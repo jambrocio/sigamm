@@ -468,7 +468,7 @@ function generarReciboLuzSocio(codigoReciboLuzOriginal){
 	
 	$("#codigoReciboLuzOriginal").val(codigoReciboLuzOriginal);
 	
-	alert("UNO " + codigoReciboLuzOriginal);
+	//alert("UNO " + codigoReciboLuzOriginal);
 	//buscarUsuario();
 	cargarReciboLuzSocio();
 	
@@ -484,7 +484,7 @@ function cargarReciboLuzSocio(){
 		var opciones = "<center>";
 			
 			opciones += "<a href=javascript:editarReciboLuzSocio(";
-			opciones += rowObject.codigoRecibo + "') >";
+			opciones += rowObject.sector + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Luz Socio'/>";
 			opciones += "</a>";
 			
@@ -498,7 +498,7 @@ function cargarReciboLuzSocio(){
 			opciones += "&nbsp;&nbsp;";
 			
 			opciones += "<a href=javascript:generarReciboLuzXSocio('";
-			opciones += rowObject.codigoRecibo + "') >";
+			opciones += rowObject.codigoSector + "','" + rowObject.nroPuesto + "','" + rowObject.codigoReciboOriginal + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/agregar2_24x24.png' border='0' title='Crear Recibo de Luz por Socio'/>";
 			opciones += "</a>";			
 			
@@ -511,7 +511,7 @@ function cargarReciboLuzSocio(){
 	var parametros = new Object();
 	parametros.codigoRecibo = 4;
 	
-	alert(parametros.codigoRecibo);
+	//alert(parametros.codigoRecibo);
 	
 	jQuery("#grillaReciboLuz").jqGrid(
 	{
@@ -521,28 +521,28 @@ function cargarReciboLuzSocio(){
 		height: 'auto',
 		width: 'auto',
 		data: parametros,
-		colNames : ['Código Puesto', 'Código Usuario', 'Nro. Puesto', 'Giro','Recibo Luz','Total', 'Opciones'],
+		colNames : ['Sector', 'Nombre Usuario', 'Puesto', 'Giro','Recibo Luz','Total', 'Opciones'],
 		colModel : [{
-			name : 'codigoPuesto',
-			index: 'codigoPuesto',
+			name : 'codigoSector',
+			index: 'codigoSector',
 			sortable:false,
-			width: 90,
+			width: 70,
 			align: 'center'
 		},{
-			name : 'codigoUsuario',
-			index: 'codigoUsuario',
+			name : 'nombreFull',
+			index: 'nombreFull',
 			sortable:false,
-			width: 100,
+			width: 140,
 			align: 'left'
 		},{
 			name : 'nroPuesto',
 			index: 'nroPuesto',
 			sortable:false,
-			width: 80,
-			align: 'left'
+			width: 50,
+			align: 'center'
 		},{
-			name : 'codigoGiro',
-			index: 'codigoGiro',
+			name : 'nombreGiro',
+			index: 'nombreGiro',
 			sortable:false,
 			width: 150,
 			align: 'center'
@@ -588,36 +588,34 @@ function cargarReciboLuzSocio(){
 }
 
 
-function generarReciboLuzXSocio(codigoPuesto){
-	console.log("Generar Recibo de Luz X Socios - [codigo Socio] : " + codigoPuesto);
-	
-	//alert(codigoPuesto);
-	/*$("#nroRecibo").text(codigoReciboLuzOriginal);
-	alert($("#nroRecibo").text());*/
-	
-	$("#codigoPuestoSocio").text(codigoPuesto);
+function generarReciboLuzXSocio(sector, puesto, original){
+	alert("Sector: "+sector+" - Puesto: "+puesto+" - Luz Original: "+original);
 	
 	$('#recibos_luz_por_socio_modal').modal({
 		backdrop: 'static',
 		keyboard: false
 	});
-	
-	//$("#codigoPuesto").html(" - PUESTO [" + codigoPuestoesto + "]");
+		
+	$("sectorSocio").text(sector);
+	$("puestoSocio").text(puesto);								
+	$("reciboOriginal").text(original);
 	
 	colorEtiquetas();
 	
 	/*$("#codigoReciboLuzOriginal").val(codigoReciboLuzOriginal);
 	buscarUsuario();*/
-	cargarDatosReciboLuzSocio(codigoPuesto);
+	cargarDatosReciboLuzSocio(sector, puesto, original);
 	
 }
 
-function cargarDatosReciboLuzSocio(codigoPuesto){	
+function cargarDatosReciboLuzSocio(sector, puesto, original){	
 
 	//alert(codigoPuesto);
 	
 	var parametros = new Object();
-	parametros.codigoPuesto = codigoPuesto;
+	parametros.codigoSector         = sector;
+	parametros.nroPuesto            = puesto;
+	parametros.codigoReciboOriginal = original;
 	
 	$.ajax({
         type: "POST",
@@ -1189,7 +1187,7 @@ function guardarRecibo(){
 		
 			<table border="0" width="100%" cellpadding="0" cellspacing="0"></tr>
 				<tr>
-					<td colspan="4"><b>RECIBO DE LUZ <span id="codigoPuesto"></span><b/></td>
+					<td colspan="4"><b>RECIBO DE LUZ <span id="reciboOriginal"></span><b/></td>
 				</tr>
 				<tr>
 					<td colspan="4">&nbsp;</td>
