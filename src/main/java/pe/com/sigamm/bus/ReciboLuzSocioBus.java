@@ -7,4 +7,6 @@ public interface ReciboLuzSocioBus {
 
 	public Retorno grabarReciboLuzxSocio(ReciboLuzSocio reciboLuzSocio);
 	
+	public Retorno eliminarReciboLuzxSocio(ReciboLuzSocio reciboLuzSocio);
+	
 }

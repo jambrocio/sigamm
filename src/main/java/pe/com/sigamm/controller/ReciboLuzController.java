@@ -112,7 +112,7 @@ public class ReciboLuzController {
 			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
 			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
 			@RequestParam(value = "codigoPuesto", defaultValue = "0") Integer codigoPuesto,
-			@RequestParam(value = "codigoRecibo", defaultValue = "4") Integer codigoRecibo){
+			@RequestParam(value = "codigoRecibo", defaultValue = "0") Integer codigoRecibo){
 		
 		ResponseListBean<Puesto> response = new ResponseListBean<Puesto>();
 		
@@ -185,4 +185,21 @@ public class ReciboLuzController {
 		
 		return resultado;
 	}
+	
+	
+	@RequestMapping(value = "/eliminar-luz-x-socio.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String eliminarPuesto(ReciboLuzSocio reciboLuzSocio){
+		
+		Gson gson = new Gson();
+		
+		Retorno retorno = reciboLuzSocioBus.eliminarReciboLuzxSocio(reciboLuzSocio);
+		int codigo = retorno.getCodigo();
+		String mensaje = retorno.getMensaje();
+		 
+		String resultado = "{\"idUsuario\":" + codigo + ",\"mensaje\":\"" + mensaje + "\"}";
+		
+		
+		return resultado;
+	}
+	
 }

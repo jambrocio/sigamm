@@ -28,4 +28,11 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 		
 	}
 
+	@Override
+	public Retorno eliminarReciboLuzxSocio(ReciboLuzSocio reciboLuzSocio) {
+		
+		return reciboLuzSocioDao.eliminarReciboLuzxSocio(reciboLuzSocio);
+		
+	}
+
 }

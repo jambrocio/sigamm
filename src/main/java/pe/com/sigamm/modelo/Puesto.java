@@ -7,6 +7,7 @@ public class Puesto {
 	int codigoGiro;
 	int codigoReciboOriginal;
 	int codigoSector;
+	int estadoReciboLuz;
 	String nombreSector;
 	String nroPuesto;
 	String dni;
@@ -20,6 +21,7 @@ public class Puesto {
 	double numCostoWatts;
 	double alumbradoPublico;
 	double mantenimiento;
+	
 	public int getCodigoSocio() {
 		return codigoSocio;
 	}
@@ -133,6 +135,12 @@ public class Puesto {
 	}
 	public void setMantenimiento(double mantenimiento) {
 		this.mantenimiento = mantenimiento;
+	}
+	public int getEstadoReciboLuz() {
+		return estadoReciboLuz;
+	}
+	public void setEstadoReciboLuz(int estadoReciboLuz) {
+		this.estadoReciboLuz = estadoReciboLuz;
 	}
 	
 }

@@ -343,7 +343,7 @@ function cargarReciboLuzOriginal(){
 		var opciones = "<center>";
 			
 			opciones += "<a href=javascript:editarReciboLuzOriginal(";
-			opciones += rowObject.codigoOrgReciboLuz + "') >";
+			opciones += rowObject.codigoOrgReciboLuz + ") >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Usuario'/>";
 			opciones += "</a>";
 			
@@ -356,8 +356,8 @@ function cargarReciboLuzOriginal(){
 			
 			opciones += "&nbsp;&nbsp;";
 			
-			opciones += "<a href=javascript:generarReciboLuzSocio('";
-			opciones += rowObject.codigoReciboLuzOriginal + "') >";
+			opciones += "<a href=javascript:generarReciboLuzSocio(";
+			opciones += rowObject.codigoReciboLuzOriginal + ") >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/reciboLuz_24x24.png' border='0' title='Generar Recibo Luz Socio'/>";
 			opciones += "</a>";			
 			
@@ -452,10 +452,10 @@ function cargarReciboLuzOriginal(){
 }
 
 
-function generarReciboLuzSocio(codigoReciboLuzOriginal){
-	console.log("Generar Recibo Luz Socios - [codigoReciboLuzOriginal] : " + codigoReciboLuzOriginal);
+function generarReciboLuzSocio(codigoRecibo){
+	console.log("Generar Recibo Luz Socios - [codigoReciboLuzOriginal] : " + codigoRecibo);
 	
-	$("#nroRecibo").text(codigoReciboLuzOriginal);
+	$("#nroRecibo").text(codigoRecibo);
 	
 	$('#recibos_luz_socios_modal').modal({
 		backdrop: 'static',
@@ -466,17 +466,17 @@ function generarReciboLuzSocio(codigoReciboLuzOriginal){
 	
 	colorEtiquetas();
 	
-	$("#codigoReciboLuzOriginal").val(codigoReciboLuzOriginal);
+	$("#codigoReciboOrig").val(codigoRecibo);
 	
 	//alert("UNO " + codigoReciboLuzOriginal);
 	//buscarUsuario();
-	cargarReciboLuzSocio();
+	
+	cargarReciboLuzSocio(codigoRecibo);
 	
 }
 
-function cargarReciboLuzSocio(){
-	
-	//alert("Mensaje: " + rowObject.codigoReciboLuzOriginal);
+function cargarReciboLuzSocio(codigoRecibo){
+	alert("cargarReciboLuzSocio: " + codigoRecibo);
 	
 	var ruta = obtenerContexto();
 	var formatterBotones = function(cellVal,options,rowObject)
@@ -484,34 +484,36 @@ function cargarReciboLuzSocio(){
 		var opciones = "<center>";
 			
 			opciones += "<a href=javascript:editarReciboLuzSocio(";
-			opciones += rowObject.sector + "') >";
+			opciones += rowObject.codigoReciboOriginal + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Luz Socio'/>";
 			opciones += "</a>";
 			
 			opciones += "&nbsp;&nbsp;";
 			
-			opciones += "<a href=javascript:eliminarReciboLuzSocio(";
-			opciones += rowObject.codigoRecibo + "') >";
+			/*opciones += "<a href=javascript:eliminarReciboLuzXSocio('";
+			opciones += rowObject.codigoSocio + "','" + rowObject.nroPuesto + "','" + rowObject.codigoReciboOriginal + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Recibo Luz Socio'/>";
 			opciones += "</a>";
 			
-			opciones += "&nbsp;&nbsp;";
+			opciones += "&nbsp;&nbsp;";*/
 			
 			opciones += "<a href=javascript:generarReciboLuzXSocio('";
 			opciones += rowObject.codigoSector + "','" + rowObject.nroPuesto + "','" + rowObject.codigoReciboOriginal + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/agregar2_24x24.png' border='0' title='Crear Recibo de Luz por Socio'/>";
 			opciones += "</a>";			
-			
+
 			opciones += "</center>";
 			
 		return opciones;
 				
 	};
+
+	jsonObj = [];
+	var valores = new Object();
+	valores.codigoRecibo = codigoRecibo;
+	//parametros.codigoReciboOriginal = 7;
 	
-	var parametros = new Object();
-	parametros.codigoRecibo = 4;
-	
-	//alert(parametros.codigoRecibo);
+	alert(valores.codigoRecibo);
 	
 	jQuery("#grillaReciboLuz").jqGrid(
 	{
@@ -520,9 +522,15 @@ function cargarReciboLuzSocio(){
 		mtype: 'POST',
 		height: 'auto',
 		width: 'auto',
-		data: parametros,
-		colNames : ['Sector', 'Nombre Usuario', 'Puesto', 'Giro','Recibo Luz','Total', 'Opciones'],
+		postData: valores,
+		colNames : ['Recibo', 'Sector', 'Nombre Usuario', 'Puesto', 'Giro','Recibo Luz','Total', 'Opciones'],
 		colModel : [{
+			name : 'codigoRecibo',
+			index: 'codigoRecibo',
+			sortable:false,
+			width: 70,
+			align: 'center'
+		},{
 			name : 'codigoSector',
 			index: 'codigoSector',
 			sortable:false,
@@ -577,10 +585,10 @@ function cargarReciboLuzSocio(){
 		afterInsertRow: function(rowId, data, item){
 			//alert(rowId + ' - ' + data + ' - ' + item.total);
 			if (item.reciboLuzCreado == 0)
-				//$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color' : 'red'  });
-				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
-			else 
+				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });				
+			else
 				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
+
 		}
 
 
@@ -644,6 +652,56 @@ function cargarDatosReciboLuzSocio(sector, puesto, original){
 	
 	$("#lecturaInicialSocio").focus();
 }
+
+function eliminarReciboLuzXSocio(codigoSocio, puesto, original){
+	
+	var ruta = obtenerContexto();
+	mensaje = "Desea eliminar el recibo del Puesto " + puesto + " ?"; 
+	
+	$("#mensajeEliminar").html(mensaje);
+	
+	$('#alerta_modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	}).one('click', '#aceptar', function() {
+        
+		jsonObj = [];
+		var parametros = new Object();
+		parametros.codigoSocio = codigoSocio;
+		parametros.codigoRecibo = original;
+			
+		$.ajax({
+			type: "POST",
+		    async:false,
+		    url: "eliminar-luz-x-socio.json",
+		    cache : false,
+		    data: parametros,
+		    success: function(result){
+		            
+		        $('#alerta_modal').modal('hide');
+	            	
+	            $.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Mensaje',
+					// (string | mandatory) the text inside the notification
+					text: result.mensaje,
+					// (string | optional) the image to display on the left
+					image: "/" + ruta + "/recursos/images/confirm.png",
+					// (bool | optional) if you want it to fade out on its own or just sit there
+					sticky: false,
+					// (int | optional) the time you want it to be alive for before fading out
+					time: ''
+				});
+	            
+	            cargarPuestos();
+		            
+			}
+		});
+		
+    });
+
+}
+
 
 function floorFigure(figure, decimals){
     if (!decimals) decimals = 2;
@@ -802,6 +860,7 @@ function guardarRecibo(){
 <body id="body">
 <input type="hidden" id="codigoPuestoSocio" />
 <input type="hidden" id="codigoSocio" />
+<input type="text" id="codigoRecibo" />
 <input type="hidden" id="costoWatts" />
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
@@ -1282,6 +1341,32 @@ function guardarRecibo(){
 		</div>
 		
 		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="alerta_modal" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Eliminar Recibo Luz</h4>
+			</div>
+			<div class="modal-body">
+					
+				<table border="0">
+					<tr>
+						<td><img src="recursos/images/icons/exclamation_32x32.png" border="0" />&nbsp;<b><span id="mensajeEliminar" /></b></td>
+					</tr>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" id="aceptar">Si</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+			</div>
+		</div>
+		  
 	</div>
 </div>
 

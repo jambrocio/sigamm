@@ -24,7 +24,7 @@ public class ReciboLuzSocio {
 	double redondeo;
 	double total;
 	double deudaAnterior;
-	double estado;
+	int estado;
 	Date fechaCarga;
 	int reciboLuzCreado;
 	
@@ -148,10 +148,10 @@ public class ReciboLuzSocio {
 	public void setDeudaAnterior(double deudaAnterior) {
 		this.deudaAnterior = deudaAnterior;
 	}
-	public double getEstado() {
+	public int getEstado() {
 		return estado;
 	}
-	public void setEstado(double estado) {
+	public void setEstado(int estado) {
 		this.estado = estado;
 	}
 	public Date getFechaCarga() {
