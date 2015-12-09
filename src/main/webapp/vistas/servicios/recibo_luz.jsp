@@ -476,14 +476,14 @@ function generarReciboLuzSocio(codigoRecibo){
 }
 
 function cargarReciboLuzSocio(codigoRecibo){
-	alert("cargarReciboLuzSocio: " + codigoRecibo);
+	//alert("cargarReciboLuzSocio: " + codigoRecibo);
 	
 	var ruta = obtenerContexto();
 	var formatterBotones = function(cellVal,options,rowObject)
 	{	
 		var opciones = "<center>";
 			
-			opciones += "<a href=javascript:editarReciboLuzSocio(";
+			opciones += "<a href=javascript:editarReciboLuzXSocio(";
 			opciones += rowObject.codigoReciboOriginal + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Luz Socio'/>";
 			opciones += "</a>";
@@ -513,7 +513,7 @@ function cargarReciboLuzSocio(codigoRecibo){
 	valores.codigoRecibo = codigoRecibo;
 	//parametros.codigoReciboOriginal = 7;
 	
-	alert(valores.codigoRecibo);
+	//alert(valores.codigoRecibo);
 	
 	jQuery("#grillaReciboLuz").jqGrid(
 	{
@@ -525,8 +525,8 @@ function cargarReciboLuzSocio(codigoRecibo){
 		postData: valores,
 		colNames : ['Recibo', 'Sector', 'Nombre Usuario', 'Puesto', 'Giro','Recibo Luz','Total', 'Opciones'],
 		colModel : [{
-			name : 'codigoRecibo',
-			index: 'codigoRecibo',
+			name : 'codigoReciboOriginal',
+			index: 'codigoReciboOriginal',
 			sortable:false,
 			width: 70,
 			align: 'center'
@@ -653,10 +653,12 @@ function cargarDatosReciboLuzSocio(sector, puesto, original){
 	$("#lecturaInicialSocio").focus();
 }
 
-function eliminarReciboLuzXSocio(codigoSocio, puesto, original){
+
+function editarReciboLuzXSocio(codigoSocio, puesto, original){
 	
 	var ruta = obtenerContexto();
-	mensaje = "Desea eliminar el recibo del Puesto " + puesto + " ?"; 
+	//mensaje = "Desea eliminar el recibo del Puesto " + puesto + " ?"; 
+	mensaje = "En cosntrucción " + puesto + " ?";
 	
 	$("#mensajeEliminar").html(mensaje);
 	
@@ -673,7 +675,7 @@ function eliminarReciboLuzXSocio(codigoSocio, puesto, original){
 		$.ajax({
 			type: "POST",
 		    async:false,
-		    url: "eliminar-luz-x-socio.json",
+		    url: "editar-luz-x-socio.json",
 		    cache : false,
 		    data: parametros,
 		    success: function(result){

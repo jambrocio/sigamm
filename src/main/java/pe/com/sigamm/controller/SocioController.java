@@ -50,11 +50,12 @@ private static final Logger log = Logger.getLogger(SocioController.class);
 	public @ResponseBody ResponseListBean<Socio> reporteSocios(
 			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
 			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
-			@RequestParam(value = "dni", defaultValue = "0") String dni){
+			@RequestParam(value = "dni", defaultValue = "0") String dni,
+			@RequestParam(value = "nombre", defaultValue = "") String nombre){
 		
 		ResponseListBean<Socio> response = new ResponseListBean<Socio>();
 		
-		ReporteSocio reporte = socioBus.reporteSocio(pagina, registros, dni, 0);
+		ReporteSocio reporte = socioBus.reporteSocio(pagina, registros, dni, nombre, 0);
 		
 		Integer totalSocios = reporte.getTotalRegistros(); 
 		
@@ -178,7 +179,7 @@ private static final Logger log = Logger.getLogger(SocioController.class);
     public ModelAndView downloadExcel() {
         
 		// create some sample data
-		ReporteSocio reporte = socioBus.reporteSocio(1, 1, "0", 1);
+		ReporteSocio reporte = socioBus.reporteSocio(1, 1, "0", "", 1);
 		
 		List<Socio> lista = reporte.getListaSocio(); 
 		

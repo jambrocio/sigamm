@@ -482,6 +482,7 @@ function buscarSocio(){
 	
 	var parametros=new Object();
 	parametros.dni = $("#dniBuscara").val();
+	parametros.nombre = $("#nombreBuscara").val();
 
 	$("#grilla").jqGrid('setGridParam',
 	{
@@ -500,13 +501,20 @@ function buscarSocio(){
 <input type="hidden" id="codigoGiro" />
 <table border="0" width="100%">
 	<tr>
-		<td colspan="4">&nbsp;</td>
+		<td colspan="7">&nbsp;</td>
 	</tr>
 	<tr>
 		<td width="150"><b>DNI<b/></td>
 		<td width="10">:</td>
-		<td width="200"><input type="text" id="dniBuscara" class="form-control" maxlength="8" /></td>
-		<td>&nbsp;&nbsp;
+		<td width="100"><input type="text" id="dniBuscara" class="form-control" maxlength="8" /></td>
+		<td>&nbsp;&nbsp;</td>
+		<td width="150"><b>NOMBRE<b/></td>
+		<td width="10">:</td>
+		<td width="250"><input type="text" id="nombreBuscara" class="form-control" maxlength="150" /></td>		
+	</tr>
+	<tr><td colspan="7">&nbsp;</td></tr>
+	<tr>
+		<td colspan=7>&nbsp;&nbsp;
 			<button type="button" class="btn btn-primary" onclick="buscarSocio()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 			</button>&nbsp;&nbsp;
@@ -519,10 +527,10 @@ function buscarSocio(){
 		</td>
 	</tr>
 	<tr>
-		<td colspan="4">&nbsp;</td>
+		<td colspan="7">&nbsp;</td>
 	</tr>
 	<tr>
-		<td colspan="4">
+		<td colspan="7">
 			<table id="grilla"></table>
 			<div id="pgrilla"></div>
 		</td>

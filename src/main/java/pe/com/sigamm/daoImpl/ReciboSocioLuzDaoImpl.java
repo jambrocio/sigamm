@@ -101,14 +101,14 @@ public class ReciboSocioLuzDaoImpl implements ReciboLuzSocioDao {
 	}
 
 	@Override
-	public Retorno eliminarReciboLuzxSocio(ReciboLuzSocio reciboLuzSocio) {
+	public Retorno editarReciboLuzxSocio(ReciboLuzSocio reciboLuzSocio) {
 		
 		Retorno retorno = new Retorno();
 		try{
-			System.out.println("Eliminando Recibo Luz Socio");
+			System.out.println("Editando Recibo Luz Socio");
 			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
 			jdbcCall.withCatalogName("PKG_RECIBO_LUZ_SOCIO");
-			jdbcCall.withProcedureName("SP_ELIMINAR_LUZ_X_SOCIO").declareParameters(
+			jdbcCall.withProcedureName("SP_EDITAR_LUZ_X_SOCIO").declareParameters(
 				new SqlParameter("vi_codigo_socio", 			Types.INTEGER),
 				new SqlParameter("vi_codigo_recibo", 			Types.INTEGER),
 				new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),

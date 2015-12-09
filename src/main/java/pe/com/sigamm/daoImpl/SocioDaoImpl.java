@@ -41,7 +41,7 @@ public class SocioDaoImpl implements SocioDao {
 	private DatosSession datosSession;
 	
 	@Override
-	public ReporteSocio reporteSocio(int pagina, int registros, String dni, int exportar) {
+	public ReporteSocio reporteSocio(int pagina, int registros, String dni, String nombre, int exportar) {
 		
 		ReporteSocio reporte = new ReporteSocio();
 		try{
@@ -51,6 +51,7 @@ public class SocioDaoImpl implements SocioDao {
 					new SqlParameter("vi_pagina", 					Types.INTEGER),
 					new SqlParameter("vi_registros", 				Types.INTEGER),
 					new SqlParameter("vi_dni", 						Types.VARCHAR),
+					new SqlParameter("vi_nombre",					Types.VARCHAR),
 					new SqlParameter("vi_exportar", 				Types.INTEGER),
 					
 					new SqlOutParameter("vo_total_registros", 		Types.INTEGER),
@@ -60,6 +61,7 @@ public class SocioDaoImpl implements SocioDao {
 			parametros.addValue("vi_pagina", 		pagina);
 			parametros.addValue("vi_registros", 	registros);
 			parametros.addValue("vi_dni", 			dni);
+			parametros.addValue("vi_nombre", 		nombre);
 			parametros.addValue("vi_exportar", 		exportar);
 			
 			Map<String,Object> results = jdbcCall.execute(parametros);

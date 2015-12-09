@@ -187,12 +187,12 @@ public class ReciboLuzController {
 	}
 	
 	
-	@RequestMapping(value = "/eliminar-luz-x-socio.json", method = RequestMethod.POST, produces="application/json")
+	@RequestMapping(value = "/editar-luz-x-socio.json", method = RequestMethod.POST, produces="application/json")
 	public @ResponseBody String eliminarPuesto(ReciboLuzSocio reciboLuzSocio){
 		
 		Gson gson = new Gson();
 		
-		Retorno retorno = reciboLuzSocioBus.eliminarReciboLuzxSocio(reciboLuzSocio);
+		Retorno retorno = reciboLuzSocioBus.editarReciboLuzxSocio(reciboLuzSocio);
 		int codigo = retorno.getCodigo();
 		String mensaje = retorno.getMensaje();
 		 

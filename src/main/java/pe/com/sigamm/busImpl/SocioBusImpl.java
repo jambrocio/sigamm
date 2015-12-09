@@ -31,9 +31,9 @@ public class SocioBusImpl implements SocioBus {
 	private SocioDao socioDao;
 	
 	@Override
-	public ReporteSocio reporteSocio(int pagina, int registros, String dni, int exportar) {
+	public ReporteSocio reporteSocio(int pagina, int registros, String dni, String nombre, int exportar) {
 		
-		return socioDao.reporteSocio(pagina, registros, dni, exportar);
+		return socioDao.reporteSocio(pagina, registros, dni, nombre, exportar);
 	}
 
 	@Override
