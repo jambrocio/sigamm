@@ -483,7 +483,7 @@ function cargarReciboLuzSocio(codigoRecibo){
 	{	
 		var opciones = "<center>";
 			
-			opciones += "<a href=javascript:editarReciboLuzXSocio(";
+			opciones += "<a href=javascript:editarReciboLuzXSocio('";
 			opciones += rowObject.codigoReciboOriginal + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Luz Socio'/>";
 			opciones += "</a>";
@@ -511,9 +511,6 @@ function cargarReciboLuzSocio(codigoRecibo){
 	jsonObj = [];
 	var valores = new Object();
 	valores.codigoRecibo = codigoRecibo;
-	//parametros.codigoReciboOriginal = 7;
-	
-	//alert(valores.codigoRecibo);
 	
 	jQuery("#grillaReciboLuz").jqGrid(
 	{
@@ -528,7 +525,7 @@ function cargarReciboLuzSocio(codigoRecibo){
 			name : 'codigoReciboOriginal',
 			index: 'codigoReciboOriginal',
 			sortable:false,
-			width: 70,
+			width: 50,
 			align: 'center'
 		},{
 			name : 'codigoSector',
@@ -569,7 +566,7 @@ function cargarReciboLuzSocio(codigoRecibo){
 		},{					
 			name:'opciones',
 			index:'opciones',
-			width:100,
+			width:110,
 			sortable:false,
 			search: false,
 			formatter:formatterBotones
@@ -657,8 +654,8 @@ function cargarDatosReciboLuzSocio(sector, puesto, original){
 function editarReciboLuzXSocio(codigoSocio, puesto, original){
 	
 	var ruta = obtenerContexto();
-	//mensaje = "Desea eliminar el recibo del Puesto " + puesto + " ?"; 
-	mensaje = "En cosntrucción " + puesto + " ?";
+	mensaje = "Desea editar el recibo del Puesto " + puesto + " ?"; 
+	//mensaje = "En cosntrucción " + puesto + " ?";
 	
 	$("#mensajeEliminar").html(mensaje);
 	
@@ -855,8 +852,31 @@ function guardarRecibo(){
 	});
 	
 	cargarReciboLuzSocio();
-	
+	limpiarReciboLuzSocio();
+
 }
+
+
+function limpiarReciboLuzSocio(){
+
+	$("#nombreSocio").val('');
+	$("#puestoSocio").val('');								
+	$("#sectorSocio").val('');
+	$("#giroSocio").val('');
+	$("#periodoSocio").val('');
+	$("#lecturaInicialSocio").val('');
+	$("#lecturaFinalSocio").val('');
+	$("#consumoMesSocio").text('');	
+	$("#cargoEnergiaSocio").val('');
+	$("#alumbradoPublicoSocio").val('');
+	$("#servicioMantenimientoSocio").val('');
+	$("#deudaAnteriorSocio").val('');
+	$("#reconexionSocio").val('');
+	$("#totalSocio").text('');
+
+}
+
+
 </script>
 </head>
 <body id="body">
@@ -1199,7 +1219,7 @@ function guardarRecibo(){
 				<tr>
 					<td width="150"><b>RECIBO LUZ SOCIOS<b/></td>
 					<td width="10">:</td>
-					<td width="200"><input type="text" id="reciboLuzSocioBuscara" class="text ui-widget-content ui-corner-all" maxlength="8" /></td>
+					<td width="250"><input type="text" id="reciboLuzSocioBuscara" class="text ui-widget-content ui-corner-all" maxlength="8" /></td>
 					<td>&nbsp;&nbsp;
 						<button type="button" class="btn btn-primary" onclick="cargarReciboLuzSocio()">
 							<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
@@ -1236,7 +1256,7 @@ function guardarRecibo(){
 
 <!-- Ventana Modal Recibo Luz Ppor cada Socio -->
 <div class="modal fade" id="recibos_luz_por_socio_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog" style="width: 400px">
+	<div class="modal-dialog" style="width: 450px">
 		<div class="modal-content">
 		
 		<div class="modal-header modal-header-primary">
@@ -1338,7 +1358,7 @@ function guardarRecibo(){
 		</div>
 		
 		<div class="modal-footer">
-			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="guardarRecibo()">Grabar</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="guardarRecibo()">Grabar</button>		
 			<button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
 		</div>
 		
