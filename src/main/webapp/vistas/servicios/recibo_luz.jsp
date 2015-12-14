@@ -657,7 +657,7 @@ function editarReciboLuzXSocio(original, puesto){
 	mensaje = "Desea editar el recibo del Puesto " + puesto + " ?"; 
 	//mensaje = "En cosntrucción " + puesto + " ?";
 	
-	$("#mensajeEliminar").html(mensaje);
+	$("#mensajeEditar").html(mensaje);
 	
 	$('#alerta_modal').modal({
 		backdrop: 'static',
@@ -675,34 +675,56 @@ function editarReciboLuzXSocio(original, puesto){
 		    url: "editar-luz-x-socio.json",
 		    cache : false,
 		    data: parametros,
+		    //dataType: "html",
 		    success: function(result){
-		            
-		        $('#alerta_modal').modal('hide');
+		    	
+		    	//alert(result.records);
+		    	
+			    $('#alerta_modal').modal('hide');
+	
+		        if (result.records > 0) {
+			        $('#recibos_luz_por_socio_modal').modal({
+		        		backdrop: 'static',
+		        		keyboard: false
+		        	});	        	
 
-	        	$('#recibos_luz_por_socio_modal').modal({
-	        		backdrop: 'static',
-	        		keyboard: false
-	        	});
-
-	        	$.each(result.rows, function(key,val) {
-	            	$("#nombreSocio").text(val.nombreFull);
-	            	$("#puestoSocio").text(val.puestoSocio);
-	            	$("#sectorSocio").text(val.nombreSector);
-	            	$("#giroSocio").text(val.nombreGiro);
-	            	$("#periodoSocio").text(val.fecPeriodo);
-
-	            	$("#lecturaInicialSocio").val(val.lecturaInicial);
-	        		$("#lecturaFinalSocio").val(val.lecturaFinal);
-	        		$("#consumoMesSocio").html(val.consumoMes);
-	        		$("#cargoEnergiaSocio").val(val.cargoEnergia);
-	        		$("#alumbradoPublicoSocio").val(val.alumbradoPublico);
-	        		$("#servicioMantenimientoSocio").val(val.servicioMantenimiento);
-	        		$("#deudaAnteriorSocio").val(val.deudaAnterior);
-	        		$("#reconexionSocio").val(val.reconexion);
-	        		$("#totalSocio").html(val.total);
-	        		$("#costoWatts").val(val.costoWatts);
-	            	
-	        	});
+		        	$.each(result.rows, function(key,val) {
+		        		$("#codigoSocio").val(val.codigoSocio);
+		            	$("#nombreSocio").text(val.nombreFull);
+		            	$("#puestoSocio").text(val.puestoSocio);
+		            	$("#sectorSocio").text(val.nombreSector);
+		            	$("#giroSocio").text(val.nombreGiro);
+		            	$("#periodoSocio").text(val.fecPeriodo);
+	
+		            	$("#lecturaInicialSocio").val(val.lecturaInicial);
+		        		$("#lecturaFinalSocio").val(val.lecturaFinal);
+		        		$("#consumoMesSocio").html(val.consumoMes);
+		        		$("#cargoEnergiaSocio").val(val.cargoEnergia);
+		        		$("#alumbradoPublicoSocio").val(val.alumbradoPublico);
+		        		$("#servicioMantenimientoSocio").val(val.servicioMantenimiento);
+		        		$("#deudaAnteriorSocio").val(val.deudaAnterior);
+		        		$("#reconexionSocio").val(val.reconexion);
+		        		$("#totalSocio").html(val.total);
+		        		$("#costoWatts").val(val.costoWatts);
+		        		$("#codigoReciboLuzSocio").val(val.correlativo);
+		            	
+		        	});
+	        	
+	        	} else {
+	        		
+	        		$.gritter.add({
+						// (string | mandatory) the heading of the notification
+						title: 'Mensaje',
+						// (string | mandatory) the text inside the notification
+						text: 'El Recibo de Luz del puesto ' + puesto + ' aún no se ha creado, verifique...',
+						// (string | optional) the image to display on the left
+						image: "/" + ruta + "/recursos/images/confirm.png",
+						// (bool | optional) if you want it to fade out on its own or just sit there
+						sticky: false,
+						// (int | optional) the time you want it to be alive for before fading out
+						time: ''
+					});
+	        	};
 	            //cargarPuestos();
 		            
 			}
@@ -777,6 +799,8 @@ function operaciones(valor){
 		cargoEnergia = parseFloat($("#costoWatts").val())*parseFloat($("#consumoMesSocio").html());
 		//alert("cargo: " + cargoEnergia);
 		$("#cargoEnergiaSocio").val(cargoEnergia);
+		operaciones('R');
+		
 	}else if (valores=='R'){
 		respuesta = parseFloat($("#cargoEnergiaSocio").val()) + parseFloat($("#alumbradoPublicoSocio").val()) + parseFloat($("#servicioMantenimientoSocio").val()) + parseFloat($("#deudaAnteriorSocio").val()) + parseFloat($("#reconexionSocio").val());
 		//alert(respuesta);
@@ -803,7 +827,7 @@ function guardarRecibo(){
 	
 	var ruta = obtenerContexto();
 	
-	//alert("PUESTO: " + $("#puestoSocio").html() +" - CODIGO: "+ $("#codigoSocio").text() );
+	//alert("CORRELATIVO: " + $("#codigoReciboLuzSocio").val() );
 	
 	var parametros = new Object();
 	parametros.codigoSocio = $("#codigoSocio").val();
@@ -816,7 +840,8 @@ function guardarRecibo(){
 	parametros.servicioMantenimiento = $("#servicioMantenimientoSocio").val();
 	parametros.deudaAnterior = $("#deudaAnteriorSocio").val();
 	parametros.reconexion = $("#reconexionSocio").val();
-	parametros.total = $("#totalSocio").text();	
+	parametros.total = $("#totalSocio").text();
+	parametros.correlativo = $("#codigoReciboLuzSocio").val();
 		
 	$.ajax({
 		type: "POST",
@@ -843,7 +868,8 @@ function guardarRecibo(){
 					time: ''
 				});
 	            
-	            cargarReciboLuzOriginal();
+	            cargarReciboLuzSocio();
+	            //cargarReciboLuzOriginal();
 	            
 			}else{
                 	
@@ -895,6 +921,7 @@ function limpiarReciboLuzSocio(){
 <input type="hidden" id="codigoSocio" />
 <input type="hidden" id="codigoRecibo" />
 <input type="hidden" id="costoWatts" />
+<input type="hidden" id="codigoReciboLuzSocio" />
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td colspan="4">&nbsp;</td>
@@ -1384,13 +1411,13 @@ function limpiarReciboLuzSocio(){
 		<div class="modal-content">
 			<div class="modal-header modal-header-primary">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Eliminar Recibo Luz</h4>
+				<h4 class="modal-title">Editar Recibo Luz</h4>
 			</div>
 			<div class="modal-body">
 					
 				<table border="0">
 					<tr>
-						<td><img src="recursos/images/icons/exclamation_32x32.png" border="0" />&nbsp;<b><span id="mensajeEliminar" /></b></td>
+						<td><img src="recursos/images/icons/exclamation_32x32.png" border="0" />&nbsp;<b><span id="mensajeEditar" /></b></td>
 					</tr>
 				</table>
 			</div>

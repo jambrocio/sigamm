@@ -199,7 +199,7 @@ public class ReciboLuzController {
 		ResponseListBean<ReciboLuzSocio> response = new ResponseListBean<ReciboLuzSocio>();
 		
 		ReporteReciboLuzSocio reporte = reciboLuzSocioBus.editarReciboLuzxSocio(pagina, registros, puestoSocio, codigoRecibo);
-		Integer totalSocios = reporte.getTotalRegistros(); 
+		Integer totalSocios = reporte.getTotalRegistros();
 		
 		response.setPage(pagina);
 		response.setRecords(totalSocios);
@@ -208,7 +208,7 @@ public class ReciboLuzController {
 		response.setTotal(OperadoresUtil.obtenerCociente(totalSocios, registros));
 				
 		response.setRows(reporte.getListaReciboLuzSocio());
-		
+			
 		return response;
 	}
 	

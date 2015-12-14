@@ -85,5 +85,9 @@
 		<put-attribute name="titulo" value="Recibo de Luz Original" />
 	</definition>
 
+	<definition name="servicios/recibo_agua" extends="main">
+		<put-attribute name="contenido" value="/vistas/servicios/recibo_agua.jsp" />
+		<put-attribute name="titulo" value="Recibo de Agua" />
+	</definition>
 	
 </tiles-definitions>
