@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 
+import pe.com.sigamm.bean.ReporteReciboLuzSocio;
 import pe.com.sigamm.bus.ReciboLuzSocioBus;
 import pe.com.sigamm.dao.ReciboLuzSocioDao;
 import pe.com.sigamm.modelo.ReciboLuzSocio;
@@ -29,9 +30,9 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 	}
 
 	@Override
-	public Retorno editarReciboLuzxSocio(ReciboLuzSocio reciboLuzSocio) {
+	public ReporteReciboLuzSocio editarReciboLuzxSocio(int pagina, int registros, String puestoSocio, int codigoRecibo) {
 		
-		return reciboLuzSocioDao.editarReciboLuzxSocio(reciboLuzSocio);
+		return reciboLuzSocioDao.editarReciboLuzxSocio(pagina, registros, puestoSocio, codigoRecibo);
 		
 	}
 

@@ -27,6 +27,13 @@ public class ReciboLuzSocio {
 	int estado;
 	Date fechaCarga;
 	int reciboLuzCreado;
+	String puestoSocio;
+	String nombreFull;
+	String nombreGiro;
+	String nombreSector;
+	String fecPeriodo;
+	double costoWatts;
+	Socio socio;
 	
 	public int getCodigoSocio() {
 		return codigoSocio;
@@ -165,6 +172,48 @@ public class ReciboLuzSocio {
 	}
 	public void setReciboLuzCreado(int reciboLuzCreado) {
 		this.reciboLuzCreado = reciboLuzCreado;
+	}
+	public String getPuestoSocio() {
+		return puestoSocio;
+	}
+	public void setPuestoSocio(String puestoSocio) {
+		this.puestoSocio = puestoSocio;
+	}
+	public Socio getSocio() {
+		return socio;
+	}
+	public void setSocio(Socio socio) {
+		this.socio = socio;
+	}
+	public String getNombreFull() {
+		return nombreFull;
+	}
+	public void setNombreFull(String nombreFull) {
+		this.nombreFull = nombreFull;
+	}
+	public String getNombreGiro() {
+		return nombreGiro;
+	}
+	public void setNombreGiro(String nombreGiro) {
+		this.nombreGiro = nombreGiro;
+	}
+	public String getNombreSector() {
+		return nombreSector;
+	}
+	public void setNombreSector(String nombreSector) {
+		this.nombreSector = nombreSector;
+	}
+	public String getFecPeriodo() {
+		return fecPeriodo;
+	}
+	public void setFecPeriodo(String fecPeriodo) {
+		this.fecPeriodo = fecPeriodo;
+	}
+	public double getCostoWatts() {
+		return costoWatts;
+	}
+	public void setCostoWatts(double costoWatts) {
+		this.costoWatts = costoWatts;
 	}
 
 }

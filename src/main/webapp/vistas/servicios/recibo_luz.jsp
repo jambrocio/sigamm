@@ -484,7 +484,7 @@ function cargarReciboLuzSocio(codigoRecibo){
 		var opciones = "<center>";
 			
 			opciones += "<a href=javascript:editarReciboLuzXSocio('";
-			opciones += rowObject.codigoReciboOriginal + "') >";
+			opciones += rowObject.codigoReciboOriginal + "','" + rowObject.nroPuesto + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Luz Socio'/>";
 			opciones += "</a>";
 			
@@ -651,7 +651,7 @@ function cargarDatosReciboLuzSocio(sector, puesto, original){
 }
 
 
-function editarReciboLuzXSocio(codigoSocio, puesto, original){
+function editarReciboLuzXSocio(original, puesto){
 	
 	var ruta = obtenerContexto();
 	mensaje = "Desea editar el recibo del Puesto " + puesto + " ?"; 
@@ -666,7 +666,7 @@ function editarReciboLuzXSocio(codigoSocio, puesto, original){
         
 		jsonObj = [];
 		var parametros = new Object();
-		parametros.codigoSocio = codigoSocio;
+		parametros.puestoSocio = puesto;
 		parametros.codigoRecibo = original;
 			
 		$.ajax({
@@ -678,21 +678,32 @@ function editarReciboLuzXSocio(codigoSocio, puesto, original){
 		    success: function(result){
 		            
 		        $('#alerta_modal').modal('hide');
+
+	        	$('#recibos_luz_por_socio_modal').modal({
+	        		backdrop: 'static',
+	        		keyboard: false
+	        	});
+
+	        	$.each(result.rows, function(key,val) {
+	            	$("#nombreSocio").text(val.nombreFull);
+	            	$("#puestoSocio").text(val.puestoSocio);
+	            	$("#sectorSocio").text(val.nombreSector);
+	            	$("#giroSocio").text(val.nombreGiro);
+	            	$("#periodoSocio").text(val.fecPeriodo);
+
+	            	$("#lecturaInicialSocio").val(val.lecturaInicial);
+	        		$("#lecturaFinalSocio").val(val.lecturaFinal);
+	        		$("#consumoMesSocio").html(val.consumoMes);
+	        		$("#cargoEnergiaSocio").val(val.cargoEnergia);
+	        		$("#alumbradoPublicoSocio").val(val.alumbradoPublico);
+	        		$("#servicioMantenimientoSocio").val(val.servicioMantenimiento);
+	        		$("#deudaAnteriorSocio").val(val.deudaAnterior);
+	        		$("#reconexionSocio").val(val.reconexion);
+	        		$("#totalSocio").html(val.total);
+	        		$("#costoWatts").val(val.costoWatts);
 	            	
-	            $.gritter.add({
-					// (string | mandatory) the heading of the notification
-					title: 'Mensaje',
-					// (string | mandatory) the text inside the notification
-					text: result.mensaje,
-					// (string | optional) the image to display on the left
-					image: "/" + ruta + "/recursos/images/confirm.png",
-					// (bool | optional) if you want it to fade out on its own or just sit there
-					sticky: false,
-					// (int | optional) the time you want it to be alive for before fading out
-					time: ''
-				});
-	            
-	            cargarPuestos();
+	        	});
+	            //cargarPuestos();
 		            
 			}
 		});
@@ -882,7 +893,7 @@ function limpiarReciboLuzSocio(){
 <body id="body">
 <input type="hidden" id="codigoPuestoSocio" />
 <input type="hidden" id="codigoSocio" />
-<input type="text" id="codigoRecibo" />
+<input type="hidden" id="codigoRecibo" />
 <input type="hidden" id="costoWatts" />
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
 	<tr>

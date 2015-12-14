@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import pe.com.sigamm.bean.CamposObligatorios;
 import pe.com.sigamm.bean.ReportePuesto;
 import pe.com.sigamm.bean.ReporteReciboLuzOriginal;
+import pe.com.sigamm.bean.ReporteReciboLuzSocio;
 import pe.com.sigamm.bean.ResponseListBean;
 import pe.com.sigamm.bus.PuestoBus;
 import pe.com.sigamm.bus.ReciboLuzOriginalBus;
@@ -26,6 +27,7 @@ import pe.com.sigamm.modelo.LuzOriginal;
 import pe.com.sigamm.modelo.Puesto;
 import pe.com.sigamm.modelo.ReciboLuzSocio;
 import pe.com.sigamm.modelo.Retorno;
+import pe.com.sigamm.modelo.Socio;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.Constantes;
 import pe.com.sigamm.util.OperadoresUtil;
@@ -188,18 +190,26 @@ public class ReciboLuzController {
 	
 	
 	@RequestMapping(value = "/editar-luz-x-socio.json", method = RequestMethod.POST, produces="application/json")
-	public @ResponseBody String eliminarPuesto(ReciboLuzSocio reciboLuzSocio){
+	public @ResponseBody ResponseListBean<ReciboLuzSocio> editarReciboLuzxSocio(
+			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
+			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
+			@RequestParam(value = "puestoSocio", defaultValue = "0") String puestoSocio,
+			@RequestParam(value = "codigoRecibo", defaultValue = "0") Integer codigoRecibo){
 		
-		Gson gson = new Gson();
+		ResponseListBean<ReciboLuzSocio> response = new ResponseListBean<ReciboLuzSocio>();
 		
-		Retorno retorno = reciboLuzSocioBus.editarReciboLuzxSocio(reciboLuzSocio);
-		int codigo = retorno.getCodigo();
-		String mensaje = retorno.getMensaje();
-		 
-		String resultado = "{\"idUsuario\":" + codigo + ",\"mensaje\":\"" + mensaje + "\"}";
+		ReporteReciboLuzSocio reporte = reciboLuzSocioBus.editarReciboLuzxSocio(pagina, registros, puestoSocio, codigoRecibo);
+		Integer totalSocios = reporte.getTotalRegistros(); 
 		
+		response.setPage(pagina);
+		response.setRecords(totalSocios);
 		
-		return resultado;
+		//total de paginas a mostrar
+		response.setTotal(OperadoresUtil.obtenerCociente(totalSocios, registros));
+				
+		response.setRows(reporte.getListaReciboLuzSocio());
+		
+		return response;
 	}
 	
 }

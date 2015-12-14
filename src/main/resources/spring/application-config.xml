@@ -17,14 +17,22 @@
 	<context:component-scan base-package="pe.com.sigamm" />
 	
 	<!-- DESARROLLO -->
-  
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="username" value="JAMBROCIO" />
-		<property name="password" value="virgo1984" />
+  	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="username" value="ACMMH" />
+		<property name="password" value="3966802" />
 		<property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+		 
+		<property name="url" value="jdbc:oracle:thin:@192.168.1.33:1521:xe" />
+		<!-- 
+		<property name="url" value="jdbc:oracle:thin:@192.168.30.72:1521:xe" /> 
 		<property name="url" value="jdbc:oracle:thin:@192.168.30.187:1521:xe" />
+		<property name="url" value="jdbc:oracle:thin:@192.168.131.134:1521:xe" />
+		IP de LapTop en Huaral
+		<property name="url" value="jdbc:oracle:thin:@192.168.1.34:1521:xe" />
+		IP de LapTop en La Perla
+		<property name="url" value="jdbc:oracle:thin:@192.168.1.33:1521:xe" />
+		 -->
 	</bean>
-
 <!-- 	 
 	<bean id="dataSource"
 		class="org.springframework.jndi.JndiObjectFactoryBean">
