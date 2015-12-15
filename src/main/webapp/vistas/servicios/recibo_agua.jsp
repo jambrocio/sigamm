@@ -68,6 +68,11 @@ function cargarReciboAgua(){
 				
 	};
 	
+	jsonObj = [];
+	var parametros = new Object();
+	parametros.codigoServicio = 2;
+	parametros.estado = 1;
+	
 	jQuery("#grilla").jqGrid(
 	{
 		url : 'reporte-recibo-agua.json',
@@ -75,6 +80,7 @@ function cargarReciboAgua(){
 		mtype: 'POST',
 		height: 'auto',
 		width: 'auto',
+		postData: parametros,
 		colNames : ['CodigoServicio', 'CodigoSocio', 'Puesto', 'Apellidos y Nombres','Padron','Giro', 'Opciones'],
 		colModel : [{
 			name : 'codigoServicio',
@@ -89,8 +95,8 @@ function cargarReciboAgua(){
 			width: 100,
 			align: 'left'
 		},{
-			name : 'puesto',
-			index: 'puesto',
+			name : 'numeroPuesto',
+			index: 'numeroPuesto',
 			sortable:false,
 			width: 100,
 			align: 'left'
@@ -113,8 +119,8 @@ function cargarReciboAgua(){
 			width: 150,
 			align: 'center'
 		},{					
-			name:'codigoReciboLuzOriginal',
-			index:'codigoReciboLuzOriginal',
+			name:'codigoServicio',
+			index:'codigoServicio',
 			width:100,
 			sortable:false,
 			search: false,
