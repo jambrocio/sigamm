@@ -14,6 +14,8 @@ public class ReciboAguaSocio {
     String numeroPadron; 
     int codigoGiro;
     String nombreGiro;
+    int reciboAgua;
+    
 	public int getCodigoServicio() {
 		return codigoServicio;
 	}
@@ -74,7 +76,6 @@ public class ReciboAguaSocio {
 	public void setEstadoSocio(int estadoSocio) {
 		this.estadoSocio = estadoSocio;
 	}
-	
 	public String getNumeroPadron() {
 		return numeroPadron;
 	}
@@ -92,6 +93,12 @@ public class ReciboAguaSocio {
 	}
 	public void setNombreGiro(String nombreGiro) {
 		this.nombreGiro = nombreGiro;
+	}
+	public int getReciboAgua() {
+		return reciboAgua;
+	}
+	public void setReciboAgua(int reciboAgua) {
+		this.reciboAgua = reciboAgua;
 	}
 	
 }

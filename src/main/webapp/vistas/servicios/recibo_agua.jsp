@@ -38,12 +38,253 @@
 <script>
 $(document).ready(function(){	
 	
-	//cargarReciboAgua();
+	cargarReciboAguaOriginal();
 	
 });
 
+$(function($){
+    $.datepicker.regional['es'] = {
+        closeText: 'Cerrar',
+        prevText: '<Ant',
+        nextText: 'Sig>',
+        currentText: 'Hoy',
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+        dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+        weekHeader: 'Sm',
+        dateFormat: 'dd/mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''
+    };
+    $.datepicker.setDefaults($.datepicker.regional['es']);
+});
 
-function cargarReciboAgua(){
+
+$(function() {
+	$("#periodo").datepicker({
+        dateFormat: 'MM yy',
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+		regional: 'es',
+        onClose: function(dateText, inst) {  
+            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
+            $(this).val($.datepicker.formatDate('MM yy', new Date(year, month, 1)));
+        }
+    });  
+	
+	
+	$("#periodo").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });    
+    });
+});
+
+
+function colorEtiquetas(){
+	
+	$("#lblperiodo").css("color", "black");
+	$("#lbllecturainicial").css("color", "black");
+	$("#lbllecturafinal").css("color", "black");
+	$("#lblmonto").css("color", "black");
+	
+	$("#lblperiodo-img").hide();
+	$("#lbllecturainicial-img").hide();
+	$("#lbllecturafinal-img").hide();
+	$("#lblmonto-img").hide();
+	
+}
+
+
+function guardar(){
+	
+	var ruta = obtenerContexto();
+			
+	jsonObj = [];
+	var parametros = new Object();
+	parametros.periodo = $("#periodo").val();
+	parametros.lecturainicial = $("#lecturainicial").val();
+	parametros.lecturafinal = $("#lecturafinal").val();
+	parametros.monto = parseFloat($("#monto").val());	
+		
+	$.ajax({
+		type: "POST",
+	    async:false,
+	    url: "grabar-recibo-agua.json",
+	    cache : false,
+	    data: parametros,
+	    success: function(result){
+	            
+	        if(result.camposObligatorios.length == 0){
+                	
+            	$('#recibo_modal').modal('hide');
+            	
+	            $.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Mensaje',
+					// (string | mandatory) the text inside the notification
+					text: result.mensaje,
+					// (string | optional) the image to display on the left
+					image: "/" + ruta + "/recursos/images/confirm.png",
+					// (bool | optional) if you want it to fade out on its own or just sit there
+					sticky: false,
+					// (int | optional) the time you want it to be alive for before fading out
+					time: ''
+				});
+	            
+	            cargarRecibo();
+	            
+			}else{
+                	
+            	colorEtiquetas();
+            	fila = "";
+            	$.each(result.camposObligatorios, function(id, obj){
+                        
+                	$("#" + obj.nombreCampo).css("color", "red");
+                    $("#" + obj.nombreCampo + "-img").show();
+                    $("#" + obj.nombreCampo + "-img").attr("data-content", obj.descripcion);
+                        
+				});
+                	
+			}
+                
+		}
+	});
+}
+
+
+function cargarReciboAguaOriginal(){
+	
+	var ruta = obtenerContexto();
+	var formatterBotones = function(cellVal,options,rowObject)
+	{	
+		var opciones = "<center>";
+			
+			opciones += "<a href=javascript:editarReciboAguaOriginal(";
+			opciones += rowObject.codigoOrgReciboAgua + ") >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Agua'/>";
+			opciones += "</a>";
+			
+			opciones += "&nbsp;&nbsp;";
+			
+			opciones += "<a href=javascript:eliminarReciboAguaOriginal(";
+			opciones += rowObject.codigoOrgReciboAgua + "') >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Recibo Agua'/>";
+			opciones += "</a>";
+			
+			opciones += "&nbsp;&nbsp;";
+			
+			opciones += "<a href=javascript:generarReciboAguaSocio(";
+			opciones += rowObject.codigoReciboAguaOriginal + ") >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/water_24x24.png' border='0' title='Generar Recibo Agua para cada Socio'/>";
+			opciones += "</a>";			
+			
+			opciones += "</center>";
+			
+		return opciones;
+				
+	};
+	
+	jsonObj = [];
+	var parametros = new Object();
+	parametros.codigoServicio = 2;
+	parametros.estado = 1;
+	
+	jQuery("#grilla").jqGrid(
+	{
+		url : 'reporte-recibo-agua.json',
+		datatype : "json",
+		mtype: 'POST',
+		height: 'auto',
+		width: 'auto',
+		postData: parametros,
+		colNames : ['CodigoServicio', 'CodigoSocio', 'Puesto', 'Apellidos y Nombres','Padron','Giro', 'Recibo Agua', 'Opciones'],
+		colModel : [{
+			name : 'codigoServicio',
+			index: 'codigoServicio',
+			sortable:false,
+			width: 70,
+			align: 'center'
+		},{
+			name : 'codigoSocio',
+			index: 'codigoSocio',
+			sortable:false,
+			width: 70,
+			align: 'left'
+		},{
+			name : 'numeroPuesto',
+			index: 'numeroPuesto',
+			sortable:false,
+			width: 50,
+			align: 'left'
+		},{
+			name : 'nombreFull',
+			index: 'nombreFull',
+			sortable:false,
+			width: 350,
+			align: 'center'
+		},{
+			name : 'numeroPadron',
+			index: 'numeroPadron',
+			sortable:false,
+			width: 70,
+			align: 'center'
+		},{
+			name : 'nombreGiro',
+			index: 'nombreGiro',
+			sortable:false,
+			width: 150,
+			align: 'center'
+		},{
+			name : 'reciboAgua',
+			index: 'reciboAgua',
+			sortable:false,
+			width: 70,
+			align: 'center'
+		},{					
+			name:'codigoServicio',
+			index:'codigoServicio',
+			width:80,
+			sortable:false,
+			search: false,
+			formatter:formatterBotones
+		}],								
+		rowNum : 20,
+		pager : '#pgrilla',
+		sortname : 'codigoSocio',
+		autowidth: true,
+		rownumbers: true,
+		viewrecords : true,
+		sortorder : "codigoSocio",				
+		caption : "Recibo de Agua",
+		formatoptions: {decimalSeperator : '.'},
+		afterInsertRow: function(rowId, data, item){
+			//alert(rowId + ' - ' + data + ' - ' + item.periodo);
+			var anio = item.periodo.substring(0,4);
+			var mes1 = item.periodo.substring(4,6);
+			var periodo = null;
+			var months = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO','JULIO', 'AGOSTO', 'SETIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+			for(var j=0;j<months.length;j++){
+				if (mes1==j+1)
+					periodo=months[j] + ' ' + anio;
+			}
+		}
+
+
+	}).trigger('reloadGrid');
+}
+
+
+function cargarReciboAguaSocios(){
 	
 	var ruta = obtenerContexto();
 	var formatterBotones = function(cellVal,options,rowObject)
@@ -81,36 +322,36 @@ function cargarReciboAgua(){
 		height: 'auto',
 		width: 'auto',
 		postData: parametros,
-		colNames : ['CodigoServicio', 'CodigoSocio', 'Puesto', 'Apellidos y Nombres','Padron','Giro', 'Opciones'],
+		colNames : ['CodigoServicio', 'CodigoSocio', 'Puesto', 'Apellidos y Nombres','Padron','Giro', 'Recibo Agua', 'Opciones'],
 		colModel : [{
 			name : 'codigoServicio',
 			index: 'codigoServicio',
 			sortable:false,
-			width: 90,
+			width: 70,
 			align: 'center'
 		},{
 			name : 'codigoSocio',
 			index: 'codigoSocio',
 			sortable:false,
-			width: 100,
+			width: 70,
 			align: 'left'
 		},{
 			name : 'numeroPuesto',
 			index: 'numeroPuesto',
 			sortable:false,
-			width: 100,
+			width: 50,
 			align: 'left'
 		},{
 			name : 'nombreFull',
 			index: 'nombreFull',
 			sortable:false,
-			width: 150,
+			width: 350,
 			align: 'center'
 		},{
 			name : 'numeroPadron',
 			index: 'numeroPadron',
 			sortable:false,
-			width: 150,
+			width: 70,
 			align: 'center'
 		},{
 			name : 'nombreGiro',
@@ -118,10 +359,16 @@ function cargarReciboAgua(){
 			sortable:false,
 			width: 150,
 			align: 'center'
+		},{
+			name : 'reciboAgua',
+			index: 'reciboAgua',
+			sortable:false,
+			width: 70,
+			align: 'center'
 		},{					
 			name:'codigoServicio',
 			index:'codigoServicio',
-			width:100,
+			width:80,
 			sortable:false,
 			search: false,
 			formatter:formatterBotones
@@ -134,7 +381,13 @@ function cargarReciboAgua(){
 		viewrecords : true,
 		sortorder : "codigoSocio",				
 		caption : "Recibo de Agua",
-		formatoptions: {decimalSeperator : '.'
+		afterInsertRow: function(rowId, data, item){
+				//alert(rowId + ' - ' + data + ' - ' + item.reciboAgua);
+				if (item.reciboAgua == 0)
+					$("#grilla").setCell(rowId, 'reciboAgua', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });				
+				else
+					$("#grilla").setCell(rowId, 'reciboAgua', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
+
 		}
 
 	}).trigger('reloadGrid');
@@ -158,7 +411,7 @@ function cargarReciboAgua(){
 			<!-- button type="button" class="btn btn-primary" onclick="nuevoRecibo()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
 			</button -->
-			<button class="btn btn-primary" data-toggle="modal" data-target="#luz_original_modal" onclick="nuevoRecibos()">
+			<button class="btn btn-primary" data-toggle="modal" data-target="#recibo_modal">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
 			</button>
 		</td>
@@ -174,6 +427,99 @@ function cargarReciboAgua(){
 	</tr>
 </table>	
 
+
+
+<div class="modal fade" id="recibo_modal" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title"><span id="tituloRegistro" />Nuevo Recibo</h4>
+			</div>
+			<div class="modal-body">
+				
+					<table border="0" style="width: 500px;">
+						<tr>
+							<td colspan="7" align="right">&nbsp;</td>
+						</tr>
+						<tr>
+							<td colspan="7" align="left">
+								<button type="button" class="btn btn-primary" onclick="guardar(1)">
+									<img src="recursos/images/icons/guardar_16x16.png" alt="Buscar" />&nbsp;Guardar
+								</button>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="7" align="right">&nbsp;</td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td><span id="lblPeriodoBuscar"><b>Periodo</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td><input type="text" id="periodoBuscar" class="form-control" maxlength="8" /></td>
+							<td valign="top">&nbsp;&nbsp;
+								<button type="button" class="btn btn-primary" onclick="buscarPeriodo()">
+									<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
+								</button>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="7"><hr /></td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td><span id="lblperiodo"><b>PERIODO (*)</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td><input type="text" id="periodo" class="form-control" maxlength="20"/></td>
+							<td valign="top">&nbsp;</td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td><span id="lbllecturainicial"><b>LECTURA INICIAL (*)</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td><input type="text" id="lecturainicial" class="form-control" maxlength="8"/></td>
+							<td valign="top">&nbsp;</td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td><span id="lbllecturafinal"><b>LECTURA FINAL (*)</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td><input type="text" id="lecturafinal" class="form-control" maxlength="8"/></td>
+							<td valign="top">&nbsp;</td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td><span id="lblmonto"><b>MONTO (*)</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td><input type="text" id="monto" class="form-control" maxlength="20"/></td>
+							<td valign="top">&nbsp;</td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td colspan="6"><b>(*) Campos Obligatorios</b></td>
+						</tr>
+					</table>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+		  
+	</div>
+</div> 
 
 <div class="modal fade" id="alerta_modal" role="dialog" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog">

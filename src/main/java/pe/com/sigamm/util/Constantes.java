@@ -24,6 +24,12 @@ public class Constantes {
 	public static final String DNI_NUMERO					= "DNI debe contener solo numeros.";
 	public static final String PUESTO_NUMERO     			= "Nro. de Puesto debe contener solo numeros.";
 	public static final String PADRON_NUMERO     			= "Padron debe contener solo numeros.";
+	//--- VALIDACION RECIBO AGUA
+	public static final String PERIODO_OBLIGATORIO			= "Periodo es obligatorio.";
+	public static final String LECTURA_INICIAL_OBLIGATORIO	= "Lectura Inicial es obligatorio.";
+	public static final String LECTURA_FINAL_OBLIGATORIO	= "Lectura Final es obligatorio.";
+	public static final String MONTO_OBLIGATORIO			= "Monto es obligatorio.";
+	
 	
 	public static final String ETIQUETA_USUARIO			= "lblusuario";
 	public static final String ETIQUETA_DNI				= "lbldni";
@@ -39,6 +45,13 @@ public class Constantes {
 	public static final String ETIQUETA_GIRO_COMERCIAL	= "lblgiroComercial";
 	public static final String ETIQUETA_PUESTO			= "lblpuesto";
 	public static final String ETIQUETA_PADRON			= "lblpadron";
+
+	//--- ETIQUETAS RECIBO AGUA
+	public static final String ETIQUETA_PERIODO			= "lblPeriodo";
+	public static final String ETIQUETA_LECTURA_INICIAL	= "lbllecturainicial";
+	public static final String ETIQUETA_LECTURA_FINAL	= "lbllecturafinal";
+	public static final String ETIQUETA_MONTO			= "lblmonto";
+	
 	
 	public static final String CLAVE_DEFAULT		= "ACMMH";
 	
