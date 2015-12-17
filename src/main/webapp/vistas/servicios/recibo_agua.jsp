@@ -38,7 +38,7 @@
 <script>
 $(document).ready(function(){	
 	
-	cargarReciboAguaOriginal();
+	cargarReciboAgua();
 	
 });
 
@@ -108,13 +108,18 @@ function colorEtiquetas(){
 function guardar(){
 	
 	var ruta = obtenerContexto();
+	var lecturaIni = $("#lecturainicial").val();
+	var lecturaFin = $("#lecturafinal").val();
+	var monto      = $("#monto").val();
+	
+	alert("Ini: " + lecturaIni + " Fin: " + lecturaFin + " Monto: " + monto);
 			
 	jsonObj = [];
 	var parametros = new Object();
 	parametros.periodo = $("#periodo").val();
-	parametros.lecturainicial = $("#lecturainicial").val();
-	parametros.lecturafinal = $("#lecturafinal").val();
-	parametros.monto = parseFloat($("#monto").val());	
+	parametros.lecturaInicial = lecturaIni;
+	parametros.lecturaFinal = lecturaFin;
+	parametros.monto = monto;	
 		
 	$.ajax({
 		type: "POST",
@@ -162,7 +167,7 @@ function guardar(){
 }
 
 
-function cargarReciboAguaOriginal(){
+function cargarReciboAgua(){
 	
 	var ruta = obtenerContexto();
 	var formatterBotones = function(cellVal,options,rowObject)
@@ -207,52 +212,40 @@ function cargarReciboAguaOriginal(){
 		height: 'auto',
 		width: 'auto',
 		postData: parametros,
-		colNames : ['CodigoServicio', 'CodigoSocio', 'Puesto', 'Apellidos y Nombres','Padron','Giro', 'Recibo Agua', 'Opciones'],
+		colNames : ['Codigo Recibo', 'Periodo', 'Lectura Inicial', 'Lectura Final','Monto','Opciones'],
 		colModel : [{
-			name : 'codigoServicio',
-			index: 'codigoServicio',
-			sortable:false,
-			width: 70,
-			align: 'center'
-		},{
-			name : 'codigoSocio',
-			index: 'codigoSocio',
-			sortable:false,
-			width: 70,
-			align: 'left'
-		},{
-			name : 'numeroPuesto',
-			index: 'numeroPuesto',
+			name : 'codigoRecibo',
+			index: 'codigoRecibo',
 			sortable:false,
 			width: 50,
-			align: 'left'
-		},{
-			name : 'nombreFull',
-			index: 'nombreFull',
-			sortable:false,
-			width: 350,
 			align: 'center'
 		},{
-			name : 'numeroPadron',
-			index: 'numeroPadron',
+			name : 'periodo',
+			index: 'periodo',
 			sortable:false,
-			width: 70,
+			width: 100,
 			align: 'center'
 		},{
-			name : 'nombreGiro',
-			index: 'nombreGiro',
+			name : 'lecturaInicial',
+			index: 'lecturaInicial',
 			sortable:false,
-			width: 150,
+			width: 50,
 			align: 'center'
 		},{
-			name : 'reciboAgua',
-			index: 'reciboAgua',
+			name : 'lecturaFinal',
+			index: 'lecturaFinal',
 			sortable:false,
-			width: 70,
+			width: 50,
+			align: 'center'
+		},{
+			name : 'monto',
+			index: 'monto',
+			sortable:false,
+			width: 100,
 			align: 'center'
 		},{					
-			name:'codigoServicio',
-			index:'codigoServicio',
+			name:'codigoRecibo',
+			index:'codigoRecibo',
 			width:80,
 			sortable:false,
 			search: false,
@@ -260,27 +253,16 @@ function cargarReciboAguaOriginal(){
 		}],								
 		rowNum : 20,
 		pager : '#pgrilla',
-		sortname : 'codigoSocio',
+		sortname : 'codigoRecibo',
 		autowidth: true,
 		rownumbers: true,
 		viewrecords : true,
-		sortorder : "codigoSocio",				
-		caption : "Recibo de Agua",
-		formatoptions: {decimalSeperator : '.'},
-		afterInsertRow: function(rowId, data, item){
-			//alert(rowId + ' - ' + data + ' - ' + item.periodo);
-			var anio = item.periodo.substring(0,4);
-			var mes1 = item.periodo.substring(4,6);
-			var periodo = null;
-			var months = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO','JULIO', 'AGOSTO', 'SETIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
-			for(var j=0;j<months.length;j++){
-				if (mes1==j+1)
-					periodo=months[j] + ' ' + anio;
-			}
-		}
-
+		sortorder : "codigoRecibo",				
+		caption : "Recibo de Agua"
 
 	}).trigger('reloadGrid');
+	
+	cargarReciboAgua();
 }
 
 
