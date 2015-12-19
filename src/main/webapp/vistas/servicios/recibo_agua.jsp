@@ -98,6 +98,7 @@ function cargarNuevo(){
 	
 	colorEtiquetas();
 	
+	$("#codigorecibo").val('0');
 	$("#periodo").val('');
 	$("#lecturainicial").val('0');
 	$("#lecturafinal").val('0');
@@ -125,7 +126,7 @@ function cargarReciboAgua(){
 			
 			opciones += "&nbsp;&nbsp;";
 			
-			opciones += "<a href=javascript:generarReciboAgua_x_Socio(";
+			opciones += "<a href=javascript:generarReciboAguaSocio(";
 			opciones += rowObject.codigoRecibo + ") >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/water_24x24.png' border='0' title='Generar Recibo Agua para cada Socio'/>";
 			opciones += "</a>";			
@@ -220,7 +221,8 @@ function guardar(){
 	var ruta = obtenerContexto();
 			
 	jsonObj = [];
-	var parametros = new Object();	
+	var parametros = new Object();
+	parametros.codigoRecibo = $("#codigorecibo").val();
 	parametros.periodo = $("#periodo").val();
 	parametros.lecturaInicial = $("#lecturainicial").val();
 	parametros.lecturaFinal = $("#lecturafinal").val();
@@ -283,6 +285,7 @@ function editarReciboAgua(codigoRecibo, periodo, lecturaInicial, lecturaFinal, m
 	
 	colorEtiquetas();
 	
+	$("#codigorecibo").val(codigoRecibo);
 	$("#periodo").val(periodo.replace('_',' '));
 	$("#lecturainicial").val(lecturaInicial);
 	$("#lecturafinal").val(lecturaFinal);
@@ -291,7 +294,7 @@ function editarReciboAgua(codigoRecibo, periodo, lecturaInicial, lecturaFinal, m
 }
 
 function eliminarReciboAgua(codigoRecibo, periodo){
-	alert("Recibo a Eliminar " + periodo);
+	//alert("Recibo a Eliminar " + periodo);
 	
 	var ruta = obtenerContexto();
 	mensaje = "Desea eliminar el recibo de agua cuyo periodo es " + periodo.replace('_',' ') + "... ?"; 
@@ -339,10 +342,139 @@ function eliminarReciboAgua(codigoRecibo, periodo){
 	
 }
 
+function generarReciboAguaSocio(codigoRecibo){
+	console.log("Generar Recibo Agua Socios - [codigoReciboAgua] : " + codigoRecibo);
+	
+	$("#nroRecibo").text(codigoRecibo);
+	
+	$('#recibos_agua_socios_modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	});
+	
+	$("#tituloRegistro").html("Generar Recibo Agua para Socios");
+	
+	colorEtiquetas();
+	
+	$("#codigoReciboAgua").val(codigoRecibo);
+	
+	cargarReciboAguaSocio(codigoRecibo);
+}
+
+
+function cargarReciboAguaSocio(codigoRecibo){
+	
+	var ruta = obtenerContexto();
+	var formatterBotones = function(cellVal,options,rowObject)
+	{	
+		var opciones = "<center>";
+			
+			opciones += "<a href=javascript:editarReciboAguaXSocio('";
+			opciones += rowObject.codigoReciboAgua + "') >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Agua Socio'/>";
+			opciones += "</a>";
+			
+			opciones += "&nbsp;&nbsp;";
+			
+			opciones += "<a href=javascript:generarReciboAguaXSocio('";
+			opciones += rowObject.codigoReciboAgua + "') >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/agregar2_24x24.png' border='0' title='Crear Recibo de Agua por Socio'/>";
+			opciones += "</a>";			
+
+			opciones += "</center>";
+			
+		return opciones;
+				
+	};
+
+	jsonObj = [];
+	var valores = new Object();
+	valores.codigoRecibo = codigoRecibo;
+	
+	jQuery("#grillaReciboAgua").jqGrid(
+	{
+		url : 'reporte-recibo-agua-socio.json',
+		datatype : "json",
+		mtype: 'POST',
+		height: 'auto',
+		width: 'auto',
+		postData: valores,
+		colNames : ['Recibo', 'Sector', 'Nombre Usuario', 'Puesto', 'Giro','Recibo Luz','Total', 'Opciones'],
+		colModel : [{
+			name : 'codigoReciboOriginal',
+			index: 'codigoReciboOriginal',
+			sortable:false,
+			width: 50,
+			align: 'center'
+		},{
+			name : 'codigoSector',
+			index: 'codigoSector',
+			sortable:false,
+			width: 70,
+			align: 'center'
+		},{
+			name : 'nombreFull',
+			index: 'nombreFull',
+			sortable:false,
+			width: 140,
+			align: 'left'
+		},{
+			name : 'nroPuesto',
+			index: 'nroPuesto',
+			sortable:false,
+			width: 50,
+			align: 'center'
+		},{
+			name : 'nombreGiro',
+			index: 'nombreGiro',
+			sortable:false,
+			width: 150,
+			align: 'center'
+		},{
+			name : 'reciboLuzCreado',
+			index: 'reciboLuzCreado',
+			sortable:false,
+			width: 80,
+			align: 'center'
+		},{
+			name : 'total',
+			index: 'total',
+			sortable:false,
+			width: 80,
+			align: 'center'
+		},{					
+			name:'opciones',
+			index:'opciones',
+			width:110,
+			sortable:false,
+			search: false,
+			formatter:formatterBotones
+		}],								
+		rowNum : 20,
+		pager : '#pgrillaReciboLuz',
+		sortname : 'codigoPuesto',
+		autowidth: true,
+		rownumbers: true,
+		viewrecords : true,
+		sortorder : "codigoPuesto",				
+		caption : "Recibo de Luz Socios",
+		afterInsertRow: function(rowId, data, item){
+			//alert(rowId + ' - ' + data + ' - ' + item.total);
+			if (item.reciboLuzCreado == 0)
+				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });				
+			else
+				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
+
+		}
+
+
+	}).trigger('reloadGrid');
+}
 
 </script>
 </head>
 <body id="body">
+<input type="hidden" id="codigorecibo" />
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td colspan="4">&nbsp;</td>
@@ -478,6 +610,54 @@ function eliminarReciboAgua(codigoRecibo, periodo){
 	</div>
 </div>
 
+
+<!-- Ventana Modal para Recibo Agua Socios -->
+<div class="modal fade" id="recibos_agua_socios_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width: 800px">
+		<div class="modal-content">
+		
+		<div class="modal-header modal-header-primary">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title">Listado de Recibos de Agua de Socios</h4>
+		</div>
+
+		<div class="modal-body">
+		
+			<table border="0" width="100%" cellpadding="0" cellspacing="0">
+				<tr>
+					<td colspan="4" style="color:red"><b>&nbsp;RECIBO DE AGUA ORIGINAL NRO. <span id="nroRecibo"></span></b></td>
+				</tr>
+				<tr>
+					<td width="150"><b>RECIBO AGUA SOCIOS<b/></td>
+					<td width="10">:</td>
+					<td width="250"><input type="text" id="reciboLuzSocioBuscara" class="text ui-widget-content ui-corner-all" maxlength="8" /></td>
+					<td>&nbsp;&nbsp;
+						<button type="button" class="btn btn-primary" onclick="cargarReciboLuzSocio()">
+							<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
+						</button>&nbsp;&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4">&nbsp;</td>
+				</tr>
+				<tr>
+					<td colspan="4">
+						<table id="grillaReciboAgua"></table>
+						<div id="pgrillaReciboAgua"></div>
+					</td>
+				</tr>
+			</table>	
+		
+		</div>
+		
+		<div class="modal-footer">
+			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="">Grabar</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+		</div>
+		
+		</div>
+	</div>
+</div>
 
 </body>
 </html>

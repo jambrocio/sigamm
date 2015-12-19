@@ -41,6 +41,8 @@ public class ReciboAguaController {
 	@Autowired
 	private ReciboAguaBus reciboAguaBus;
 	
+	@Autowired
+	private ReciboAguaSocioBus reciboAguaSocioBus;
 	
 	@RequestMapping(value = "/recibo_agua", method=RequestMethod.GET)
 	public String reporteVisitas(HttpServletRequest request) {
@@ -134,16 +136,15 @@ public class ReciboAguaController {
 	}
 	
 	
-	@RequestMapping(value = "/reporte-recibo-agua-x-socio.json", method = RequestMethod.POST, produces="application/json")
+	@RequestMapping(value = "/reporte-recibo-agua-socio.json", method = RequestMethod.POST, produces="application/json")
 	public @ResponseBody ResponseListBean<ReciboAguaSocio> reporteReciboAguaPuesto(
 			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
 			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
-			@RequestParam(value = "codigoSocio", defaultValue = "0") Integer codigoSocio,
-			@RequestParam(value = "codigoServicio", defaultValue = "0") Integer codigoServicio){
+			@RequestParam(value = "codigoRecibo", defaultValue = "0") Integer codigoRecibo){
 		
 		ResponseListBean<ReciboAguaSocio> response = new ResponseListBean<ReciboAguaSocio>();
 		
-		/*ReporteReciboAguaSocio reporte = reciboAguaSocioBus.reportePuestoAguaSocio(pagina, registros, codigoSocio, codigoServicio);
+		ReporteReciboAguaSocio reporte = reciboAguaSocioBus.reportePuestoAguaSocio(pagina, registros, codigoRecibo);
 		
 		Integer totalReciboPuestoAgua = reporte.getTotalRegistros(); 
 		
@@ -153,7 +154,7 @@ public class ReciboAguaController {
 		//total de paginas a mostrar
 		response.setTotal(OperadoresUtil.obtenerCociente(totalReciboPuestoAgua, registros));
 				
-		response.setRows(reporte.getListaReciboAguaSocio());*/
+		response.setRows(reporte.getListaReciboAguaSocio());
 		
 		return response;
 	}

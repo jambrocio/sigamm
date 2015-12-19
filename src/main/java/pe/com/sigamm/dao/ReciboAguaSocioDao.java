@@ -4,6 +4,6 @@ import pe.com.sigamm.bean.ReporteReciboAguaSocio;
 
 public interface ReciboAguaSocioDao {
 	
-	public ReporteReciboAguaSocio reporteReciboAguaSocio(int pagina, int registros, int codigoSocio, int codigoServicio);	
+	public ReporteReciboAguaSocio reporteReciboAguaSocio(int pagina, int registros, int codigoRecibo);	
 
 }
