@@ -117,6 +117,23 @@ public class ReciboAguaController {
 		return resultado;
 	}
 	
+	
+	@RequestMapping(value = "/eliminar-recibo-agua.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String eliminarReciboAgua(ReciboAgua reciboAgua){
+		
+		Gson gson = new Gson();
+		
+		Retorno retorno = reciboAguaBus.eliminarReciboAgua(reciboAgua);
+		int codigo = retorno.getCodigo();
+		String mensaje = retorno.getMensaje();
+		 
+		String resultado = "{\"idUsuario\":" + codigo + ",\"mensaje\":\"" + mensaje + "\"}";
+		
+		
+		return resultado;
+	}
+	
+	
 	@RequestMapping(value = "/reporte-recibo-agua-x-socio.json", method = RequestMethod.POST, produces="application/json")
 	public @ResponseBody ResponseListBean<ReciboAguaSocio> reporteReciboAguaPuesto(
 			@RequestParam(value = "page", defaultValue = "1") Integer pagina,

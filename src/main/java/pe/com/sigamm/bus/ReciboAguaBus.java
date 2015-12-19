@@ -10,4 +10,6 @@ public interface ReciboAguaBus {
 	
 	public Retorno grabarReciboAgua(ReciboAgua reciboAgua);
 	
+	public Retorno eliminarReciboAgua(ReciboAgua reciboAgua);
+	
 }

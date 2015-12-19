@@ -35,5 +35,10 @@ public class ReciboAguaBusImpl implements ReciboAguaBus {
 		return reciboAguaDao.grabarReciboAgua(reciboAgua);
 		
 	}
+
+	@Override
+	public Retorno eliminarReciboAgua(ReciboAgua reciboAgua) {
+		return reciboAguaDao.eliminarReciboAgua(reciboAgua);
+	}
 	
 }

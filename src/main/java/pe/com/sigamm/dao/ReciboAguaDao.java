@@ -9,5 +9,7 @@ public interface ReciboAguaDao {
 	public ReporteReciboAgua reporteReciboAgua(int pagina, int registros, int codigoRecibo);
 	
 	public Retorno grabarReciboAgua(ReciboAgua reciboAgua);
+	
+	public Retorno eliminarReciboAgua(ReciboAgua reciboAgua);
 
 }
