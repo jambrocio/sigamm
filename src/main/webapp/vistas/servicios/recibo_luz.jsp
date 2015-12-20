@@ -211,6 +211,8 @@ function nuevoRecibos(){
 	$("#recargoMora").val(0);
 	$("#redonMesAnt").val(0);
 	$("#redonMesAct").val(0);
+	$("#ajustePreRet").val(0);
+	$("#igvRefact").val(0);
 	$("#total").val(0);
 }
 
@@ -284,7 +286,8 @@ function guardar(){
 	parametros.potGenFpPreuni = $("#potGenFpPreuni").val();
 	parametros.potGenFpTotal = $("#potGenFpTotal").val();
 	parametros.alumbradoPublicoOriginal = $("#alumbradoPublicoOriginal").val();
-	
+	parametros.ajustePrecioRetroactivo = $("#ajustePreRet").val(0);
+	parametros.igvRefact = $("#igvRefact").val(0);
 	parametros.total = $("#total").val();
 
 		
@@ -344,14 +347,14 @@ function cargarReciboLuzOriginal(){
 			
 			opciones += "<a href=javascript:editarReciboLuzOriginal(";
 			opciones += rowObject.codigoOrgReciboLuz + ") >";
-			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Usuario'/>";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Luz'/>";
 			opciones += "</a>";
 			
 			opciones += "&nbsp;&nbsp;";
 			
 			opciones += "<a href=javascript:eliminarReciboLuzOriginal(";
 			opciones += rowObject.codigoOrgReciboLuz + "') >";
-			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Puesto'/>";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Recibo Luz'/>";
 			opciones += "</a>";
 			
 			opciones += "&nbsp;&nbsp;";
@@ -455,7 +458,7 @@ function cargarReciboLuzOriginal(){
 function generarReciboLuzSocio(codigoRecibo){
 	console.log("Generar Recibo Luz Socios - [codigoReciboLuzOriginal] : " + codigoRecibo);
 	
-	$("#nroRecibo").text(codigoRecibo);
+	$("#nroRecibo").text(codigoRecibo);	
 	
 	$('#recibos_luz_socios_modal').modal({
 		backdrop: 'static',
@@ -465,18 +468,17 @@ function generarReciboLuzSocio(codigoRecibo){
 	$("#tituloRegistro").html("Generar Recibo Luz Socios");
 	
 	colorEtiquetas();
-	
-	$("#codigoReciboOrig").val(codigoRecibo);
+	$('#grillaReciboLuz').jqGrid('clearGridData');	
+	$("#codigoRecibo").val(codigoRecibo);
 	
 	//alert("UNO " + codigoReciboLuzOriginal);
 	//buscarUsuario();
-	
-	cargarReciboLuzSocio(codigoRecibo);
+	cargarReciboLuzSocio($("#nroRecibo").text());
 	
 }
 
 function cargarReciboLuzSocio(codigoRecibo){
-	//alert("cargarReciboLuzSocio: " + codigoRecibo);
+	alert("cargarReciboLuzSocio: " + codigoRecibo);
 	
 	var ruta = obtenerContexto();
 	var formatterBotones = function(cellVal,options,rowObject)
@@ -490,13 +492,6 @@ function cargarReciboLuzSocio(codigoRecibo){
 			
 			opciones += "&nbsp;&nbsp;";
 			
-			/*opciones += "<a href=javascript:eliminarReciboLuzXSocio('";
-			opciones += rowObject.codigoSocio + "','" + rowObject.nroPuesto + "','" + rowObject.codigoReciboOriginal + "') >";
-			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Recibo Luz Socio'/>";
-			opciones += "</a>";
-			
-			opciones += "&nbsp;&nbsp;";*/
-			
 			opciones += "<a href=javascript:generarReciboLuzXSocio('";
 			opciones += rowObject.codigoSector + "','" + rowObject.nroPuesto + "','" + rowObject.codigoReciboOriginal + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/agregar2_24x24.png' border='0' title='Crear Recibo de Luz por Socio'/>";
@@ -509,8 +504,9 @@ function cargarReciboLuzSocio(codigoRecibo){
 	};
 
 	jsonObj = [];
-	var valores = new Object();
-	valores.codigoRecibo = codigoRecibo;
+	var parametros = new Object();
+	parametros.codigoRecibo = "";
+	parametros.codigoRecibo = $("#codigoRecibo").val();
 	
 	jQuery("#grillaReciboLuz").jqGrid(
 	{
@@ -519,7 +515,7 @@ function cargarReciboLuzSocio(codigoRecibo){
 		mtype: 'POST',
 		height: 'auto',
 		width: 'auto',
-		postData: valores,
+		postData: parametros,
 		colNames : ['Recibo', 'Sector', 'Nombre Usuario', 'Puesto', 'Giro','Recibo Luz','Total', 'Opciones'],
 		colModel : [{
 			name : 'codigoReciboOriginal',
@@ -741,12 +737,23 @@ function floorFigure(figure, decimals){
     return (parseInt(figure*d)/d).toFixed(decimals);
 };
 
+
+function redondear_dos_decimal(valor) {
+	alert(valor);
+	var redondea_valor = 0.00;
+	redondea_valor = Math.round(valor * 100) / 100;
+	alert(redondea_valor);
+   return redondea_valor; 
+}
+
+
+
 function calculaCampos(valor){
 	var valores  = valor;
-	var subTotal = 0.0;
-	var igv      = 0.0;
-	var totalMes = 0.0;
-	var total    = 0.0;
+	var subTotal = 0.00;
+	var igv      = 0.00;
+	var totalMes = 0.00;
+	var total    = 0.00;
 	
 	//alert(valor + " | " + $("#repoManCnx").val() + " | " + $("#cargoFijo").val());
 	
@@ -754,7 +761,8 @@ function calculaCampos(valor){
 		subTotal =	parseFloat($("#repoManCnx").val()) + parseFloat($("#cargoFijo").val())+ parseFloat($("#energActFraPtaTotal").val()) + parseFloat($("#energActHorPtaTotal").val()) + parseFloat($("#energReacTotal").val()) + parseFloat($("#interesCompensatorio").val()) + parseFloat($("#potUsoRedDistTotal").val()) + parseFloat($("#potGenFpTotal").val()) + parseFloat($("#alumbradoPublicoOriginal").val());
 		//alert("subTotal ["+floorFigure(subTotal)+"]");
 		if (!isNaN(subTotal))
-			$("#subTotalMes").val(floorFigure(subTotal));
+			$("#subTotalMes").val(redondear_dos_decimal(subTotal) );
+			//$("#subTotalMes").val(floorFigure(subTotal));
 		else
 			$("#subTotalMes").val(0);
 		
@@ -765,7 +773,7 @@ function calculaCampos(valor){
 		else
 			$("#igv").val(0);
 		
-		totalMes = parseFloat(floorFigure(subTotal)) + parseFloat(floorFigure(igv)) ;
+		totalMes = redondear_dos_decimal( parseFloat(floorFigure(subTotal)) + parseFloat(floorFigure(igv)) );
 		//alert("totalMes ["+floorFigure(totalMes)+"]");
 		if (!isNaN(totalMes))
 			$("#totalMesAct").val(floorFigure(totalMes));
@@ -773,8 +781,17 @@ function calculaCampos(valor){
 			$("#totalMesAct").val(0);
 		
 	}else if (valores=='T'){
-		total =  parseFloat($("#totalMesAct").val()) + parseFloat($("#aporteLey").val()) + parseFloat($("#deudaAnterior").val()) + parseFloat($("#recargoMora").val()) + parseFloat($("#redonMesAnt").val()) + parseFloat($("#redonMesAct").val());
-		//alert("total ["+floorFigure(total)+"]");
+		/*total =  Math.ceil(parseFloat($("#totalMesAct").val()) + parseFloat($("#aporteLey").val()) + parseFloat($("#deudaAnterior").val()) 
+		+ parseFloat($("#recargoMora").val()) + parseFloat($("#redonMesAnt").val()) + parseFloat($("#redonMesAct").val()) 
+		+ parseFloat($("#ajustePreRet").val()) + parseFloat($("#igvRefact").val()));*/
+		total = redondear_dos_decimal( parseFloat($("#totalMesAct").val()) + parseFloat($("#aporteLey").val()) + parseFloat($("#deudaAnterior").val()) 
+				+ parseFloat($("#recargoMora").val()) + parseFloat($("#redonMesAnt").val()) + parseFloat($("#redonMesAct").val()) 
+				+ parseFloat($("#ajustePreRet").val()) + parseFloat($("#igvRefact").val()) );
+		
+		//total = (Math.round(total * 10) / 10).toFixed(1);
+		
+		//alert("total ["+total+"]");
+		
 		if (!isNaN(total))
 			$("#total").val(floorFigure(total));
 		else
@@ -797,12 +814,14 @@ function operaciones(valor){
 			$("#consumoMesSocio").html(0);
 
 		cargoEnergia = parseFloat($("#costoWatts").val())*parseFloat($("#consumoMesSocio").html());
+		redondear_dos_decimal(cargoEnergia);
+		
 		//alert("cargo: " + cargoEnergia);
-		$("#cargoEnergiaSocio").val(cargoEnergia);
+		$("#cargoEnergiaSocio").val(redondear_dos_decimal(cargoEnergia));
 		operaciones('R');
 		
 	}else if (valores=='R'){
-		respuesta = parseFloat($("#cargoEnergiaSocio").val()) + parseFloat($("#alumbradoPublicoSocio").val()) + parseFloat($("#servicioMantenimientoSocio").val()) + parseFloat($("#deudaAnteriorSocio").val()) + parseFloat($("#reconexionSocio").val());
+		respuesta = redondear_dos_decimal( parseFloat($("#cargoEnergiaSocio").val()) + parseFloat($("#alumbradoPublicoSocio").val()) + parseFloat($("#servicioMantenimientoSocio").val()) + parseFloat($("#deudaAnteriorSocio").val()) + parseFloat($("#reconexionSocio").val()) );
 		//alert(respuesta);
 		if (!isNaN(respuesta))
 			$("#totalSocio").html(floorFigure(respuesta));
@@ -832,6 +851,7 @@ function guardarRecibo(){
 	var parametros = new Object();
 	parametros.codigoSocio = $("#codigoSocio").val();
 	parametros.codigoRecibo = $("#nroRecibo").text();
+	parametros.idsocio = $("#idRecibo").val();
 	parametros.lecturaInicial = $("#lecturaInicialSocio").val();
 	parametros.lecturaFinal = $("#lecturaFinalSocio").val();
 	parametros.consumoMes = $("#consumoMesSocio").html();
@@ -841,7 +861,7 @@ function guardarRecibo(){
 	parametros.deudaAnterior = $("#deudaAnteriorSocio").val();
 	parametros.reconexion = $("#reconexionSocio").val();
 	parametros.total = $("#totalSocio").text();
-	parametros.correlativo = $("#codigoReciboLuzSocio").val();
+	//parametros.correlativo = $("#codigoReciboLuzSocio").val();
 		
 	$.ajax({
 		type: "POST",
@@ -888,7 +908,6 @@ function guardarRecibo(){
 		}
 	});
 	
-	cargarReciboLuzSocio();
 	limpiarReciboLuzSocio();
 
 }
@@ -913,13 +932,126 @@ function limpiarReciboLuzSocio(){
 
 }
 
+function buscarReciboLuzSocio(puestoSocio){
+	
+	var ruta = obtenerContexto();
+	var formatterBotones = function(cellVal,options,rowObject)
+	{	
+		var opciones = "<center>";
+			
+			opciones += "<a href=javascript:editarReciboLuzXSocio('";
+			opciones += rowObject.codigoReciboOriginal + "','" + rowObject.nroPuesto + "') >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Luz Socio'/>";
+			opciones += "</a>";
+			
+			opciones += "&nbsp;&nbsp;";
+						
+			opciones += "<a href=javascript:generarReciboLuzXSocio('";
+			opciones += rowObject.codigoSector + "','" + rowObject.nroPuesto + "','" + rowObject.codigoReciboOriginal + "') >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/agregar2_24x24.png' border='0' title='Crear Recibo de Luz por Socio'/>";
+			opciones += "</a>";			
+
+			opciones += "</center>";
+			
+		return opciones;
+				
+	};
+
+	jsonObj = [];
+	var valores = new Object();
+	valores.puestoSocio = puestoSocio;
+	
+	jQuery("#grillaReciboLuz").jqGrid(
+	{
+		url : 'buscar-recibo-luz-puesto.json',
+		datatype : "json",
+		mtype: 'POST',
+		height: 'auto',
+		width: 'auto',
+		postData: valores,
+		colNames : ['Recibo', 'Sector', 'Nombre Usuario', 'Puesto', 'Giro','Recibo Luz','Total', 'Opciones'],
+		colModel : [{
+			name : 'codigoReciboOriginal',
+			index: 'codigoReciboOriginal',
+			sortable:false,
+			width: 50,
+			align: 'center'
+		},{
+			name : 'codigoSector',
+			index: 'codigoSector',
+			sortable:false,
+			width: 70,
+			align: 'center'
+		},{
+			name : 'nombreFull',
+			index: 'nombreFull',
+			sortable:false,
+			width: 140,
+			align: 'left'
+		},{
+			name : 'nroPuesto',
+			index: 'nroPuesto',
+			sortable:false,
+			width: 50,
+			align: 'center'
+		},{
+			name : 'nombreGiro',
+			index: 'nombreGiro',
+			sortable:false,
+			width: 150,
+			align: 'center'
+		},{
+			name : 'reciboLuzCreado',
+			index: 'reciboLuzCreado',
+			sortable:false,
+			width: 80,
+			align: 'center'
+		},{
+			name : 'total',
+			index: 'total',
+			sortable:false,
+			width: 80,
+			align: 'center'
+		},{					
+			name:'opciones',
+			index:'opciones',
+			width:110,
+			sortable:false,
+			search: false,
+			formatter:formatterBotones
+		}],								
+		rowNum : 20,
+		pager : '#pgrillaReciboLuz',
+		sortname : 'codigoPuesto',
+		autowidth: true,
+		rownumbers: true,
+		viewrecords : true,
+		sortorder : "codigoPuesto",				
+		caption : "Recibo de Luz Socios",
+		afterInsertRow: function(rowId, data, item){
+			//alert(rowId + ' - ' + data + ' - ' + item.total);
+			if (item.reciboLuzCreado == 0)
+				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });				
+			else
+				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
+
+		}
+
+
+	}).trigger('reloadGrid');
+	
+}
+
+function limpiar(){
+	$("#codigoRecibo").val('0');
+}
 
 </script>
 </head>
 <body id="body">
 <input type="hidden" id="codigoPuestoSocio" />
 <input type="hidden" id="codigoSocio" />
-<input type="hidden" id="codigoRecibo" />
+<input type="text" id="codigoRecibo" />
 <input type="hidden" id="costoWatts" />
 <input type="hidden" id="codigoReciboLuzSocio" />
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
@@ -1215,6 +1347,28 @@ function limpiarReciboLuzSocio(){
 					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='redonMesAct' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos('T')" tabindex="57"/></td>
 				</tr>
 				<tr>
+					<td><font size="1">AJUSTE PRECIO RETRACTIVO</font></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='lecturaActRedAct' id='lecturaActRedAct' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='lecturaAntRedAct' id='lecturaAntRedAct' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='DiferenciaRedAct' id='DiferenciaRedAct' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='FactorRedAct' id='FactorRedAct' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsumosRedAct' id='ConsumosRedAct' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsFactRedAct' id='ConsFactRedAct' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='PrecUnitRedAct' id='PrecUnitRedAct' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='ajustePreRet' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos('T')" tabindex="58"/></td>
+				</tr>
+				<tr>
+					<td><font size="1">IGV 18% Refact.</font></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='lecturaActRedAct' id='lecturaActRedAct' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='lecturaAntRedAct' id='lecturaAntRedAct' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='DiferenciaRedAct' id='DiferenciaRedAct' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='FactorRedAct' id='FactorRedAct' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsumosRedAct' id='ConsumosRedAct' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='ConsFactRedAct' id='ConsFactRedAct' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align="center">&nbsp;<!-- input type='text' class='texto' style='font-family:verdana;font-size:8px;' name='PrecUnitRedAct' id='PrecUnitRedAct' class='text ui-widget-content ui-corner-all' size="10" maxlength="10" /--></td>
+					<td align='center'><input type='text' class='texto' style='font-family:verdana;font-size:8px;' id='igvRefact' class='text ui-widget-content ui-corner-all' size='10' maxlength='10' value="0" onChange="calculaCampos('T')" tabindex="59"/></td>
+				</tr>
+				<tr>
 					<td><label>Total:</label></td>
 					<td align="center">&nbsp;</td>
 					<td align="center">&nbsp;</td>
@@ -1223,7 +1377,7 @@ function limpiarReciboLuzSocio(){
 					<td align="center">&nbsp;</td>
 					<td align="center">&nbsp;</td>
 					<td align="center">&nbsp;</td>	
-					<td align="center"><input type='text' name='total' class='texto' style='font-family:verdana;font-size:8px;' id='total' size="10" value="0" readonly="readonly" tabindex="58"/></td>
+					<td align="center"><input type='text' name='total' class='texto' style='font-family:verdana;font-size:8px;' id='total' size="10" value="0" readonly="readonly" tabindex="60"/></td>
 				</tr>
 			</table>
 		</div>
@@ -1255,11 +1409,11 @@ function limpiarReciboLuzSocio(){
 					<td colspan="4" style="color:red"><b>&nbsp;RECIBO DE LUZ ORIGINAL NRO. <span id="nroRecibo"></span></b></td>
 				</tr>
 				<tr>
-					<td width="150"><b>RECIBO LUZ SOCIOS<b/></td>
+					<td width="150"><b>PUESTO LUZ SOCIOS<b/></td>
 					<td width="10">:</td>
 					<td width="250"><input type="text" id="reciboLuzSocioBuscara" class="text ui-widget-content ui-corner-all" maxlength="8" /></td>
 					<td>&nbsp;&nbsp;
-						<button type="button" class="btn btn-primary" onclick="cargarReciboLuzSocio()">
+						<button type="button" class="btn btn-primary" onclick="buscarReciboLuzSocio()">
 							<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 						</button>&nbsp;&nbsp;
 						<!-- 
@@ -1284,7 +1438,7 @@ function limpiarReciboLuzSocio(){
 		
 		<div class="modal-footer">
 			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="">Grabar</button>
-			<button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="limpiar()">Cerrar</button>
 		</div>
 		
 		</div>
@@ -1343,6 +1497,10 @@ function limpiarReciboLuzSocio(){
 							<tr>
 								<td width="40%"><b>Periodo :</b></td>
 								<td><div id="periodoSocio" style="color: blue; font-size:11px; width: 150px;" align="left"></div></td>
+							</tr>
+							<tr>
+								<td><b>ID :</b></td>
+								<td><input type='text' id='idRecibo' size='10' class='text ui-widget-content ui-corner-all' style="text-align: center;"/></td>
 							</tr>
 							<tr>
 								<td><b>Lectura Anterior :</b></td>

@@ -64,6 +64,8 @@ public class LuzOriginal {
 	double potGenFpPreuni;
 	double potUsoRedDistTotal;
 	double potGenFpTotal;
+	double ajustePrecioRetroactivo;
+	double igvRefact;
 	
 	public String getPeriodo() {
 		return periodo;
@@ -430,6 +432,18 @@ public class LuzOriginal {
 	}
 	public void setMantenimiento(double mantenimiento) {
 		this.mantenimiento = mantenimiento;
+	}
+	public double getAjustePrecioRetroactivo() {
+		return ajustePrecioRetroactivo;
+	}
+	public void setAjustePrecioRetroactivo(double ajustePrecioRetroactivo) {
+		this.ajustePrecioRetroactivo = ajustePrecioRetroactivo;
+	}
+	public double getIgvRefact() {
+		return igvRefact;
+	}
+	public void setIgvRefact(double igvRefact) {
+		this.igvRefact = igvRefact;
 	}
 	
 }

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import pe.com.sigamm.bean.ReporteReciboLuzSocio;
 import pe.com.sigamm.bean.ReporteSocio;
 import pe.com.sigamm.dao.ReciboLuzSocioDao;
+import pe.com.sigamm.modelo.Puesto;
 import pe.com.sigamm.modelo.ReciboLuzSocio;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.modelo.Socio;
@@ -42,6 +43,7 @@ public class ReciboSocioLuzDaoImpl implements ReciboLuzSocioDao {
 			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
 			jdbcCall.withCatalogName("PKG_RECIBO_LUZ_SOCIO");
 			jdbcCall.withProcedureName("SP_GRABAR_LUZ_X_SOCIO").declareParameters(
+					new SqlParameter("vi_idRecibo", 			Types.NUMERIC),
 					new SqlParameter("vi_codigo_socio", 		Types.NUMERIC),
 					new SqlParameter("vi_codigo_recibo", 		Types.NUMERIC),
 					new SqlParameter("vi_correlativo", 			Types.NUMERIC),
@@ -66,6 +68,7 @@ public class ReciboSocioLuzDaoImpl implements ReciboLuzSocioDao {
 			
 			MapSqlParameterSource parametros = new MapSqlParameterSource();
 
+			parametros.addValue("vi_idRecibo", 			reciboLuzSocio.getIdRecibo());
 			parametros.addValue("vi_codigo_socio", 		reciboLuzSocio.getCodigoSocio());
 			parametros.addValue("vi_codigo_recibo",		reciboLuzSocio.getCodigoRecibo());
 			parametros.addValue("vi_correlativo",		reciboLuzSocio.getCorrelativo());

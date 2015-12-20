@@ -7,9 +7,12 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 
+import pe.com.sigamm.bean.ReportePuesto;
 import pe.com.sigamm.bean.ReporteReciboLuzSocio;
 import pe.com.sigamm.bus.ReciboLuzSocioBus;
+import pe.com.sigamm.dao.PuestoDao;
 import pe.com.sigamm.dao.ReciboLuzSocioDao;
+import pe.com.sigamm.modelo.Puesto;
 import pe.com.sigamm.modelo.ReciboLuzSocio;
 import pe.com.sigamm.modelo.Retorno;
 
@@ -21,6 +24,9 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 	
 	@Resource
 	private ReciboLuzSocioDao reciboLuzSocioDao;
+	
+	@Resource
+	private PuestoDao puestoDao;
 	
 	@Override
 	public Retorno grabarReciboLuzxSocio(ReciboLuzSocio reciboLuzSocio) {

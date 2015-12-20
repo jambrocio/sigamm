@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class ReciboLuzSocio {
 	
+	int idRecibo;
 	int codigoSocio;
 	int codigoRecibo;
 	int correlativo;
@@ -35,6 +36,13 @@ public class ReciboLuzSocio {
 	double costoWatts;
 	Socio socio;
 	
+	
+	public int getIdRecibo() {
+		return idRecibo;
+	}
+	public void setIdRecibo(int idRecibo) {
+		this.idRecibo = idRecibo;
+	}
 	public int getCodigoSocio() {
 		return codigoSocio;
 	}

@@ -212,4 +212,29 @@ public class ReciboLuzController {
 		return response;
 	}
 	
+	
+	@RequestMapping(value = "/buscar-recibo-luz-puesto.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody ResponseListBean<Puesto> reporteUsuarioPuestoGiro(
+			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
+			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
+			@RequestParam(value = "puestoSocio", defaultValue = "0") String puestoSocio){
+		
+		ResponseListBean<Puesto> response = new ResponseListBean<Puesto>();
+		
+		//ReportePuesto reporte = reciboLuzSocioBus.buscarPuestoxSocio(pagina, registros, puestoSocio);
+		/*ReportePuesto reporte = reciboLuzSocioBus.buscarPuestoxSocio(pagina, registros, puestoSocio)
+		
+		Integer totalReciboPuestoxPto = reporte.getTotalRegistros(); 
+		
+		response.setPage(pagina);
+		response.setRecords(totalReciboPuestoxPto);
+		
+		//total de paginas a mostrar
+		response.setTotal(OperadoresUtil.obtenerCociente(totalReciboPuestoxPto, registros));
+				
+		response.setRows(reporte.getListaPuesto());*/
+		
+		return response;
+	}
+	
 }

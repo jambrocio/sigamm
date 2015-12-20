@@ -399,28 +399,34 @@ function cargarReciboAguaSocio(codigoRecibo){
 		height: 'auto',
 		width: 'auto',
 		postData: valores,
-		colNames : ['Recibo', 'Sector', 'Nombre Usuario', 'Puesto', 'Giro','Recibo Luz','Total', 'Opciones'],
+		colNames : ['Código', 'Servicio', 'Puesto', 'Nombre Usuario', 'Padron', 'Giro','Recibo Agua','Total', 'Opciones'],
 		colModel : [{
-			name : 'codigoReciboOriginal',
-			index: 'codigoReciboOriginal',
+			name : 'codigoServicio',
+			index: 'codigoServicio',
 			sortable:false,
 			width: 50,
 			align: 'center'
 		},{
-			name : 'codigoSector',
-			index: 'codigoSector',
+			name : 'nombreServicio',
+			index: 'nombreServicio',
 			sortable:false,
-			width: 70,
+			width: 100,
 			align: 'center'
+		},{
+			name : 'numeroPuesto',
+			index: 'numeroPuesto',
+			sortable:false,
+			width: 50,
+			align: 'left'
 		},{
 			name : 'nombreFull',
 			index: 'nombreFull',
 			sortable:false,
-			width: 140,
+			width: 150,
 			align: 'left'
 		},{
-			name : 'nroPuesto',
-			index: 'nroPuesto',
+			name : 'numeroPadron',
+			index: 'numeroPadron',
 			sortable:false,
 			width: 50,
 			align: 'center'
@@ -431,10 +437,10 @@ function cargarReciboAguaSocio(codigoRecibo){
 			width: 150,
 			align: 'center'
 		},{
-			name : 'reciboLuzCreado',
-			index: 'reciboLuzCreado',
+			name : 'reciboAguaCreado',
+			index: 'reciboAguaCreado',
 			sortable:false,
-			width: 80,
+			width: 50,
 			align: 'center'
 		},{
 			name : 'total',
@@ -451,19 +457,19 @@ function cargarReciboAguaSocio(codigoRecibo){
 			formatter:formatterBotones
 		}],								
 		rowNum : 20,
-		pager : '#pgrillaReciboLuz',
-		sortname : 'codigoPuesto',
+		pager : '#pgrillaReciboAgua',
+		sortname : 'codigoServicio',
 		autowidth: true,
 		rownumbers: true,
 		viewrecords : true,
-		sortorder : "codigoPuesto",				
-		caption : "Recibo de Luz Socios",
+		sortorder : "codigoServicio",				
+		caption : "Recibo de Agua Socios",
 		afterInsertRow: function(rowId, data, item){
 			//alert(rowId + ' - ' + data + ' - ' + item.total);
-			if (item.reciboLuzCreado == 0)
-				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });				
+			if (item.reciboAguaCreado == 0)
+				$("#grillaReciboAgua").setCell(rowId, 'reciboAguaCreado', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });				
 			else
-				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'reciboAguaCreado', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
 
 		}
 
