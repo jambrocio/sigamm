@@ -36,9 +36,13 @@
 
 </style>
 <script>
+var intentos = 0;
 $(document).ready(function(){	
 	
 	cargarReciboLuzOriginal();
+	$("#contraba").hide();
+	limpiar();
+	limpiarReciboLuzSocio();
 	
 });
 
@@ -119,6 +123,7 @@ $(function() {
                     'Sep', 'Oct', 'Nov', 'Dic'] 
             });  
 	
+
 });
 /*$(document).ready(function() {
 
@@ -473,13 +478,32 @@ function generarReciboLuzSocio(codigoRecibo){
 	
 	//alert("UNO " + codigoReciboLuzOriginal);
 	//buscarUsuario();
-	cargarReciboLuzSocio($("#nroRecibo").text());
+	cargarReciboLuz($("#nroRecibo").text());
 	
 }
 
-function cargarReciboLuzSocio(codigoRecibo){
-	alert("cargarReciboLuzSocio: " + codigoRecibo);
+function cargarReciboLuz(codigo){
 	
+	jsonObj = [];
+	var parametros = new Object();
+	parametros.codigoRecibo = codigo;
+	
+	if(intentos > 0){
+		$("#grillaReciboLuz").jqGrid('setGridParam',
+		{
+			url : 'reporte-recibo-luz-puesto.json',
+			datatype : "json",
+			postData:parametros,
+			page:1
+		}).trigger('reloadGrid');
+	}else{
+		cargarReciboLuzSocio(codigo);
+	}
+		
+}
+
+function cargarReciboLuzSocio(codigoRecibo){
+	intentos = 1;
 	var ruta = obtenerContexto();
 	var formatterBotones = function(cellVal,options,rowObject)
 	{	
@@ -505,7 +529,6 @@ function cargarReciboLuzSocio(codigoRecibo){
 
 	jsonObj = [];
 	var parametros = new Object();
-	parametros.codigoRecibo = "";
 	parametros.codigoRecibo = $("#codigoRecibo").val();
 	
 	jQuery("#grillaReciboLuz").jqGrid(
@@ -605,8 +628,11 @@ function generarReciboLuzXSocio(sector, puesto, original){
 	
 	/*$("#codigoReciboLuzOriginal").val(codigoReciboLuzOriginal);
 	buscarUsuario();*/
-	cargarDatosReciboLuzSocio(sector, puesto, original);
+	$(function() {
+		$("idRecibo").focus();
+	});
 	
+	cargarDatosReciboLuzSocio(sector, puesto, original);
 }
 
 function cargarDatosReciboLuzSocio(sector, puesto, original){	
@@ -684,17 +710,27 @@ function editarReciboLuzXSocio(original, puesto){
 		        		keyboard: false
 		        	});	        	
 
-		        	$.each(result.rows, function(key,val) {
+		        	$.each(result.rows, function(key,val) {		        		
 		        		$("#codigoSocio").val(val.codigoSocio);
 		            	$("#nombreSocio").text(val.nombreFull);
 		            	$("#puestoSocio").text(val.puestoSocio);
 		            	$("#sectorSocio").text(val.nombreSector);
 		            	$("#giroSocio").text(val.nombreGiro);
 		            	$("#periodoSocio").text(val.fecPeriodo);
-	
+						$("#idRecibo").val(val.idRecibo);
 		            	$("#lecturaInicialSocio").val(val.lecturaInicial);
 		        		$("#lecturaFinalSocio").val(val.lecturaFinal);
-		        		$("#consumoMesSocio").html(val.consumoMes);
+		        		if (val.trabado == 1){
+		        			$("input:checkbox").attr('checked', 'checked');
+	        				$("#sintraba").hide();
+	        				$("#contraba").show();
+	        				$("#consumoMesSocioTrabado").val(val.consumoMes);
+		        		} else {
+		        			$("input:checkbox").removeAttr('checked');
+	        				$("#sintraba").show();
+	        				$("#contraba").hide();
+	        				$("#consumoMesSocio").html(val.consumoMes);
+		        		}		        		
 		        		$("#cargoEnergiaSocio").val(val.cargoEnergia);
 		        		$("#alumbradoPublicoSocio").val(val.alumbradoPublico);
 		        		$("#servicioMantenimientoSocio").val(val.servicioMantenimiento);
@@ -739,10 +775,8 @@ function floorFigure(figure, decimals){
 
 
 function redondear_dos_decimal(valor) {
-	alert(valor);
 	var redondea_valor = 0.00;
 	redondea_valor = Math.round(valor * 100) / 100;
-	alert(redondea_valor);
    return redondea_valor; 
 }
 
@@ -755,28 +789,22 @@ function calculaCampos(valor){
 	var totalMes = 0.00;
 	var total    = 0.00;
 	
-	//alert(valor + " | " + $("#repoManCnx").val() + " | " + $("#cargoFijo").val());
-	
 	if (valores=='O'){
-		subTotal =	parseFloat($("#repoManCnx").val()) + parseFloat($("#cargoFijo").val())+ parseFloat($("#energActFraPtaTotal").val()) + parseFloat($("#energActHorPtaTotal").val()) + parseFloat($("#energReacTotal").val()) + parseFloat($("#interesCompensatorio").val()) + parseFloat($("#potUsoRedDistTotal").val()) + parseFloat($("#potGenFpTotal").val()) + parseFloat($("#alumbradoPublicoOriginal").val());
-		//alert("subTotal ["+floorFigure(subTotal)+"]");
+		subTotal =	redondear_dos_decimal( parseFloat($("#repoManCnx").val()) + parseFloat($("#cargoFijo").val())+ parseFloat($("#energActFraPtaTotal").val()) + parseFloat($("#energActHorPtaTotal").val()) + parseFloat($("#energReacTotal").val()) + parseFloat($("#interesCompensatorio").val()) + parseFloat($("#potUsoRedDistTotal").val()) + parseFloat($("#potGenFpTotal").val()) + parseFloat($("#alumbradoPublicoOriginal").val()) );
 		if (!isNaN(subTotal))
-			$("#subTotalMes").val(redondear_dos_decimal(subTotal) );
-			//$("#subTotalMes").val(floorFigure(subTotal));
+			$("#subTotalMes").val(subTotal);
 		else
 			$("#subTotalMes").val(0);
 		
-		igv = parseFloat(floorFigure(subTotal)*0.18);
-		//alert("igv ["+floorFigure(igv)+"]");
+		igv = redondear_dos_decimal( parseFloat(subTotal*0.18) );
 		if (!isNaN(subTotal))
-			$("#igv").val(floorFigure(igv));
+			$("#igv").val(igv);
 		else
 			$("#igv").val(0);
 		
-		totalMes = redondear_dos_decimal( parseFloat(floorFigure(subTotal)) + parseFloat(floorFigure(igv)) );
-		//alert("totalMes ["+floorFigure(totalMes)+"]");
+		totalMes = redondear_dos_decimal( parseFloat(subTotal) + parseFloat(igv) );
 		if (!isNaN(totalMes))
-			$("#totalMesAct").val(floorFigure(totalMes));
+			$("#totalMesAct").val(totalMes);
 		else
 			$("#totalMesAct").val(0);
 		
@@ -787,13 +815,9 @@ function calculaCampos(valor){
 		total = redondear_dos_decimal( parseFloat($("#totalMesAct").val()) + parseFloat($("#aporteLey").val()) + parseFloat($("#deudaAnterior").val()) 
 				+ parseFloat($("#recargoMora").val()) + parseFloat($("#redonMesAnt").val()) + parseFloat($("#redonMesAct").val()) 
 				+ parseFloat($("#ajustePreRet").val()) + parseFloat($("#igvRefact").val()) );
-		
-		//total = (Math.round(total * 10) / 10).toFixed(1);
-		
-		//alert("total ["+total+"]");
-		
+			
 		if (!isNaN(total))
-			$("#total").val(floorFigure(total));
+			$("#total").val(total);
 		else
 			$("#total").val(0);
 	}
@@ -804,38 +828,46 @@ function operaciones(valor){
 	var valores = valor;
 	var respuesta;
 	var cargoEnergia;
-//	alert(valores);
+	//alert(valores);
 	
 	if (valores=='L'){
-		respuesta = parseInt($("#lecturaFinalSocio").val()) - parseInt($("#lecturaInicialSocio").val());
-		if (!isNaN(respuesta))
-			$("#consumoMesSocio").html(respuesta);
-		else
-			$("#consumoMesSocio").html(0);
+		if( $('#sintraba').is(":visible") ){
+			respuesta = parseInt($("#lecturaFinalSocio").val()) - parseInt($("#lecturaInicialSocio").val());
+			if (!isNaN(respuesta))
+				$("#consumoMesSocio").html(respuesta);
+			else
+				$("#consumoMesSocio").html(0);
+		} 
 
-		cargoEnergia = parseFloat($("#costoWatts").val())*parseFloat($("#consumoMesSocio").html());
-		redondear_dos_decimal(cargoEnergia);
+
+		if( $('#sintraba').is(":visible") ){
+			cargoEnergia = redondear_dos_decimal( parseFloat($("#costoWatts").val())*parseFloat($("#consumoMesSocio").html()) );
+		} else {
+			cargoEnergia = redondear_dos_decimal( parseFloat($("#costoWatts").val())*parseFloat($("#consumoMesSocioTrabado").val()) );
+		}
 		
-		//alert("cargo: " + cargoEnergia);
-		$("#cargoEnergiaSocio").val(redondear_dos_decimal(cargoEnergia));
+//		alert("cargo: " + cargoEnergia);
+		$("#cargoEnergiaSocio").val(cargoEnergia);
 		operaciones('R');
 		
 	}else if (valores=='R'){
 		respuesta = redondear_dos_decimal( parseFloat($("#cargoEnergiaSocio").val()) + parseFloat($("#alumbradoPublicoSocio").val()) + parseFloat($("#servicioMantenimientoSocio").val()) + parseFloat($("#deudaAnteriorSocio").val()) + parseFloat($("#reconexionSocio").val()) );
-		//alert(respuesta);
+//		alert(respuesta);
 		if (!isNaN(respuesta))
-			$("#totalSocio").html(floorFigure(respuesta));
+			$("#totalSocio").html(respuesta);
 		else
 			$("#totalSocio").html(0.00);
 	}else{
 		$("#lecturaInicialSocio").html(0);
 		$("#lecturaFinalSocio").html(0);
-		$("#consumoMesSocio").html(0);
-		$("#cargoEnergiaSocio").html(0);
-		$("#alumbradoPublicoSocio").html(0);
-		$("#servicioMantenimientoSocio").html(0);
-		$("#deudaAnteriorSocio").html(0);
-		$("#reconexionSocio").html(0);
+		$("#consumoMesSocio").html(0.00);
+		$("#consumoMesSocioTrabado").val(0.00);
+		$("#consumoMesSocioTrabado").hidden();
+		$("#cargoEnergiaSocio").html(0.00);
+		$("#alumbradoPublicoSocio").html(0.00);
+		$("#servicioMantenimientoSocio").html(0.00);
+		$("#deudaAnteriorSocio").html(0.00);
+		$("#reconexionSocio").html(0.00);
 		$("#totalSocio").html(0.00);
 	}
 	
@@ -854,14 +886,21 @@ function guardarRecibo(){
 	parametros.idsocio = $("#idRecibo").val();
 	parametros.lecturaInicial = $("#lecturaInicialSocio").val();
 	parametros.lecturaFinal = $("#lecturaFinalSocio").val();
-	parametros.consumoMes = $("#consumoMesSocio").html();
+	if( $('#sintraba').is(":visible") ){
+		parametros.consumoMes = $("#consumoMesSocio").html();
+		parametros.trabado = 0;
+	} else {
+		parametros.consumoMes = $("#consumoMesSocioTrabado").val();
+		parametros.trabado = 1;
+	}
 	parametros.cargoEnergia = $("#cargoEnergiaSocio").val();
 	parametros.alumbradoPublico = $("#alumbradoPublicoSocio").val();
 	parametros.servicioMantenimiento = $("#servicioMantenimientoSocio").val();
 	parametros.deudaAnterior = $("#deudaAnteriorSocio").val();
 	parametros.reconexion = $("#reconexionSocio").val();
 	parametros.total = $("#totalSocio").text();
-	//parametros.correlativo = $("#codigoReciboLuzSocio").val();
+	parametros.correlativo = $("#codigoReciboLuzSocio").val();
+	parametros.idRecibo = $("#idRecibo").val();
 		
 	$.ajax({
 		type: "POST",
@@ -889,7 +928,7 @@ function guardarRecibo(){
 				});
 	            
 	            cargarReciboLuzSocio();
-	            //cargarReciboLuzOriginal();
+	            limpiarReciboLuzSocio();
 	            
 			}else{
                 	
@@ -907,32 +946,36 @@ function guardarRecibo(){
                 
 		}
 	});
-	
-	limpiarReciboLuzSocio();
 
 }
 
 
 function limpiarReciboLuzSocio(){
-
-	$("#nombreSocio").val('');
-	$("#puestoSocio").val('');								
-	$("#sectorSocio").val('');
-	$("#giroSocio").val('');
-	$("#periodoSocio").val('');
+	
+	$("#nombreSocio").text('');
+	$("#puestoSocio").text('');								
+	$("#sectorSocio").text('');
+	$("#giroSocio").text('');
+	$("#periodoSocio").text('');
+	$("#idRecibo").val('');
 	$("#lecturaInicialSocio").val('');
 	$("#lecturaFinalSocio").val('');
-	$("#consumoMesSocio").text('');	
+	$("#consumoMesSocio").text('');
+	$("#ConsumoMesSocioTrabado").val('');
 	$("#cargoEnergiaSocio").val('');
 	$("#alumbradoPublicoSocio").val('');
 	$("#servicioMantenimientoSocio").val('');
 	$("#deudaAnteriorSocio").val('');
 	$("#reconexionSocio").val('');
 	$("#totalSocio").text('');
+	$("#codigoReciboLuzSocio").val('0');
 
 }
 
-function buscarReciboLuzSocio(puestoSocio){
+function buscarReciboLuzSocio(){
+	
+	var puestoSocio = $("#reciboLuzSocioBuscara").val();
+	//alert("PUESTO: " + puestoSocio);
 	
 	var ruta = obtenerContexto();
 	var formatterBotones = function(cellVal,options,rowObject)
@@ -1046,12 +1089,35 @@ function limpiar(){
 	$("#codigoRecibo").val('0');
 }
 
+function activaManual(){
+	if( $('#sintraba').is(":visible") ){
+		$('#sintraba').hide();
+		$('#contraba').show();
+	} else {
+		$('#sintraba').show();
+		$('#contraba').hide();
+	}
+}
+
+function campoEnter(e,t)
+{
+	var k=null;
+	(e.keyCode) ? k=e.keyCode : k=e.which;
+	if(k==13) (!t) ? botonEnter() : t.focus();
+}
+
+function botonEnter()
+{
+	document.forms[0].submit();
+	return true;
+}
+
 </script>
 </head>
 <body id="body">
 <input type="hidden" id="codigoPuestoSocio" />
 <input type="hidden" id="codigoSocio" />
-<input type="text" id="codigoRecibo" />
+<input type="hidden" id="codigoRecibo" />
 <input type="hidden" id="costoWatts" />
 <input type="hidden" id="codigoReciboLuzSocio" />
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
@@ -1066,17 +1132,9 @@ function limpiar(){
 			<button type="button" class="btn btn-primary" onclick="cargarReciboLuzOriginal()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 			</button>&nbsp;&nbsp;
-			<!-- button type="button" class="btn btn-primary" onclick="nuevoRecibo()">
-				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
-			</button -->
 			<button class="btn btn-primary" data-toggle="modal" data-target="#luz_original_modal" onclick="nuevoRecibos()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
 			</button>
-			<!-- 
-			<button class="btn btn-primary" onclick="cargarReciboLuzOriginal()">
-				<img src="recursos/images/icons/buscar_16x16.png" alt="Actualizar" />&nbsp;Actualizar
-			</button>
-			 -->
 		</td>
 	</tr>
 	<tr>
@@ -1500,19 +1558,26 @@ function limpiar(){
 							</tr>
 							<tr>
 								<td><b>ID :</b></td>
-								<td><input type='text' id='idRecibo' size='10' class='text ui-widget-content ui-corner-all' style="text-align: center;"/></td>
+								<td><input type='text' id='idRecibo' name='idRecibo' size='10' class='text ui-widget-content ui-corner-all' style="text-align: center;" onKeyDown="campoEnter(event,this.form.lecturaInicialSocio);"/></td>
 							</tr>
 							<tr>
 								<td><b>Lectura Anterior :</b></td>
-								<td><input type='text' id='lecturaInicialSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('L');" style="text-align: center;"/></td>
+								<td><input type='text' id='lecturaInicialSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('L');" style="text-align: center;" onKeyDown="campoEnter(event,this.form.lecturaFinalSocio);"/></td>
 							</tr>
 							<tr>
 								<td><b>Lectura Actual :</b></td>
 								<td><input type='text' id='lecturaFinalSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('L');" style="text-align: center;"/></td>
 							</tr>
 							<tr>
+								<td colspan="2" align="center"><label><input type="checkbox" id="cbox1" value="first_checkbox" onclick="activaManual()"> Medidor Trabado</label></td>
+							</tr>
+							<tr id="sintraba">
 								<td><b>Consumo de Mes :</b></td>
 								<td><div id="consumoMesSocio" style="border: 2px solid blue; width: 100px;" align="center"></div></td>
+							</tr>
+							<tr id="contraba">
+								<td><b>Consumo de Mes :</b></td>
+								<td><input type='text' id='consumoMesSocioTrabado' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('L');" style="text-align: center;border: 2px solid blue; width: 100px;"/></td>
 							</tr>
 						</table>		
 					</td>
@@ -1555,7 +1620,7 @@ function limpiar(){
 		
 		<div class="modal-footer">
 			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="guardarRecibo()">Grabar</button>		
-			<button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="limpiarReciboLuzSocio()">Cerrar</button>
 		</div>
 		
 		</div>

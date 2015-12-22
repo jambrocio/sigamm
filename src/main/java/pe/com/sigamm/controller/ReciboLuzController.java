@@ -113,7 +113,7 @@ public class ReciboLuzController {
 	public @ResponseBody ResponseListBean<Puesto> reporteReciboLuzPuesto(
 			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
 			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
-			@RequestParam(value = "codigoPuesto", defaultValue = "0") Integer codigoPuesto,
+			@RequestParam(value = "codigoPuesto", defaultValue = "0") String codigoPuesto,
 			@RequestParam(value = "codigoRecibo", defaultValue = "0") Integer codigoRecibo){
 		
 		ResponseListBean<Puesto> response = new ResponseListBean<Puesto>();
@@ -217,7 +217,8 @@ public class ReciboLuzController {
 	public @ResponseBody ResponseListBean<Puesto> reporteUsuarioPuestoGiro(
 			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
 			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
-			@RequestParam(value = "puestoSocio", defaultValue = "0") String puestoSocio){
+			@RequestParam(value = "puestoSocio", defaultValue = "0") String puestoSocio,
+			@RequestParam(value = "codigoRecibo", defaultValue = "0") Integer codigoRecibo){
 		
 		ResponseListBean<Puesto> response = new ResponseListBean<Puesto>();
 		

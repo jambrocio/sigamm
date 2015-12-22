@@ -11,6 +11,7 @@ public class ReciboLuzSocio {
 	int lecturaInicial;
 	int lecturaFinal;
 	int consumoMes;
+	int trabado;
 	double cargoFijo;
 	double alumbradoPublico;
 	double cargoEnergia;
@@ -35,8 +36,6 @@ public class ReciboLuzSocio {
 	String fecPeriodo;
 	double costoWatts;
 	Socio socio;
-	
-	
 	public int getIdRecibo() {
 		return idRecibo;
 	}
@@ -78,6 +77,12 @@ public class ReciboLuzSocio {
 	}
 	public void setConsumoMes(int consumoMes) {
 		this.consumoMes = consumoMes;
+	}
+	public int getTrabado() {
+		return trabado;
+	}
+	public void setTrabado(int trabado) {
+		this.trabado = trabado;
 	}
 	public double getCargoFijo() {
 		return cargoFijo;
@@ -187,12 +192,6 @@ public class ReciboLuzSocio {
 	public void setPuestoSocio(String puestoSocio) {
 		this.puestoSocio = puestoSocio;
 	}
-	public Socio getSocio() {
-		return socio;
-	}
-	public void setSocio(Socio socio) {
-		this.socio = socio;
-	}
 	public String getNombreFull() {
 		return nombreFull;
 	}
@@ -223,5 +222,11 @@ public class ReciboLuzSocio {
 	public void setCostoWatts(double costoWatts) {
 		this.costoWatts = costoWatts;
 	}
+	public Socio getSocio() {
+		return socio;
+	}
+	public void setSocio(Socio socio) {
+		this.socio = socio;
+	}	
 
 }

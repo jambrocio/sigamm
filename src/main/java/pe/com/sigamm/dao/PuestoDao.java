@@ -17,7 +17,7 @@ public interface PuestoDao {
 	
 	public Retorno eliminarPuesto(Puesto puesto);
 	
-	public ReportePuesto reportePuestoLuz(int pagina, int registros, int codigoSocio, int codigoRecibo);
+	public ReportePuesto reportePuestoLuz(int pagina, int registros, String codigoPuesto, int codigoRecibo);
 	
 	public ReportePuesto reportePuestoxPto(int pagina, int registros, int codigoSector, String nroPuesto, int codigoReciboOriginal);
 

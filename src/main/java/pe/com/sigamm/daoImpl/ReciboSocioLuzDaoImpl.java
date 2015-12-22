@@ -57,6 +57,7 @@ public class ReciboSocioLuzDaoImpl implements ReciboLuzSocioDao {
 					new SqlParameter("vi_reconexion", 			Types.NUMERIC),
 					new SqlParameter("vi_total", 				Types.NUMERIC),
 					new SqlParameter("vi_estado", 				Types.NUMERIC),
+					new SqlParameter("vi_trabado", 				Types.NUMERIC),
 					new SqlParameter("vi_usuario_carga", 		Types.VARCHAR),
 					new SqlParameter("vi_fecha_carga", 			Types.DATE),					
 					new SqlParameter("vi_usuario_modifica", 	Types.VARCHAR),	
@@ -82,6 +83,7 @@ public class ReciboSocioLuzDaoImpl implements ReciboLuzSocioDao {
 			parametros.addValue("vi_reconexion",		reciboLuzSocio.getReconexion());
 			parametros.addValue("vi_total",				reciboLuzSocio.getTotal());
 			parametros.addValue("vi_estado",			reciboLuzSocio.getEstado());
+			parametros.addValue("vi_trabado",			reciboLuzSocio.getTrabado());
 			parametros.addValue("vi_usuario_carga",		datosSession.getCodigoUsuario());			
 			parametros.addValue("vi_fecha_carga",		reciboLuzSocio.getFechaCarga());
 			parametros.addValue("vi_usuario_modifica",	null);
