@@ -539,24 +539,12 @@ function cargarReciboLuzSocio(codigoRecibo){
 		height: 'auto',
 		width: 'auto',
 		postData: parametros,
-		colNames : ['Recibo', 'Sector', 'Nombre Usuario', 'Puesto', 'Giro','Recibo Luz','Total', 'Opciones'],
+		colNames : ['Nombre Usuario', 'Puesto', 'Giro','Total', 'Opciones'],
 		colModel : [{
-			name : 'codigoReciboOriginal',
-			index: 'codigoReciboOriginal',
-			sortable:false,
-			width: 50,
-			align: 'center'
-		},{
-			name : 'codigoSector',
-			index: 'codigoSector',
-			sortable:false,
-			width: 70,
-			align: 'center'
-		},{
 			name : 'nombreFull',
 			index: 'nombreFull',
 			sortable:false,
-			width: 140,
+			width: 320,
 			align: 'left'
 		},{
 			name : 'nroPuesto',
@@ -569,12 +557,6 @@ function cargarReciboLuzSocio(codigoRecibo){
 			index: 'nombreGiro',
 			sortable:false,
 			width: 150,
-			align: 'center'
-		},{
-			name : 'reciboLuzCreado',
-			index: 'reciboLuzCreado',
-			sortable:false,
-			width: 80,
 			align: 'center'
 		},{
 			name : 'total',
@@ -600,28 +582,28 @@ function cargarReciboLuzSocio(codigoRecibo){
 		caption : "Recibo de Luz Socios",
 		afterInsertRow: function(rowId, data, item){
 			//alert(rowId + ' - ' + data + ' - ' + item.total);
-			if (item.reciboLuzCreado == 0)
-				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });				
-			else
-				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
+			if (item.reciboLuzCreado == 0){
+				$("#grillaReciboLuz").setCell(rowId, 'nombreFull', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'nroPuesto', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'nombreGiro', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+			} else {
+				$("#grillaReciboLuz").setCell(rowId, 'nombreFull', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'nroPuesto', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'nombreGiro', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
+			}
 
 		}
-
 
 	}).trigger('reloadGrid');
 }
 
 
 function generarReciboLuzXSocio(sector, puesto, original){
-	//alert("Sector: "+sector+" - Puesto: "+puesto+" - Luz Original: "+original);
-	
-	$('#recibos_luz_por_socio_modal').modal({
-		backdrop: 'static',
-		keyboard: false
-	});
 		
 	$("sectorSocio").text(sector);
-	$("puestoSocio").text(puesto);								
+	$("puestoSocio").text(puesto);									
 	$("reciboOriginal").text(original);
 	
 	colorEtiquetas();
@@ -638,6 +620,7 @@ function generarReciboLuzXSocio(sector, puesto, original){
 function cargarDatosReciboLuzSocio(sector, puesto, original){	
 
 	//alert(codigoPuesto);
+	var ruta = obtenerContexto();
 	
 	var parametros = new Object();
 	parametros.codigoSector         = sector;
@@ -664,7 +647,41 @@ function cargarDatosReciboLuzSocio(sector, puesto, original){
             	$("#servicioMantenimientoSocio").val(val.mantenimiento);
             	$("#costoWatts").val(val.numCostoWatts);
             	$("#codigoSocio").val(val.codigoSocio);
+            	$("#reciboLuzCreado").val(val.reciboLuzCreado);
+            	          	
+            	
+				if ($("#reciboLuzCreado").val() == 0) {
+					
+					$('#recibos_luz_por_socio_modal').modal({
+						backdrop: 'static',
+						keyboard: false
+					});
+					
+				} else {
+					
+					$.gritter.add({
+						// (string | mandatory) the heading of the notification
+						title: 'Mensaje',
+						// (string | mandatory) the text inside the notification
+						text: 'El Recibo de Luz del puesto ' + $("#puestoSocio").text() + ' ya fue creado...!!!',
+						// (string | optional) the image to display on the left
+						image: "/" + ruta + "/recursos/images/confirm.png",
+						// (bool | optional) if you want it to fade out on its own or just sit there
+						sticky: false,
+						// (int | optional) the time you want it to be alive for before fading out
+						time: ''
+					});
+					
+				}
+					
+					
+					
+               		
+                	
+            	
         	});
+        	
+
         	
         }
     });
@@ -969,6 +986,7 @@ function limpiarReciboLuzSocio(){
 	$("#reconexionSocio").val('');
 	$("#totalSocio").text('');
 	$("#codigoReciboLuzSocio").val('0');
+	$("#reciboLuzCreado").val('');
 
 }
 
@@ -1012,7 +1030,7 @@ function buscarReciboLuzSocio(){
 		height: 'auto',
 		width: 'auto',
 		postData: valores,
-		colNames : ['Recibo', 'Sector', 'Nombre Usuario', 'Puesto', 'Giro','Recibo Luz','Total', 'Opciones'],
+		/*colNames : ['Recibo', 'Sector', 'Nombre Usuario', 'Puesto', 'Giro','Recibo Luz','Total', 'Opciones'],
 		colModel : [{
 			name : 'codigoReciboOriginal',
 			index: 'codigoReciboOriginal',
@@ -1072,11 +1090,66 @@ function buscarReciboLuzSocio(){
 		sortorder : "codigoPuesto",				
 		caption : "Recibo de Luz Socios",
 		afterInsertRow: function(rowId, data, item){
-			//alert(rowId + ' - ' + data + ' - ' + item.total);
 			if (item.reciboLuzCreado == 0)
 				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });				
 			else
 				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
+
+		}*/
+		colNames : ['Nombre Usuario', 'Puesto', 'Giro','Total', 'Opciones'],
+		colModel : [{
+			name : 'nombreFull',
+			index: 'nombreFull',
+			sortable:false,
+			width: 140,
+			align: 'left'
+		},{
+			name : 'nroPuesto',
+			index: 'nroPuesto',
+			sortable:false,
+			width: 50,
+			align: 'center'
+		},{
+			name : 'nombreGiro',
+			index: 'nombreGiro',
+			sortable:false,
+			width: 150,
+			align: 'center'
+		},{
+			name : 'total',
+			index: 'total',
+			sortable:false,
+			width: 80,
+			align: 'center'
+		},{					
+			name:'opciones',
+			index:'opciones',
+			width:110,
+			sortable:false,
+			search: false,
+			formatter:formatterBotones
+		}],								
+		rowNum : 20,
+		pager : '#pgrillaReciboLuz',
+		sortname : 'codigoPuesto',
+		autowidth: true,
+		rownumbers: true,
+		viewrecords : true,
+		sortorder : "codigoPuesto",				
+		caption : "Recibo de Luz Socios",
+		afterInsertRow: function(rowId, data, item){
+			//alert(rowId + ' - ' + data + ' - ' + item.total);
+			if (item.reciboLuzCreado == 0){
+				$("#grillaReciboLuz").setCell(rowId, 'nombreFull', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'nroPuesto', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'nombreGiro', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+			} else {
+				$("#grillaReciboLuz").setCell(rowId, 'nombreFull', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'nroPuesto', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'nombreGiro', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
+			}
 
 		}
 
@@ -1120,6 +1193,7 @@ function botonEnter()
 <input type="hidden" id="codigoRecibo" />
 <input type="hidden" id="costoWatts" />
 <input type="hidden" id="codigoReciboLuzSocio" />
+<input type="hidden" id="reciboLuzCreado" />
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td colspan="4">&nbsp;</td>
