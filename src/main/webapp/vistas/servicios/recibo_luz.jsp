@@ -602,16 +602,16 @@ function cargarReciboLuzSocio(codigoRecibo){
 
 function generarReciboLuzXSocio(sector, puesto, original){
 		
-	$("sectorSocio").text(sector);
-	$("puestoSocio").text(puesto);									
-	$("reciboOriginal").text(original);
+	$("#sectorSocio").text(sector);
+	$("#puestoSocio").text(puesto);									
+	$("#reciboOriginal").text(original);
 	
 	colorEtiquetas();
 	
 	/*$("#codigoReciboLuzOriginal").val(codigoReciboLuzOriginal);
 	buscarUsuario();*/
 	$(function() {
-		$("idRecibo").focus();
+		$("#idRecibo").focus();
 	});
 	
 	cargarDatosReciboLuzSocio(sector, puesto, original);

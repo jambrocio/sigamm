@@ -36,6 +36,8 @@
 
 </style>
 <script>
+var intentos = 0;
+
 $(document).ready(function(){
 	
 	cargarNuevo();
@@ -363,7 +365,7 @@ function generarReciboAguaSocio(codigoRecibo){
 
 
 function cargarReciboAguaSocio(codigoRecibo){
-	
+	intentos = 1;
 	var ruta = obtenerContexto();
 	var formatterBotones = function(cellVal,options,rowObject)
 	{	
@@ -377,7 +379,7 @@ function cargarReciboAguaSocio(codigoRecibo){
 			opciones += "&nbsp;&nbsp;";
 			
 			opciones += "<a href=javascript:generarReciboAguaXSocio('";
-			opciones += rowObject.codigoReciboAgua + "') >";
+			opciones += rowObject.codigoSector + "','" + rowObject.numeroPuesto + "','" + rowObject.codigoServicio + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/agregar2_24x24.png' border='0' title='Crear Recibo de Agua por Socio'/>";
 			opciones += "</a>";			
 
@@ -399,20 +401,8 @@ function cargarReciboAguaSocio(codigoRecibo){
 		height: 'auto',
 		width: 'auto',
 		postData: valores,
-		colNames : ['Código', 'Servicio', 'Puesto', 'Nombre Usuario', 'Padron', 'Giro','Recibo Agua','Total', 'Opciones'],
+		colNames : ['Puesto', 'Nombre Usuario', 'Padron', 'Giro','Total', 'Opciones'],
 		colModel : [{
-			name : 'codigoServicio',
-			index: 'codigoServicio',
-			sortable:false,
-			width: 50,
-			align: 'center'
-		},{
-			name : 'nombreServicio',
-			index: 'nombreServicio',
-			sortable:false,
-			width: 100,
-			align: 'center'
-		},{
 			name : 'numeroPuesto',
 			index: 'numeroPuesto',
 			sortable:false,
@@ -422,7 +412,7 @@ function cargarReciboAguaSocio(codigoRecibo){
 			name : 'nombreFull',
 			index: 'nombreFull',
 			sortable:false,
-			width: 150,
+			width: 250,
 			align: 'left'
 		},{
 			name : 'numeroPadron',
@@ -434,13 +424,7 @@ function cargarReciboAguaSocio(codigoRecibo){
 			name : 'nombreGiro',
 			index: 'nombreGiro',
 			sortable:false,
-			width: 150,
-			align: 'center'
-		},{
-			name : 'reciboAguaCreado',
-			index: 'reciboAguaCreado',
-			sortable:false,
-			width: 50,
+			width: 200,
 			align: 'center'
 		},{
 			name : 'total',
@@ -451,7 +435,7 @@ function cargarReciboAguaSocio(codigoRecibo){
 		},{					
 			name:'opciones',
 			index:'opciones',
-			width:110,
+			width:100,
 			sortable:false,
 			search: false,
 			formatter:formatterBotones
@@ -466,16 +450,113 @@ function cargarReciboAguaSocio(codigoRecibo){
 		caption : "Recibo de Agua Socios",
 		afterInsertRow: function(rowId, data, item){
 			//alert(rowId + ' - ' + data + ' - ' + item.total);
-			if (item.reciboAguaCreado == 0)
-				$("#grillaReciboAgua").setCell(rowId, 'reciboAguaCreado', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });				
-			else
-				$("#grillaReciboAgua").setCell(rowId, 'reciboAguaCreado', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
+			if (item.reciboAgua == 0) {
+				$("#grillaReciboAgua").setCell(rowId, 'numeroPuesto', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'nombreFull', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });				
+				$("#grillaReciboAgua").setCell(rowId, 'numeroPadron', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'nombreGiro', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'total', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+			} else {				
+				$("#grillaReciboAgua").setCell(rowId, 'numeroPuesto', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'nombreFull', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'numeroPadron', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'nombreGiro', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'total', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
+			}
 
 		}
 
 
 	}).trigger('reloadGrid');
 }
+
+
+function generarReciboAguaXSocio(sector, puesto, original){
+	
+	alert("Sector: " + sector + " Puesto: " + puesto + " Original: " + original);
+	
+	$('#recibos_agua_por_socio_modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	});
+	
+	$("#sectorSocio").text(sector);
+	$("#puestoSocio").text(puesto);									
+	$("#reciboOriginal").text(original);
+	
+	colorEtiquetas();
+	
+	alert("Sector: " + $("#sectorSocio").text() + " Puesto: " + $("#puestoSocio").text() + " Original: " + $("#reciboOriginal").text());
+	
+	/*$("#codigoReciboLuzOriginal").val(codigoReciboLuzOriginal);
+	buscarUsuario();*/
+	
+	cargarDatosReciboAguaSocio(sector, puesto, original);
+}
+
+
+function cargarDatosReciboAguaSocio(sector, puesto, original){	
+
+	//alert(codigoPuesto);
+	var ruta = obtenerContexto();
+	
+	var parametros = new Object();
+	parametros.codigoSector         = sector;
+	parametros.nroPuesto            = puesto;
+	parametros.codigoReciboOriginal = original;
+	
+	$.ajax({
+        type: "POST",
+        async:false,
+        url: "buscar-usuario-puesto-giro.json",
+        cache : false,
+        data: parametros,
+        success: function(result){
+            console.log(result);
+        	//alert("Resultado : [" + result.rows + "]");
+        	
+        	$.each(result.rows, function(key,val) {
+            	$("#nombreSocio").text(val.nombreFull);
+            	$("#puestoSocio").text(val.nroPuesto);
+            	$("#sectorSocio").text(val.nombreSector);
+            	$("#giroSocio").text(val.nombreGiro);
+            	$("#periodoSocio").text(val.periodoSocio);
+            	$("#codigoSocio").val(val.codigoSocio);
+            	$("#reciboAguaCreado").val(val.reciboAguaCreado);
+            	          	
+            	
+				if ($("#reciboAguaCreado").val() == 0) {
+					
+					$('#recibos_agua_por_socio_modal').modal({
+						backdrop: 'static',
+						keyboard: false
+					});
+					
+				} else {
+					
+					$.gritter.add({
+						// (string | mandatory) the heading of the notification
+						title: 'Mensaje',
+						// (string | mandatory) the text inside the notification
+						text: 'El Recibo de Agua del puesto ' + $("#puestoSocio").text() + ' ya fue creado...!!!',
+						// (string | optional) the image to display on the left
+						image: "/" + ruta + "/recursos/images/confirm.png",
+						// (bool | optional) if you want it to fade out on its own or just sit there
+						sticky: false,
+						// (int | optional) the time you want it to be alive for before fading out
+						time: ''
+					});
+					
+				}
+            	
+        	});
+        	
+        }
+    });
+	
+	$("#lecturaInicialSocio").focus();
+}
+
 
 </script>
 </head>
@@ -664,6 +745,66 @@ function cargarReciboAguaSocio(codigoRecibo){
 		</div>
 	</div>
 </div>
+
+<!-- Ventana Modal Recibo Luz Ppor cada Socio -->
+<div class="modal fade" id="recibos_agua_por_socio_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width: 450px">
+		<div class="modal-content">
+		
+		<div class="modal-header modal-header-primary">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title">Recibos de Agua de Socio</h4>
+		</div>
+
+		<div class="modal-body">
+		
+			<table border="0" width="100%" cellpadding="0" cellspacing="0"></tr>
+				<tr>
+					<td colspan="4"><b>RECIBO DE AGUA <span id="reciboOriginal"></span><b/></td>
+				</tr>
+				<tr>
+					<td colspan="4">&nbsp;</td>
+				</tr>
+			</table>
+			<table border="1" width="100%">
+				<tr>
+					<td>
+						<table border="0" width="100%">
+							<tr>
+								<td width="40%"><b>ASOCIADO (A) :</b></td>
+								<td><div id="nombreSocio" style="color: blue; font-size:11px;" align="left"></div></td>
+							</tr>
+							<tr>
+								<td><b>Nº PUESTO :</b></td>
+								<td>
+									<div id="puestoSocio" style="color: blue; width: 90px;" align="left"></div>								
+								</td>
+							</tr>
+							<tr>
+								<td><b>SECTOR :</b></td>
+								<td><div id="sectorSocio" style="color: blue; width: 100px; font-size:11px;" align="left"></div></td>
+							</tr>
+							<tr>
+								<td><b>GIRO :</b></td>
+								<td><div id="giroSocio" style="color: blue; font-size:11px;" align="left"></div></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		  
+		  
+		</div>
+		
+		<div class="modal-footer">
+			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="guardarRecibo()">Grabar</button>		
+			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="limpiarReciboAguaSocio()">Cerrar</button>
+		</div>
+		
+		</div>
+	</div>
+</div>
+
 
 </body>
 </html>
