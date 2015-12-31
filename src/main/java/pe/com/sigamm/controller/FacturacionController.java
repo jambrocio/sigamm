@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import pe.com.sigamm.bean.CamposObligatorios;
 import pe.com.sigamm.bus.FacturacionBus;
 import pe.com.sigamm.modelo.Concepto;
+import pe.com.sigamm.modelo.Empresa;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Retorno;
@@ -71,6 +72,11 @@ public class FacturacionController {
 	public @ResponseBody String cargarConceptos(Concepto concepto){
 		
 		return facturacionBus.opcionesConceptos(concepto);
-		//return null;
+	}
+	
+	@RequestMapping(value = "/buscar-ruc.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String cargarConceptos(Empresa empresa){
+		
+		return facturacionBus.razonSocialEmpresa(empresa);
 	}
 }

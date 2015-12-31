@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import pe.com.sigamm.bean.ServiciosDetalle;
 import pe.com.sigamm.dao.FacturacionDao;
 import pe.com.sigamm.modelo.Concepto;
+import pe.com.sigamm.modelo.Empresa;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Retorno;
@@ -141,6 +142,25 @@ public class FacturacionDaoImpl implements FacturacionDao {
 		
 		Map<String,Object> results = jdbcCall.execute(parametros);
 		List<Concepto> lista = (List<Concepto>) results.get("vo_result");
+		return  lista;
+		
+	}
+
+	
+	@Override
+	public List<Empresa> razonSocialEmpresa(Empresa empresa) {
+		
+		jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+		jdbcCall.withCatalogName("PKG_FACTURACION");
+		jdbcCall.withProcedureName("SP_LISTAR_EMPRESA").declareParameters(
+				new SqlParameter("vi_ruc", 	Types.VARCHAR),				
+				new SqlOutParameter("vo_result", OracleTypes.CURSOR,new BeanPropertyRowMapper(Empresa.class)));
+		
+		MapSqlParameterSource parametros = new MapSqlParameterSource();
+		parametros.addValue("vi_ruc", empresa.getRuc());
+		
+		Map<String,Object> results = jdbcCall.execute(parametros);
+		List<Empresa> lista = (List<Empresa>) results.get("vo_result");
 		return  lista;
 		
 	}

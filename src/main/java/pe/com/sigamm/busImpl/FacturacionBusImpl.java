@@ -13,6 +13,7 @@ import pe.com.sigamm.bean.ServiciosDetalle;
 import pe.com.sigamm.bus.FacturacionBus;
 import pe.com.sigamm.dao.FacturacionDao;
 import pe.com.sigamm.modelo.Concepto;
+import pe.com.sigamm.modelo.Empresa;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.MenuPrincipal;
@@ -47,13 +48,17 @@ public class FacturacionBusImpl implements FacturacionBus {
 	@Override
 	public String opcionesConceptos(Concepto concepto) {
 
-		List<Concepto> opciones = facturacionDao.opcionesConceptos(concepto);
-		for(Concepto conceptos : opciones){
-			
-		}
-		
+		List<Concepto> opciones = facturacionDao.opcionesConceptos(concepto);		
 		return gson.toJson(opciones);
 		
+	}
+
+	@Override
+	public String razonSocialEmpresa(Empresa empresa) {
+
+		List<Empresa> razonSocial = facturacionDao.razonSocialEmpresa(empresa);		
+		return gson.toJson(razonSocial);
+
 	}
 
 }
