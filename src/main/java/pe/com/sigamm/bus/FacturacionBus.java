@@ -11,6 +11,6 @@ public interface FacturacionBus {
 
 	public Retorno grabarFacturacion(FacturacionCabecera facturacion, List<FacturacionDetalle> lista);
 	
-	
+	public String opcionesConceptos(Concepto concepto);
 	
 }
