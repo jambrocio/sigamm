@@ -89,6 +89,12 @@ function cargarConceptos(){
         data: parametros,
         success: function(result){
         	
+        	//alert(result);
+        	$('#egreso_modal').modal({
+        		backdrop: 'static',
+        		keyboard: false
+        	});
+        	
         	var optionConceptos = "<option value=0>SELECCIONAR</option>";
         	$.each(result, function(keyM, conceptos) {
         		
@@ -164,23 +170,30 @@ function validarSiNumero(numero){
 			</div>
 			<div class="modal-body">
 				
-					<table border="0" style="width: 500px;">
+					<table border="0" style="width: 580px;" >
 						<tr>
-							<td colspan="7" align="right">&nbsp;</td>
+							<td colspan="14" align="right">&nbsp;</td>
 						</tr>
 						<tr>
-							<td colspan="7" align="left">
+							<td colspan="14" align="left">
 								<button type="button" class="btn btn-primary" onclick="guardar(1)">
 									<img src="recursos/images/icons/guardar_16x16.png" alt="Buscar" />&nbsp;Guardar
 								</button>
 							</td>
 						</tr>
 						<tr>
-							<td colspan="7"><hr /></td>
+							<td colspan="14"><hr /></td>
 						</tr>
 						<tr>
 							<td width="10px">&nbsp;</td>
-							<td><span id="lbltipodocumento"><b>TIPO DOCUMENTO (*)</b></span></td>
+							<td><span id="lbltipodocumento" style="font-size: 11px;"><b>TIPO DOC. (*)</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td><input type="text" id="tipodocumento" class="form-control" maxlength="20"/></td>
+							<td valign="top">&nbsp;</td>
+							<td width="10px">&nbsp;</td>
+							<td><span id="lbltipodocumento" style="font-size: 11px;"><b>TIPO DOC. (*)</b></span></td>
 							<td width="5px">&nbsp;</td>
 							<td><b>:</b></td>
 							<td width="5px">&nbsp;</td>
@@ -189,16 +202,14 @@ function validarSiNumero(numero){
 						</tr>
 						<tr>
 							<td width="10px">&nbsp;</td>
-							<td><span id="lblconcepto"><b>CONCEPTO (*)</b></span></td>
+							<td><span id="lblconcepto" style="font-size: 11px;"><b>CONCEPTO (*)</b></span></td>
 							<td width="5px">&nbsp;</td>
 							<td><b>:</b></td>
 							<td width="5px">&nbsp;</td>
 							<td><select id="concepto" class="form-control"></select></td>
 							<td valign="top"><img id="lblconcepto-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
-						</tr>
-						<tr>
 							<td width="10px">&nbsp;</td>
-							<td><span id="lblnro"><b>NRO (*)</b></span></td>
+							<td><span id="lblnro" style="font-size: 11px;"><b>NRO (*)</b></span></td>
 							<td width="5px">&nbsp;</td>
 							<td><b>:</b></td>
 							<td width="5px">&nbsp;</td>
@@ -207,7 +218,7 @@ function validarSiNumero(numero){
 						</tr>
 						<tr>
 							<td width="10px">&nbsp;</td>
-							<td colspan="6"><b>(*) Campos Obligatorios</b></td>
+							<td colspan="13" style="font-size: 11px;"><b>(*) Campos Obligatorios</b></td>
 						</tr>
 					</table>
 
