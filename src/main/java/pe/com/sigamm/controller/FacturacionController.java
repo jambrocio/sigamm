@@ -70,7 +70,7 @@ public class FacturacionController {
 	@RequestMapping(value = "/cargar-conceptos.json", method = RequestMethod.POST, produces="application/json")
 	public @ResponseBody String cargarConceptos(Concepto concepto){
 		
-		//return facturacionBus.opcionesConceptos(concepto);
-		return null;
+		return facturacionBus.opcionesConceptos(concepto);
+		//return null;
 	}
 }

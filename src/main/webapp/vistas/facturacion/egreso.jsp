@@ -46,53 +46,62 @@
 <script>
 $(document).ready(function(){	
 	
-	//$('[data-toggle="popover"]').popover({ placement : 'right', trigger: "hover" });
+	$('[data-toggle="popover"]').popover({ placement : 'right', trigger: "hover" });
 	
 });
 
 function colorEtiquetas(){
 	
-	$("#lblservicio").css("color", "black");
+	$("#lblconcepto").css("color", "black");
 	
-	$("#lblservicio-img").hide();
+	$("#lblconcepto-img").hide();
 	
 }
 
-function nuevoCobro(){
+function nuevoEgreso(){
 	
 	colorEtiquetas();
 	
-	$("#codigoPuesto").val(0);
-	
-	$("#dniBuscar").val("");
-	
+	/*$("#codigoPuesto").val(0);	
+	$("#dniBuscar").val("");	
 	$("#dni").val("");
 	$("#apePaterno").val("");
 	$("#apeMaterno").val("");
 	$("#nombres").val("");
-	$("#telefono").val("");
-	
-	$("#btnBuscar").attr("disabled", false);
-	
-	var tabla = document.getElementById("tabla_resultado");
-	var filasTabla = tabla.rows.length;
-	
-	for(var i = 0; i < filasTabla - 1; i++) {
-		
- 		if(i > 0){
- 			
- 			tabla.deleteRow(1);
- 			
- 		}
- 		
- 	}
-	
+	$("#telefono").val("");	
 	$("#totalesLetras").html("");
 	$("#totales").html("");
-	$("#btnAgregar").attr("disabled", false);
- 	
+	$("#btnAgregar").attr("disabled", false);*/
+ 
+	cargarConceptos();
 }
 
+function cargarConceptos(){
+	
+	var parametros = new Object();
+	parametros.rubro = 'E';
+	
+	$.ajax({
+        type: "POST",
+        async: false,
+        url: "cargar-conceptos.json",
+        cache: false,
+        data: parametros,
+        success: function(result){
+        	
+        	var optionConceptos = "<option value=0>SELECCIONAR</option>";
+        	$.each(result, function(keyM, conceptos) {
+        		
+        		optionConceptos += "<option value=" + conceptos.codigoConcepto + ">" + conceptos.nombreConcepto + "</option>";
+        		
+        	});
+        	
+        	$("#concepto").html(optionConceptos);
+    		
+        }
+    });
+	
+}
 
 function validarSiNumero(numero){
 	
@@ -115,7 +124,7 @@ function validarSiNumero(numero){
 	</tr>
 	<tr>
 		<td colspan="7" align="left">
-			<button type="button" class="btn btn-primary" onclick="nuevoCobro()">
+			<button type="button" class="btn btn-primary" onclick="nuevoEgreso()">
 				<img src="recursos/images/icons/nuevo_16x16.png" alt="Nuevo" />&nbsp;Nuevo
 			</button>
 			&nbsp;
@@ -128,23 +137,88 @@ function validarSiNumero(numero){
 			</button>
 		</td>
 	</tr>
+	<!-- tr>
+		<td width="150"><b>EGRESOS...<b/></td>
+		<td width="10">:</td>
+		<td width="200"><input type="text" id="reciboBuscara" class="form-control" maxlength="8" /></td>
+		<td>&nbsp;&nbsp;
+			<button class="btn btn-primary" data-toggle="modal" data-target="egreso_modal" onclick="nuevoEgreso()">
+				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
+			</button>
+		</td>
+	</tr -->
 	<tr>
 		<td colspan="7" align="right">&nbsp;</td>
 	</tr>
-	<tr>
-		<td width="10px">&nbsp;</td>
-		<td><span id="lblNumeroPuesto"><b>Nro.Puesto</b></span></td>
-		<td width="5px">&nbsp;</td>
-		<td><b>:</b></td>
-		<td width="5px">&nbsp;</td>
-		<td><input type="text" id="puestoBuscar" class="form-control" maxlength="4" /></td>
-		<td valign="top">&nbsp;&nbsp;
-			<button type="button" id="btnBuscar" class="btn btn-primary" onclick="buscarPuesto()">
-				<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
-			</button>
-		</td>
-	</tr>
 </table>	
+
+
+<div class="modal fade" id="egreso_modal" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title"><span id="tituloRegistro" />Nuevo Egreso</h4>
+			</div>
+			<div class="modal-body">
+				
+					<table border="0" style="width: 500px;">
+						<tr>
+							<td colspan="7" align="right">&nbsp;</td>
+						</tr>
+						<tr>
+							<td colspan="7" align="left">
+								<button type="button" class="btn btn-primary" onclick="guardar(1)">
+									<img src="recursos/images/icons/guardar_16x16.png" alt="Buscar" />&nbsp;Guardar
+								</button>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="7"><hr /></td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td><span id="lbltipodocumento"><b>TIPO DOCUMENTO (*)</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td><input type="text" id="tipodocumento" class="form-control" maxlength="20"/></td>
+							<td valign="top">&nbsp;</td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td><span id="lblconcepto"><b>CONCEPTO (*)</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td><select id="concepto" class="form-control"></select></td>
+							<td valign="top"><img id="lblconcepto-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td><span id="lblnro"><b>NRO (*)</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td><input type="text" id="nro" class="form-control" maxlength="8"/></td>
+							<td valign="top">&nbsp;</td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td colspan="6"><b>(*) Campos Obligatorios</b></td>
+						</tr>
+					</table>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+		  
+	</div>
+</div> 
 	
 </body>
 </html>

@@ -1,9 +1,13 @@
 package pe.com.sigamm.daoImpl;
 
 import java.sql.Types;
+import java.util.List;
 import java.util.Map;
 
+import oracle.jdbc.OracleTypes;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
@@ -11,7 +15,9 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
+import pe.com.sigamm.bean.ServiciosDetalle;
 import pe.com.sigamm.dao.FacturacionDao;
+import pe.com.sigamm.modelo.Concepto;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Retorno;
@@ -120,4 +126,27 @@ public class FacturacionDaoImpl implements FacturacionDao {
 		
 	}
 
+	
+	@Override
+	public List<Concepto> opcionesConceptos(Concepto concepto) {
+		
+		jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+		jdbcCall.withCatalogName("PKG_FACTURACION");
+		jdbcCall.withProcedureName("SP_LISTAR_CONCEPTO").declareParameters(
+				new SqlParameter("vi_rubro", 	Types.VARCHAR),				
+				new SqlOutParameter("vo_result", OracleTypes.CURSOR,new BeanPropertyRowMapper(Concepto.class)));
+		
+		MapSqlParameterSource parametros = new MapSqlParameterSource();
+		parametros.addValue("vi_rubro", concepto.getRubro());
+		
+		Map<String,Object> results = jdbcCall.execute(parametros);
+		List<Concepto> lista = (List<Concepto>) results.get("vo_result");
+		return  lista;
+		
+	}
+	
 }
+
+
+
+
