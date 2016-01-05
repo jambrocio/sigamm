@@ -61,4 +61,12 @@ public class FacturacionBusImpl implements FacturacionBus {
 
 	}
 
+	@Override
+	public Retorno grabarEmpresa(Empresa empresa) {
+
+		Retorno retornoEmpresa = facturacionDao.grabarEmpresa(empresa);
+		
+		return retornoEmpresa;
+	}
+
 }

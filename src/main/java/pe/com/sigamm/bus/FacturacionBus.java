@@ -16,4 +16,6 @@ public interface FacturacionBus {
 	
 	public String razonSocialEmpresa(Empresa empresa);
 	
+	public Retorno grabarEmpresa(Empresa empresa);
+	
 }

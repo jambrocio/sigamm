@@ -6,6 +6,11 @@
 <link rel="stylesheet" href="<c:url value="recursos/css/sm-blue/sm-blue.css"/>" />	
 <!-- Todas estas librerias son heredadas por las paginas que estan en contenido  -->
 <!-- Inicio -->
+<link href="recursos/css/jquery.alerts.css" rel="StyleSheet" type="text/css" />
+<script type="text/javascript" src="recursos/js/jquery.ui.draggable.js"></script>
+<script type="text/javascript" src="recursos/js/jquery.alerts.mod.js"></script>
+
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="recursos/js/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="recursos/js/jquery.smartmenus.js"></script>
 <script type="text/javascript" src="recursos/js/bootstrap.min.js"></script>
@@ -39,6 +44,13 @@ a:hover, a:visited, a:link, a:active
 {
 	text-decoration: none;
 }
+
+.jAlertsMessage, .jAlertsMessage h2, .jAlertsMessage p, .jAlertsButton {
+		font-family: 'PT Sans', sans-serif;
+		font-size: 16px;
+	}
+	.jAlertsMessage h2 { font-size: 22px; }
+
 </style>
 <!-- Fin -->
 <script type="text/javascript">

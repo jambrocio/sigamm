@@ -165,6 +165,56 @@ public class FacturacionDaoImpl implements FacturacionDao {
 		
 	}
 	
+	
+	@Override
+	public Retorno grabarEmpresa(Empresa empresa) {
+
+		Retorno retorno = new Retorno();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_GRABAR_EMPRESA").declareParameters(
+				new SqlParameter("vi_codigo_empresa", 			Types.INTEGER),
+				new SqlParameter("vi_ruc", 						Types.VARCHAR),
+				new SqlParameter("vi_razon_social", 			Types.VARCHAR),
+				new SqlParameter("vi_condicion", 				Types.VARCHAR),
+				new SqlParameter("vi_estado", 					Types.VARCHAR),
+				new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
+				
+				new SqlOutParameter("vo_codigo_empresa", 		Types.INTEGER),
+				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
+				new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
+				
+            
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_empresa", 			empresa.getCodigo_empresa());
+			parametros.addValue("vi_ruc", 						empresa.getRuc());
+			parametros.addValue("vi_razon_social", 				empresa.getRazonSocial());
+			parametros.addValue("vi_condicion", 				empresa.getCondicion());
+			parametros.addValue("vi_estado", 					empresa.getEstado());
+			parametros.addValue("vi_codigo_usuario", 			datosSession.getCodigoUsuario());
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			int codigoEmpresa = (Integer) result.get("vo_codigo_empresa");
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(codigoEmpresa);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
+	}
+	
 }
 
 

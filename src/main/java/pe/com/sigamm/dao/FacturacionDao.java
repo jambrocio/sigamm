@@ -19,4 +19,6 @@ public interface FacturacionDao {
 
 	public List<Empresa> razonSocialEmpresa(Empresa empresa);
 	
+	public Retorno grabarEmpresa(Empresa empresa);
+	
 }

@@ -22,6 +22,8 @@ import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.modelo.Socio;
 import pe.com.sigamm.session.DatosSession;
+import pe.com.sigamm.util.Constantes;
+import pe.com.sigamm.util.Util;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -79,4 +81,46 @@ public class FacturacionController {
 		
 		return facturacionBus.razonSocialEmpresa(empresa);
 	}
+	
+	@RequestMapping(value = "/grabar-empresa.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String grabarEmpresa(Empresa empresa){
+		Gson gson = new Gson();
+		List<CamposObligatorios> camposObligatorios = new ArrayList<CamposObligatorios>();
+		
+		if(empresa.getCodigo_empresa() == 0){
+			
+			if(empresa.getRucNuevo() == ""){
+				camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_RUC, Constantes.RUC_OBLIGATORIO));
+			}
+			
+			if(empresa.getRazonSocialNueva() == ""){
+				camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_RAZON_SOCIAL, Constantes.RAZON_SOCIAL_OBLIGATORIO));
+			}
+			
+			if(empresa.getRazonSocialNueva() == null){
+				camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_RAZON_SOCIAL, Constantes.RAZON_SOCIAL_OBLIGATORIO));
+			}
+			
+		}
+		
+		int codigo = 0;
+		String mensaje = "";
+		String listaObligatorios = gson.toJson(camposObligatorios);
+		
+		if(camposObligatorios.size() > 0){
+			
+			codigo = 0;
+			
+		}else{
+			
+			Retorno retorno = facturacionBus.grabarEmpresa(empresa);
+			codigo = retorno.getCodigo();
+			mensaje = retorno.getMensaje();
+		}
+	 
+		String resultado = "{\"idUsuario\":" + codigo + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + mensaje + "\"}";
+		
+		return resultado;
+	}
+
 }

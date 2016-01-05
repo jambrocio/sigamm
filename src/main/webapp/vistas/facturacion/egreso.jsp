@@ -93,11 +93,14 @@ $(function() {
 
 function colorEtiquetas(){
 	
-	$("#lblconcepto").css("color", "black");
+	$("#lblrucnuevo").css("color", "black");
+	$("#lblrazonsocialnueva").css("color", "black");
 	
-	$("#lblconcepto-img").hide();
+	$("#lblrucnuevo-img").hide();
+	$("#lblrazonsocialnueva-img").hide();
 	
 }
+
 
 function nuevoEgreso(){
 	
@@ -162,12 +165,17 @@ function validarSiNumero(numero){
 	
 }
 
+function limpiarRazonSocial(){
+	$("#razonsocial").val('');
+}
+	
 function buscaraRuc(){
 	var ruta = obtenerContexto();
 	
 	jsonObj = [];
 	var parametros = new Object();
 	parametros.ruc = $("#ruc").val();
+	parametros.rucNuevo = $("#ruc").val();
 	
 	$.ajax({
 		type: "POST",
@@ -176,45 +184,89 @@ function buscaraRuc(){
 	    cache : false,
 	    data: parametros,
 	    success: function(result){
-	           
-	    	alert(result);
-	    	
-	        /*if(result.camposObligatorios.length == 0){
+	    	    	
+	    	if (result==''){
+	    		mensaje = "El RUC digitado [" + $("#ruc").val() + "] no se encuentra en la Base de Datos, desea insertarlo ?. ";
+	    		mensaje += "Se requiere que ingrese la RAZON SOCIAL de la Empresa...";
+	    		
+	    		$("#mensajeEmpresa").html(mensaje);
+	    		$("#rucnuevo").val($("#ruc").val());
+	    		
+	    		$('#alerta_modal').modal({
+	    			backdrop: 'static',
+	    			keyboard: false
+	    		}).one('click', '#aceptar', function() {
 
-	            $.gritter.add({
-					// (string | mandatory) the heading of the notification
-					title: 'Mensaje',
-					// (string | mandatory) the text inside the notification
-					text: result.mensaje,
-					// (string | optional) the image to display on the left
-					image: "/" + ruta + "/recursos/images/confirm.png",
-					// (bool | optional) if you want it to fade out on its own or just sit there
-					sticky: false,
-					// (int | optional) the time you want it to be alive for before fading out
-					time: ''
-				});
-
-	            
-			}else{
-                	
-            	colorEtiquetas();
-            	fila = "";
-            	$.each(result.camposObligatorios, function(id, obj){
-                        
-                	$("#" + obj.nombreCampo).css("color", "red");
-                    $("#" + obj.nombreCampo + "-img").show();
-                    $("#" + obj.nombreCampo + "-img").attr("data-content", obj.descripcion);
-                        
-				});
-                	
-			}*/
-                
-		}
+	    		});
+		    	
+		    } else {
+		    	$.each(result, function(keyM, val) {
+		    		$("#razonsocial").val(val.razonSocial);		    		
+		    	});
+			}
+	    }
 	});
-	
 	
 }
 	
+	
+function guardarEmpresa(){
+	alert("Guardar Empresa");
+	
+	if ( ($("#rucnuevo").val() == null) || ($("#rucnuevo").val() == "") ){
+		jAlert('No ha digitado el número de RUC, verifique...', 'Mensaje Alerta');
+		$("#rucnuevo").focus();
+		return false;
+	}
+	var ruc = $("#rucnuevo").val();
+	if ( (ruc.length < 11) ){
+		jAlert('La longitud del número de RUC es menor a 11 dígitos, verifique...', 'Mensaje Alerta');
+		$("#rucnuevo").focus();
+		return false;
+	}
+	if ( ($("#razonsocialnueva").val() == null) || ($("#razonsocialnueva").val() == "") ){
+		jAlert('No ha digitado la RAZON SOCIAL, verifique...', 'Mensaje Alerta');
+		$("#razonsocialnueva").focus();
+		return false;
+	}
+	
+	var ruta = obtenerContexto();
+	jsonObj = [];
+	var parametros = new Object();
+	parametros.rucNuevo = $("#rucnuevo").val();
+	parametros.razonSocialNueva = $("#razonsocialnueva").val();
+	$.ajax({
+		type: "POST",
+	    async:false,
+	    url: "grabar-empresa.json",
+	    cache : false,
+	    data: parametros,
+	    success: function(result){
+	    		    
+		    $('#alerta_modal').modal('hide');
+	    		        		
+		    $.gritter.add({
+				// (string | mandatory) the heading of the notification
+				title: 'Mensaje',
+				// (string | mandatory) the text inside the notification
+				text: result.mensaje,
+				// (string | optional) the image to display on the left
+				image: "/" + ruta + "/recursos/images/confirm.png",
+				// (bool | optional) if you want it to fade out on its own or just sit there
+				sticky: false,
+				// (int | optional) the time you want it to be alive for before fading out
+				time: ''
+			});
+            //cargarPuestos();
+            $("#rucnuevo").val('');
+            $("#razonsocialnueva").val('');
+            $("#ruc").focus();
+            
+		}
+	});		
+
+}
+
 function guardar(){
 	
 	var ruta = obtenerContexto();
@@ -356,6 +408,7 @@ function guardar(){
 			</button>
 		</td>
 	</tr>
+	<a href="#" onclick="jWarning('Advertencia'); return false;">Sample jWarning</a><br/>
 	<!-- tr>
 		<td width="150"><b>EGRESOS...<b/></td>
 		<td width="10">:</td>
@@ -418,28 +471,28 @@ function guardar(){
 							<td width="12px">&nbsp;</td>
 							<td><span id="lblruc" style="font-size: 11px;"><b>RUC (*)</b></span></td>
 							<td><b>:</b></td>
-							<td><input type="text" id="ruc" class="form-control" maxlength="8" onblur="buscaraRuc()"/></td>
+							<td><input type="text" id="ruc" class="form-control" maxlength="11" onblur="buscaraRuc();" onchange="limpiarRazonSocial();" value="20537575531"/></td>
 							<td valign="top">&nbsp;</td>
 						</tr>
 						<tr>
 							<td width="12px">&nbsp;</td>
 							<td><span id="lblrazonsocial" style="font-size: 11px;"><b>RAZON SOCIAL (*)</b></span></td>
 							<td><b>:</b></td>
-							<td colspan="6"><input type="text" id="razonsocial" class="form-control" maxlength="20"/></td>
+							<td colspan="6"><input type="text" id="razonsocial" class="form-control" maxlength="200"/></td>
 							<td valign="top">&nbsp;</td>
 						</tr>
 						<tr>
 							<td width="12px">&nbsp;</td>
 							<td><span id="lbldescripcion" style="font-size: 11px;"><b>DESCRIPCION (*)</b></span></td>
 							<td><b>:</b></td>
-							<td colspan="6"><input type="text" id="descripcion" class="form-control" maxlength="20"/></td>
+							<td colspan="6"><textarea rows="4" cols="50" id="descripcion" class="form-control" maxlength="4000"></textarea></td>
 							<td valign="top">&nbsp;</td>
 						</tr>
 						<tr>
 							<td width="12px">&nbsp;</td>
 							<td><span id="lblrepresentante" style="font-size: 11px;"><b>REPRESENTANTE (*)</b></span></td>
 							<td><b>:</b></td>
-							<td colspan="6"><input type="text" id="representante" class="form-control" maxlength="20"/></td>
+							<td colspan="6"><input type="text" id="representante" class="form-control" maxlength="200"/></td>
 							<td valign="top">&nbsp;</td>
 						</tr>
 						<tr>
@@ -462,13 +515,58 @@ function guardar(){
 
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="guardar()">Grabar</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 			</div>
 		</div>
 		  
 	</div>
 </div> 
+
+
+<div class="modal fade" id="alerta_modal" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Guardar Empresa</h4>
+			</div>
+			<div class="modal-body">
+					
+				<table border="0">
+					<tr>
+						<td colspan="3"><img src="recursos/images/icons/exclamation_32x32.png" border="0" />&nbsp;<b><span id="mensajeEmpresa" /></b></td>
+					</tr>
+					<tr style="height: 30px">&nbsp;</tr>
+					<tr>
+						<td colspan="3" align="left">
+							<button type="button" class="btn btn-primary" onclick="guardarEmpresa(1)">
+								<img src="recursos/images/icons/guardar_16x16.png" alt="Buscar" />&nbsp;Guardar
+							</button>
+						</td>
+					</tr>
+					<tr style="height: 30px">&nbsp;</tr>
+					<tr>
+						<td><span id="lblrucnueva" style="font-size: 11px;"><b>RUC (*)</b></span></td>
+						<td><b>:</b></td>
+						<td><input type="text" id="rucnuevo" class="form-control" maxlength="11"/></td>
+					</tr>	
+					<tr>
+						<td><span id="lblrazonsocialnueva" style="font-size: 11px;"><b>RAZON SOCIAL (*)</b></span></td>
+						<td><b>:</b></td>
+						<td><input type="text" id="razonsocialnueva" class="form-control" maxlength="200" style="text-transform: uppercase;" /></td>
+					</tr>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<!-- button type="button" class="btn btn-default" id="aceptar">Si</button -->
+				<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+			</div>
+		</div>
+		  
+	</div>
+</div>
 	
 </body>
 </html>
