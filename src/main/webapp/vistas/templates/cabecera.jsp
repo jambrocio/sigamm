@@ -6,10 +6,6 @@
 <link rel="stylesheet" href="<c:url value="recursos/css/sm-blue/sm-blue.css"/>" />	
 <!-- Todas estas librerias son heredadas por las paginas que estan en contenido  -->
 <!-- Inicio -->
-<link href="recursos/css/jquery.alerts.css" rel="StyleSheet" type="text/css" />
-<script type="text/javascript" src="recursos/js/jquery.ui.draggable.js"></script>
-<script type="text/javascript" src="recursos/js/jquery.alerts.mod.js"></script>
-
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="recursos/js/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="recursos/js/jquery.smartmenus.js"></script>
@@ -30,6 +26,7 @@
 <script type="text/javascript" src="recursos/js/jQueryRotateCompressed.2.2.js"></script>
 <script type="text/javascript" src="recursos/js/util.js"></script>
 <script type="text/javascript" src="recursos/js/convertidor.js"></script>
+<script type="text/javascript" src="recursos/js/jquery.alerts.js" charset="utf-8" ></script>
 
 <link rel="stylesheet" type="text/css" media="screen" href="recursos/js/jqgrid/css/ui.jqgrid.css" />
 
@@ -38,7 +35,8 @@
 <link rel="stylesheet" href="recursos/css/bootstrap.css" type="text/css" />
 <link rel="stylesheet" href="recursos/css/jquery.gritter.css" type="text/css" />
 <link rel="stylesheet" href="recursos/css/jquery.autocomplete.css" type="text/css" />
-
+<link rel="stylesheet" href="recursos/css/jquery.alerts.css" charset="utf-8" type="text/css" media="screen" />
+    
 <style>
 a:hover, a:visited, a:link, a:active
 {

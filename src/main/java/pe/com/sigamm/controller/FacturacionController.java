@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import pe.com.sigamm.bean.CamposObligatorios;
 import pe.com.sigamm.bus.FacturacionBus;
 import pe.com.sigamm.modelo.Concepto;
+import pe.com.sigamm.modelo.Egreso;
 import pe.com.sigamm.modelo.Empresa;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
@@ -116,6 +117,37 @@ public class FacturacionController {
 			Retorno retorno = facturacionBus.grabarEmpresa(empresa);
 			codigo = retorno.getCodigo();
 			mensaje = retorno.getMensaje();
+		}
+	 
+		String resultado = "{\"idUsuario\":" + codigo + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + mensaje + "\"}";
+		
+		return resultado;
+	}
+
+	
+	@RequestMapping(value = "/grabar-egreso.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String grabarEgreso(Egreso egreso){
+		Gson gson = new Gson();
+		List<CamposObligatorios> camposObligatorios = new ArrayList<CamposObligatorios>();
+		
+		if(egreso.getCodigo_empresa() == 0){
+			
+			
+		}
+		
+		int codigo = 0;
+		String mensaje = "";
+		String listaObligatorios = gson.toJson(camposObligatorios);
+		
+		if(camposObligatorios.size() > 0){
+			
+			codigo = 0;
+			
+		}else{
+			
+			/*Retorno retorno = facturacionBus.grabarEgreso(egreso);
+			codigo = retorno.getCodigo();
+			mensaje = retorno.getMensaje();*/
 		}
 	 
 		String resultado = "{\"idUsuario\":" + codigo + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + mensaje + "\"}";

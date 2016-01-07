@@ -47,6 +47,7 @@
 $(document).ready(function(){	
 	
 	$('[data-toggle="popover"]').popover({ placement : 'right', trigger: "hover" });
+	//jAlert("Actualidad jQuery", "Actualidad jQuery");
 	
 });
 
@@ -211,21 +212,20 @@ function buscaraRuc(){
 	
 	
 function guardarEmpresa(){
-	alert("Guardar Empresa");
 	
 	if ( ($("#rucnuevo").val() == null) || ($("#rucnuevo").val() == "") ){
-		jAlert('No ha digitado el número de RUC, verifique...', 'Mensaje Alerta');
+		alert('No ha digitado el número de RUC, verifique...'); //, 'Mensaje Alerta');
 		$("#rucnuevo").focus();
 		return false;
 	}
 	var ruc = $("#rucnuevo").val();
 	if ( (ruc.length < 11) ){
-		jAlert('La longitud del número de RUC es menor a 11 dígitos, verifique...', 'Mensaje Alerta');
+		alert('La longitud del número de RUC es menor a 11 dígitos, verifique...'); //, 'Mensaje Alerta');
 		$("#rucnuevo").focus();
 		return false;
 	}
 	if ( ($("#razonsocialnueva").val() == null) || ($("#razonsocialnueva").val() == "") ){
-		jAlert('No ha digitado la RAZON SOCIAL, verifique...', 'Mensaje Alerta');
+		alert('No ha digitado la RAZON SOCIAL, verifique...'); //, 'Mensaje Alerta');
 		$("#razonsocialnueva").focus();
 		return false;
 	}
@@ -270,86 +270,28 @@ function guardarEmpresa(){
 function guardar(){
 	
 	var ruta = obtenerContexto();
-
 	jsonObj = [];
 	var parametros = new Object();
-	parametros.periodo = $("#periodo").val();
-	parametros.fecVencimiento = $("#fecVencimiento").val();
-	parametros.fecEmision = $("#fecEmision").val();
-	parametros.costoWats = $("#costoWats").val();
-	parametros.alumbradoPublico = $("#alumbradoPublico").val();
-	parametros.mantenimiento = $("#mantenimiento").val();
-	parametros.estado = $("#estado").val();
-	parametros.repoManCnx = $("#repoManCnx").val();
-	parametros.cargoFijo = $("#cargoFijo").val();
-	parametros.subTotalMes = $("#subTotalMes").val();
-	parametros.igv = $("#igv").val();
-	parametros.totalMesAct = $("#totalMesAct").val();
-	parametros.aporteLey = $("#aporteLey").val();
-	parametros.deudaAnterior = $("#deudaAnterior").val();
-	parametros.recargoMora = $("#recargoMora").val();
-	parametros.redonMesAnt = $("#redonMesAnt").val();
-	parametros.redonMesAct = $("#redonMesAct").val();
-	parametros.interesCompensatorio = $("#interesCompensatorio").val();	
-	
-	parametros.energActFraPtaActual = $("#energActFraPtaActual").val();
-	parametros.energActFraPtaAnteri = $("#energActFraPtaAnteri").val();
-	parametros.energActFraPtaDifer = $("#energActFraPtaDifer").val();
-	parametros.energActFraPtaFactor = $("#energActFraPtaFactor").val();
-	parametros.energActFraPtaConsu = $("#energActFraPtaConsu").val();
-	parametros.energActFraPtaConfa = $("#energActFraPtaConfa").val();
-	parametros.energActFraPtaPreuni = $("#energActFraPtaPreuni").val();
-	parametros.energActFraPtaTotal = $("#energActFraPtaTotal").val();
-	parametros.energActHorPtaActu = $("#energActHorPtaActu").val();
-	parametros.energActHorPtaAnt = $("#energActHorPtaAnt").val();
-	parametros.energActHorPtaDif = $("#energActHorPtaDif").val();
-	parametros.energActHorPtaFac = $("#energActHorPtaFac").val();
-	parametros.energActHorPtaCons = $("#energActHorPtaCons").val();
-	parametros.energActHorPtaConfac = $("#energActHorPtaConfac").val();
-	parametros.energActHorPtaPreuni = $("#energActHorPtaPreuni").val();
-	parametros.energActHorPtaTotal = $("#energActHorPtaTotal").val();
-	parametros.energReacInicial = $("#energReacInicial").val();
-	parametros.energReacAnteri = $("#energReacAnteri").val();
-	parametros.energReacDifere = $("#energReacDifere").val();
-	parametros.energReacFactor = $("#energReacFactor").val();
-	parametros.energReacConsu = $("#energReacConsu").val();
-	parametros.energReacFaccons = $("#energReacFaccons").val();
-	parametros.energReacPreuni = $("#energReacPreuni").val();
-	parametros.energReacTotal = $("#energReacTotal").val();
-	
-	parametros.potenciaFpIni = $("#potenciaFpIni").val();
-	parametros.potenciaFpAnte = $("#potenciaFpAnte").val();
-	parametros.potenciaFpDif = $("#potenciaFpDif").val();
-	parametros.potenciaFpFac = $("#potenciaFpFac").val();
-	parametros.potenciaFpCons = $("#potenciaFpCons").val();
-	parametros.potenciaHpAct = $("#potenciaHpAct").val();
-	parametros.potenciaHpAnt = $("#potenciaHpAnt").val();
-	parametros.potenciaHpDif = $("#potenciaHpDif").val();
-	parametros.potenciaHpFac = $("#potenciaHpFac").val();
-	parametros.potenciaHpCons = $("#potenciaHpCons").val();
-	parametros.potUsoRedDistConfac = $("#potUsoRedDistConfac").val();
-	parametros.potUsoRedDistPreuni = $("#potUsoRedDistPreuni").val();
-	parametros.potUsoRedDistTotal = $("#potUsoRedDistTotal").val();
-	parametros.potGenFpConfac = $("#potGenFpConfac").val();
-	parametros.potGenFpPreuni = $("#potGenFpPreuni").val();
-	parametros.potGenFpTotal = $("#potGenFpTotal").val();
-	parametros.alumbradoPublicoOriginal = $("#alumbradoPublicoOriginal").val();
-	parametros.ajustePrecioRetroactivo = $("#ajustePreRet").val(0);
-	parametros.igvRefact = $("#igvRefact").val(0);
+	parametros.codigoegreso = $("#concepto").val();
+	parametros.tipoDocumento = null;
+	parametros.numero_documento = $("#nro").val();
+	//parametros.fecha = $.datepicker.parseDate( 'DD/MM/YYYY', $("#fecha").val());  //$("#fecha").val();
+	parametros.ruc = $("#ruc").val();
+	parametros.detalle = $("#descripcion").val();
+	parametros.representante = $("#representante").val();
 	parametros.total = $("#total").val();
-
 		
 	$.ajax({
 		type: "POST",
 	    async:false,
-	    url: "grabar-luz-original.json",
+	    url: "grabar-egreso.json",
 	    cache : false,
 	    data: parametros,
 	    success: function(result){
 	            
 	        if(result.camposObligatorios.length == 0){
                 	
-            	$('#luz_original_modal').modal('hide');
+            	//$('#luz_original_modal').modal('hide');
             	
 	            $.gritter.add({
 					// (string | mandatory) the heading of the notification
@@ -364,7 +306,7 @@ function guardar(){
 					time: ''
 				});
 	            
-	            cargarReciboLuzOriginal();
+	            //cargarReciboLuzOriginal();
 	            
 			}else{
                 	
@@ -408,7 +350,7 @@ function guardar(){
 			</button>
 		</td>
 	</tr>
-	<a href="#" onclick="jWarning('Advertencia'); return false;">Sample jWarning</a><br/>
+	
 	<!-- tr>
 		<td width="150"><b>EGRESOS...<b/></td>
 		<td width="10">:</td>
@@ -485,14 +427,14 @@ function guardar(){
 							<td width="12px">&nbsp;</td>
 							<td><span id="lbldescripcion" style="font-size: 11px;"><b>DESCRIPCION (*)</b></span></td>
 							<td><b>:</b></td>
-							<td colspan="6"><textarea rows="4" cols="50" id="descripcion" class="form-control" maxlength="4000"></textarea></td>
+							<td colspan="6"><textarea rows="4" cols="50" id="descripcion" class="form-control" maxlength="4000" style="text-transform: uppercase;"></textarea></td>
 							<td valign="top">&nbsp;</td>
 						</tr>
 						<tr>
 							<td width="12px">&nbsp;</td>
 							<td><span id="lblrepresentante" style="font-size: 11px;"><b>REPRESENTANTE (*)</b></span></td>
 							<td><b>:</b></td>
-							<td colspan="6"><input type="text" id="representante" class="form-control" maxlength="200"/></td>
+							<td colspan="6"><input type="text" id="representante" class="form-control" maxlength="200" style="text-transform: uppercase;"/></td>
 							<td valign="top">&nbsp;</td>
 						</tr>
 						<tr>

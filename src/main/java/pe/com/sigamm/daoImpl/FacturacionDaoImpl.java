@@ -188,8 +188,8 @@ public class FacturacionDaoImpl implements FacturacionDao {
             
 			MapSqlParameterSource parametros = new MapSqlParameterSource();
 			parametros.addValue("vi_codigo_empresa", 			empresa.getCodigo_empresa());
-			parametros.addValue("vi_ruc", 						empresa.getRuc());
-			parametros.addValue("vi_razon_social", 				empresa.getRazonSocial());
+			parametros.addValue("vi_ruc", 						empresa.getRuc() == null ? empresa.getRucNuevo() : empresa.getRuc());
+			parametros.addValue("vi_razon_social", 				empresa.getRazonSocial() == null ? empresa.getRazonSocialNueva() : empresa.getRazonSocial());
 			parametros.addValue("vi_condicion", 				empresa.getCondicion());
 			parametros.addValue("vi_estado", 					empresa.getEstado());
 			parametros.addValue("vi_codigo_usuario", 			datosSession.getCodigoUsuario());
