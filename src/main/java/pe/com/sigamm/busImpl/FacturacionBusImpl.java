@@ -13,6 +13,7 @@ import pe.com.sigamm.bean.ServiciosDetalle;
 import pe.com.sigamm.bus.FacturacionBus;
 import pe.com.sigamm.dao.FacturacionDao;
 import pe.com.sigamm.modelo.Concepto;
+import pe.com.sigamm.modelo.Egreso;
 import pe.com.sigamm.modelo.Empresa;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
@@ -64,9 +65,15 @@ public class FacturacionBusImpl implements FacturacionBus {
 	@Override
 	public Retorno grabarEmpresa(Empresa empresa) {
 
-		Retorno retornoEmpresa = facturacionDao.grabarEmpresa(empresa);
-		
+		Retorno retornoEmpresa = facturacionDao.grabarEmpresa(empresa);		
 		return retornoEmpresa;
+	}
+
+	@Override
+	public Retorno grabarEgreso(Egreso egreso) {
+
+		Retorno retornoEgreso = facturacionDao.grabarEgreso(egreso);		
+		return retornoEgreso;
 	}
 
 }

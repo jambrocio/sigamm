@@ -88,7 +88,7 @@ public class FacturacionController {
 		Gson gson = new Gson();
 		List<CamposObligatorios> camposObligatorios = new ArrayList<CamposObligatorios>();
 		
-		if(empresa.getCodigo_empresa() == 0){
+		if(empresa.getCodigoEmpresa() == 0){
 			
 			if(empresa.getRucNuevo() == ""){
 				camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_RUC, Constantes.RUC_OBLIGATORIO));
@@ -130,7 +130,7 @@ public class FacturacionController {
 		Gson gson = new Gson();
 		List<CamposObligatorios> camposObligatorios = new ArrayList<CamposObligatorios>();
 		
-		if(egreso.getCodigo_empresa() == 0){
+		if(egreso.getCodigoEmpresa() == 0){
 			
 			
 		}
@@ -145,9 +145,9 @@ public class FacturacionController {
 			
 		}else{
 			
-			/*Retorno retorno = facturacionBus.grabarEgreso(egreso);
+			Retorno retorno = facturacionBus.grabarEgreso(egreso);
 			codigo = retorno.getCodigo();
-			mensaje = retorno.getMensaje();*/
+			mensaje = retorno.getMensaje();
 		}
 	 
 		String resultado = "{\"idUsuario\":" + codigo + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + mensaje + "\"}";

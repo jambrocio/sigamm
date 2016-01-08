@@ -3,6 +3,7 @@ package pe.com.sigamm.bus;
 import java.util.List;
 
 import pe.com.sigamm.modelo.Concepto;
+import pe.com.sigamm.modelo.Egreso;
 import pe.com.sigamm.modelo.Empresa;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
@@ -17,5 +18,7 @@ public interface FacturacionBus {
 	public String razonSocialEmpresa(Empresa empresa);
 	
 	public Retorno grabarEmpresa(Empresa empresa);
+	
+	public Retorno grabarEgreso(Egreso egreso);
 	
 }

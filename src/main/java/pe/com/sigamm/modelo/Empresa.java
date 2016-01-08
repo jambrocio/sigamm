@@ -1,7 +1,7 @@
 package pe.com.sigamm.modelo;
 
 public class Empresa {
-	int codigo_empresa;
+	int codigoEmpresa;
 	String ruc;
 	String razonSocial;
 	String condicion;
@@ -9,11 +9,11 @@ public class Empresa {
 	String rucNuevo;
 	String razonSocialNueva;
 	
-	public int getCodigo_empresa() {
-		return codigo_empresa;
+	public int getCodigoEmpresa() {
+		return codigoEmpresa;
 	}
-	public void setCodigo_empresa(int codigo_empresa) {
-		this.codigo_empresa = codigo_empresa;
+	public void setCodigo_empresa(int codigoEmpresa) {
+		this.codigoEmpresa = codigoEmpresa;
 	}
 	public String getRuc() {
 		return ruc;

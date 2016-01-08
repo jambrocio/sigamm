@@ -15,9 +15,9 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
-import pe.com.sigamm.bean.ServiciosDetalle;
 import pe.com.sigamm.dao.FacturacionDao;
 import pe.com.sigamm.modelo.Concepto;
+import pe.com.sigamm.modelo.Egreso;
 import pe.com.sigamm.modelo.Empresa;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
@@ -187,7 +187,7 @@ public class FacturacionDaoImpl implements FacturacionDao {
 				
             
 			MapSqlParameterSource parametros = new MapSqlParameterSource();
-			parametros.addValue("vi_codigo_empresa", 			empresa.getCodigo_empresa());
+			parametros.addValue("vi_codigo_empresa", 			empresa.getCodigoEmpresa());
 			parametros.addValue("vi_ruc", 						empresa.getRuc() == null ? empresa.getRucNuevo() : empresa.getRuc());
 			parametros.addValue("vi_razon_social", 				empresa.getRazonSocial() == null ? empresa.getRazonSocialNueva() : empresa.getRazonSocial());
 			parametros.addValue("vi_condicion", 				empresa.getCondicion());
@@ -201,6 +201,60 @@ public class FacturacionDaoImpl implements FacturacionDao {
 			String mensaje = (String) result.get("vo_mensaje");
 			
 			retorno.setCodigo(codigoEmpresa);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
+	}
+
+	@Override
+	public Retorno grabarEgreso(Egreso egreso) {
+
+		Retorno retorno = new Retorno();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_GRABAR_EGRESO").declareParameters(
+				new SqlParameter("vi_codigo_egreso", 			Types.INTEGER),
+				new SqlParameter("vi_tipo_documento", 			Types.VARCHAR),
+				new SqlParameter("vi_numero_documento", 		Types.VARCHAR),
+				new SqlParameter("vi_fecha", 					Types.VARCHAR),
+				new SqlParameter("vi_codigo_empresa", 			Types.INTEGER),
+				new SqlParameter("vi_detalle", 					Types.VARCHAR),
+				new SqlParameter("vi_total", 					Types.INTEGER),
+				new SqlParameter("vi_representante", 			Types.VARCHAR),
+				new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
+				
+				new SqlOutParameter("vo_codigo_egreso", 		Types.INTEGER),
+				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
+				new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
+            
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_egreso", 			egreso.getCodigoEgreso());
+			parametros.addValue("vi_tipo_documento", 			egreso.getTipoDocumento());
+			parametros.addValue("vi_numero_documento", 			egreso.getNumeroDocumento());
+			parametros.addValue("vi_fecha", 					egreso.getFecha());
+			parametros.addValue("vi_codigo_empresa", 			egreso.getCodigoEmpresa());
+			parametros.addValue("vi_detalle", 					egreso.getDetalle());
+			parametros.addValue("vi_total", 					egreso.getTotal());
+			parametros.addValue("vi_representante", 			egreso.getRepresentante());			
+			parametros.addValue("vi_codigo_usuario", 			datosSession.getCodigoUsuario());
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			int codigoEgreso = (Integer) result.get("vo_codigo_egreso");
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(codigoEgreso);
 			retorno.setIndicador(indicador);
 			retorno.setMensaje(mensaje);
 			

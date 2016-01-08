@@ -94,11 +94,11 @@ $(function() {
 
 function colorEtiquetas(){
 	
-	$("#lblrucnuevo").css("color", "black");
-	$("#lblrazonsocialnueva").css("color", "black");
+	$("#lblrucNuevo").css("color", "black");
+	$("#lblrazonSocialNueva").css("color", "black");
 	
-	$("#lblrucnuevo-img").hide();
-	$("#lblrazonsocialnueva-img").hide();
+	$("#lblrucNuevo-img").hide();
+	$("#lblrazonSocialNueva-img").hide();
 	
 }
 
@@ -166,8 +166,8 @@ function validarSiNumero(numero){
 	
 }
 
-function limpiarRazonSocial(){
-	$("#razonsocial").val('');
+function limpiarrazonSocial(){
+	$("#razonSocial").val('');
 }
 	
 function buscaraRuc(){
@@ -191,7 +191,7 @@ function buscaraRuc(){
 	    		mensaje += "Se requiere que ingrese la RAZON SOCIAL de la Empresa...";
 	    		
 	    		$("#mensajeEmpresa").html(mensaje);
-	    		$("#rucnuevo").val($("#ruc").val());
+	    		$("#rucNuevo").val($("#ruc").val());
 	    		
 	    		$('#alerta_modal').modal({
 	    			backdrop: 'static',
@@ -202,7 +202,8 @@ function buscaraRuc(){
 		    	
 		    } else {
 		    	$.each(result, function(keyM, val) {
-		    		$("#razonsocial").val(val.razonSocial);		    		
+		    		$("#codigoEmpresa").val(val.codigoEmpresa);
+		    		$("#razonSocial").val(val.razonSocial);		    		
 		    	});
 			}
 	    }
@@ -213,28 +214,28 @@ function buscaraRuc(){
 	
 function guardarEmpresa(){
 	
-	if ( ($("#rucnuevo").val() == null) || ($("#rucnuevo").val() == "") ){
+	if ( ($("#rucNuevo").val() == null) || ($("#rucNuevo").val() == "") ){
 		alert('No ha digitado el número de RUC, verifique...'); //, 'Mensaje Alerta');
-		$("#rucnuevo").focus();
+		$("#rucNuevo").focus();
 		return false;
 	}
-	var ruc = $("#rucnuevo").val();
+	var ruc = $("#rucNuevo").val();
 	if ( (ruc.length < 11) ){
 		alert('La longitud del número de RUC es menor a 11 dígitos, verifique...'); //, 'Mensaje Alerta');
-		$("#rucnuevo").focus();
+		$("#rucNuevo").focus();
 		return false;
 	}
-	if ( ($("#razonsocialnueva").val() == null) || ($("#razonsocialnueva").val() == "") ){
+	if ( ($("#razonSocialNueva").val() == null) || ($("#razonSocialNueva").val() == "") ){
 		alert('No ha digitado la RAZON SOCIAL, verifique...'); //, 'Mensaje Alerta');
-		$("#razonsocialnueva").focus();
+		$("#razonSocialNueva").focus();
 		return false;
 	}
 	
 	var ruta = obtenerContexto();
 	jsonObj = [];
 	var parametros = new Object();
-	parametros.rucNuevo = $("#rucnuevo").val();
-	parametros.razonSocialNueva = $("#razonsocialnueva").val();
+	parametros.rucNuevo = $("#rucNuevo").val();
+	parametros.razonSocialNueva = $("#razonSocialNueva").val();
 	$.ajax({
 		type: "POST",
 	    async:false,
@@ -258,8 +259,8 @@ function guardarEmpresa(){
 				time: ''
 			});
             //cargarPuestos();
-            $("#rucnuevo").val('');
-            $("#razonsocialnueva").val('');
+            $("#rucNuevo").val('');
+            $("#razonSocialNueva").val('');
             $("#ruc").focus();
             
 		}
@@ -268,14 +269,17 @@ function guardarEmpresa(){
 }
 
 function guardar(){
+	alert( "Codigo Empresa : " + $("#codigoEmpresa").val() );
+	alert( "Codigo Egreso : " + $("#concepto").val() );
 	
 	var ruta = obtenerContexto();
 	jsonObj = [];
 	var parametros = new Object();
-	parametros.codigoegreso = $("#concepto").val();
-	parametros.tipoDocumento = null;
-	parametros.numero_documento = $("#nro").val();
-	//parametros.fecha = $.datepicker.parseDate( 'DD/MM/YYYY', $("#fecha").val());  //$("#fecha").val();
+	parametros.codigoEmpresa = parseInt( $("#codigoEmpresa").val() );
+	parametros.codigoEgreso = parseInt( $("#concepto").val() );
+	parametros.tipoDocumento = parseInt('0');
+	parametros.numeroDocumento = $("#nro").val();
+	parametros.fecha = $("#fecha").val();
 	parametros.ruc = $("#ruc").val();
 	parametros.detalle = $("#descripcion").val();
 	parametros.representante = $("#representante").val();
@@ -330,7 +334,8 @@ function guardar(){
 </script>
 </head>
 <body id="body">
-<input type="hidden" id="codigoSocio" />
+<input type="hidden" id="codigoEmpresa" />
+<input type="hidden" id="codigoEgreso" />
 <table border="0" style="width: 600px;">
 	<tr>
 		<td colspan="7" align="right">&nbsp;</td>
@@ -413,14 +418,14 @@ function guardar(){
 							<td width="12px">&nbsp;</td>
 							<td><span id="lblruc" style="font-size: 11px;"><b>RUC (*)</b></span></td>
 							<td><b>:</b></td>
-							<td><input type="text" id="ruc" class="form-control" maxlength="11" onblur="buscaraRuc();" onchange="limpiarRazonSocial();" value="20537575531"/></td>
+							<td><input type="text" id="ruc" class="form-control" maxlength="11" onblur="buscaraRuc();" onchange="limpiarrazonSocial();" value="20537575531"/></td>
 							<td valign="top">&nbsp;</td>
 						</tr>
 						<tr>
 							<td width="12px">&nbsp;</td>
-							<td><span id="lblrazonsocial" style="font-size: 11px;"><b>RAZON SOCIAL (*)</b></span></td>
+							<td><span id="lblrazonSocial" style="font-size: 11px;"><b>RAZON SOCIAL (*)</b></span></td>
 							<td><b>:</b></td>
-							<td colspan="6"><input type="text" id="razonsocial" class="form-control" maxlength="200"/></td>
+							<td colspan="6"><input type="text" id="razonSocial" class="form-control" maxlength="200"/></td>
 							<td valign="top">&nbsp;</td>
 						</tr>
 						<tr>
@@ -490,14 +495,14 @@ function guardar(){
 					</tr>
 					<tr style="height: 30px">&nbsp;</tr>
 					<tr>
-						<td><span id="lblrucnueva" style="font-size: 11px;"><b>RUC (*)</b></span></td>
+						<td><span id="lblrucNuevo" style="font-size: 11px;"><b>RUC (*)</b></span></td>
 						<td><b>:</b></td>
-						<td><input type="text" id="rucnuevo" class="form-control" maxlength="11"/></td>
+						<td><input type="text" id="rucNuevo" class="form-control" maxlength="11"/></td>
 					</tr>	
 					<tr>
-						<td><span id="lblrazonsocialnueva" style="font-size: 11px;"><b>RAZON SOCIAL (*)</b></span></td>
+						<td><span id="lblrazonSocialNueva" style="font-size: 11px;"><b>RAZON SOCIAL (*)</b></span></td>
 						<td><b>:</b></td>
-						<td><input type="text" id="razonsocialnueva" class="form-control" maxlength="200" style="text-transform: uppercase;" /></td>
+						<td><input type="text" id="razonSocialNueva" class="form-control" maxlength="200" style="text-transform: uppercase;" /></td>
 					</tr>
 				</table>
 			</div>

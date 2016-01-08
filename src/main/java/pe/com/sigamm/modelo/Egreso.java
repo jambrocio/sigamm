@@ -1,35 +1,33 @@
 package pe.com.sigamm.modelo;
 
-import java.sql.Date;
-
 public class Egreso {
-	int codigo_egreso;
-	int tipo_documento;
-	String numero_documento;
+	int codigoEgreso;
+	int tipoDocumento;
+	String numeroDocumento;
 	String ruc;
-	Date fecha;
-	int codigo_empresa;
+	String fecha;
+	int codigoEmpresa;
 	String detalle;
 	double total;
 	String representante;
 	
-	public int getCodigo_egreso() {
-		return codigo_egreso;
+	public int getCodigoEgreso() {
+		return codigoEgreso;
 	}
-	public void setCodigo_egreso(int codigo_egreso) {
-		this.codigo_egreso = codigo_egreso;
+	public void setCodigoEgreso(int codigoEgreso) {
+		this.codigoEgreso = codigoEgreso;
 	}
-	public int getTipo_documento() {
-		return tipo_documento;
+	public int getTipoDocumento() {
+		return tipoDocumento;
 	}
-	public void setTipo_documento(int tipo_documento) {
-		this.tipo_documento = tipo_documento;
+	public void setTipoDocumento(int tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
 	}
-	public String getNumero_documento() {
-		return numero_documento;
+	public String getNumeroDocumento() {
+		return numeroDocumento;
 	}
-	public void setNumero_documento(String numero_documento) {
-		this.numero_documento = numero_documento;
+	public void setNumeroDocumento(String numeroDocumento) {
+		this.numeroDocumento = numeroDocumento;
 	}
 	public String getRuc() {
 		return ruc;
@@ -37,17 +35,17 @@ public class Egreso {
 	public void setRuc(String ruc) {
 		this.ruc = ruc;
 	}
-	public Date getFecha() {
+	public String getFecha() {
 		return fecha;
 	}
-	public void setFecha(Date fecha) {
+	public void setFecha(String fecha) {
 		this.fecha = fecha;
 	}
-	public int getCodigo_empresa() {
-		return codigo_empresa;
+	public int getCodigoEmpresa() {
+		return codigoEmpresa;
 	}
-	public void setCodigo_empresa(int codigo_empresa) {
-		this.codigo_empresa = codigo_empresa;
+	public void setCodigoEmpresa(int codigoEmpresa) {
+		this.codigoEmpresa = codigoEmpresa;
 	}
 	public String getDetalle() {
 		return detalle;
@@ -67,5 +65,5 @@ public class Egreso {
 	public void setRepresentante(String representante) {
 		this.representante = representante;
 	}
-
+	
 }
