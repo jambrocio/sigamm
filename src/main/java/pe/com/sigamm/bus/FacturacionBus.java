@@ -2,6 +2,7 @@ package pe.com.sigamm.bus;
 
 import java.util.List;
 
+import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.modelo.Concepto;
 import pe.com.sigamm.modelo.Egreso;
 import pe.com.sigamm.modelo.Empresa;
@@ -21,4 +22,7 @@ public interface FacturacionBus {
 	
 	public Retorno grabarEgreso(Egreso egreso);
 	
+	public ReporteEgreso reporteEgreso(int pagina, int registros, String codigoEgreso);
+	
+	public Retorno eliminarEgreso(Egreso egreso);
 }

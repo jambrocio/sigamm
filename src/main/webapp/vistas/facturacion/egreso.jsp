@@ -48,7 +48,7 @@ $(document).ready(function(){
 	
 	$('[data-toggle="popover"]').popover({ placement : 'right', trigger: "hover" });
 	//jAlert("Actualidad jQuery", "Actualidad jQuery");
-	
+	cargarEgresos();
 });
 
 $(function($){
@@ -268,16 +268,14 @@ function guardarEmpresa(){
 
 }
 
+
 function guardar(){
-	alert( "Codigo Empresa : " + $("#codigoEmpresa").val() );
-	alert( "Codigo Egreso : " + $("#concepto").val() );
-	
 	var ruta = obtenerContexto();
 	jsonObj = [];
 	var parametros = new Object();
 	parametros.codigoEmpresa = parseInt( $("#codigoEmpresa").val() );
-	parametros.codigoEgreso = parseInt( $("#concepto").val() );
-	parametros.tipoDocumento = parseInt('0');
+	parametros.codigoEgreso = parseInt('0');
+	parametros.tipoDocumento = parseInt( $("#concepto").val() );
 	parametros.numeroDocumento = $("#nro").val();
 	parametros.fecha = $("#fecha").val();
 	parametros.ruc = $("#ruc").val();
@@ -310,7 +308,7 @@ function guardar(){
 					time: ''
 				});
 	            
-	            //cargarReciboLuzOriginal();
+	            cargarEgresos();
 	            
 			}else{
                 	
@@ -327,16 +325,184 @@ function guardar(){
 			}
                 
 		}
+	});	
+}
+
+
+function cargarEgresos(){
+	
+	var ruta = obtenerContexto();
+	var formatterBotones = function(cellVal,options,rowObject)
+	{	
+		var opciones = "<center>";
+			
+			opciones += "<a href=javascript:editarEgresos(";
+			opciones += rowObject.codigoEgreso + "," + rowObject.tipoDocumento + ",'" + rowObject.numeroDocumento + "','" + rowObject.fecha.replace(' ','_') + "'," + rowObject.codigoEmpresa + ",'" + rowObject.representante.replace(' ','_') + "'," + rowObject.total + ") >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Egreso'/>";
+			opciones += "</a>";
+			
+			opciones += "&nbsp;&nbsp;";
+			
+			opciones += "<a href=javascript:eliminarEgreso(";
+			opciones += rowObject.codigoEgreso + ") >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Egreso'/>";
+			opciones += "</a>";			
+			
+			opciones += "</center>";
+			
+		return opciones;
+				
+	};
+	
+	jQuery("#grilla").jqGrid(
+	{
+		url : 'reporte-egreso.json',
+		datatype : "json",
+		mtype: 'POST',
+		height: 'auto',
+		width: 'auto',
+		colNames : ['Codigo Egreso', 'Tipo Documento', 'Número Documento', 'Fecha','Empresa','Representante','Total', 'Opciones'],
+		colModel : [{
+			name : 'codigoEgreso',
+			index: 'codigoEgreso',
+			sortable:false,
+			width: 90,
+			align: 'center'
+		},{
+			name : 'tipoDocumento',
+			index: 'tipoDocumento',
+			sortable:false,
+			width: 150,
+			align: 'left'
+		},{
+			name : 'numeroDocumento',
+			index: 'numeroDocumento',
+			sortable:false,
+			width: 150,
+			align: 'left'
+		},{
+			name : 'fecha',
+			index: 'fecha',
+			sortable:false,
+			width: 100,
+			align: 'center'
+		},{
+			name : 'codigoEmpresa',
+			index: 'codigoEmpresa',
+			sortable:false,
+			width: 200,
+			align: 'center'
+		},{
+			name : 'representante',
+			index: 'representante',
+			sortable:false,
+			width: 350,
+			align: 'center'
+		},{
+			name : 'total',
+			index: 'total',
+			sortable:false,
+			width: 100,
+			align: 'center'
+		},{					
+			name:'codigoEgreso',
+			index:'codigoEgreso',
+			width:200,
+			sortable:false,
+			search: false,
+			formatter:formatterBotones
+		}],								
+		rowNum : 20,
+		pager : '#pgrilla',
+		sortname : 'dni',
+		autowidth: true,
+		rownumbers: true,
+		viewrecords : true,
+		sortorder : "codigoEgreso",				
+		caption : "Egreso"
+		
+	}).trigger('reloadGrid');
+}
+
+
+function editarEgresos(codigoEgreso, tipoDocumento, numeroDocumento, fecha, codigoEmpresa, representante, total){
+	console.log("Editar Egreso - [codigoEgreso] : " + codigoEgreso );
+	alert("Codigo Egreso: " + codigoEgreso + "\n Tipo Documento: " + tipoDocumento + "\n numero Documento: " + numeroDocumento + "\n Fecha: " + fecha + "\n Codigo Empresa: " + codigoEmpresa + "\n Representante: " + representante + "\n Total: " + total);
+	
+	$('#egreso_modal').modal({
+		backdrop: 'static',
+		keyboard: false
 	});
+	
+	$("#tituloRegistro").html("Modificar Datos - Egreso");
+	
+	colorEtiquetas();
+	
+	//$("#concepto").val(tipoDocumento);
+	$("#nro").val(numeroDocumento);
+	//$("#fecha").val(fecha.replace('_',' '));
+	$("#ruc").val("");
+	$("#descripcion").val(codigoEmpresa);
+	$("#representante").val(representante.replace('_',' '));
+	$("#total").val(total);
 	
 }
 
+
+function eliminarEgreso(codigoEgreso){
+	//alert("Recibo a Eliminar " + periodo);
+	
+	var ruta = obtenerContexto();
+	mensaje = "Desea eliminar el egreso cuyo código es  " + codigoEgreso + "... ?"; 
+	
+	$("#mensajeEliminar").html(mensaje);
+	
+	$('#alerta_eliminar_modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	}).one('click', '#aceptar', function() {
+        
+		jsonObj = [];
+		var parametros = new Object();
+		parametros.codigoEgreso = codigoEgreso;
+			
+		$.ajax({
+			type: "POST",
+		    async:false,
+		    url: "eliminar-egreso.json",
+		    cache : false,
+		    data: parametros,
+		    success: function(result){
+		            
+		        $('#alerta_eliminar_modal').modal('hide');
+	            	
+	            $.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Mensaje',
+					// (string | mandatory) the text inside the notification
+					text: result.mensaje,
+					// (string | optional) the image to display on the left
+					image: "/" + ruta + "/recursos/images/confirm.png",
+					// (bool | optional) if you want it to fade out on its own or just sit there
+					sticky: false,
+					// (int | optional) the time you want it to be alive for before fading out
+					time: ''
+				});
+	            
+	            cargarEgresos();
+		            
+			}
+		});
+		
+    });
+	
+}
 </script>
 </head>
 <body id="body">
 <input type="hidden" id="codigoEmpresa" />
 <input type="hidden" id="codigoEgreso" />
-<table border="0" style="width: 600px;">
+<table border="0" style="width: 1100px;">
 	<tr>
 		<td colspan="7" align="right">&nbsp;</td>
 	</tr>
@@ -346,28 +512,23 @@ function guardar(){
 				<img src="recursos/images/icons/nuevo_16x16.png" alt="Nuevo" />&nbsp;Nuevo
 			</button>
 			&nbsp;
-			<button type="button" class="btn btn-primary" onclick="guardar()">
+			<!-- button type="button" class="btn btn-primary" onclick="guardar()">
 				<img src="recursos/images/icons/guardar_16x16.png" alt="Buscar" />&nbsp;Guardar
 			</button>
 			&nbsp;
 			<button type="button" class="btn btn-primary">
 				<img src="recursos/images/icons/reservar2_16x16.png" alt="Reservar" />&nbsp;Reservar
-			</button>
+			</button -->
 		</td>
 	</tr>
-	
-	<!-- tr>
-		<td width="150"><b>EGRESOS...<b/></td>
-		<td width="10">:</td>
-		<td width="200"><input type="text" id="reciboBuscara" class="form-control" maxlength="8" /></td>
-		<td>&nbsp;&nbsp;
-			<button class="btn btn-primary" data-toggle="modal" data-target="egreso_modal" onclick="nuevoEgreso()">
-				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
-			</button>
-		</td>
-	</tr -->
 	<tr>
 		<td colspan="7" align="right">&nbsp;</td>
+	</tr>
+	<tr>
+		<td colspan="7">
+			<table id="grilla"></table>
+			<div id="pgrilla"></div>
+		</td>
 	</tr>
 </table>	
 
@@ -508,6 +669,33 @@ function guardar(){
 			</div>
 			<div class="modal-footer">
 				<!-- button type="button" class="btn btn-default" id="aceptar">Si</button -->
+				<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+			</div>
+		</div>
+		  
+	</div>
+</div>
+
+
+<div class="modal fade" id="alerta_eliminar_modal" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Eliminar Egreso</h4>
+			</div>
+			<div class="modal-body">
+					
+				<table border="0">
+					<tr>
+						<td><img src="recursos/images/icons/exclamation_32x32.png" border="0" />&nbsp;<b><span id="mensajeEliminar" /></b></td>
+					</tr>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" id="aceptar">Si</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
 			</div>
 		</div>

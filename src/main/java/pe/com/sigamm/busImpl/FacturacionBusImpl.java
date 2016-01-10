@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 
+import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ServiciosDetalle;
 import pe.com.sigamm.bus.FacturacionBus;
 import pe.com.sigamm.dao.FacturacionDao;
@@ -74,6 +75,18 @@ public class FacturacionBusImpl implements FacturacionBus {
 
 		Retorno retornoEgreso = facturacionDao.grabarEgreso(egreso);		
 		return retornoEgreso;
+	}
+
+	@Override
+	public ReporteEgreso reporteEgreso(int pagina, int registros, String codigoEgreso) {
+
+		return facturacionDao.reporteEgreso(pagina, registros, codigoEgreso);
+	}
+
+	@Override
+	public Retorno eliminarEgreso(Egreso egreso) {
+
+		return facturacionDao.eliminarEgreso(egreso);
 	}
 
 }

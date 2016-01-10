@@ -80,7 +80,7 @@
 	</definition>
 	<definition name="facturacion/egreso" extends="main">
 		<put-attribute name="contenido" value="/vistas/facturacion/egreso.jsp" />
-		<put-attribute name="titulo" value="Facturacion" />
+		<put-attribute name="titulo" value="Egresos" />
 	</definition>
 
 	<!-- SERVICIOS -->

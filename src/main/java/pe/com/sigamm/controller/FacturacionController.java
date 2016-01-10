@@ -11,19 +11,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import pe.com.sigamm.bean.CamposObligatorios;
+import pe.com.sigamm.bean.ReporteEgreso;
+import pe.com.sigamm.bean.ResponseListBean;
 import pe.com.sigamm.bus.FacturacionBus;
 import pe.com.sigamm.modelo.Concepto;
 import pe.com.sigamm.modelo.Egreso;
 import pe.com.sigamm.modelo.Empresa;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
+import pe.com.sigamm.modelo.LuzOriginal;
+import pe.com.sigamm.modelo.ReciboAgua;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.modelo.Socio;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.Constantes;
+import pe.com.sigamm.util.OperadoresUtil;
 import pe.com.sigamm.util.Util;
 
 import com.google.gson.Gson;
@@ -155,4 +161,42 @@ public class FacturacionController {
 		return resultado;
 	}
 
+	
+	@RequestMapping(value = "/reporte-egreso.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody ResponseListBean<Egreso> reporteEgreso(
+			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
+			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
+			@RequestParam(value = "codigoEgreso", defaultValue = "0") String codigoEgreso){
+		
+		ResponseListBean<Egreso> response = new ResponseListBean<Egreso>();
+		
+		ReporteEgreso reporteEgreso = facturacionBus.reporteEgreso(pagina, registros, codigoEgreso);
+		
+		Integer totalEgreso = reporteEgreso.getTotalRegistros(); 
+		
+		response.setPage(pagina);
+		response.setRecords(totalEgreso);
+		
+		//total de paginas a mostrar
+		response.setTotal(OperadoresUtil.obtenerCociente(totalEgreso, registros));
+				
+		response.setRows(reporteEgreso.getListaEgreso());
+		
+		return response;
+	}
+	
+	@RequestMapping(value = "/eliminar-egreso.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String eliminarEgreso(Egreso egreso){
+		
+		Gson gson = new Gson();
+		
+		Retorno retorno = facturacionBus.eliminarEgreso(egreso);
+		int codigo = retorno.getCodigo();
+		String mensaje = retorno.getMensaje();
+		 
+		String resultado = "{\"idUsuario\":" + codigo + ",\"mensaje\":\"" + mensaje + "\"}";
+		
+		
+		return resultado;
+	}
 }

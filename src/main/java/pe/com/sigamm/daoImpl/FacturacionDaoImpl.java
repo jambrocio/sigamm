@@ -15,12 +15,15 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
+import pe.com.sigamm.bean.ReporteEgreso;
+import pe.com.sigamm.bean.ReporteReciboLuzOriginal;
 import pe.com.sigamm.dao.FacturacionDao;
 import pe.com.sigamm.modelo.Concepto;
 import pe.com.sigamm.modelo.Egreso;
 import pe.com.sigamm.modelo.Empresa;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
+import pe.com.sigamm.modelo.LuzOriginal;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.LoggerCustom;
@@ -267,6 +270,79 @@ public class FacturacionDaoImpl implements FacturacionDao {
 		}
 		
 		return retorno;
+	}
+
+	@Override
+	public ReporteEgreso reporteEgreso(int pagina, int registros, String codigoEgreso) {
+
+		ReporteEgreso reporte = new ReporteEgreso();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_REPORTE_EGRESO").declareParameters(
+					new SqlParameter("vi_pagina", 					Types.INTEGER),
+					new SqlParameter("vi_registros", 				Types.INTEGER),
+					new SqlParameter("vi_codigo_egreso", 	        Types.VARCHAR),
+					
+					new SqlOutParameter("vo_total_registros", 		Types.INTEGER),
+					new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(Egreso.class)));
+			
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_pagina", 	pagina);
+			parametros.addValue("vi_registros", registros);
+			parametros.addValue("vi_codigo_egreso", codigoEgreso);
+			
+			Map<String,Object> results = jdbcCall.execute(parametros);
+			int totalRegistros = (Integer) results.get("vo_total_registros");
+			List<Egreso> lista = (List<Egreso>) results.get("vo_result");
+			
+			reporte.setTotalRegistros(totalRegistros);
+			reporte.setListaEgreso(lista);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return  reporte;
+	}
+
+	@Override
+	public Retorno eliminarEgreso(Egreso egreso) {
+
+		Retorno retorno = new Retorno();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_ELIMINAR_EGRESO").declareParameters(
+				new SqlParameter("vi_codigo_egreso", 			Types.INTEGER),
+				new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
+				
+				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
+				new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
+				
+            
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_egreso", 			egreso.getCodigoEgreso());
+			parametros.addValue("vi_codigo_usuario", 			datosSession.getCodigoUsuario());
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
+		
 	}
 	
 }
