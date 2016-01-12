@@ -8,11 +8,10 @@ public class Empresa {
 	String estado;
 	String rucNuevo;
 	String razonSocialNueva;
-	
 	public int getCodigoEmpresa() {
 		return codigoEmpresa;
 	}
-	public void setCodigo_empresa(int codigoEmpresa) {
+	public void setCodigoEmpresa(int codigoEmpresa) {
 		this.codigoEmpresa = codigoEmpresa;
 	}
 	public String getRuc() {
@@ -51,5 +50,5 @@ public class Empresa {
 	public void setRazonSocialNueva(String razonSocialNueva) {
 		this.razonSocialNueva = razonSocialNueva;
 	}
-	
+
 }

@@ -48,8 +48,22 @@ $(document).ready(function(){
 	
 	$('[data-toggle="popover"]').popover({ placement : 'right', trigger: "hover" });
 	//jAlert("Actualidad jQuery", "Actualidad jQuery");
+	inicializaValores();
 	cargarEgresos();
 });
+
+function inicializaValores(){
+	$("#codigoEgreso").val('0');
+	$("#codigoEmpresa").val('0');
+	$("#nro").val('');
+	$("#fecha").val('');
+	$("#ruc").val('');
+	$("#razonSocial").val('');
+	$("#descripcion").val('');
+	$("#representante").val('');
+	$("#total").val('');
+}
+
 
 $(function($){
     $.datepicker.regional['es'] = {
@@ -117,7 +131,7 @@ function nuevoEgreso(){
 	$("#totalesLetras").html("");
 	$("#totales").html("");
 	$("#btnAgregar").attr("disabled", false);*/
- 
+ 	inicializaValores();
 	cargarConceptos();
 }
 
@@ -175,6 +189,7 @@ function buscaraRuc(){
 	
 	jsonObj = [];
 	var parametros = new Object();
+	parametros.codigoEmpresa = $("#codigoEmpresa").val();
 	parametros.ruc = $("#ruc").val();
 	parametros.rucNuevo = $("#ruc").val();
 	
@@ -210,7 +225,33 @@ function buscaraRuc(){
 	});
 	
 }
+
+function buscaraEmpresa(codigoEmpresa){
+	console.log("Buscar Empresa - [codigoEmpresa] : " + codigoEmpresa );
+	jsonObj = [];
+	var paramempresa = new Object();
+	paramempresa.codigoEmpresa = parseInt(codigoEmpresa);
 	
+	//alert("Codigo:" + codigoEmpresa);
+	
+	$.ajax({
+		type: "POST",
+	    async:false,
+	    url: "buscar-ruc.json",
+	    cache : false,
+	    data: paramempresa,
+	    success: function(result){
+	    	    	
+	    	$.each(result, function(keyM, val) {
+	    		$("#codigoEmpresa").val(val.codigoEmpresa);
+	    		$("#ruc").val(val.ruc);
+	    		$("#razonSocial").val(val.razonSocial);		    		
+	    	});
+
+	    }
+	});
+	
+}
 	
 function guardarEmpresa(){
 	
@@ -273,16 +314,16 @@ function guardar(){
 	var ruta = obtenerContexto();
 	jsonObj = [];
 	var parametros = new Object();
+	parametros.codigoEgreso = parseInt( $("#codigoEgreso").val() );
 	parametros.codigoEmpresa = parseInt( $("#codigoEmpresa").val() );
-	parametros.codigoEgreso = parseInt('0');
 	parametros.tipoDocumento = parseInt( $("#concepto").val() );
 	parametros.numeroDocumento = $("#nro").val();
 	parametros.fecha = $("#fecha").val();
 	parametros.ruc = $("#ruc").val();
 	parametros.detalle = $("#descripcion").val();
 	parametros.representante = $("#representante").val();
-	parametros.total = $("#total").val();
-		
+	parametros.total = parseFloat($("#total").val());
+	
 	$.ajax({
 		type: "POST",
 	    async:false,
@@ -293,7 +334,7 @@ function guardar(){
 	            
 	        if(result.camposObligatorios.length == 0){
                 	
-            	//$('#luz_original_modal').modal('hide');
+            	$('#egreso_modal').modal('hide');
             	
 	            $.gritter.add({
 					// (string | mandatory) the heading of the notification
@@ -337,7 +378,7 @@ function cargarEgresos(){
 		var opciones = "<center>";
 			
 			opciones += "<a href=javascript:editarEgresos(";
-			opciones += rowObject.codigoEgreso + "," + rowObject.tipoDocumento + ",'" + rowObject.numeroDocumento + "','" + rowObject.fecha.replace(' ','_') + "'," + rowObject.codigoEmpresa + ",'" + rowObject.representante.replace(' ','_') + "'," + rowObject.total + ") >";
+			opciones += rowObject.codigoEgreso + "," + rowObject.tipoDocumento + ",'" + rowObject.numeroDocumento + "','" + rowObject.fecha.replace(/\s/g,"_") + "'," + rowObject.codigoEmpresa + ",'" + rowObject.detalle.replace(/\s/g,"_") + "','" + rowObject.representante.replace(/\s/g,"_") + "'," + rowObject.total + ") >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Egreso'/>";
 			opciones += "</a>";
 			
@@ -361,7 +402,7 @@ function cargarEgresos(){
 		mtype: 'POST',
 		height: 'auto',
 		width: 'auto',
-		colNames : ['Codigo Egreso', 'Tipo Documento', 'Número Documento', 'Fecha','Empresa','Representante','Total', 'Opciones'],
+		colNames : ['Codigo', 'Tipo Documento', 'Número Documento', 'Fecha','Empresa','Representante','Total', 'Opciones'],
 		colModel : [{
 			name : 'codigoEgreso',
 			index: 'codigoEgreso',
@@ -369,8 +410,8 @@ function cargarEgresos(){
 			width: 90,
 			align: 'center'
 		},{
-			name : 'tipoDocumento',
-			index: 'tipoDocumento',
+			name : 'nombreDocumento',
+			index: 'nombreDocumento',
 			sortable:false,
 			width: 150,
 			align: 'left'
@@ -387,10 +428,10 @@ function cargarEgresos(){
 			width: 100,
 			align: 'center'
 		},{
-			name : 'codigoEmpresa',
-			index: 'codigoEmpresa',
+			name : 'razonSocial',
+			index: 'razonSocial',
 			sortable:false,
-			width: 200,
+			width: 250,
 			align: 'center'
 		},{
 			name : 'representante',
@@ -425,25 +466,28 @@ function cargarEgresos(){
 }
 
 
-function editarEgresos(codigoEgreso, tipoDocumento, numeroDocumento, fecha, codigoEmpresa, representante, total){
+function editarEgresos(codigoEgreso, tipoDocumento, numeroDocumento, fecha, codigoEmpresa, detalle, representante, total){
 	console.log("Editar Egreso - [codigoEgreso] : " + codigoEgreso );
-	alert("Codigo Egreso: " + codigoEgreso + "\n Tipo Documento: " + tipoDocumento + "\n numero Documento: " + numeroDocumento + "\n Fecha: " + fecha + "\n Codigo Empresa: " + codigoEmpresa + "\n Representante: " + representante + "\n Total: " + total);
+	console.log("Editar Egreso - [codigoEmpresa] : " + codigoEmpresa );
+	//alert("Codigo Egreso: " + codigoEgreso + "\n Tipo Documento: " + tipoDocumento + "\n numero Documento: " + numeroDocumento + "\n Fecha: " + fecha + "\n Codigo Empresa: " + codigoEmpresa + "\n Representante: " + representante + "\n Total: " + total);
 	
 	$('#egreso_modal').modal({
 		backdrop: 'static',
 		keyboard: false
 	});
 	
+	cargarConceptos();
 	$("#tituloRegistro").html("Modificar Datos - Egreso");
-	
 	colorEtiquetas();
 	
-	//$("#concepto").val(tipoDocumento);
+	$("#codigoEmpresa").val(codigoEmpresa);
+	$('#concepto option[value="' +tipoDocumento+ '"]').attr("selected", "selected");
 	$("#nro").val(numeroDocumento);
-	//$("#fecha").val(fecha.replace('_',' '));
-	$("#ruc").val("");
-	$("#descripcion").val(codigoEmpresa);
-	$("#representante").val(representante.replace('_',' '));
+	$("#fecha").val(fecha.replace(/\_/g," "));
+	$("#codigoEgreso").val(codigoEgreso);
+	buscaraEmpresa(codigoEmpresa);
+	$("#descripcion").val(detalle.replace(/\_/g," "));
+	$("#representante").val(representante.replace(/\_/g," "));
 	$("#total").val(total);
 	
 }
@@ -500,8 +544,8 @@ function eliminarEgreso(codigoEgreso){
 </script>
 </head>
 <body id="body">
-<input type="hidden" id="codigoEmpresa" />
 <input type="hidden" id="codigoEgreso" />
+<input type="hidden" id="codigoEmpresa" />
 <table border="0" style="width: 1100px;">
 	<tr>
 		<td colspan="7" align="right">&nbsp;</td>
@@ -579,8 +623,9 @@ function eliminarEgreso(codigoEgreso){
 							<td width="12px">&nbsp;</td>
 							<td><span id="lblruc" style="font-size: 11px;"><b>RUC (*)</b></span></td>
 							<td><b>:</b></td>
-							<td><input type="text" id="ruc" class="form-control" maxlength="11" onblur="buscaraRuc();" onchange="limpiarrazonSocial();" value="20537575531"/></td>
+							<td><input type="text" id="ruc" class="form-control" maxlength="11" onblur="buscaraRuc();" onchange="limpiarrazonSocial();"/></td>
 							<td valign="top">&nbsp;</td>
+							<!--  value="20537575531" -->
 						</tr>
 						<tr>
 							<td width="12px">&nbsp;</td>

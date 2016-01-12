@@ -10,6 +10,8 @@ public class Egreso {
 	String detalle;
 	double total;
 	String representante;
+	String nombreDocumento;
+	String razonSocial;
 	
 	public int getCodigoEgreso() {
 		return codigoEgreso;
@@ -65,5 +67,16 @@ public class Egreso {
 	public void setRepresentante(String representante) {
 		this.representante = representante;
 	}
-	
+	public String getNombreDocumento() {
+		return nombreDocumento;
+	}
+	public void setNombreDocumento(String nombreDocumento) {
+		this.nombreDocumento = nombreDocumento;
+	}
+	public String getRazonSocial() {
+		return razonSocial;
+	}
+	public void setRazonSocial(String razonSocial) {
+		this.razonSocial = razonSocial;
+	}
 }

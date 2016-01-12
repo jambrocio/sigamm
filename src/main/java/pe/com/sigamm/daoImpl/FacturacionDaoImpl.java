@@ -156,10 +156,12 @@ public class FacturacionDaoImpl implements FacturacionDao {
 		jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
 		jdbcCall.withCatalogName("PKG_FACTURACION");
 		jdbcCall.withProcedureName("SP_LISTAR_EMPRESA").declareParameters(
-				new SqlParameter("vi_ruc", 	Types.VARCHAR),				
+				new SqlParameter("vi_codigo_empresa", 	Types.INTEGER),
+				new SqlParameter("vi_ruc", 	Types.VARCHAR),
 				new SqlOutParameter("vo_result", OracleTypes.CURSOR,new BeanPropertyRowMapper(Empresa.class)));
 		
 		MapSqlParameterSource parametros = new MapSqlParameterSource();
+		parametros.addValue("vi_codigo_empresa", empresa.getCodigoEmpresa());
 		parametros.addValue("vi_ruc", empresa.getRuc());
 		
 		Map<String,Object> results = jdbcCall.execute(parametros);
@@ -232,7 +234,7 @@ public class FacturacionDaoImpl implements FacturacionDao {
 				new SqlParameter("vi_fecha", 					Types.VARCHAR),
 				new SqlParameter("vi_codigo_empresa", 			Types.INTEGER),
 				new SqlParameter("vi_detalle", 					Types.VARCHAR),
-				new SqlParameter("vi_total", 					Types.INTEGER),
+				new SqlParameter("vi_total", 					Types.DOUBLE),
 				new SqlParameter("vi_representante", 			Types.VARCHAR),
 				new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
 				
