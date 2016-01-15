@@ -10,8 +10,12 @@ public class Egreso {
 	String detalle;
 	double total;
 	String representante;
+	String cobrado;
+	String dni;
+	String area;
 	String nombreDocumento;
 	String razonSocial;
+	int tipoCategoria;
 	
 	public int getCodigoEgreso() {
 		return codigoEgreso;
@@ -67,6 +71,24 @@ public class Egreso {
 	public void setRepresentante(String representante) {
 		this.representante = representante;
 	}
+	public String getCobrado() {
+		return cobrado;
+	}
+	public void setCobrado(String cobrado) {
+		this.cobrado = cobrado;
+	}
+	public String getDni() {
+		return dni;
+	}
+	public void setDni(String dni) {
+		this.dni = dni;
+	}
+	public String getArea() {
+		return area;
+	}
+	public void setArea(String area) {
+		this.area = area;
+	}
 	public String getNombreDocumento() {
 		return nombreDocumento;
 	}
@@ -79,4 +101,11 @@ public class Egreso {
 	public void setRazonSocial(String razonSocial) {
 		this.razonSocial = razonSocial;
 	}
+	public int getTipoCategoria() {
+		return tipoCategoria;
+	}
+	public void setTipoCategoria(int tipoCategoria) {
+		this.tipoCategoria = tipoCategoria;
+	}
+
 }

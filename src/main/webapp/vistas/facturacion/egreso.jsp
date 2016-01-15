@@ -61,6 +61,9 @@ function inicializaValores(){
 	$("#razonSocial").val('');
 	$("#descripcion").val('');
 	$("#representante").val('');
+	$("#cobrado").val('');
+	$("#dni").val('');
+	$("#area").val('');
 	$("#total").val('');
 }
 
@@ -120,19 +123,9 @@ function colorEtiquetas(){
 function nuevoEgreso(){
 	
 	colorEtiquetas();
-	
-	/*$("#codigoPuesto").val(0);	
-	$("#dniBuscar").val("");	
-	$("#dni").val("");
-	$("#apePaterno").val("");
-	$("#apeMaterno").val("");
-	$("#nombres").val("");
-	$("#telefono").val("");	
-	$("#totalesLetras").html("");
-	$("#totales").html("");
-	$("#btnAgregar").attr("disabled", false);*/
  	inicializaValores();
 	cargarConceptos();
+	cargarCategorias();
 }
 
 function cargarConceptos(){
@@ -168,6 +161,42 @@ function cargarConceptos(){
     });
 	
 }
+
+
+function cargarCategorias(){
+	
+	var parametros = new Object();
+	parametros.rubro = 'C';
+	
+	$.ajax({
+        type: "POST",
+        async: false,
+        url: "cargar-conceptos.json",
+        cache: false,
+        data: parametros,
+        success: function(result){
+        	
+        	//alert(result);
+        	$('#egreso_modal').modal({
+        		backdrop: 'static',
+        		keyboard: false,
+        		width: '600px'
+        	});
+        	
+        	var optionCategorias = "<option value=0>SELECCIONAR</option>";
+        	$.each(result, function(keyM, categorias) {
+        		
+        		optionCategorias += "<option value=" + categorias.codigoConcepto + ">" + categorias.nombreConcepto + "</option>";
+        		
+        	});
+        	
+        	$("#categoria").html(optionCategorias);
+    		
+        }
+    });
+	
+}
+
 
 function validarSiNumero(numero){
 	
@@ -321,7 +350,11 @@ function guardar(){
 	parametros.fecha = $("#fecha").val();
 	parametros.ruc = $("#ruc").val();
 	parametros.detalle = $("#descripcion").val();
+	parametros.tipoCategoria = parseInt( $("#categoria").val() );
 	parametros.representante = $("#representante").val();
+	parametros.cobrado = $("#cobrado").val();
+	parametros.dni = $("#dni").val();
+	parametros.area = $("#area").val();
 	parametros.total = parseFloat($("#total").val());
 	
 	$.ajax({
@@ -378,7 +411,7 @@ function cargarEgresos(){
 		var opciones = "<center>";
 			
 			opciones += "<a href=javascript:editarEgresos(";
-			opciones += rowObject.codigoEgreso + "," + rowObject.tipoDocumento + ",'" + rowObject.numeroDocumento + "','" + rowObject.fecha.replace(/\s/g,"_") + "'," + rowObject.codigoEmpresa + ",'" + rowObject.detalle.replace(/\s/g,"_") + "','" + rowObject.representante.replace(/\s/g,"_") + "'," + rowObject.total + ") >";
+			opciones += rowObject.codigoEgreso + "," + rowObject.tipoDocumento + ",'" + rowObject.numeroDocumento + "','" + rowObject.fecha.replace(/\s/g,"_") + "'," + rowObject.codigoEmpresa + ",'" + rowObject.detalle.replace(/\s/g,"_") + "'," + rowObject.tipoCategoria + ",'" + rowObject.representante.replace(/\s/g,"_") + "'," + rowObject.total + ",'" + rowObject.cobrado.replace(/\s/g,"_") + "','" + rowObject.dni + "','" + rowObject.area.replace(/\s/g,"_") + "')>";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Egreso'/>";
 			opciones += "</a>";
 			
@@ -466,10 +499,10 @@ function cargarEgresos(){
 }
 
 
-function editarEgresos(codigoEgreso, tipoDocumento, numeroDocumento, fecha, codigoEmpresa, detalle, representante, total){
+function editarEgresos(codigoEgreso, tipoDocumento, numeroDocumento, fecha, codigoEmpresa, detalle, tipoCategoria, representante, total, cobrado, dni, area){
 	console.log("Editar Egreso - [codigoEgreso] : " + codigoEgreso );
 	console.log("Editar Egreso - [codigoEmpresa] : " + codigoEmpresa );
-	//alert("Codigo Egreso: " + codigoEgreso + "\n Tipo Documento: " + tipoDocumento + "\n numero Documento: " + numeroDocumento + "\n Fecha: " + fecha + "\n Codigo Empresa: " + codigoEmpresa + "\n Representante: " + representante + "\n Total: " + total);
+	//alert("Codigo Egreso: " + codigoEgreso + "\n Tipo Documento: " + tipoDocumento + "\n numero Documento: " + numeroDocumento + "\n Fecha: " + fecha + "\n Codigo Empresa: " + codigoEmpresa + "\n Representante: " + representante + "\n Total: " + total + "\n Cobrado: " + cobrado + "\n Dni: " + dni + "\n Area: " + area);
 	
 	$('#egreso_modal').modal({
 		backdrop: 'static',
@@ -477,6 +510,7 @@ function editarEgresos(codigoEgreso, tipoDocumento, numeroDocumento, fecha, codi
 	});
 	
 	cargarConceptos();
+	cargarCategorias();
 	$("#tituloRegistro").html("Modificar Datos - Egreso");
 	colorEtiquetas();
 	
@@ -487,9 +521,12 @@ function editarEgresos(codigoEgreso, tipoDocumento, numeroDocumento, fecha, codi
 	$("#codigoEgreso").val(codigoEgreso);
 	buscaraEmpresa(codigoEmpresa);
 	$("#descripcion").val(detalle.replace(/\_/g," "));
+	$('#categoria option[value="' +tipoCategoria+ '"]').attr("selected", "selected");
 	$("#representante").val(representante.replace(/\_/g," "));
+	$("#cobrado").val(cobrado.replace(/\_/g," "));
+	$("#dni").val(dni);
+	$("#area").val(area.replace(/\_/g," "));
 	$("#total").val(total);
-	
 }
 
 
@@ -611,7 +648,7 @@ function eliminarEgreso(codigoEgreso){
 							<td width="12px">&nbsp;</td>
 							<td><span id="lblnro" style="font-size: 11px;"><b>NRO (*)</b></span></td>
 							<td><b>:</b></td>
-							<td><input type="text" id="nro" class="form-control" maxlength="8"/></td>
+							<td><input type="text" id="nro" class="form-control" maxlength="20"/></td>
 							<td valign="top">&nbsp;</td>
 						</tr>
 						<tr>
@@ -643,9 +680,35 @@ function eliminarEgreso(codigoEgreso){
 						</tr>
 						<tr>
 							<td width="12px">&nbsp;</td>
+							<td><span id="lblcategoria" style="font-size: 11px;"><b>CATEGORIA (*)</b></span></td>
+							<td><b>:</b></td>
+							<td><select id="categoria" class="form-control"></select></td>
+							<td valign="top"><img id="lblategoria-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+							<td colspan="5" valign="top">&nbsp;</td>
+						<tr>
+							<td width="12px">&nbsp;</td>
 							<td><span id="lblrepresentante" style="font-size: 11px;"><b>REPRESENTANTE (*)</b></span></td>
 							<td><b>:</b></td>
-							<td colspan="6"><input type="text" id="representante" class="form-control" maxlength="200" style="text-transform: uppercase;"/></td>
+							<td colspan="6"><input type="text" id="representante" class="form-control" maxlength="500" style="text-transform: uppercase;"/></td>
+							<td valign="top">&nbsp;</td>
+						</tr>
+						<tr>
+							<td width="12px">&nbsp;</td>
+							<td><span id="lblcobrado" style="font-size: 11px;"><b>COBRADO POR</b></span></td>
+							<td><b>:</b></td>
+							<td colspan="6"><input type="text" id="cobrado" class="form-control" maxlength="500" style="text-transform: uppercase;"/></td>
+							<td valign="top">&nbsp;</td>
+						</tr>
+						<tr>
+							<td width="12px">&nbsp;</td>
+							<td><span id="lbldni" style="font-size: 11px;"><b>DNI</b></span></td>
+							<td><b>:</b></td>
+							<td><input type="text" id="dni" class="form-control" maxlength="8"/></td>
+							<td valign="top">&nbsp;</td>
+							<td width="12px">&nbsp;</td>
+							<td><span id="lblarea" style="font-size: 11px;"><b>AREA</b></span></td>
+							<td><b>:</b></td>
+							<td><input type="text" id="area" class="form-control" maxlength="50" style="text-transform: uppercase;"/></td>
 							<td valign="top">&nbsp;</td>
 						</tr>
 						<tr>

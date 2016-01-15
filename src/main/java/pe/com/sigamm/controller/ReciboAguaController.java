@@ -16,14 +16,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 
 import pe.com.sigamm.bean.CamposObligatorios;
+import pe.com.sigamm.bean.ReportePuesto;
 import pe.com.sigamm.bean.ReporteReciboAgua;
 import pe.com.sigamm.bean.ReporteReciboAguaSocio;
+import pe.com.sigamm.bean.ReporteReciboLuzSocio;
 import pe.com.sigamm.bean.ResponseListBean;
 import pe.com.sigamm.bus.ReciboAguaBus;
 import pe.com.sigamm.bus.ReciboAguaSocioBus;
 import pe.com.sigamm.modelo.Puesto;
 import pe.com.sigamm.modelo.ReciboAgua;
 import pe.com.sigamm.modelo.ReciboAguaSocio;
+import pe.com.sigamm.modelo.ReciboLuzSocio;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.Constantes;
@@ -160,5 +163,52 @@ public class ReciboAguaController {
 	}
 
 
-
+	@RequestMapping(value = "/editar-agua-x-socio.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody ResponseListBean<ReciboAguaSocio> editarReciboAguaxSocio(
+			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
+			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
+			@RequestParam(value = "puestoSocio", defaultValue = "0") String puestoSocio,
+			@RequestParam(value = "codigoRecibo", defaultValue = "0") Integer codigoRecibo){
+		
+		ResponseListBean<ReciboAguaSocio> response = new ResponseListBean<ReciboAguaSocio>();
+		
+		ReporteReciboAguaSocio reporte = reciboAguaSocioBus.editarReciboAguaxSocio(pagina, registros, puestoSocio, codigoRecibo);
+		Integer totalReciboPuestoAgua = reporte.getTotalRegistros();
+		
+		response.setPage(pagina);
+		response.setRecords(totalReciboPuestoAgua);
+		
+		//total de paginas a mostrar
+		response.setTotal(OperadoresUtil.obtenerCociente(totalReciboPuestoAgua, registros));
+				
+		response.setRows(reporte.getListaReciboAguaSocio());
+			
+		return response;
+	}
+	
+	
+	@RequestMapping(value = "/buscar-usuario-puesto-giro-agua.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody ResponseListBean<Puesto> reporteUsuarioPuestoGiroAgua(
+			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
+			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
+			@RequestParam(value = "codigoSector", defaultValue = "0") Integer codigoSector,
+			@RequestParam(value = "nroPuesto", defaultValue = "0") String nroPuesto,
+			@RequestParam(value = "codigoReciboOriginal", defaultValue = "0") Integer codigoReciboOriginal){
+		
+		ResponseListBean<Puesto> response = new ResponseListBean<Puesto>();
+		
+		/*ReportePuesto reporte = puestoBus.reportePuestoxPto(pagina, registros, codigoSector, nroPuesto, codigoReciboOriginal);
+		
+		Integer totalReciboPuestoxPto = reporte.getTotalRegistros(); 
+		
+		response.setPage(pagina);
+		response.setRecords(totalReciboPuestoxPto);
+		
+		//total de paginas a mostrar
+		response.setTotal(OperadoresUtil.obtenerCociente(totalReciboPuestoxPto, registros));
+				
+		response.setRows(reporte.getListaPuesto());*/
+		
+		return response;
+	}
 }

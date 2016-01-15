@@ -172,6 +172,7 @@ public class PuestoDaoImpl implements PuestoDao {
 
 	@Override
 	public ReportePuesto reportePuestoLuz(int pagina, int registros, String codigoPuesto, int codigoRecibo) {
+		if (codigoPuesto=="") codigoPuesto="0";
 		ReportePuesto reporte = new ReportePuesto();
 		try{
 			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
@@ -180,7 +181,7 @@ public class PuestoDaoImpl implements PuestoDao {
 			jdbcCall.withProcedureName("SP_REPORTE_PUESTO_LUZ_SOCIO").declareParameters(
 					new SqlParameter("vi_pagina", 					Types.INTEGER),
 					new SqlParameter("vi_registros", 				Types.INTEGER),
-					new SqlParameter("vi_codigo_puesto", 			Types.INTEGER),
+					new SqlParameter("vi_codigo_puesto", 			Types.VARCHAR),
 					new SqlParameter("vi_codigo_luz_original", 		Types.INTEGER),
 					
 					new SqlOutParameter("vo_total_registros", 		Types.INTEGER),
@@ -214,7 +215,7 @@ public class PuestoDaoImpl implements PuestoDao {
 			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
 			jdbcCall.withCatalogName("PKG_PUESTO");
 			
-			jdbcCall.withProcedureName("SP_REPORTE_PUESTO_X_PTO").declareParameters(
+			jdbcCall.withProcedureName("SP_REPORTE_PUESTO_X_LUZ").declareParameters(
 					new SqlParameter("vi_pagina", 					Types.INTEGER),
 					new SqlParameter("vi_registros", 				Types.INTEGER),
 					new SqlParameter("vi_codigo_sector", 			Types.INTEGER),

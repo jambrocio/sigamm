@@ -27,4 +27,10 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 		
 	}
 
+	@Override
+	public ReporteReciboAguaSocio editarReciboAguaxSocio(int pagina, int registros, String puestoSocio, int codigoRecibo) {
+
+		return reciboAguaSocioDao.editarReciboAguaxSocio(pagina, registros, puestoSocio, codigoRecibo);
+	}
+
 }

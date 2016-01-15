@@ -1,16 +1,18 @@
 package pe.com.sigamm.modelo;
 
-public class ReciboAguaSocio {
-	double importe; 
+public class ReciboAguaSocio { 
 	int codigoSocioServicio; 
 	int codigoSocio; 
     int estadoSocio;
     int codigoGiro;
-    int reciboAgua;
+    int codigoReciboAgua;
     int correlativo;
     int codigoSector;
 	int codigoServicioDetalle;
-	int codigoServicio;	
+	int codigoServicio;
+	int estado;
+	int reciboAguaCreado;
+	double total;
     String numeroPuesto;
     String nombreFull; 
     String numeroPadron; 
@@ -19,12 +21,6 @@ public class ReciboAguaSocio {
 	String nombreServicio;  
 	String nombreDetalle;
 	
-	public double getImporte() {
-		return importe;
-	}
-	public void setImporte(double importe) {
-		this.importe = importe;
-	}
 	public int getCodigoSocioServicio() {
 		return codigoSocioServicio;
 	}
@@ -49,11 +45,11 @@ public class ReciboAguaSocio {
 	public void setCodigoGiro(int codigoGiro) {
 		this.codigoGiro = codigoGiro;
 	}
-	public int getReciboAgua() {
-		return reciboAgua;
+	public int getCodigoReciboAgua() {
+		return codigoReciboAgua;
 	}
-	public void setReciboAgua(int reciboAgua) {
-		this.reciboAgua = reciboAgua;
+	public void setCodigoReciboAgua(int codigoReciboAgua) {
+		this.codigoReciboAgua = codigoReciboAgua;
 	}
 	public int getCorrelativo() {
 		return correlativo;
@@ -78,6 +74,24 @@ public class ReciboAguaSocio {
 	}
 	public void setCodigoServicio(int codigoServicio) {
 		this.codigoServicio = codigoServicio;
+	}
+	public int getEstado() {
+		return estado;
+	}
+	public void setEstado(int estado) {
+		this.estado = estado;
+	}
+	public int getReciboAguaCreado() {
+		return reciboAguaCreado;
+	}
+	public void setReciboAguaCreado(int reciboAguaCreado) {
+		this.reciboAguaCreado = reciboAguaCreado;
+	}
+	public double getTotal() {
+		return total;
+	}
+	public void setTotal(double total) {
+		this.total = total;
 	}
 	public String getNumeroPuesto() {
 		return numeroPuesto;
@@ -120,6 +134,5 @@ public class ReciboAguaSocio {
 	}
 	public void setNombreDetalle(String nombreDetalle) {
 		this.nombreDetalle = nombreDetalle;
-	} 
-	
+	}
 }

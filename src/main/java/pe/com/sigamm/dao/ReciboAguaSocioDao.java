@@ -6,4 +6,5 @@ public interface ReciboAguaSocioDao {
 	
 	public ReporteReciboAguaSocio reporteReciboAguaSocio(int pagina, int registros, int codigoRecibo);	
 
+	public ReporteReciboAguaSocio editarReciboAguaxSocio(int pagina, int registros, String puestoSocio, int codigoRecibo);
 }

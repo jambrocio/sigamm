@@ -71,4 +71,48 @@ public class ReciboSocioAguaDaoImpl implements ReciboAguaSocioDao {
 		
 	}
 
+	@Override
+	public ReporteReciboAguaSocio editarReciboAguaxSocio(int pagina, int registros, String puestoSocio, int codigoRecibo) {
+		// TODO Auto-generated method stub
+		ReporteReciboAguaSocio reporte = new ReporteReciboAguaSocio();
+		try{
+			System.out.println("Editando Recibo Agua Socio");
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_RECIBO_AGUA_SOCIO");
+			jdbcCall.withProcedureName("SP_EDITAR_AGUA_X_SOCIO").declareParameters(
+				new SqlParameter("vi_pagina",		 			Types.INTEGER),
+				new SqlParameter("vi_registros", 				Types.INTEGER),
+				new SqlParameter("vi_puesto_socio", 			Types.VARCHAR),
+				new SqlParameter("vi_codigo_recibo", 			Types.INTEGER),
+				new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
+				
+				/*new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
+				new SqlOutParameter("vo_mensaje", 				Types.VARCHAR),*/
+				new SqlOutParameter("vo_total_registros", 		Types.INTEGER),
+				new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(ReciboLuzSocio.class)));
+				
+            
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_pagina", 					pagina);
+			parametros.addValue("vi_registros", 				registros);
+			parametros.addValue("vi_puesto_socio", 				puestoSocio);
+			parametros.addValue("vi_codigo_recibo", 			codigoRecibo);
+			parametros.addValue("vi_codigo_usuario", 			datosSession.getCodigoUsuario());
+			
+			Map<String,Object> results = jdbcCall.execute(parametros);
+			int totalRegistros = (Integer) results.get("vo_total_registros");
+			List<ReciboAguaSocio> lista = (List<ReciboAguaSocio>) results.get("vo_result");
+			
+			reporte.setTotalRegistros(totalRegistros);
+			reporte.setListaReciboAguaSocio(lista);
+			
+		}catch(Exception e){
+			
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return reporte;
+
+	}
+
 }

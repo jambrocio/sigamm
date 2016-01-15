@@ -990,10 +990,33 @@ function limpiarReciboLuzSocio(){
 
 }
 
-function buscarReciboLuzSocio(){
+
+function buscarReciboLuz(){
+	var codigoRecibo = $("#codigoRecibo").val();
+	var codigoPuesto = $("#reciboLuzSocioBuscara").val();
+	//alert ("RECIBO: " + codigoRecibo + " PUESTO: " + codigoPuesto);
+	jsonObj = [];
+	var parametros = new Object();
+	parametros.codigoRecibo = codigoRecibo;
+	parametros.codigoPuesto = codigoPuesto;
 	
-	var puestoSocio = $("#reciboLuzSocioBuscara").val();
-	//alert("PUESTO: " + puestoSocio);
+	if(intentos > 0){
+		$("#grillaReciboLuz").jqGrid('setGridParam',
+		{
+			url : 'reporte-recibo-luz-puesto.json',
+			datatype : "json",
+			postData:parametros,
+			page:1
+		}).trigger('reloadGrid');
+	}else{
+		buscarReciboLuzSocio(codigoRecibo, codigoPuesto);
+	}
+		
+}
+
+
+function buscarReciboLuzSocio(codigoRecibo, codigoPuesto){
+	intentos = 1;
 	
 	var ruta = obtenerContexto();
 	var formatterBotones = function(cellVal,options,rowObject)
@@ -1006,7 +1029,7 @@ function buscarReciboLuzSocio(){
 			opciones += "</a>";
 			
 			opciones += "&nbsp;&nbsp;";
-						
+			
 			opciones += "<a href=javascript:generarReciboLuzXSocio('";
 			opciones += rowObject.codigoSector + "','" + rowObject.nroPuesto + "','" + rowObject.codigoReciboOriginal + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/agregar2_24x24.png' border='0' title='Crear Recibo de Luz por Socio'/>";
@@ -1019,89 +1042,25 @@ function buscarReciboLuzSocio(){
 	};
 
 	jsonObj = [];
-	var valores = new Object();
-	valores.puestoSocio = puestoSocio;
+	var parametros = new Object();
+	parametros.codigoRecibo = codigoRecibo;
+	parametros.codigoPuesto = codigoPuesto;
 	
+	alert("Codigo Puesto: " + $("#reciboLuzSocioBuscara").val());
 	jQuery("#grillaReciboLuz").jqGrid(
 	{
-		url : 'buscar-recibo-luz-puesto.json',
+		url : 'reporte-recibo-luz-puesto.json',
 		datatype : "json",
 		mtype: 'POST',
 		height: 'auto',
 		width: 'auto',
-		postData: valores,
-		/*colNames : ['Recibo', 'Sector', 'Nombre Usuario', 'Puesto', 'Giro','Recibo Luz','Total', 'Opciones'],
-		colModel : [{
-			name : 'codigoReciboOriginal',
-			index: 'codigoReciboOriginal',
-			sortable:false,
-			width: 50,
-			align: 'center'
-		},{
-			name : 'codigoSector',
-			index: 'codigoSector',
-			sortable:false,
-			width: 70,
-			align: 'center'
-		},{
-			name : 'nombreFull',
-			index: 'nombreFull',
-			sortable:false,
-			width: 140,
-			align: 'left'
-		},{
-			name : 'nroPuesto',
-			index: 'nroPuesto',
-			sortable:false,
-			width: 50,
-			align: 'center'
-		},{
-			name : 'nombreGiro',
-			index: 'nombreGiro',
-			sortable:false,
-			width: 150,
-			align: 'center'
-		},{
-			name : 'reciboLuzCreado',
-			index: 'reciboLuzCreado',
-			sortable:false,
-			width: 80,
-			align: 'center'
-		},{
-			name : 'total',
-			index: 'total',
-			sortable:false,
-			width: 80,
-			align: 'center'
-		},{					
-			name:'opciones',
-			index:'opciones',
-			width:110,
-			sortable:false,
-			search: false,
-			formatter:formatterBotones
-		}],								
-		rowNum : 20,
-		pager : '#pgrillaReciboLuz',
-		sortname : 'codigoPuesto',
-		autowidth: true,
-		rownumbers: true,
-		viewrecords : true,
-		sortorder : "codigoPuesto",				
-		caption : "Recibo de Luz Socios",
-		afterInsertRow: function(rowId, data, item){
-			if (item.reciboLuzCreado == 0)
-				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });				
-			else
-				$("#grillaReciboLuz").setCell(rowId, 'reciboLuzCreado', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
-
-		}*/
+		postData: parametros,
 		colNames : ['Nombre Usuario', 'Puesto', 'Giro','Total', 'Opciones'],
 		colModel : [{
 			name : 'nombreFull',
 			index: 'nombreFull',
 			sortable:false,
-			width: 140,
+			width: 320,
 			align: 'left'
 		},{
 			name : 'nroPuesto',
@@ -1145,18 +1104,17 @@ function buscarReciboLuzSocio(){
 				$("#grillaReciboLuz").setCell(rowId, 'nombreGiro', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
 				$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
 			} else {
-				$("#grillaReciboLuz").setCell(rowId, 'nombreFull', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
-				$("#grillaReciboLuz").setCell(rowId, 'nroPuesto', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
-				$("#grillaReciboLuz").setCell(rowId, 'nombreGiro', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
-				$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color':'#A9F5A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'nombreFull', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'nroPuesto', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'nombreGiro', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
 			}
 
 		}
 
-
 	}).trigger('reloadGrid');
-	
 }
+
 
 function limpiar(){
 	$("#codigoRecibo").val('0');
@@ -1545,7 +1503,7 @@ function botonEnter()
 					<td width="10">:</td>
 					<td width="250"><input type="text" id="reciboLuzSocioBuscara" class="text ui-widget-content ui-corner-all" maxlength="8" /></td>
 					<td>&nbsp;&nbsp;
-						<button type="button" class="btn btn-primary" onclick="buscarReciboLuzSocio()">
+						<button type="button" class="btn btn-primary" onclick="buscarReciboLuz();">
 							<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 						</button>&nbsp;&nbsp;
 						<!-- 

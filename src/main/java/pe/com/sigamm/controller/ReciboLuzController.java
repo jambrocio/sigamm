@@ -214,7 +214,7 @@ public class ReciboLuzController {
 	
 	
 	@RequestMapping(value = "/buscar-recibo-luz-puesto.json", method = RequestMethod.POST, produces="application/json")
-	public @ResponseBody ResponseListBean<Puesto> reporteUsuarioPuestoGiro(
+	public @ResponseBody ResponseListBean<Puesto> reporteLuzPuesto(
 			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
 			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
 			@RequestParam(value = "puestoSocio", defaultValue = "0") String puestoSocio,
@@ -222,18 +222,19 @@ public class ReciboLuzController {
 		
 		ResponseListBean<Puesto> response = new ResponseListBean<Puesto>();
 		
+		//ReporteReciboLuzSocio reporte = reciboLuzSocioBus.buscarPuestoxSocio(pagina, registros, puestoSocio);
 		//ReportePuesto reporte = reciboLuzSocioBus.buscarPuestoxSocio(pagina, registros, puestoSocio);
-		/*ReportePuesto reporte = reciboLuzSocioBus.buscarPuestoxSocio(pagina, registros, puestoSocio)
+		/*ReportePuesto reporte = reciboLuzSocioBus.buscarPuestoxSocio(pagina, registros, puestoSocio)*/
 		
-		Integer totalReciboPuestoxPto = reporte.getTotalRegistros(); 
+		//Integer totalRecibo = reporte.getTotalRegistros(); 
 		
 		response.setPage(pagina);
-		response.setRecords(totalReciboPuestoxPto);
+		//response.setRecords(totalRecibo);
 		
 		//total de paginas a mostrar
-		response.setTotal(OperadoresUtil.obtenerCociente(totalReciboPuestoxPto, registros));
+		//response.setTotal(OperadoresUtil.obtenerCociente(totalRecibo, registros));
 				
-		response.setRows(reporte.getListaPuesto());*/
+		//response.setRows(reporte.getListaReciboLuzSocio());
 		
 		return response;
 	}
