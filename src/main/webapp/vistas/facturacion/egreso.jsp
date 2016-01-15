@@ -502,7 +502,7 @@ function cargarEgresos(){
 function editarEgresos(codigoEgreso, tipoDocumento, numeroDocumento, fecha, codigoEmpresa, detalle, tipoCategoria, representante, total, cobrado, dni, area){
 	console.log("Editar Egreso - [codigoEgreso] : " + codigoEgreso );
 	console.log("Editar Egreso - [codigoEmpresa] : " + codigoEmpresa );
-	//alert("Codigo Egreso: " + codigoEgreso + "\n Tipo Documento: " + tipoDocumento + "\n numero Documento: " + numeroDocumento + "\n Fecha: " + fecha + "\n Codigo Empresa: " + codigoEmpresa + "\n Representante: " + representante + "\n Total: " + total + "\n Cobrado: " + cobrado + "\n Dni: " + dni + "\n Area: " + area);
+	//alert("Codigo Egreso: " + codigoEgreso + "\n Tipo Documento: " + tipoDocumento + "\n numero Documento: " + numeroDocumento + "\n Fecha: " + fecha + "\n Codigo Empresa: " + codigoEmpresa + "\n Detalle: " + detalle + "\n TipoCategoria: " + tipoCategoria + "\n Representante: " + representante + "\n Total: " + total + "\n Cobrado: " + cobrado + "\n Dni: " + dni + "\n Area: " + area);
 	
 	$('#egreso_modal').modal({
 		backdrop: 'static',
@@ -683,7 +683,7 @@ function eliminarEgreso(codigoEgreso){
 							<td><span id="lblcategoria" style="font-size: 11px;"><b>CATEGORIA (*)</b></span></td>
 							<td><b>:</b></td>
 							<td><select id="categoria" class="form-control"></select></td>
-							<td valign="top"><img id="lblategoria-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+							<td valign="top"><img id="lblcategoria-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 							<td colspan="5" valign="top">&nbsp;</td>
 						<tr>
 							<td width="12px">&nbsp;</td>

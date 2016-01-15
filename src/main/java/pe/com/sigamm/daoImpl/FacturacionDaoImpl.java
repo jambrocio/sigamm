@@ -229,12 +229,12 @@ public class FacturacionDaoImpl implements FacturacionDao {
 			jdbcCall.withCatalogName("PKG_FACTURACION");
 			jdbcCall.withProcedureName("SP_GRABAR_EGRESO").declareParameters(
 				new SqlParameter("vi_codigo_egreso", 			Types.INTEGER),
-				new SqlParameter("vi_tipo_documento", 			Types.VARCHAR),
+				new SqlParameter("vi_tipo_documento", 			Types.NUMERIC),
 				new SqlParameter("vi_numero_documento", 		Types.VARCHAR),
 				new SqlParameter("vi_fecha", 					Types.VARCHAR),
 				new SqlParameter("vi_codigo_empresa", 			Types.INTEGER),
 				new SqlParameter("vi_detalle", 					Types.VARCHAR),
-				
+				new SqlParameter("vi_tipo_categoria",			Types.NUMERIC),
 				new SqlParameter("vi_total", 					Types.DOUBLE),
 				new SqlParameter("vi_representante", 			Types.VARCHAR),
 				new SqlParameter("vi_cobrado", 					Types.VARCHAR),
@@ -253,11 +253,12 @@ public class FacturacionDaoImpl implements FacturacionDao {
 			parametros.addValue("vi_fecha", 					egreso.getFecha());
 			parametros.addValue("vi_codigo_empresa", 			egreso.getCodigoEmpresa());
 			parametros.addValue("vi_detalle", 					egreso.getDetalle());
+			parametros.addValue("vi_tipo_categoria", 			egreso.getTipoCategoria());
 			parametros.addValue("vi_total", 					egreso.getTotal());
-			parametros.addValue("vi_representante", 			egreso.getRepresentante());
-			parametros.addValue("vi_cobrado", 					egreso.getCobrado());
-			parametros.addValue("vi_dni", 						egreso.getDni());
-			parametros.addValue("vi_area", 						egreso.getArea());
+			parametros.addValue("vi_representante", 			egreso.getRepresentante() == null ? "" : egreso.getRepresentante());
+			parametros.addValue("vi_cobrado", 					egreso.getCobrado() == null ? "" : egreso.getCobrado());
+			parametros.addValue("vi_dni", 						egreso.getDni() == null ? "" : egreso.getDni());
+			parametros.addValue("vi_area", 						egreso.getArea() == null ? "" : egreso.getArea());
 			parametros.addValue("vi_codigo_usuario", 			datosSession.getCodigoUsuario());
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
