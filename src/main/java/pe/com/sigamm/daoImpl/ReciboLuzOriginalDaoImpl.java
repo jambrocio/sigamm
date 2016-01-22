@@ -227,4 +227,43 @@ public class ReciboLuzOriginalDaoImpl implements ReciboLuzOriginalDao {
 
 	}
 
+	@Override
+	public Retorno cerrarReciboLuzOriginal(LuzOriginal reciboLuzOriginal) {
+		Retorno retorno = new Retorno();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_RECIBO_LUZ_ORIG");
+			
+			jdbcCall.withProcedureName("SP_REPORTE_CERRAR_LUZ_ORIG").declareParameters(
+					new SqlParameter("vi_codigo_recibo_luz_orig", 	Types.VARCHAR),
+					
+					new SqlOutParameter("vo_codigo_recibo", 		Types.INTEGER),
+					new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
+					new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
+			
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_recibo_luz_orig",		reciboLuzOriginal.getCodigoReciboLuzOriginal());
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			int codigoRecibo = (Integer) result.get("vo_codigo_recibo");
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(codigoRecibo);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
+		
+	}
+
 }

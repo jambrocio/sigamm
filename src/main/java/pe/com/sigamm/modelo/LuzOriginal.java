@@ -66,6 +66,7 @@ public class LuzOriginal {
 	double potGenFpTotal;
 	double ajustePrecioRetroactivo;
 	double igvRefact;
+	int estadoAbierto;
 	
 	public String getPeriodo() {
 		return periodo;
@@ -444,6 +445,12 @@ public class LuzOriginal {
 	}
 	public void setIgvRefact(double igvRefact) {
 		this.igvRefact = igvRefact;
+	}
+	public int getEstadoAbierto() {
+		return estadoAbierto;
+	}
+	public void setEstadoAbierto(int estadoAbierto) {
+		this.estadoAbierto = estadoAbierto;
 	}
 	
 }

@@ -21,6 +21,7 @@ public class Puesto {
 	double numCostoWatts;
 	double alumbradoPublico;
 	double mantenimiento;
+	int estadoAbierto;
 	
 	public int getCodigoSocio() {
 		return codigoSocio;
@@ -141,6 +142,12 @@ public class Puesto {
 	}
 	public void setEstadoReciboLuz(int estadoReciboLuz) {
 		this.estadoReciboLuz = estadoReciboLuz;
+	}
+	public int getEstadoAbierto() {
+		return estadoAbierto;
+	}
+	public void setEstadoAbierto(int estadoAbierto) {
+		this.estadoAbierto = estadoAbierto;
 	}
 	
 }

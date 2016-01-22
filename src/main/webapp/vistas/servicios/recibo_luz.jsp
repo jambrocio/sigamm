@@ -369,6 +369,27 @@ function cargarReciboLuzOriginal(){
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/reciboLuz_24x24.png' border='0' title='Generar Recibo Luz Socio'/>";
 			opciones += "</a>";			
 			
+			opciones += "&nbsp;&nbsp;";
+			
+		if (rowObject.estadoAbierto == 0) {			
+			opciones += "<a href=javascript:cerrarReciboLuz(";
+			opciones += rowObject.codigoReciboLuzOriginal + ") >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/unlock_24x24.png' border='0' title='Cerrar Recibo Luz General'/>";
+			opciones += "</a>";
+		} else {
+			opciones += "<a href=javascript:abrirReciboLuz(";
+			opciones += rowObject.codigoReciboLuzOriginal + ") >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/lock_24x24.png' border='0' title='Abrir Recibo Luz General'/>";
+			opciones += "</a>";
+		}			
+			
+			opciones += "&nbsp;&nbsp;";
+			
+			opciones += "<a href=javascript:generarImpresión(";
+			opciones += rowObject.codigoReciboLuzOriginal + ") >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Generar Impresión de todos los Recibo de Luz de los Socios'/>";
+			opciones += "</a>";
+			
 			opciones += "</center>";
 			
 		return opciones;
@@ -428,7 +449,7 @@ function cargarReciboLuzOriginal(){
 		},{					
 			name:'codigoReciboLuzOriginal',
 			index:'codigoReciboLuzOriginal',
-			width:100,
+			width:130,
 			sortable:false,
 			search: false,
 			formatter:formatterBotones
@@ -621,6 +642,7 @@ function cargarDatosReciboLuzSocio(sector, puesto, original){
 
 	//alert(codigoPuesto);
 	var ruta = obtenerContexto();
+	var estadoAbierto;
 	
 	var parametros = new Object();
 	parametros.codigoSector         = sector;
@@ -636,51 +658,63 @@ function cargarDatosReciboLuzSocio(sector, puesto, original){
         success: function(result){
             console.log(result);
         	//alert("Resultado : [" + result.rows + "]");
-        	
         	$.each(result.rows, function(key,val) {
-            	$("#nombreSocio").text(val.nombreFull);
-            	$("#puestoSocio").text(val.nroPuesto);
-            	$("#sectorSocio").text(val.nombreSector);
-            	$("#giroSocio").text(val.nombreGiro);
-            	$("#periodoSocio").text(val.periodoSocio);
-            	$("#alumbradoPublicoSocio").val(val.alumbradoPublico);
-            	$("#servicioMantenimientoSocio").val(val.mantenimiento);
-            	$("#costoWatts").val(val.numCostoWatts);
-            	$("#codigoSocio").val(val.codigoSocio);
-            	$("#reciboLuzCreado").val(val.reciboLuzCreado);
-            	          	
-            	
-				if ($("#reciboLuzCreado").val() == 0) {
-					
-					$('#recibos_luz_por_socio_modal').modal({
-						backdrop: 'static',
-						keyboard: false
-					});
-					
-				} else {
-					
-					$.gritter.add({
-						// (string | mandatory) the heading of the notification
-						title: 'Mensaje',
-						// (string | mandatory) the text inside the notification
-						text: 'El Recibo de Luz del puesto ' + $("#puestoSocio").text() + ' ya fue creado...!!!',
-						// (string | optional) the image to display on the left
-						image: "/" + ruta + "/recursos/images/confirm.png",
-						// (bool | optional) if you want it to fade out on its own or just sit there
-						sticky: false,
-						// (int | optional) the time you want it to be alive for before fading out
-						time: ''
-					});
-					
-				}
-					
-					
-					
-               		
-                	
-            	
-        	});
+				estadoAbierto = val.estadoAbierto;
+			});
         	
+        	if (estadoAbierto == 0) {
+	        	$.each(result.rows, function(key,val) {
+	            	$("#nombreSocio").text(val.nombreFull);
+	            	$("#puestoSocio").text(val.nroPuesto);
+	            	$("#sectorSocio").text(val.nombreSector);
+	            	$("#giroSocio").text(val.nombreGiro);
+	            	$("#periodoSocio").text(val.periodoSocio);
+	            	$("#alumbradoPublicoSocio").val(val.alumbradoPublico);
+	            	$("#servicioMantenimientoSocio").val(val.mantenimiento);
+	            	$("#costoWatts").val(val.numCostoWatts);
+	            	$("#codigoSocio").val(val.codigoSocio);
+	            	$("#reciboLuzCreado").val(val.reciboLuzCreado);
+	            	          	
+	            	
+					if ($("#reciboLuzCreado").val() == 0) {
+						
+						$('#recibos_luz_por_socio_modal').modal({
+							backdrop: 'static',
+							keyboard: false
+						});
+						
+					} else {
+						
+						$.gritter.add({
+							// (string | mandatory) the heading of the notification
+							title: 'Mensaje',
+							// (string | mandatory) the text inside the notification
+							text: 'El Recibo de Luz del puesto ' + $("#puestoSocio").text() + ' ya fue creado...!!!',
+							// (string | optional) the image to display on the left
+							image: "/" + ruta + "/recursos/images/confirm.png",
+							// (bool | optional) if you want it to fade out on its own or just sit there
+							sticky: false,
+							// (int | optional) the time you want it to be alive for before fading out
+							time: ''
+						});
+						
+					}
+
+	        	});
+        	} else {
+        		$.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Mensaje',
+					// (string | mandatory) the text inside the notification
+					text: 'El Recibo de Luz Principal se encuentra CERRADO, por lo tanto, no podrá realzar esta acción',
+					// (string | optional) the image to display on the left
+					image: "/" + ruta + "/recursos/images/confirm.png",
+					// (bool | optional) if you want it to fade out on its own or just sit there
+					sticky: false,
+					// (int | optional) the time you want it to be alive for before fading out
+					time: ''
+				});
+        	}        	
 
         	
         }
@@ -693,6 +727,7 @@ function cargarDatosReciboLuzSocio(sector, puesto, original){
 function editarReciboLuzXSocio(original, puesto){
 	
 	var ruta = obtenerContexto();
+	var estadoAbierto;
 	mensaje = "Desea editar el recibo del Puesto " + puesto + " ?"; 
 	//mensaje = "En cosntrucción " + puesto + " ?";
 	
@@ -717,47 +752,65 @@ function editarReciboLuzXSocio(original, puesto){
 		    //dataType: "html",
 		    success: function(result){
 		    	
-		    	//alert(result.records);
-		    	
+		    	//alert(result.records);		    	
 			    $('#alerta_modal').modal('hide');
 	
+			    $.each(result.rows, function(key,val) {
+			    	estadoAbierto = val.estadoAbierto;
+			    });
+			    
 		        if (result.records > 0) {
-			        $('#recibos_luz_por_socio_modal').modal({
-		        		backdrop: 'static',
-		        		keyboard: false
-		        	});	        	
-
-		        	$.each(result.rows, function(key,val) {		        		
-		        		$("#codigoSocio").val(val.codigoSocio);
-		            	$("#nombreSocio").text(val.nombreFull);
-		            	$("#puestoSocio").text(val.puestoSocio);
-		            	$("#sectorSocio").text(val.nombreSector);
-		            	$("#giroSocio").text(val.nombreGiro);
-		            	$("#periodoSocio").text(val.fecPeriodo);
-						$("#idRecibo").val(val.idRecibo);
-		            	$("#lecturaInicialSocio").val(val.lecturaInicial);
-		        		$("#lecturaFinalSocio").val(val.lecturaFinal);
-		        		if (val.trabado == 1){
-		        			$("input:checkbox").attr('checked', 'checked');
-	        				$("#sintraba").hide();
-	        				$("#contraba").show();
-	        				$("#consumoMesSocioTrabado").val(val.consumoMes);
-		        		} else {
-		        			$("input:checkbox").removeAttr('checked');
-	        				$("#sintraba").show();
-	        				$("#contraba").hide();
-	        				$("#consumoMesSocio").html(val.consumoMes);
-		        		}		        		
-		        		$("#cargoEnergiaSocio").val(val.cargoEnergia);
-		        		$("#alumbradoPublicoSocio").val(val.alumbradoPublico);
-		        		$("#servicioMantenimientoSocio").val(val.servicioMantenimiento);
-		        		$("#deudaAnteriorSocio").val(val.deudaAnterior);
-		        		$("#reconexionSocio").val(val.reconexion);
-		        		$("#totalSocio").html(val.total);
-		        		$("#costoWatts").val(val.costoWatts);
-		        		$("#codigoReciboLuzSocio").val(val.correlativo);
-		            	
-		        	});
+		        	
+		        	if (estadoAbierto == 0) {		        	
+				        $('#recibos_luz_por_socio_modal').modal({
+			        		backdrop: 'static',
+			        		keyboard: false
+			        	});	        	
+	
+			        	$.each(result.rows, function(key,val) {		        		
+			        		$("#codigoSocio").val(val.codigoSocio);
+			            	$("#nombreSocio").text(val.nombreFull);
+			            	$("#puestoSocio").text(val.puestoSocio);
+			            	$("#sectorSocio").text(val.nombreSector);
+			            	$("#giroSocio").text(val.nombreGiro);
+			            	$("#periodoSocio").text(val.fecPeriodo);
+							$("#idRecibo").val(val.idRecibo);
+			            	$("#lecturaInicialSocio").val(val.lecturaInicial);
+			        		$("#lecturaFinalSocio").val(val.lecturaFinal);
+			        		if (val.trabado == 1){
+			        			$("input:checkbox").attr('checked', 'checked');
+		        				$("#sintraba").hide();
+		        				$("#contraba").show();
+		        				$("#consumoMesSocioTrabado").val(val.consumoMes);
+			        		} else {
+			        			$("input:checkbox").removeAttr('checked');
+		        				$("#sintraba").show();
+		        				$("#contraba").hide();
+		        				$("#consumoMesSocio").html(val.consumoMes);
+			        		}		        		
+			        		$("#cargoEnergiaSocio").val(val.cargoEnergia);
+			        		$("#alumbradoPublicoSocio").val(val.alumbradoPublico);
+			        		$("#servicioMantenimientoSocio").val(val.servicioMantenimiento);
+			        		$("#deudaAnteriorSocio").val(val.deudaAnterior);
+			        		$("#reconexionSocio").val(val.reconexion);
+			        		$("#totalSocio").html(val.total);
+			        		$("#costoWatts").val(val.costoWatts);
+			        		$("#codigoReciboLuzSocio").val(val.correlativo);			            	
+			        	});
+		        	} else {
+		        		$.gritter.add({
+							// (string | mandatory) the heading of the notification
+							title: 'Mensaje',
+							// (string | mandatory) the text inside the notification
+							text: 'El Recibo de Luz Principal se encuentra CERRADO, por lo tanto, no podrá realzar esta acción',
+							// (string | optional) the image to display on the left
+							image: "/" + ruta + "/recursos/images/confirm.png",
+							// (bool | optional) if you want it to fade out on its own or just sit there
+							sticky: false,
+							// (int | optional) the time you want it to be alive for before fading out
+							time: ''
+						});
+		        	}
 	        	
 	        	} else {
 	        		
@@ -781,6 +834,67 @@ function editarReciboLuzXSocio(original, puesto){
 		
     });
 
+}
+
+
+function cerrarReciboLuz(codigo){
+	var ruta = obtenerContexto();
+	mensaje = "Desea CERRAR el recibo de luz de código " + codigo + " ?"; 
+	//mensaje = "En cosntrucción " + puesto + " ?";
+	
+	$("#mensajeCerrar").html(mensaje);
+	
+	$('#mensaje_modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	}).one('click', '#aceptar', function() {
+		jsonObj = [];
+		var parametros = new Object();
+		parametros.codigoReciboLuzOriginal = codigo;
+		
+		$.ajax({
+			type: "POST",
+		    async:false,
+		    url: "cerrar-luz-original.json",
+		    cache : false,
+		    data: parametros,
+		    //datatype: "json",
+		    success: function(result){
+		    	
+		    	if(result.camposObligatorios.length == 0){	    	
+				    $('#mensaje_modal').modal('hide');
+		      		
+	        		$.gritter.add({
+						// (string | mandatory) the heading of the notification
+						title: 'Mensaje',
+						// (string | mandatory) the text inside the notification
+						text: 'El Recibo de Luz de Código ' + codigo + ' se cerró correctamente, no podrá ingresar recibos para socios en este período',
+						// (string | optional) the image to display on the left
+						image: "/" + ruta + "/recursos/images/confirm.png",
+						// (bool | optional) if you want it to fade out on its own or just sit there
+						sticky: false,
+						// (int | optional) the time you want it to be alive for before fading out
+						time: ''
+					});
+	
+	        		cargarReciboLuzOriginal();
+		    	}
+		            
+			}
+		});
+	});
+}
+
+
+
+function abrirReciboLuz(codigo){
+	alert("Usted no está autorizado para activar nuevamente este recibo de luz... [" + codigo + "]");
+}
+
+
+
+function generarImpresión(codigo){
+	alert("Generando todos los recibos de impresión de los socios para el código... [" + codigo + "]");
 }
 
 
@@ -1673,6 +1787,33 @@ function botonEnter()
 				<table border="0">
 					<tr>
 						<td><img src="recursos/images/icons/exclamation_32x32.png" border="0" />&nbsp;<b><span id="mensajeEditar" /></b></td>
+					</tr>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" id="aceptar">Si</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+			</div>
+		</div>
+		  
+	</div>
+</div>
+
+
+<div class="modal fade" id="mensaje_modal" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Mensaje Recibo Luz</h4>
+			</div>
+			<div class="modal-body">
+					
+				<table border="0">
+					<tr>
+						<td><img src="recursos/images/icons/exclamation_32x32.png" border="0" />&nbsp;<b><span id="mensajeCerrar" /></b></td>
 					</tr>
 				</table>
 			</div>

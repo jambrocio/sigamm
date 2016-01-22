@@ -10,4 +10,5 @@ public interface ReciboLuzOriginalDao {
 	
 	public ReporteReciboLuzOriginal reporteReciboLuzOriginal(int pagina, int registros, String codigoReciboLuzOriginal);
 	
+	public Retorno cerrarReciboLuzOriginal(LuzOriginal reciboLuzOriginal);
 }

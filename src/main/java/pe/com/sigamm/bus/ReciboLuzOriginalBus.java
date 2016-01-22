@@ -9,4 +9,6 @@ public interface ReciboLuzOriginalBus {
 	public Retorno grabarReciboLuzOriginal(LuzOriginal luzoriginal);
 	
 	public ReporteReciboLuzOriginal reporteReciboLuzOriginal(int pagina, int registros, String codigoReciboLuzOriginal);
+	
+	public Retorno cerrarReciboLuzOriginal(LuzOriginal reciboLuzOriginal);
 }

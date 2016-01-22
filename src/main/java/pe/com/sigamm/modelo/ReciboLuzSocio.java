@@ -35,7 +35,9 @@ public class ReciboLuzSocio {
 	String nombreSector;
 	String fecPeriodo;
 	double costoWatts;
-	Socio socio;
+	int estadoAbierto;
+	
+	
 	public int getIdRecibo() {
 		return idRecibo;
 	}
@@ -222,11 +224,11 @@ public class ReciboLuzSocio {
 	public void setCostoWatts(double costoWatts) {
 		this.costoWatts = costoWatts;
 	}
-	public Socio getSocio() {
-		return socio;
+	public int getEstadoAbierto() {
+		return estadoAbierto;
 	}
-	public void setSocio(Socio socio) {
-		this.socio = socio;
+	public void setEstadoAbierto(int estadoAbierto) {
+		this.estadoAbierto = estadoAbierto;
 	}	
-
+	
 }

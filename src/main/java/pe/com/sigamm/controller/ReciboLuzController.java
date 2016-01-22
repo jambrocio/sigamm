@@ -211,6 +211,26 @@ public class ReciboLuzController {
 			
 		return response;
 	}
+		
+		
+	@RequestMapping(value = "/cerrar-luz-original.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String cerrarReciboLuzOriginal(LuzOriginal reciboLuzOriginal){
+			
+			Gson gson = new Gson();
+			List<CamposObligatorios> camposObligatorios = new ArrayList<CamposObligatorios>();
+			
+			int codigo = 0;
+			String mensaje = "";
+			String listaObligatorios = gson.toJson(camposObligatorios);
+				
+			Retorno retorno = reciboLuzOriginalBus.cerrarReciboLuzOriginal(reciboLuzOriginal);
+			codigo = retorno.getCodigo();
+			mensaje = retorno.getMensaje();
+			 
+			String resultado = "{\"idUsuario\":" + codigo + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + mensaje + "\"}";			
+			
+			return resultado;
+		}
 	
 	
 	@RequestMapping(value = "/buscar-recibo-luz-puesto.json", method = RequestMethod.POST, produces="application/json")

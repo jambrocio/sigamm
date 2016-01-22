@@ -134,6 +134,13 @@ function cargarReciboAgua(){
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/water_24x24.png' border='0' title='Generar Recibo Agua para cada Socio'/>";
 			opciones += "</a>";			
 			
+			opciones += "&nbsp;&nbsp;";
+			
+			opciones += "<a href=javascript:cerrarReciboAgua(";
+			opciones += rowObject.codigoRecibo + ") >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/seguridad_24x24.png' border='0' title='Cerrar el Recibo Agua General'/>";
+			opciones += "</a>";
+			
 			opciones += "</center>";
 			
 		return opciones;
