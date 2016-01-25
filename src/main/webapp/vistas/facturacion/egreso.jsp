@@ -435,14 +435,15 @@ function cargarEgresos(){
 		mtype: 'POST',
 		height: 'auto',
 		width: 'auto',
-		colNames : ['Codigo', 'Tipo Documento', 'Número Documento', 'Fecha','Empresa','Representante','Total', 'Opciones'],
-		colModel : [{
+		//colNames : ['Codigo', 'Tipo Documento', 'Número Documento', 'Fecha','Empresa','Representante','Total', 'Opciones'],
+		colNames : ['Tipo Documento', 'Número Documento', 'Fecha','Empresa','Representante','Total', 'Opciones'],
+		colModel : [/*{
 			name : 'codigoEgreso',
 			index: 'codigoEgreso',
 			sortable:false,
 			width: 90,
 			align: 'center'
-		},{
+		},*/{
 			name : 'nombreDocumento',
 			index: 'nombreDocumento',
 			sortable:false,
@@ -591,6 +592,9 @@ function eliminarEgreso(codigoEgreso){
 		<td colspan="7" align="left">
 			<button type="button" class="btn btn-primary" onclick="nuevoEgreso()">
 				<img src="recursos/images/icons/nuevo_16x16.png" alt="Nuevo" />&nbsp;Nuevo
+			</button>
+			<button type="button" class="btn btn-primary">
+				<img src="recursos/images/icons/excel_16x16.png" alt="Exportar a Excel" />&nbsp;<a href="/sigamm/reporteEgresoExcel" style="color:white">Exportar</a>
 			</button>
 			&nbsp;
 			<!-- button type="button" class="btn btn-primary" onclick="guardar()">

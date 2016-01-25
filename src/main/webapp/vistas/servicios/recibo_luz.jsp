@@ -403,14 +403,14 @@ function cargarReciboLuzOriginal(){
 		mtype: 'POST',
 		height: 'auto',
 		width: 'auto',
-		colNames : ['CodigoRecibo', 'Periodo', 'FechaEmision', 'FechaVencimiento','Total Mes Actual','Total Mes Anterior','Total', 'Opciones'],
-		colModel : [{
+		colNames : ['Periodo', 'FechaEmision', 'FechaVencimiento','Total Mes Actual','Total Mes Anterior','Total', 'Opciones'],
+		colModel : [/*{
 			name : 'codigoReciboLuzOriginal',
 			index: 'codigoReciboLuzOriginal',
 			sortable:false,
 			width: 90,
 			align: 'center'
-		},{
+		},*/{
 			name : 'periodo',
 			index: 'periodo',
 			sortable:false,

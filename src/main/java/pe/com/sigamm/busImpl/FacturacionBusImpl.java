@@ -89,4 +89,10 @@ public class FacturacionBusImpl implements FacturacionBus {
 		return facturacionDao.eliminarEgreso(egreso);
 	}
 
+	@Override
+	public ReporteEgreso reporteEgresoExcel(int pagina, int registros, int exportar) {
+		
+		return facturacionDao.reporteEgresoExcel(pagina, registros, exportar);
+	}
+
 }
