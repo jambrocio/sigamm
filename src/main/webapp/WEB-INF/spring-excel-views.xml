@@ -5,5 +5,7 @@
 	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
 	<bean id="excelView" class="pe.com.sigamm.excel.ExcelBuilder" />
+	
+	<bean id="excelViewEgresos" class="pe.com.sigamm.excel.ExcelBuilderEgresos" />
 
 </beans>

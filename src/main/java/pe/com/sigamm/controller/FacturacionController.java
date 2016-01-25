@@ -208,7 +208,7 @@ public class FacturacionController {
 		List<Egreso> lista = reporte.getListaEgreso();
 		
 		// return a view which will be resolved by an excel view resolver
-        return new ModelAndView("excelView", "listaRegistros", lista);
+        return new ModelAndView("excelViewEgresos", "listaRegistrosEgresos", lista);
          
     }
 }

@@ -73,21 +73,9 @@ function nuevoCobro(){
 	
 	$("#btnBuscar").attr("disabled", false);
 	
-	var tabla = document.getElementById("tabla_resultado");
-	var filasTabla = tabla.rows.length;
+	limpiarTablaDeudas();
+	limpiarTablaResultado();
 	
-	for(var i = 0; i < filasTabla - 1; i++) {
-		
- 		if(i > 0){
- 			
- 			tabla.deleteRow(1);
- 			
- 		}
- 		
- 	}
-	
-	$("#totalesLetras").html("");
-	$("#totales").html("");
 	$("#btnAgregar").attr("disabled", false);
  	
 }
@@ -105,15 +93,14 @@ function guardar(){
     $("#tabla_resultado tbody tr").each(function (item) {
         var this_row = $(this);
         var numero = $.trim(this_row.find('td:eq(0)').html());
-        var codConcepto = $.trim(this_row.find('td:eq(1)').html());
+        var codDeuda = $.trim(this_row.find('td:eq(1)').html());
         var desConcepto = $.trim(this_row.find('td:eq(2)').html());
         var monto = $.trim(this_row.find('td:eq(3)').html());
         var codPuesto = $.trim(this_row.find('td:eq(4)').html());
 		
-        if(monto != "Monto" || codPuesto != "Cod.Puesto" || codConcepto != "Cod.Concepto"){
+        if(monto != "Monto" || codPuesto != "Cod.Puesto" || codDeuda != "Cod.Concepto"){
 	        objetos = {};
-	        objetos.codigoPuesto = codPuesto;
-	        objetos.codigoConcepto = codConcepto;
+	        objetos.codigoDeudaSocio = codDeuda;
 	        objetos.monto = monto;
 	        jsonObj.push(objetos);
         }
@@ -181,6 +168,9 @@ function buscarPuesto(){
         	
         	cargarServicios();
         	
+        	limpiarTablaDeudas();
+        	limpiarTablaResultado();
+        	
         }
     });
 }
@@ -213,6 +203,76 @@ function cargarServicios(){
 	
 }
 
+function limpiarTablaDeudas(){
+	
+	var tabla = document.getElementById("tabla_deudas_socio");
+	var filasTabla = tabla.rows.length;
+	
+	for(var i = 0; i < filasTabla; i++) {
+		
+		if(i > 0){
+ 			
+ 			tabla.deleteRow(1);
+ 			
+ 		}
+ 		
+ 	}
+}
+
+function limpiarTablaResultado(){
+	
+	var tabla = document.getElementById("tabla_resultado");
+	var filasTabla = tabla.rows.length;
+	
+	for(var i = 0; i < filasTabla - 1; i++) {
+		
+ 		if(i > 0){
+ 			
+ 			tabla.deleteRow(1);
+ 			
+ 		}
+ 		
+ 	}
+	
+	$("#totalesLetras").html("");
+	$("#totales").html("");
+	
+}
+
+function buscarDeudasSocio(){
+	
+	limpiarTablaDeudas();
+	
+	var parametros = new Object();
+	parametros.codigoSocio = $("#codigoSocio").val();
+	parametros.codigoServicioDetalle = $("#servicio").val();
+	
+	$.ajax({
+        type: "POST",
+        async: false,
+        url: "buscar-deuda-socio-concepto.json",
+        cache: false,
+        data: parametros,
+        success: function(result){
+        	
+        	$.each(result, function(keyM, serv) {
+        		
+        		$('#tabla_deudas_socio tbody tr:last').after(
+        				"<tr>" +
+        				"<td style='display:none;'>" + serv.codigoDeudaSocio + "</td>" +
+        				"<td align='center'><input type='checkbox' id='chk_" + serv.codigoDeudaSocio + "'></td>" +
+        	            "<td align='left'>" + serv.fecPeriodo + "</td>" +
+        				"<td align='right'>" + serv.importe + "</td>" +
+        				"</tr>");
+        		        		
+        		//console.log("Periodo : " + serv.fecPeriodo + "\nImporte : " + serv.importe);
+        		
+        	});
+        	
+        }
+    });
+	
+}
 
 function agregarConcepto(){
 	/*	
@@ -316,17 +376,72 @@ function validarSiNumero(numero){
 	}
 	
 }
+
+function agregarDeuda(){
 	
+	var ruta = obtenerContexto();
+	codigoPuesto = $("#codigoPuesto").val();
+	
+	$("#tabla_deudas_socio tbody tr").each(function (item) {
+        var this_row = $(this);
+        var codigoDeuda = $.trim(this_row.find('td:eq(0)').html());
+        var check = $.trim(this_row.find('td:eq(1)').html());
+        var concepto = $.trim(this_row.find('td:eq(2)').html());
+        var importe = $.trim(this_row.find('td:eq(3)').html());
+        
+        if(importe != "Importe"){
+	        
+        	//console.log("codigoDeuda : " + codigoDeuda + "\nCheck : " + check + "\nConcepto : " + concepto + "\nImporte : " + importe);
+        	
+        	//Verifica si esta checked
+        	if($("#chk_" + codigoDeuda).is(':checked')) {  
+            	
+        		var existe = 0;
+        		$("#tabla_resultado tbody tr").each(function (itemResultado) {
+        	        var this_row_resultado = $(this);
+        	        var codigoDeudaResultado = $.trim(this_row_resultado.find('td:eq(1)').html());
+        	        
+        	        if(codigoDeuda == codigoDeudaResultado){
+        	        	
+        	        	existe = existe + 1;
+        	        	
+        	        }
+            	});
+        		
+        		if(existe == 0){
+	        		$('#tabla_resultado tbody tr:last').after(
+	        				"<tr>" +
+	        	            "<td align='right'>1</td>" + 
+	        	            "<td align='center' style='display:none;'>" + codigoDeuda + "</td>" +
+	        				"<td align='left'>" + concepto + "</td>" +
+	        				"<td align='right'>" + importe + "</td>" +
+	        				"<td align='center' style='display:none;'>" + codigoPuesto + "</td>" +
+	        				"<td align='center'>" +
+	        				"<button type='button' class='boton btnEliminar' onclick='eliminarFila(this);'>" +
+	        					"<img src='/"+ruta+"/recursos/images/icons/eliminar_16x16.png' alt='Eliminar' />" +
+	        				"</button></td>" +
+	        				"</tr>");
+        		}
+        		
+        		existe = 0;
+        		
+        	}
+        }
+        
+    });
+	
+	calculoTotal();
+}
 </script>
 </head>
 <body id="body">
 <input type="hidden" id="codigoSocio" />
-<table border="0" style="width: 500px;">
+<table border="0" style="width: 900px;">
 	<tr>
-		<td colspan="7" align="right">&nbsp;</td>
+		<td colspan="9" align="right">&nbsp;</td>
 	</tr>
 	<tr>
-		<td colspan="7" align="left">
+		<td colspan="9" align="left">
 			<button type="button" class="btn btn-primary" onclick="nuevoCobro()">
 				<img src="recursos/images/icons/nuevo_16x16.png" alt="Nuevo" />&nbsp;Nuevo
 			</button>
@@ -341,32 +456,45 @@ function validarSiNumero(numero){
 		</td>
 	</tr>
 	<tr>
-		<td colspan="7" align="right">&nbsp;</td>
+		<td colspan="9" align="right">&nbsp;</td>
 	</tr>
 	<tr>
 		<td width="10px">&nbsp;</td>
-		<td><span id="lblNumeroPuesto"><b>Nro.Puesto</b></span></td>
+		<td width="120px"><span id="lblNumeroPuesto"><b>Nro.Puesto</b></span></td>
 		<td width="5px">&nbsp;</td>
-		<td><b>:</b></td>
+		<td width="5px"><b>:</b></td>
 		<td width="5px">&nbsp;</td>
-		<td><input type="text" id="puestoBuscar" class="form-control" maxlength="4" /></td>
-		<td valign="top">&nbsp;&nbsp;
+		<td width="200px"><input type="text" id="puestoBuscar" class="form-control" maxlength="4" /></td>
+		<td width="130px" valign="top">&nbsp;&nbsp;
 			<button type="button" id="btnBuscar" class="btn btn-primary" onclick="buscarPuesto()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 			</button>
 		</td>
+		<td colspan="2">&nbsp;</td>
 	</tr>
 	<tr>
 		<td colspan="7"><hr /></td>
+		<td colspan="2">&nbsp;</td>
 	</tr>
 	<tr>
 		<td width="10px">&nbsp;</td>
-		<td><span id="lbldni"><b>DNI</b></span></td>
+		<td width="120px"><span id="lbldni"><b>DNI</b></span></td>
 		<td width="5px">&nbsp;</td>
-		<td><b>:</b></td>
+		<td width="5px"><b>:</b></td>
 		<td width="5px">&nbsp;</td>
-		<td><input type="text" id="dni" class="form-control" maxlength="8" disabled="disabled"/></td>
-		<td valign="top">&nbsp;</td>
+		<td width="200px"><input type="text" id="dni" class="form-control" maxlength="8" disabled="disabled"/></td>
+		<td width="130px" valign="top">&nbsp;</td>
+		<td rowspan="13" width="20px">&nbsp;</td>
+		<td rowspan="13" valign="top">
+			<table border="1" width="100%" id="tabla_deudas_socio" cellspacing="5" cellpadding="5" class="tabla">
+				<tr>
+					<td align="center" class="tablaCabecera" width="20px" style="display:none;">&nbsp;</td>
+					<td align="center" class="tablaCabecera" width="20px">&nbsp;</td>
+					<td align="center" class="tablaCabecera">Desc.Concepto</td>
+					<td align="center" class="tablaCabecera" width="100px">Importe</td>
+				</tr>
+			</table>
+		</td>
 	</tr>
 	<tr>
 		<td width="10px">&nbsp;</td>
@@ -419,21 +547,34 @@ function validarSiNumero(numero){
 		<td width="5px">&nbsp;</td>
 		<td><b>:</b></td>
 		<td width="5px">&nbsp;</td>
-		<td><select id="servicio" class="form-control"></select></td>
+		<td><select id="servicio" class="form-control" onchange=buscarDeudasSocio();></select></td>
 		<td valign="top"><img id="lblservicio-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 	</tr>
 	<tr>
-		<td width="10px">&nbsp;</td>
-		<td>&nbsp;</td>
-		<td width="5px">&nbsp;</td>
-		<td>&nbsp;</td>
-		<td width="5px">&nbsp;</td>
-		<td>
-			<button type="button" id="btnAgregar" class="btn btn-primary">
+		<td colspan="7">&nbsp;</td>
+	</tr>
+	<tr>
+		<td colspan="7">&nbsp;</td>
+	</tr>
+	<tr>
+		<td colspan="7">&nbsp;</td>
+	</tr>
+	<tr>
+		<td colspan="7">&nbsp;</td>
+	</tr>
+	<tr>
+		<td colspan="7">&nbsp;</td>
+	</tr>
+	<tr>
+		<td colspan="7">&nbsp;</td>
+	</tr>
+	<tr>
+		<td colspan="7">&nbsp;</td>
+		<td colspan="2" align="right">
+			<button type="button" id="btnAgregar" class="btn btn-primary" onclick="agregarDeuda();">
 				<img src="recursos/images/icons/agregar2_16x16.png" alt="Agregar" />&nbsp;Agregar
 			</button>
 		</td>
-		<td valign="top">&nbsp;</td>
 	</tr>
 	<tr>
 		<td colspan="7">&nbsp;</td>
