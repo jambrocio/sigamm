@@ -3,9 +3,8 @@ package pe.com.sigamm.modelo;
 public class FacturacionDetalle {
 
 	int codigoFacturacionDet;
-	int codigoPuesto;
-	int codigoConcepto;
-	int monto;
+	int codigoDeudaSocio;
+	String monto;
 	int codigoFacturacioncab;
 	
 	public int getCodigoFacturacionDet() {
@@ -14,22 +13,16 @@ public class FacturacionDetalle {
 	public void setCodigoFacturacionDet(int codigoFacturacionDet) {
 		this.codigoFacturacionDet = codigoFacturacionDet;
 	}
-	public int getCodigoPuesto() {
-		return codigoPuesto;
+	public int getCodigoDeudaSocio() {
+		return codigoDeudaSocio;
 	}
-	public void setCodigoPuesto(int codigoPuesto) {
-		this.codigoPuesto = codigoPuesto;
+	public void setCodigoDeudaSocio(int codigoDeudaSocio) {
+		this.codigoDeudaSocio = codigoDeudaSocio;
 	}
-	public int getCodigoConcepto() {
-		return codigoConcepto;
-	}
-	public void setCodigoConcepto(int codigoConcepto) {
-		this.codigoConcepto = codigoConcepto;
-	}
-	public int getMonto() {
+	public String getMonto() {
 		return monto;
 	}
-	public void setMonto(int monto) {
+	public void setMonto(String monto) {
 		this.monto = monto;
 	}
 	public int getCodigoFacturacioncab() {

@@ -1,6 +1,7 @@
 package pe.com.sigamm.daoImpl;
 
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,17 +17,14 @@ import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
 import pe.com.sigamm.bean.ReporteEgreso;
-import pe.com.sigamm.bean.ReporteReciboLuzOriginal;
-import pe.com.sigamm.bean.ReporteSocio;
 import pe.com.sigamm.dao.FacturacionDao;
 import pe.com.sigamm.modelo.Concepto;
+import pe.com.sigamm.modelo.DeudaSocio;
 import pe.com.sigamm.modelo.Egreso;
 import pe.com.sigamm.modelo.Empresa;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
-import pe.com.sigamm.modelo.LuzOriginal;
 import pe.com.sigamm.modelo.Retorno;
-import pe.com.sigamm.modelo.Socio;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.LoggerCustom;
 
@@ -95,9 +93,8 @@ public class FacturacionDaoImpl implements FacturacionDao {
 			jdbcCall.withCatalogName("PKG_FACTURACION");
 			jdbcCall.withProcedureName("SP_GRABAR_FACTURACION_DETALLE").declareParameters(
 				new SqlParameter("vi_facturacion_cabecera", 	Types.INTEGER),
-				new SqlParameter("vi_codigo_puesto", 			Types.INTEGER),
-				new SqlParameter("vi_codigo_concepto", 			Types.INTEGER),
-				new SqlParameter("vi_monto", 					Types.INTEGER),
+				new SqlParameter("vi_codigo_deuda_socio", 		Types.INTEGER),
+				new SqlParameter("vi_monto", 					Types.VARCHAR),
 				
 				new SqlOutParameter("vo_facturacion_detalle", 	Types.INTEGER),
 				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
@@ -106,8 +103,7 @@ public class FacturacionDaoImpl implements FacturacionDao {
             
 			MapSqlParameterSource parametros = new MapSqlParameterSource();
 			parametros.addValue("vi_facturacion_cabecera", 		codigoFacturacion);
-			parametros.addValue("vi_codigo_puesto", 			facturacion.getCodigoPuesto());
-			parametros.addValue("vi_codigo_concepto", 			facturacion.getCodigoConcepto());
+			parametros.addValue("vi_codigo_deuda_socio", 		facturacion.getCodigoDeudaSocio());
 			parametros.addValue("vi_monto", 					facturacion.getMonto());
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
@@ -131,7 +127,6 @@ public class FacturacionDaoImpl implements FacturacionDao {
 		return retorno;
 		
 	}
-
 	
 	@Override
 	public List<Concepto> opcionesConceptos(Concepto concepto) {
@@ -392,8 +387,32 @@ public class FacturacionDaoImpl implements FacturacionDao {
 		
 	}
 	
+	@Override
+	public List<DeudaSocio> listarDeudasSocio(DeudaSocio deuda) {
+		
+		List<DeudaSocio> lista = new ArrayList<DeudaSocio>();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_REPORTE_DEUDA_SOCIO").declareParameters(
+					new SqlParameter("vi_codigo_socio", 			Types.INTEGER),
+					new SqlParameter("vi_codigo_servicio_detalle", 	Types.INTEGER),
+					
+					new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(DeudaSocio.class)));
+			
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_socio", 				deuda.getCodigoSocio());
+			parametros.addValue("vi_codigo_servicio_detalle", 	deuda.getCodigoServicioDetalle());
+			
+			Map<String,Object> results = jdbcCall.execute(parametros);
+			lista = (List<DeudaSocio>) results.get("vo_result");
+			
+		}catch(Exception e){
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return lista;
+		
+	}
+	
 }
-
-
-
-

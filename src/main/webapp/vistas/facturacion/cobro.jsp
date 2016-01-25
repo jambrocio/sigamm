@@ -272,6 +272,7 @@ function buscarDeudasSocio(){
         }
     });
 	
+	//alert("Saludos cordiales");
 }
 
 function agregarConcepto(){

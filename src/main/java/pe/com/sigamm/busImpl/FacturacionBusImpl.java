@@ -7,19 +7,18 @@ import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.Gson;
-
 import pe.com.sigamm.bean.ReporteEgreso;
-import pe.com.sigamm.bean.ServiciosDetalle;
 import pe.com.sigamm.bus.FacturacionBus;
 import pe.com.sigamm.dao.FacturacionDao;
 import pe.com.sigamm.modelo.Concepto;
+import pe.com.sigamm.modelo.DeudaSocio;
 import pe.com.sigamm.modelo.Egreso;
 import pe.com.sigamm.modelo.Empresa;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
-import pe.com.sigamm.modelo.MenuPrincipal;
 import pe.com.sigamm.modelo.Retorno;
+
+import com.google.gson.Gson;
 
 @Service
 public class FacturacionBusImpl implements FacturacionBus {
@@ -94,5 +93,10 @@ public class FacturacionBusImpl implements FacturacionBus {
 		
 		return facturacionDao.reporteEgresoExcel(pagina, registros, exportar);
 	}
-
+	
+	@Override
+	public List<DeudaSocio> listarDeudasSocio(DeudaSocio deuda) {
+		
+		return facturacionDao.listarDeudasSocio(deuda);
+	}
 }

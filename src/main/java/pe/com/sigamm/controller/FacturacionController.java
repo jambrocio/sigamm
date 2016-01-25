@@ -20,6 +20,7 @@ import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ResponseListBean;
 import pe.com.sigamm.bus.FacturacionBus;
 import pe.com.sigamm.modelo.Concepto;
+import pe.com.sigamm.modelo.DeudaSocio;
 import pe.com.sigamm.modelo.Egreso;
 import pe.com.sigamm.modelo.Empresa;
 import pe.com.sigamm.modelo.FacturacionCabecera;
@@ -211,4 +212,10 @@ public class FacturacionController {
         return new ModelAndView("excelViewEgresos", "listaRegistrosEgresos", lista);
          
     }
+	
+	@RequestMapping(value = "/buscar-deuda-socio-concepto.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody List<DeudaSocio> buscarDeudaSocioConcepto(DeudaSocio deuda){
+		
+		return facturacionBus.listarDeudasSocio(deuda);
+	}
 }
