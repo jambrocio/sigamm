@@ -443,27 +443,29 @@ function agregarDeuda(){
 	</tr>
 	<tr>
 		<td colspan="9" align="left">
-			<button type="button" class="btn btn-primary" onclick="nuevoCobro()">
+			<button type="button" id="btnNuevo" class="btn btn-primary" onclick="nuevoCobro()">
 				<img src="recursos/images/icons/nuevo_16x16.png" alt="Nuevo" />&nbsp;Nuevo
 			</button>
 			&nbsp;
-			<button type="button" class="btn btn-primary" onclick="guardar()">
+			<button type="button" id="btnGuardar" class="btn btn-primary" onclick="guardar()">
 				<img src="recursos/images/icons/guardar_16x16.png" alt="Buscar" />&nbsp;Guardar
 			</button>
 			&nbsp;
+			<!-- 
 			<button type="button" class="btn btn-primary">
 				<img src="recursos/images/icons/reservar2_16x16.png" alt="Reservar" />&nbsp;Reservar
 			</button>
+			 -->
 		</td>
 	</tr>
 	<tr>
-		<td colspan="9" align="right">&nbsp;</td>
+		<td colspan="9">&nbsp;</td>
 	</tr>
 	<tr>
-		<td width="10px">&nbsp;</td>
-		<td width="120px"><span id="lblNumeroPuesto"><b>Nro.Puesto</b></span></td>
+		<td width="10px" align="left">&nbsp;</td>
+		<td width="120px" align="left"><span id="lblNumeroPuesto"><b>Nro.Puesto</b></span></td>
 		<td width="5px">&nbsp;</td>
-		<td width="5px"><b>:</b></td>
+		<td width="5px" align="left"><b>:</b></td>
 		<td width="5px">&nbsp;</td>
 		<td width="200px"><input type="text" id="puestoBuscar" class="form-control" maxlength="4" /></td>
 		<td width="130px" valign="top">&nbsp;&nbsp;
@@ -474,8 +476,7 @@ function agregarDeuda(){
 		<td colspan="2">&nbsp;</td>
 	</tr>
 	<tr>
-		<td colspan="7"><hr /></td>
-		<td colspan="2">&nbsp;</td>
+		<td colspan="9"><hr /></td>
 	</tr>
 	<tr>
 		<td width="10px">&nbsp;</td>
@@ -485,17 +486,7 @@ function agregarDeuda(){
 		<td width="5px">&nbsp;</td>
 		<td width="200px"><input type="text" id="dni" class="form-control" maxlength="8" disabled="disabled"/></td>
 		<td width="130px" valign="top">&nbsp;</td>
-		<td rowspan="13" width="20px">&nbsp;</td>
-		<td rowspan="13" valign="top">
-			<table border="1" width="100%" id="tabla_deudas_socio" cellspacing="5" cellpadding="5" class="tabla">
-				<tr>
-					<td align="center" class="tablaCabecera" width="20px" style="display:none;">&nbsp;</td>
-					<td align="center" class="tablaCabecera" width="20px">&nbsp;</td>
-					<td align="center" class="tablaCabecera">Desc.Concepto</td>
-					<td align="center" class="tablaCabecera" width="100px">Importe</td>
-				</tr>
-			</table>
-		</td>
+		<td colspan="2">&nbsp;</td>
 	</tr>
 	<tr>
 		<td width="10px">&nbsp;</td>
@@ -505,6 +496,7 @@ function agregarDeuda(){
 		<td width="5px">&nbsp;</td>
 		<td><input type="text" id="apePaterno" class="form-control" maxlength="30" disabled="disabled"/></td>
 		<td valign="top">&nbsp;</td>
+		<td colspan="2">&nbsp;</td>
 	</tr>
 	<tr>
 		<td width="10px">&nbsp;</td>
@@ -514,6 +506,7 @@ function agregarDeuda(){
 		<td width="5px">&nbsp;</td>
 		<td><input type="text" id="apeMaterno" class="form-control" maxlength="30" disabled="disabled"/></td>
 		<td valign="top">&nbsp;</td>
+		<td colspan="2">&nbsp;</td>
 	</tr>
 	<tr>
 		<td width="10px">&nbsp;</td>
@@ -523,6 +516,7 @@ function agregarDeuda(){
 		<td width="5px">&nbsp;</td>
 		<td><input type="text" id="nombres" class="form-control" maxlength="40" disabled="disabled"/></td>
 		<td valign="top">&nbsp;</td>
+		<td colspan="2">&nbsp;</td>
 	</tr>
 	<tr>
 		<td width="10px">&nbsp;</td>
@@ -532,6 +526,7 @@ function agregarDeuda(){
 		<td width="5px">&nbsp;</td>
 		<td><input type="text" id="telefono" class="form-control" maxlength="9" disabled="disabled"/></td>
 		<td valign="top">&nbsp;</td>
+		<td colspan="2">&nbsp;</td>
 	</tr>
 	<tr>
 		<td width="10px">&nbsp;</td>
@@ -541,6 +536,7 @@ function agregarDeuda(){
 		<td width="5px">&nbsp;</td>
 		<td><input type="text" id="puesto" class="form-control" maxlength="9" disabled="disabled"/></td>
 		<td valign="top">&nbsp;</td>
+		<td colspan="2">&nbsp;</td>
 	</tr>
 	<tr>
 		<td width="10px">&nbsp;</td>
@@ -550,54 +546,56 @@ function agregarDeuda(){
 		<td width="5px">&nbsp;</td>
 		<td><select id="servicio" class="form-control" onchange=buscarDeudasSocio();></select></td>
 		<td valign="top"><img id="lblservicio-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+		<td colspan="2">&nbsp;</td>
 	</tr>
 	<tr>
-		<td colspan="7">&nbsp;</td>
+		<td colspan="9">&nbsp;</td>
 	</tr>
 	<tr>
-		<td colspan="7">&nbsp;</td>
-	</tr>
-	<tr>
-		<td colspan="7">&nbsp;</td>
-	</tr>
-	<tr>
-		<td colspan="7">&nbsp;</td>
-	</tr>
-	<tr>
-		<td colspan="7">&nbsp;</td>
-	</tr>
-	<tr>
-		<td colspan="7">&nbsp;</td>
-	</tr>
-	<tr>
-		<td colspan="7">&nbsp;</td>
-		<td colspan="2" align="right">
+		<td colspan="9" align="left">
 			<button type="button" id="btnAgregar" class="btn btn-primary" onclick="agregarDeuda();">
 				<img src="recursos/images/icons/agregar2_16x16.png" alt="Agregar" />&nbsp;Agregar
 			</button>
 		</td>
 	</tr>
 	<tr>
-		<td colspan="7">&nbsp;</td>
+		<td colspan="9">&nbsp;</td>
 	</tr>
 	<tr>
-		<td colspan="7">
-			<table border="1" width="100%" id="tabla_resultado" cellspacing="5" cellpadding="5" class="tabla" width="50%">
+		<td colspan="9">
+			<table border="0" width="100%">
 				<tr>
-					<td align="center" class="tablaCabecera">Nro</td>
-					<td align="center" class="tablaCabecera" style="display:none;">Cod.Concepto</td>
-					<td align="center" class="tablaCabecera">Desc.Concepto</td>
-					<td align="center" class="tablaCabecera">Monto</td>
-					<td align="center" class="tablaCabecera" style="display:none;">Cod.Puesto</td>
-					<td align="center" class="tablaCabecera">Accion</td>
+					<td valign="top">
+						<table border="1" width="100%" id="tabla_deudas_socio" cellspacing="5" cellpadding="5" class="tabla">
+							<tr>
+								<td align="center" class="tablaCabecera" width="20px" style="display:none;">&nbsp;</td>
+								<td align="center" class="tablaCabecera" width="20px">&nbsp;</td>
+								<td align="center" class="tablaCabecera">Desc.Concepto</td>
+								<td align="center" class="tablaCabecera" width="100px">Importe</td>
+							</tr>
+						</table>
+					</td>
+					<td>&nbsp;&nbsp;</td>
+					<td colspan="7" valign="top">
+						<table border="1" width="100%" id="tabla_resultado" cellspacing="5" cellpadding="5" class="tabla" width="50%">
+							<tr>
+								<td align="center" class="tablaCabecera">Nro</td>
+								<td align="center" class="tablaCabecera" style="display:none;">Cod.Concepto</td>
+								<td align="center" class="tablaCabecera">Desc.Concepto</td>
+								<td align="center" class="tablaCabecera">Monto</td>
+								<td align="center" class="tablaCabecera" style="display:none;">Cod.Puesto</td>
+								<td align="center" class="tablaCabecera">Accion</td>
+							</tr>
+							<tfoot>
+							<tr>
+								<td colspan="2" align="left"><b><span id="totalesLetras" /></b></td>
+								<td align="right"><b><span id="totales" /></b></td>
+								<td align="center"></td>
+							</tr>
+							</tfoot>
+						</table>
+					</td>
 				</tr>
-				<tfoot>
-				<tr>
-					<td colspan="2" align="left"><b><span id="totalesLetras" /></b></td>
-					<td align="right"><b><span id="totales" /></b></td>
-					<td align="center"></td>
-				</tr>
-				</tfoot>
 			</table>
 		</td>
 	</tr>
