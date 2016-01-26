@@ -46,6 +46,7 @@
 $(document).ready(function(){	
 	
 	$('[data-toggle="popover"]').popover({ placement : 'right', trigger: "hover" });
+	$("#btnImprimir").hide();
 	
 });
 
@@ -64,6 +65,9 @@ function nuevoCobro(){
 	$("#codigoPuesto").val(0);
 	
 	$("#dniBuscar").val("");
+	$("#puestoBuscar").val("");
+	$("#puesto").val("");
+	$("#servicio").val(0);
 	
 	$("#dni").val("");
 	$("#apePaterno").val("");
@@ -71,13 +75,16 @@ function nuevoCobro(){
 	$("#nombres").val("");
 	$("#telefono").val("");
 	
-	$("#btnBuscar").attr("disabled", false);
-	
 	limpiarTablaDeudas();
 	limpiarTablaResultado();
 	
+	$("#btnBuscar").attr("disabled", false);
 	$("#btnAgregar").attr("disabled", false);
- 	
+	$("#puestoBuscar").attr("disabled", false);
+	$("#btnImprimir").hide();
+	$("#servicio").attr("disabled", false);
+	$("#btnGuardar").attr("disabled", false);
+	
 }
 
 function guardar(){
@@ -134,9 +141,13 @@ function guardar(){
 	    	
 	    	if(result.idFacturacion > 0){
 		    	
+	    		$("#btnBuscar").attr("disabled", true);
 				$("#btnAgregar").attr("disabled", true);		    	
 				$(".btnEliminar").attr("disabled", true);
-					
+				$("#puestoBuscar").attr("disabled", true);
+				$("#btnGuardar").attr("disabled", true);
+				$("#btnImprimir").show();
+				$("#servicio").attr("disabled", true);
 		    }
 	    	
 		}
@@ -433,9 +444,16 @@ function agregarDeuda(){
 	
 	calculoTotal();
 }
+
+function imprimir(){
+	$("div#myPrintArea").printArea();
+}
 </script>
 </head>
 <body id="body">
+<div id="myPrintArea">
+	Zona que se imprimir&aacute;
+</div>
 <input type="hidden" id="codigoSocio" />
 <table border="0" style="width: 900px;">
 	<tr>
@@ -451,11 +469,12 @@ function agregarDeuda(){
 				<img src="recursos/images/icons/guardar_16x16.png" alt="Buscar" />&nbsp;Guardar
 			</button>
 			&nbsp;
-			<!-- 
-			<button type="button" class="btn btn-primary">
-				<img src="recursos/images/icons/reservar2_16x16.png" alt="Reservar" />&nbsp;Reservar
+			<button type="button" id="btnImprimir" class="btn btn-primary" onclick="imprimir();">
+				<!-- 
+				 <img src='recursos/images/icons/print_16x16.png' alt='Imprimir' />&nbsp;<a href='<%=request.getContextPath()%>/generarFacturacionPdf' target='_blank' style='color:white'>&nbsp;Imprimir</a>
+				-->
+				<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;Imprimir
 			</button>
-			 -->
 		</td>
 	</tr>
 	<tr>

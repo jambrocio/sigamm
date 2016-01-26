@@ -22,6 +22,7 @@ import pe.com.sigamm.modelo.Concepto;
 import pe.com.sigamm.modelo.DeudaSocio;
 import pe.com.sigamm.modelo.Egreso;
 import pe.com.sigamm.modelo.Empresa;
+import pe.com.sigamm.modelo.Facturacion;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Retorno;
@@ -412,6 +413,46 @@ public class FacturacionDaoImpl implements FacturacionDao {
 		}
 		
 		return lista;
+		
+	}
+
+	@Override
+	public Facturacion buscarFacturacion(int codigoFacturacion) {
+		
+		Facturacion facturacion = new Facturacion();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_FACTURACION").declareParameters(
+					new SqlParameter("vi_codigo_facturacion", 		Types.INTEGER),
+										
+					new SqlOutParameter("vo_codigo_usuario", 		Types.INTEGER),
+					new SqlOutParameter("vo_serie", 				Types.VARCHAR),
+					new SqlOutParameter("vo_secuencia", 			Types.VARCHAR),
+					new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(FacturacionDetalle.class)));
+			
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_facturacion", 		codigoFacturacion);
+			
+			Map<String,Object> results = jdbcCall.execute(parametros);
+			int codigoUsuario = (Integer) results.get("vo_codigo_usuario");
+			String serie = (String) results.get("vo_serie");
+			String secuencia = (String) results.get("vo_secuencia");
+			List<FacturacionDetalle> lista = (List<FacturacionDetalle>) results.get("vo_result");
+			
+			FacturacionCabecera cabecera = new FacturacionCabecera();
+			cabecera.setCodigoUsuario(codigoUsuario);
+			cabecera.setSerie(serie);
+			cabecera.setSecuencia(secuencia);
+			
+			facturacion.setCabecera(cabecera);
+			facturacion.setDetalle(lista);
+			
+		}catch(Exception e){
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return  facturacion;
 		
 	}
 	

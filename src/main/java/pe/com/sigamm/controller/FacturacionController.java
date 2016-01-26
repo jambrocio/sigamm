@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import pe.com.sigamm.modelo.Concepto;
 import pe.com.sigamm.modelo.DeudaSocio;
 import pe.com.sigamm.modelo.Egreso;
 import pe.com.sigamm.modelo.Empresa;
+import pe.com.sigamm.modelo.Facturacion;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Retorno;
@@ -218,4 +220,18 @@ public class FacturacionController {
 		
 		return facturacionBus.listarDeudasSocio(deuda);
 	}
+	
+	@RequestMapping(value = "/generarFacturacionPdf", method = RequestMethod.GET)
+    public ModelAndView generarFacturacionPdf(@RequestParam(value = "codigoEleccion", defaultValue = "1") Integer codigoEleccion, HttpServletResponse response, HttpServletRequest request) {
+        // create some sample data
+		//List<RegistrosApp> lista = procesosBus.listaRegistros(1, 1, 1);
+		
+		Facturacion facturacion = facturacionBus.buscarFacturacion(55);
+		
+		response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=Impresion Facturacion.pdf");
+        
+        // return a view which will be resolved by an excel view resolver
+        return new ModelAndView("pdfView", "facturacion", facturacion);
+    }
 }

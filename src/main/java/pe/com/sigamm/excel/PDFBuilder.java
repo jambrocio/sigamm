@@ -1,7 +1,6 @@
 package pe.com.sigamm.excel;
 
 import java.io.FileOutputStream;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import pe.com.sigamm.modelo.Facturacion;
 import pe.com.sigamm.modelo.Usuario;
 import pe.com.sigamm.util.Constantes;
 
@@ -44,9 +44,9 @@ public class PDFBuilder extends AbstractPdfView{
                     throws Exception {
  
         @SuppressWarnings("unchecked")
-        List<Usuario> usuarios = (List<Usuario>) model.get("listaResultadoCandidatos");
+        Facturacion facturacion = (Facturacion) model.get("facturacion");
         
-        writer = PdfWriter.getInstance(document, new FileOutputStream("Reporte Resultado Elecciones.pdf"));
+        writer = PdfWriter.getInstance(document, new FileOutputStream("Facturacion.pdf"));
         /*
         writer = PdfWriter.getInstance(document, new FileOutputStream("Reporte Resultado Elecciones.pdf"));
     	writer.setEncryption("concretepage".getBytes(), "cp123".getBytes(), PdfWriter.ALLOW_COPY, PdfWriter.STANDARD_ENCRYPTION_40);
@@ -87,6 +87,30 @@ public class PDFBuilder extends AbstractPdfView{
         float[] columnWidths = new float[] {2f, 10f, 20f};
         table.setWidths(columnWidths);
         
+        PdfPCell cellSeparador1 = new PdfPCell(new Paragraph(""));
+    	cellSeparador1.setBorder(Rectangle.BOTTOM);
+    	cellSeparador1.setPadding(3);
+    	cellSeparador1.setColspan(3);
+    	cellSeparador1.setBorderWidth(2f);
+    	cellSeparador1.setBorderColor(new BaseColor(52, 150, 196));
+        table.addCell(cellSeparador1);
+        
+        PdfPCell cellNro;
+    	cellNro = new PdfPCell(new Paragraph(String.valueOf(registro)));
+    	cellNro.setHorizontalAlignment(Element.ALIGN_CENTER);
+    	cellNro.setPadding(5);
+    	cellNro.setRowspan(5);
+    	//cellNro.setBorder(Rectangle.NO_BORDER);   // removes border
+        table.addCell(cellNro);
+        
+    	Paragraph candidato = new Paragraph("CANDIDATO N° ", FontFactory.getFont(
+        		"arial",   					// fuente
+                8,                          // tamaño
+                Font.BOLD,                  // estilo
+                BaseColor.BLACK));
+        
+                
+        /*
         for(Usuario usuario : usuarios){
         	
         	if(sSistemaOperativo.equals(Constantes.WINDOWS_OS)){
@@ -222,6 +246,7 @@ public class PDFBuilder extends AbstractPdfView{
         	}
             
         }
+        */
         
         document.close();
         

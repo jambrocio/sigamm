@@ -27,6 +27,7 @@
 <script type="text/javascript" src="recursos/js/util.js"></script>
 <script type="text/javascript" src="recursos/js/convertidor.js"></script>
 <script type="text/javascript" src="recursos/js/jquery.alerts.js" charset="utf-8" ></script>
+<script type="text/javascript" src="recursos/js/jquery.PrintArea.js" charset="utf-8" ></script>
 
 <link rel="stylesheet" type="text/css" media="screen" href="recursos/js/jqgrid/css/ui.jqgrid.css" />
 
