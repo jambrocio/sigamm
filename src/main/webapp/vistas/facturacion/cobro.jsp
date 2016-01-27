@@ -41,12 +41,17 @@
         /*font-size:12px;*/
         font-weight: bold;
 	}
+	
+	.modal-dialog {
+  		width: 900px;
+	}
+	
 </style>
 <script>
 $(document).ready(function(){	
 	
 	$('[data-toggle="popover"]').popover({ placement : 'right', trigger: "hover" });
-	$("#btnImprimir").hide();
+	$("#btnVisualizacion").hide();
 	
 });
 
@@ -81,7 +86,7 @@ function nuevoCobro(){
 	$("#btnBuscar").attr("disabled", false);
 	$("#btnAgregar").attr("disabled", false);
 	$("#puestoBuscar").attr("disabled", false);
-	$("#btnImprimir").hide();
+	$("#btnVisualizacion").hide();
 	$("#servicio").attr("disabled", false);
 	$("#btnGuardar").attr("disabled", false);
 	
@@ -146,8 +151,69 @@ function guardar(){
 				$(".btnEliminar").attr("disabled", true);
 				$("#puestoBuscar").attr("disabled", true);
 				$("#btnGuardar").attr("disabled", true);
-				$("#btnImprimir").show();
+				$("#btnVisualizacion").show();
 				$("#servicio").attr("disabled", true);
+				
+				limpiarTablaFacturacion();
+				
+				$("#correlativo").html(result.idFacturacion);
+				$('#tablaFacturacionDetalle tbody tr:last').after("<tr><td>&nbsp;</td><td><b>" + $("#servicio option:selected").html() + "</b></td><td>&nbsp;</td>");
+				$("#correlativo2").html(result.idFacturacion);
+				$('#tablaFacturacionDetalle2 tbody tr:last').after("<tr><td>&nbsp;</td><td><b>" + $("#servicio option:selected").html() + "</b></td><td>&nbsp;</td>");
+				
+				dataTabla = "";
+				cantidadLineas = 1;
+				$("#tabla_resultado tbody tr").each(function (item) {
+			        var this_row = $(this);
+			        var numero = $.trim(this_row.find('td:eq(0)').html());
+			        var codDeuda = $.trim(this_row.find('td:eq(1)').html());
+			        var desConcepto = $.trim(this_row.find('td:eq(2)').html());
+			        var monto = $.trim(this_row.find('td:eq(3)').html());
+			        var codPuesto = $.trim(this_row.find('td:eq(4)').html());
+					
+			        if(monto != "Monto" || codPuesto != "Cod.Puesto" || codDeuda != "Cod.Concepto"){
+				    	dataTabla += "<tr>";
+				    	dataTabla += "<td>&nbsp;</td>";
+				    	dataTabla += "<td>" + desConcepto + "</td>";
+				    	dataTabla += "<td align='right'>" + monto + "</td>";
+				    	dataTabla += "</tr>";
+			        }
+			        cantidadLineas = cantidadLineas + 1; 
+			    });
+				
+				//console.log("Cantidad de Lineas : " + cantidadLineas);
+				
+				var j = 8 - cantidadLineas; 
+				for (i=0 ;i < j; i++) { 
+					 
+					dataTabla += "<tr>";
+			    	dataTabla += "<td>&nbsp;</td>";
+			    	dataTabla += "<td>&nbsp;</td>";
+			    	dataTabla += "<td>&nbsp;</td>";
+			    	dataTabla += "</tr>";
+			    	
+			    	//console.log("Linea : " + i);
+				}
+				
+				dataTabla1 = dataTabla;
+				dataTabla1 += "<tr>";
+		    	dataTabla1 += "<td>&nbsp;</td>";
+		    	dataTabla1 += "<td><b>TOTAL</b></td>";
+		    	dataTabla1 += "<td align='right'><b><span id='totalImpresion' /></b></td>";
+		    	dataTabla1 += "</tr>";
+		    	
+		    	dataTabla2 = dataTabla;
+		    	dataTabla2 += "<tr>";
+		    	dataTabla2 += "<td>&nbsp;</td>";
+		    	dataTabla2 += "<td><b>TOTAL</b></td>";
+		    	dataTabla2 += "<td align='right'><b><span id='totalImpresion2' /></b></td>";
+		    	dataTabla2 += "</tr>";
+		    			    	
+				$('#tablaFacturacionDetalle tbody tr:last').after(dataTabla1);
+				$('#tablaFacturacionDetalle2 tbody tr:last').after(dataTabla2);
+				
+				calculoTotal();
+				
 		    }
 	    	
 		}
@@ -155,6 +221,9 @@ function guardar(){
 }
 
 function buscarPuesto(){
+	
+	var f = new Date();
+	var fecha = pad(f.getDate(), 2) + "/" + pad((f.getMonth() +1), 2) + "/" + f.getFullYear();
 	
 	puesto = $("#puestoBuscar").val();
 	
@@ -176,6 +245,18 @@ function buscarPuesto(){
         	$("#telefono").val(result.telefono);
         	$("#codigoSocio").val(result.codigoSocio);
         	$("#puesto").val(result.nroPuesto);
+        	
+        	$("#printAsociado").html(result.apellidoPaterno + " " + result.apellidoMaterno + ", " + result.nombres);
+        	$("#printPuesto").html(result.nroPuesto);
+        	$("#printGiro").html(result.nombreGiro);
+        	$("#printSector").html(result.nombreSector);
+        	$("#printFecha").html(fecha);
+        	
+        	$("#printAsociado2").html(result.apellidoPaterno + " " + result.apellidoMaterno + ", " + result.nombres);
+        	$("#printPuesto2").html(result.nroPuesto);
+        	$("#printGiro2").html(result.nombreGiro);
+        	$("#printSector2").html(result.nombreSector);
+        	$("#printFecha2").html(fecha);
         	
         	cargarServicios();
         	
@@ -214,6 +295,22 @@ function cargarServicios(){
 	
 }
 
+function limpiarTablaFacturacion(){
+	
+	var tabla = document.getElementById("tablaFacturacionDetalle");
+	var filasTabla = tabla.rows.length;
+	
+	for(var i = 0; i < filasTabla; i++) {
+		
+		if(i > 0){
+ 			
+ 			tabla.deleteRow(1);
+ 			
+ 		}
+ 		
+ 	}
+}
+
 function limpiarTablaDeudas(){
 	
 	var tabla = document.getElementById("tabla_deudas_socio");
@@ -246,7 +343,11 @@ function limpiarTablaResultado(){
  	}
 	
 	$("#totalesLetras").html("");
+	$("#totalLetras").html("");
+	$("#totalLetras2").html("");
 	$("#totales").html("");
+	$("#totalImpresion").html("");
+	$("#totalImpresion2").html("");
 	
 }
 
@@ -365,7 +466,11 @@ function calculoTotal(){
     });
 	
 	$("#totalesLetras").html(NumeroALetras(total));
+	$("#totalLetras").html(NumeroALetras(total));
+	$("#totalLetras2").html(NumeroALetras(total));
 	$("#totales").html(total.toFixed(2));
+	$("#totalImpresion").html(total.toFixed(2));
+	$("#totalImpresion2").html(total.toFixed(2));
 }
 
 function eliminarFila(t){
@@ -445,15 +550,175 @@ function agregarDeuda(){
 	calculoTotal();
 }
 
+function visualizacion(){
+	//$("div#myPrintArea").printArea();
+	
+	$('#visualizacion_modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	});
+}
+
 function imprimir(){
+	
 	$("div#myPrintArea").printArea();
+	
 }
 </script>
 </head>
 <body id="body">
-<div id="myPrintArea">
-	Zona que se imprimir&aacute;
+<div class="modal fade" id="visualizacion_modal" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Visualización</h4>
+			</div>
+			<div class="modal-body">
+					
+				<div id="myPrintArea">
+					<table border="0" width="100%">
+						<tr>
+							<td width="48%" valign="top">
+								<table border="0" width="100%">
+									<tr>
+										<td colspan="3" align="center"><b>ASOCIACIÓN DE COMERCIANTES DEL MERCADO<BR>MODELO DE HUARAL<BR>Fundado el 13 de Noviembre de 1996<BR>R.U.C. 20530606334</b></td>
+									</tr>
+									<tr>
+										<td colspan="3">&nbsp;</td>
+									</tr>
+									<tr>
+										<td colspan="3" align="center"><b>RECIBO PROVISIONAL N° <span id="correlativo" /></b></td>
+									</tr>
+									<tr>
+										<td colspan="3">&nbsp;</td>
+									</tr>
+									<tr>
+										<td width="200px"><b>FECHA</b></td>
+										<td><b>:</b></td>
+										<td><span id="printFecha" /></td>
+									</tr>
+									<tr>
+										<td><b>ASOCIADO</b></td>
+										<td><b>:</b></td>
+										<td><span id="printAsociado" /></td>
+									</tr>
+									<tr>
+										<td><b>SECTOR</b></td>
+										<td><b>:</b></td>
+										<td><span id="printSector" /></td>
+									</tr>
+									<tr>
+										<td><b>PUESTO</b></td>
+										<td><b>:</b></td>
+										<td><span id="printPuesto" /></td>
+									</tr>
+									<tr>
+										<td><b>GIRO</b></td>
+										<td><b>:</b></td>
+										<td><span id="printGiro" /></td>
+									</tr>
+									<tr>
+										<td colspan="3">&nbsp;</td>
+									</tr>
+									<tr>
+										<td colspan="3">
+											<table border="1" width="100%" cellspacing="5" cellpadding="5" class="tabla" id="tablaFacturacionDetalle">
+												<tr>
+													<td width="80px" align="center"><b>CANT.</b></td>
+													<td align="center"><b>DESCRIPCION</b></td>
+													<td width="100px" align="center"><b>IMPORTE</b></td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="3">&nbsp;</td>
+									</tr>
+									<tr>
+										<td colspan="3"><b>SON : <span id="totalLetras" /></b></td>
+									</tr>
+								</table>
+							</td>
+							<td width="4%" align="center"><div style="height:600px;width:0;border:0;border-left:3px;border-style:double;border-color:#000000" /></td>
+							<td width="48%" valign="top">
+								<table border="0" width="100%">
+									<tr>
+										<td colspan="3" align="center"><b>ASOCIACIÓN DE COMERCIANTES DEL MERCADO<BR>MODELO DE HUARAL<BR>Fundado el 13 de Noviembre de 1996<BR>R.U.C. 20530606334</b></td>
+									</tr>
+									<tr>
+										<td colspan="3">&nbsp;</td>
+									</tr>
+									<tr>
+										<td colspan="3" align="center"><b>RECIBO PROVISIONAL N° <span id="correlativo2" /></b></td>
+									</tr>
+									<tr>
+										<td colspan="3">&nbsp;</td>
+									</tr>
+									<tr>
+										<td width="200px"><b>FECHA</b></td>
+										<td><b>:</b></td>
+										<td><span id="printFecha2" /></td>
+									</tr>
+									<tr>
+										<td><b>ASOCIADO</b></td>
+										<td><b>:</b></td>
+										<td><span id="printAsociado2" /></td>
+									</tr>
+									<tr>
+										<td><b>SECTOR</b></td>
+										<td><b>:</b></td>
+										<td><span id="printSector2" /></td>
+									</tr>
+									<tr>
+										<td><b>PUESTO</b></td>
+										<td><b>:</b></td>
+										<td><span id="printPuesto2" /></td>
+									</tr>
+									<tr>
+										<td><b>GIRO</b></td>
+										<td><b>:</b></td>
+										<td><span id="printGiro2" /></td>
+									</tr>
+									<tr>
+										<td colspan="3">&nbsp;</td>
+									</tr>
+									<tr>
+										<td colspan="3">
+											<table border="1" width="100%" cellspacing="5" cellpadding="5" class="tabla" id="tablaFacturacionDetalle2">
+												<tr>
+													<td width="80px" align="center"><b>CANT.</b></td>
+													<td align="center"><b>DESCRIPCION</b></td>
+													<td width="100px" align="center"><b>IMPORTE</b></td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="3">&nbsp;</td>
+									</tr>
+									<tr>
+										<td colspan="3"><b>SON : <span id="totalLetras2" /></b></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</div>
+				
+			</div>
+			<div class="modal-footer">
+				<button type="button" id="btnImprimir" class="btn btn-primary" onclick="imprimir();">
+					<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;Imprimir
+				</button>
+			</div>
+		</div>
+		  
+	</div>
 </div>
+
 <input type="hidden" id="codigoSocio" />
 <table border="0" style="width: 900px;">
 	<tr>
@@ -469,10 +734,7 @@ function imprimir(){
 				<img src="recursos/images/icons/guardar_16x16.png" alt="Buscar" />&nbsp;Guardar
 			</button>
 			&nbsp;
-			<button type="button" id="btnImprimir" class="btn btn-primary" onclick="imprimir();">
-				<!-- 
-				 <img src='recursos/images/icons/print_16x16.png' alt='Imprimir' />&nbsp;<a href='<%=request.getContextPath()%>/generarFacturacionPdf' target='_blank' style='color:white'>&nbsp;Imprimir</a>
-				-->
+			<button type="button" id="btnVisualizacion" class="btn btn-primary" onclick="visualizacion();">
 				<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;Imprimir
 			</button>
 		</td>

@@ -147,7 +147,7 @@ function NumeroALetras(num){
   };
 
   if (data.centavos > 0)
-    data.letrasCentavos = "CON " + data.centavos + "/100";
+    data.letrasCentavos = "CON " + data.centavos + "/100 CENTIMOS";
 
   if(data.enteros == 0)
     return "CERO " + data.letrasMonedaPlural + " " + data.letrasCentavos;
