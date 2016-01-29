@@ -3,19 +3,21 @@ package pe.com.sigamm.modelo;
 public class Egreso {
 	int codigoEgreso;
 	int tipoDocumento;
+	int codigoEmpresa;
+	int tipoCategoria;
+	int estado;
 	String numeroDocumento;
 	String ruc;
 	String fecha;
-	int codigoEmpresa;
 	String detalle;
-	double total;
 	String representante;
 	String cobrado;
 	String dni;
 	String area;
 	String nombreDocumento;
 	String razonSocial;
-	int tipoCategoria;
+	String observaciones;
+	double total;
 	
 	public int getCodigoEgreso() {
 		return codigoEgreso;
@@ -28,6 +30,24 @@ public class Egreso {
 	}
 	public void setTipoDocumento(int tipoDocumento) {
 		this.tipoDocumento = tipoDocumento;
+	}
+	public int getCodigoEmpresa() {
+		return codigoEmpresa;
+	}
+	public void setCodigoEmpresa(int codigoEmpresa) {
+		this.codigoEmpresa = codigoEmpresa;
+	}
+	public int getTipoCategoria() {
+		return tipoCategoria;
+	}
+	public void setTipoCategoria(int tipoCategoria) {
+		this.tipoCategoria = tipoCategoria;
+	}
+	public int getEstado() {
+		return estado;
+	}
+	public void setEstado(int estado) {
+		this.estado = estado;
 	}
 	public String getNumeroDocumento() {
 		return numeroDocumento;
@@ -47,23 +67,11 @@ public class Egreso {
 	public void setFecha(String fecha) {
 		this.fecha = fecha;
 	}
-	public int getCodigoEmpresa() {
-		return codigoEmpresa;
-	}
-	public void setCodigoEmpresa(int codigoEmpresa) {
-		this.codigoEmpresa = codigoEmpresa;
-	}
 	public String getDetalle() {
 		return detalle;
 	}
 	public void setDetalle(String detalle) {
 		this.detalle = detalle;
-	}
-	public double getTotal() {
-		return total;
-	}
-	public void setTotal(double total) {
-		this.total = total;
 	}
 	public String getRepresentante() {
 		return representante;
@@ -101,11 +109,17 @@ public class Egreso {
 	public void setRazonSocial(String razonSocial) {
 		this.razonSocial = razonSocial;
 	}
-	public int getTipoCategoria() {
-		return tipoCategoria;
+	public String getObservaciones() {
+		return observaciones;
 	}
-	public void setTipoCategoria(int tipoCategoria) {
-		this.tipoCategoria = tipoCategoria;
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
 	}
-
+	public double getTotal() {
+		return total;
+	}
+	public void setTotal(double total) {
+		this.total = total;
+	}
+	
 }

@@ -1,6 +1,7 @@
 package pe.com.sigamm.modelo;
 
 public class ReciboAguaSocio { 
+	int idRecibo;
 	int codigoSocioServicio; 
 	int codigoSocio; 
     int estadoSocio;
@@ -12,6 +13,15 @@ public class ReciboAguaSocio {
 	int codigoServicio;
 	int estado;
 	int reciboAguaCreado;
+	int estadoAbierto;
+	int lecturaInicial;
+	int lecturaFinal;
+	int trabado;
+	double consumoMes;
+	double servicioMantenimiento;
+	double deudaAnterior;
+	double reconexion;
+	double alcantarillado;
 	double total;
     String numeroPuesto;
     String nombreFull; 
@@ -20,7 +30,14 @@ public class ReciboAguaSocio {
     String nombreSector;
 	String nombreServicio;  
 	String nombreDetalle;
+	String periodoSocio;
 	
+	public int getIdRecibo() {
+		return idRecibo;
+	}
+	public void setIdRecibo(int idRecibo) {
+		this.idRecibo = idRecibo;
+	}
 	public int getCodigoSocioServicio() {
 		return codigoSocioServicio;
 	}
@@ -87,6 +104,60 @@ public class ReciboAguaSocio {
 	public void setReciboAguaCreado(int reciboAguaCreado) {
 		this.reciboAguaCreado = reciboAguaCreado;
 	}
+	public int getEstadoAbierto() {
+		return estadoAbierto;
+	}
+	public void setEstadoAbierto(int estadoAbierto) {
+		this.estadoAbierto = estadoAbierto;
+	}
+	public int getLecturaInicial() {
+		return lecturaInicial;
+	}
+	public void setLecturaInicial(int lecturaInicial) {
+		this.lecturaInicial = lecturaInicial;
+	}
+	public int getLecturaFinal() {
+		return lecturaFinal;
+	}
+	public void setLecturaFinal(int lecturaFinal) {
+		this.lecturaFinal = lecturaFinal;
+	}
+	public int getTrabado() {
+		return trabado;
+	}
+	public void setTrabado(int trabado) {
+		this.trabado = trabado;
+	}
+	public double getConsumoMes() {
+		return consumoMes;
+	}
+	public void setConsumoMes(double consumoMes) {
+		this.consumoMes = consumoMes;
+	}
+	public double getServicioMantenimiento() {
+		return servicioMantenimiento;
+	}
+	public void setServicioMantenimiento(double servicioMantenimiento) {
+		this.servicioMantenimiento = servicioMantenimiento;
+	}
+	public double getDeudaAnterior() {
+		return deudaAnterior;
+	}
+	public void setDeudaAnterior(double deudaAnterior) {
+		this.deudaAnterior = deudaAnterior;
+	}
+	public double getReconexion() {
+		return reconexion;
+	}
+	public void setReconexion(double reconexion) {
+		this.reconexion = reconexion;
+	}
+	public double getAlcantarillado() {
+		return alcantarillado;
+	}
+	public void setAlcantarillado(double alcantarillado) {
+		this.alcantarillado = alcantarillado;
+	}
 	public double getTotal() {
 		return total;
 	}
@@ -135,4 +206,11 @@ public class ReciboAguaSocio {
 	public void setNombreDetalle(String nombreDetalle) {
 		this.nombreDetalle = nombreDetalle;
 	}
+	public String getPeriodoSocio() {
+		return periodoSocio;
+	}
+	public void setPeriodoSocio(String periodoSocio) {
+		this.periodoSocio = periodoSocio;
+	}
+
 }

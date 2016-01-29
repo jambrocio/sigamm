@@ -422,6 +422,13 @@ function cargarEgresos(){
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Egreso'/>";
 			opciones += "</a>";			
 			
+			opciones += "&nbsp;&nbsp;";
+			
+			opciones += "<a href=javascript:anularEgreso(";
+			opciones += rowObject.codigoEgreso + ") >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/tacho_24x24.png' border='0' title='Anular Egreso'/>";
+			opciones += "</a>";
+			
 			opciones += "</center>";
 			
 		return opciones;
@@ -436,14 +443,14 @@ function cargarEgresos(){
 		height: 'auto',
 		width: 'auto',
 		//colNames : ['Codigo', 'Tipo Documento', 'Número Documento', 'Fecha','Empresa','Representante','Total', 'Opciones'],
-		colNames : ['Tipo Documento', 'Número Documento', 'Fecha','Empresa','Representante','Total', 'Opciones'],
-		colModel : [/*{
-			name : 'codigoEgreso',
-			index: 'codigoEgreso',
+		colNames : ['Estado','Tipo Documento', 'Número Documento', 'Fecha','Empresa','Representante','Total', 'Opciones'],
+		colModel : [{
+			name : 'estado',
+			index: 'estado',
 			sortable:false,
 			width: 90,
 			align: 'center'
-		},*/{
+		},{
 			name : 'nombreDocumento',
 			index: 'nombreDocumento',
 			sortable:false,
@@ -494,7 +501,16 @@ function cargarEgresos(){
 		rownumbers: true,
 		viewrecords : true,
 		sortorder : "codigoEgreso",				
-		caption : "Egreso"
+		caption : "Egreso",
+		afterInsertRow: function(rowId, data, item){
+			//alert(rowId + ' - ' + data + ' - ' + item.total);
+			if (item.estado == 1){
+				$("#grilla").setCell(rowId, 'estado', 'ACEPTADO', { 'color':'green','font-weight':'bold' });
+			} else if (item.estado == 2) {
+				$("#grilla").setCell(rowId, 'estado', 'ANULADO', { 'color':'red','font-weight':'bold' });
+			}
+
+		}
 		
 	}).trigger('reloadGrid');
 }
@@ -579,6 +595,57 @@ function eliminarEgreso(codigoEgreso){
     });
 	
 }
+
+
+function anularEgreso(codigoEgreso){
+	
+	var ruta = obtenerContexto();
+	mensaje = "Desea ANULAR el egreso cuyo código es  " + codigoEgreso + "... ?"; 
+	
+	$("#mensajeAnular").html(mensaje);
+	
+	$('#alerta_anular_modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	}).one('click', '#aceptar', function() {
+
+		jsonObj = [];
+		var parametros = new Object();
+		parametros.codigoEgreso = codigoEgreso;
+		parametros.observaciones = 	$("#motivoAnulacion").val();
+		$.ajax({
+			type: "POST",
+		    async:false,
+		    url: "anular-egreso.json",
+		    cache : false,
+		    data: parametros,
+		    success: function(result){
+		            
+		        $('#alerta_anular_modal').modal('hide');
+	            	
+	            $.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Mensaje',
+					// (string | mandatory) the text inside the notification
+					text: result.mensaje,
+					// (string | optional) the image to display on the left
+					image: "/" + ruta + "/recursos/images/confirm.png",
+					// (bool | optional) if you want it to fade out on its own or just sit there
+					sticky: false,
+					// (int | optional) the time you want it to be alive for before fading out
+					time: ''
+				});
+	            
+	            cargarEgresos();
+		            
+			}
+		});
+		
+	});
+	
+}
+
+
 </script>
 </head>
 <body id="body">
@@ -804,6 +871,47 @@ function eliminarEgreso(codigoEgreso){
 					<tr>
 						<td><img src="recursos/images/icons/exclamation_32x32.png" border="0" />&nbsp;<b><span id="mensajeEliminar" /></b></td>
 					</tr>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" id="aceptar">Si</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+			</div>
+		</div>
+		  
+	</div>
+</div>
+
+
+<div class="modal fade" id="alerta_anular_modal" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Anular Egreso</h4>
+			</div>
+			<div class="modal-body">
+					
+				<table border="0" width="100%">
+					<tr>
+						<td colspan="3"><img src="recursos/images/icons/exclamation_32x32.png" border="0" />&nbsp;<b><span id="mensajeAnular" /></b></td>
+					</tr>
+					<tr style="height: 30px">&nbsp;</tr>
+					<!-- tr>
+						<td colspan="3" align="left">
+							<button type="button" class="btn btn-primary" onclick="guardarAnulado(1)">
+								<img src="recursos/images/icons/guardar_16x16.png" alt="Buscar" />&nbsp;Guardar
+							</button>
+						</td>
+					</tr-->
+					<tr style="height: 30px">&nbsp;</tr>
+					<tr>
+						<td><span id="lblmotivoAnulacion" style="font-size: 11px;"><b>MOTIVO DE ANULACION (*)</b></span></td>
+						<td><b>:</b></td>
+						<td><input type="text" id="motivoAnulacion" class="form-control" maxlength="500" style="text-transform: uppercase;" /></td>
+					</tr>	
 				</table>
 			</div>
 			<div class="modal-footer">

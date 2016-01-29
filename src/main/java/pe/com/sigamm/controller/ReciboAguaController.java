@@ -188,27 +188,57 @@ public class ReciboAguaController {
 	
 	
 	@RequestMapping(value = "/buscar-usuario-puesto-giro-agua.json", method = RequestMethod.POST, produces="application/json")
-	public @ResponseBody ResponseListBean<Puesto> reporteUsuarioPuestoGiroAgua(
+	public @ResponseBody ResponseListBean<ReciboAguaSocio> reporteUsuarioPuestoGiroAgua(
 			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
 			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
 			@RequestParam(value = "codigoSector", defaultValue = "0") Integer codigoSector,
 			@RequestParam(value = "nroPuesto", defaultValue = "0") String nroPuesto,
 			@RequestParam(value = "codigoReciboOriginal", defaultValue = "0") Integer codigoReciboOriginal){
 		
-		ResponseListBean<Puesto> response = new ResponseListBean<Puesto>();
+		ResponseListBean<ReciboAguaSocio> response = new ResponseListBean<ReciboAguaSocio>();
 		
-		/*ReportePuesto reporte = puestoBus.reportePuestoxPto(pagina, registros, codigoSector, nroPuesto, codigoReciboOriginal);
+		ReporteReciboAguaSocio reporte = reciboAguaSocioBus.reportePuestoxAgua(pagina, registros, codigoSector, nroPuesto, codigoReciboOriginal);
 		
-		Integer totalReciboPuestoxPto = reporte.getTotalRegistros(); 
+		Integer totalReciboPuestoxAgua = reporte.getTotalRegistros(); 
 		
 		response.setPage(pagina);
-		response.setRecords(totalReciboPuestoxPto);
+		response.setRecords(totalReciboPuestoxAgua);
 		
 		//total de paginas a mostrar
-		response.setTotal(OperadoresUtil.obtenerCociente(totalReciboPuestoxPto, registros));
+		response.setTotal(OperadoresUtil.obtenerCociente(totalReciboPuestoxAgua, registros));
 				
-		response.setRows(reporte.getListaPuesto());*/
+		response.setRows(reporte.getListaReciboAguaSocio());
 		
 		return response;
 	}
+	
+	
+	@RequestMapping(value = "/grabar-agua-x-socio.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String grabarReciboAguaxSocio(ReciboAguaSocio reciboAguaSocio){
+		
+		Gson gson = new Gson();
+		List<CamposObligatorios> camposObligatorios = new ArrayList<CamposObligatorios>();
+		
+		
+		int codigo = 0;
+		String mensaje = "";
+		String listaObligatorios = gson.toJson(camposObligatorios);
+		
+		if(camposObligatorios.size() > 0){
+			
+			codigo = 0;
+			
+		}else{
+			
+			Retorno retorno = reciboAguaSocioBus.grabarReciboAguaxSocio(reciboAguaSocio);
+			codigo = retorno.getCodigo();
+			mensaje = retorno.getMensaje();
+		}
+		 
+		String resultado = "{\"idUsuario\":" + codigo + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + mensaje + "\"}";
+		
+		
+		return resultado;
+	}
+	
 }

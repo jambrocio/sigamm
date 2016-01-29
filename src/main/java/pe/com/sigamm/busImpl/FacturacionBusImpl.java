@@ -106,4 +106,10 @@ public class FacturacionBusImpl implements FacturacionBus {
 		
 		return facturacionDao.buscarFacturacion(codigoFacturacion);
 	}
+	
+	@Override
+	public Retorno anularEgreso(Egreso egreso) {
+
+		return facturacionDao.anularEgreso(egreso);
+	}
 }

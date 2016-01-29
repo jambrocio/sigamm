@@ -234,4 +234,20 @@ public class FacturacionController {
         // return a view which will be resolved by an excel view resolver
         return new ModelAndView("pdfView", "facturacion", facturacion);
     }
+	
+	@RequestMapping(value = "/anular-egreso.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String anularEgreso(Egreso egreso){
+		
+		Gson gson = new Gson();
+		
+		Retorno retorno = facturacionBus.anularEgreso(egreso);
+		int codigo = retorno.getCodigo();
+		String mensaje = retorno.getMensaje();
+		 
+		String resultado = "{\"idUsuario\":" + codigo + ",\"mensaje\":\"" + mensaje + "\"}";
+		
+		
+		return resultado;
+	}
+	
 }

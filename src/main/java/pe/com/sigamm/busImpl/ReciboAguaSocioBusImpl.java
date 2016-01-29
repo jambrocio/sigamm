@@ -10,6 +10,8 @@ import com.google.gson.Gson;
 import pe.com.sigamm.bean.ReporteReciboAguaSocio;
 import pe.com.sigamm.bus.ReciboAguaSocioBus;
 import pe.com.sigamm.dao.ReciboAguaSocioDao;
+import pe.com.sigamm.modelo.ReciboAguaSocio;
+import pe.com.sigamm.modelo.Retorno;
 
 @Service
 public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
@@ -31,6 +33,18 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 	public ReporteReciboAguaSocio editarReciboAguaxSocio(int pagina, int registros, String puestoSocio, int codigoRecibo) {
 
 		return reciboAguaSocioDao.editarReciboAguaxSocio(pagina, registros, puestoSocio, codigoRecibo);
+	}
+
+	@Override
+	public ReporteReciboAguaSocio reportePuestoxAgua(int pagina, int registros, int codigoSector, String nroPuesto, int codigoReciboOriginal) {
+
+		return reciboAguaSocioDao.reportePuestoxAgua(pagina, registros, codigoSector, nroPuesto, codigoReciboOriginal);
+	}
+
+	public Retorno grabarReciboAguaxSocio(ReciboAguaSocio reciboAguaSocio) {
+		
+		return reciboAguaSocioDao.grabarReciboAguaxSocio(reciboAguaSocio);
+		
 	}
 
 }

@@ -8,14 +8,17 @@ public class Puesto {
 	int codigoReciboOriginal;
 	int codigoSector;
 	int estadoReciboLuz;
+	//int estadoReciboAgua;
 	String nombreSector;
 	String nroPuesto;
 	String dni;
 	String nombreFull;
 	String nombreGiro;
 	int reciboLuz;
+	//int reciboAgua;
 	double total;
 	int reciboLuzCreado;
+	//int reciboAguaCreado;
 	int codigoServicioDetalle;
 	String periodoSocio;
 	double numCostoWatts;
@@ -58,6 +61,12 @@ public class Puesto {
 	}
 	public void setCodigoSector(int codigoSector) {
 		this.codigoSector = codigoSector;
+	}
+	public int getEstadoReciboLuz() {
+		return estadoReciboLuz;
+	}
+	public void setEstadoReciboLuz(int estadoReciboLuz) {
+		this.estadoReciboLuz = estadoReciboLuz;
 	}
 	public String getNombreSector() {
 		return nombreSector;
@@ -136,12 +145,6 @@ public class Puesto {
 	}
 	public void setMantenimiento(double mantenimiento) {
 		this.mantenimiento = mantenimiento;
-	}
-	public int getEstadoReciboLuz() {
-		return estadoReciboLuz;
-	}
-	public void setEstadoReciboLuz(int estadoReciboLuz) {
-		this.estadoReciboLuz = estadoReciboLuz;
 	}
 	public int getEstadoAbierto() {
 		return estadoAbierto;

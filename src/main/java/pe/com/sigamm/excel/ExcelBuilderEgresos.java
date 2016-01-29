@@ -91,27 +91,32 @@ public class ExcelBuilderEgresos extends AbstractExcelView{
         header.createCell(0).setCellValue("Nro.");
         header.getCell(0).setCellStyle(csCabecera);
         
-        header.createCell(1).setCellValue("DNI");
+        header.createCell(1).setCellValue("Documento");
         header.getCell(1).setCellStyle(csCabecera);
          
-        header.createCell(2).setCellValue("Nombres");
+        header.createCell(2).setCellValue("Nro. Documento");
         header.getCell(2).setCellStyle(csCabecera);
          
-        header.createCell(3).setCellValue("Giro");
+        header.createCell(3).setCellValue("Total");
         header.getCell(3).setCellStyle(csCabecera);
          
-        header.createCell(4).setCellValue("Fecha Ingreso");
+        header.createCell(4).setCellValue("Fecha");
         header.getCell(4).setCellStyle(csCabecera);
          
-        header.createCell(5).setCellValue("Padron");
+        header.createCell(5).setCellValue("Ruc");
         header.getCell(5).setCellStyle(csCabecera);
         
-        header.createCell(6).setCellValue("Puesto");
+        header.createCell(6).setCellValue("Razón Social");
         header.getCell(6).setCellStyle(csCabecera);
-        
-        header.createCell(7).setCellValue("Sector");
+
+        header.createCell(7).setCellValue("Detalle");
         header.getCell(7).setCellStyle(csCabecera);
         
+        header.createCell(8).setCellValue("Observaciones");
+        header.getCell(7).setCellStyle(csCabecera);
+        
+        header.createCell(9).setCellValue("Estado");
+        header.getCell(7).setCellStyle(csCabecera);
         // create data rows
         int rowCount = 1;
          
@@ -125,7 +130,7 @@ public class ExcelBuilderEgresos extends AbstractExcelView{
     		c.setCellStyle(csRight);
     		
     		c = aRow.createCell(1);
-    		c.setCellValue(egreso.getTipoDocumento());
+    		c.setCellValue(egreso.getNombreDocumento());
     		c.setCellStyle(csRight);
     		
     		c = aRow.createCell(2);
@@ -133,25 +138,35 @@ public class ExcelBuilderEgresos extends AbstractExcelView{
     		c.setCellStyle(csRight);
     		
     		c = aRow.createCell(3);
-    		c.setCellValue(egreso.getNombreDocumento());
+    		c.setCellValue(egreso.getTotal());
     		c.setCellStyle(csRight);
-    		/*
+    		
     		c = aRow.createCell(4);
-    		c.setCellValue(socio.getFechaIngreso());
+    		c.setCellValue(egreso.getFecha());
     		c.setCellStyle(csRight);
     		
     		c = aRow.createCell(5);
-    		c.setCellValue(socio.getPadron());
+    		c.setCellValue(egreso.getRuc());
     		c.setCellStyle(csRight);
     		
     		c = aRow.createCell(6);
-    		c.setCellValue(socio.getNroPuesto());
+    		c.setCellValue(egreso.getRazonSocial());
+    		c.setCellStyle(csRight);
+
+    		c = aRow.createCell(7);
+    		c.setCellValue(egreso.getDetalle());
     		c.setCellStyle(csRight);
     		
-    		c = aRow.createCell(7);
-    		c.setCellValue(socio.getNombreSector());
+    		c = aRow.createCell(8);
+    		c.setCellValue(egreso.getObservaciones());
     		c.setCellStyle(csRight);
-    		*/
+    		    		
+    		c = aRow.createCell(9);
+    		if (egreso.getEstado()==1)
+    			c.setCellValue("ACEPTADO");
+    		else if (egreso.getEstado()==2)
+    			c.setCellValue("ANULADO");
+    		c.setCellStyle(csRight);
         }
     }
 }

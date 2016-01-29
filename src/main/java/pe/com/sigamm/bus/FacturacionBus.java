@@ -33,4 +33,6 @@ public interface FacturacionBus {
 	public List<DeudaSocio> listarDeudasSocio(DeudaSocio deuda);
 	
 	public Facturacion buscarFacturacion(int codigoFacturacion);
+	
+	public Retorno anularEgreso(Egreso egreso);
 }

@@ -213,9 +213,9 @@ public class PuestoDaoImpl implements PuestoDao {
 		ReportePuesto reporte = new ReportePuesto();
 		try{
 			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
-			jdbcCall.withCatalogName("PKG_PUESTO");
+			jdbcCall.withCatalogName("PKG_RECIBO_LUZ_SOCIO");
 			
-			jdbcCall.withProcedureName("SP_REPORTE_PUESTO_X_LUZ").declareParameters(
+			jdbcCall.withProcedureName("SP_REPORTE_PUESTO_X_LUZSOCIO").declareParameters(
 					new SqlParameter("vi_pagina", 					Types.INTEGER),
 					new SqlParameter("vi_registros", 				Types.INTEGER),
 					new SqlParameter("vi_codigo_sector", 			Types.INTEGER),

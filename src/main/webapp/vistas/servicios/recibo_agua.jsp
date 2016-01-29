@@ -136,12 +136,26 @@ function cargarReciboAgua(){
 			
 			opciones += "&nbsp;&nbsp;";
 			
-			opciones += "<a href=javascript:cerrarReciboAgua(";
-			opciones += rowObject.codigoRecibo + ") >";
-			opciones += "<img src='/"+ruta+"/recursos/images/icons/seguridad_24x24.png' border='0' title='Cerrar el Recibo Agua General'/>";
-			opciones += "</a>";
-			
-			opciones += "</center>";
+			if (rowObject.estadoAbierto == 0) {			
+				opciones += "<a href=javascript:cerrarReciboAgua(";
+				opciones += rowObject.codigoRecibo + ") >";
+				opciones += "<img src='/"+ruta+"/recursos/images/icons/unlock_24x24.png' border='0' title='Cerrar Recibo Agua General'/>";
+				opciones += "</a>";
+			} else {
+				opciones += "<a href=javascript:abrirReciboAgua(";
+				opciones += rowObject.codigoRecibo + ") >";
+				opciones += "<img src='/"+ruta+"/recursos/images/icons/lock_24x24.png' border='0' title='Abrir Recibo Agua General'/>";
+				opciones += "</a>";
+			}			
+				
+				opciones += "&nbsp;&nbsp;";
+				
+				opciones += "<a href=javascript:generarImpresión(";
+				opciones += rowObject.codigoRecibo + ") >";
+				opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Generar Impresión de todos los Recibo de Agua de los Socios'/>";
+				opciones += "</a>";
+				
+				opciones += "</center>";
 			
 		return opciones;
 				
@@ -160,14 +174,15 @@ function cargarReciboAgua(){
 		height: 'auto',
 		width: 'auto',
 		postData: parametros,
-		colNames : ['Codigo Recibo', 'Periodo', 'Lectura Inicial', 'Lectura Final','Monto','Opciones'],
-		colModel : [{
+		//colNames : ['Codigo Recibo', 'Periodo', 'Lectura Inicial', 'Lectura Final','Monto','Opciones'],
+		colNames : ['Periodo', 'Lectura Inicial', 'Lectura Final','Monto','Opciones'],
+		colModel : [/*{
 			name : 'codigoRecibo',
 			index: 'codigoRecibo',
 			sortable:false,
 			width: 50,
 			align: 'center'
-		},{
+		},*/{
 			name : 'periodo',
 			index: 'periodo',
 			sortable:false,
@@ -194,7 +209,7 @@ function cargarReciboAgua(){
 		},{					
 			name:'codigoRecibo',
 			index:'codigoRecibo',
-			width:80,
+			width:120,
 			sortable:false,
 			search: false,
 			formatter:formatterBotones
@@ -355,7 +370,7 @@ function eliminarReciboAgua(codigoRecibo, periodo){
 function generarReciboAguaSocio(codigoRecibo){
 	console.log("Generar Recibo Agua Socios - [codigoReciboAgua] : " + codigoRecibo);
 	
-	$("#nroRecibo").text(codigoRecibo);
+	$("#nroRecibo").text(codigoRecibo);	
 	
 	$('#recibos_agua_socios_modal').modal({
 		backdrop: 'static',
@@ -387,7 +402,7 @@ function cargarReciboAguaSocio(codigoRecibo){
 			opciones += "&nbsp;&nbsp;";
 			
 			opciones += "<a href=javascript:generarReciboAguaXSocio('";
-			opciones += rowObject.codigoSector + "','" + rowObject.numeroPuesto + "','" + rowObject.codigoReciboAgua + "') >";
+			opciones += rowObject.codigoSector + "','" + rowObject.numeroPuesto + "','" + codigoRecibo + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/agregar2_24x24.png' border='0' title='Crear Recibo de Agua por Socio'/>";
 			opciones += "</a>";			
 
@@ -563,35 +578,24 @@ function editarReciboAguaXSocio(original, puesto){
 
 
 
-function generarReciboAguaXSocio(sector, puesto, original){
-	
-	$('#recibos_agua_por_socio_modal').modal({
-		backdrop: 'static',
-		keyboard: false
-	});
-	
+function generarReciboAguaXSocio(sector, puesto, codigoRecibo){
+
 	$("#sectorSocio").text(sector);
 	$("#puestoSocio").text(puesto);									
-	$("#reciboOriginal").text(original);
+	$("#reciboOriginal").text(codigoRecibo);
 	
 	colorEtiquetas();
-	
-	/*$("#codigoReciboLuzOriginal").val(codigoReciboLuzOriginal);
-	buscarUsuario();*/
-	
-	cargarDatosReciboAguaSocio(sector, puesto, original);
+	cargarDatosReciboAguaSocio(sector, puesto, codigoRecibo);
 }
 
 
-function cargarDatosReciboAguaSocio(sector, puesto, original){	
-
-	//alert(codigoPuesto);
-	var ruta = obtenerContexto();
+function cargarDatosReciboAguaSocio(sector, puesto, codigoRecibo){
 	
+	var ruta = obtenerContexto();	
 	var parametros = new Object();
 	parametros.codigoSector         = sector;
 	parametros.nroPuesto            = puesto;
-	parametros.codigoReciboOriginal = original;
+	parametros.codigoReciboOriginal = codigoRecibo;
 	
 	$.ajax({
         type: "POST",
@@ -611,6 +615,39 @@ function cargarDatosReciboAguaSocio(sector, puesto, original){
             	$("#periodoSocio").text(val.periodoSocio);
             	$("#codigoSocio").val(val.codigoSocio);
             	$("#reciboAguaCreado").val(val.reciboAguaCreado);            	          	
+            	$("#codigoServicioDetalle").val(val.codigoServicioDetalle);
+            	
+            	if (val.codigoServicioDetalle==2) {
+            		if( $('#sintraba').is(":visible") ){
+            			$('#sintraba').hide();
+            			$('#contraba').show();
+            			$('#alcantarillado').hide();
+            		} else {
+            			$('#sintraba').show();
+            			$('#contraba').hide();
+            			$('#alcantarillado').hide();
+            		}
+            	} else if (val.codigoServicioDetalle==3) {
+            		if( $('#sintraba').is(":visible") ){
+            			$('#sintraba').hide();
+            			$('#contraba').hide();
+            			$('#alcantarillado').show();
+            		} else {
+            			$('#sintraba').hide();
+            			$('#contraba').hide();
+            			$('#alcantarillado').show();
+            		}
+            	} else if (val.codigoServicioDetalle==5) {
+            		if( $('#sintraba').is(":visible") ){
+            			$('#sintraba').hide();
+            			$('#contraba').show();
+            			$('#alcantarillado').show();
+            		} else {
+            			$('#sintraba').show();
+            			$('#contraba').hide();
+            			$('#alcantarillado').show();
+            		}
+            	}
             	
 				if ($("#reciboAguaCreado").val() == 0) {
 					
@@ -654,12 +691,131 @@ function activaManual(){
 	}
 }
 
+function operaciones(){
+	var consumomessocio = 0;
+	var consumomessociotrabado = 0;
+	var alcantarillado = 0;
+	var total = 0;
+	
+	consumomessocio = parseFloat($('#consumoMesSocio').val());	 
+	consumomessociotrabado = parseFloat($('#consumoMesSocioTrabado').val());
+	alcantarillado = parseFloat($('#alcantarilladoSocio').val()); 
+	
+	if( $('#sintraba').is(":visible") ){
+		if ( isNaN(consumomessocio) ) consumomessocio = 0.0;
+		if ( isNaN(alcantarillado) ) alcantarillado = 0.0;
+		total = consumomessocio + alcantarillado;
+	} else {
+		if ( isNaN(consumomessociotrabado) ) consumomessociotrabado = 0.0;
+		if ( isNaN(alcantarillado) ) alcantarillado = 0.0;
+		total = consumomessociotrabado + alcantarillado;
+	}
+
+	$('#totalSocio').text(redondear_dos_decimal(total));	
+}
+
+function redondear_dos_decimal(valor) {
+	var redondea_valor = 0.00;
+	redondea_valor = Math.round(valor * 100) / 100;
+   return redondea_valor; 
+}
+
+
+function guardarRecibo(){
+	
+	var ruta = obtenerContexto();
+	//alert("CORRELATIVO: " + $("#codigoReciboLuzSocio").val() );
+	var parametros = new Object();
+	parametros.idRecibo = $("#idRecibo").val();
+	parametros.codigoSocio = $("#codigoSocio").val();
+	parametros.codigoReciboAgua = $("#nroRecibo").text();
+	parametros.lecturaInicial = 0;
+	parametros.lecturaFinal = 0;
+	if( $('#sintraba').is(":visible") ){
+		alert("1");
+		parametros.consumoMes = parseFloat($("#consumoMesSocio").val());
+		parametros.trabado = 0;
+	} else {
+		alert("2");
+		parametros.consumoMes = parseFloat($("#consumoMesSocioTrabado").val());
+		parametros.trabado = 1;
+	}
+	parametros.alcantarillado = parseFloat($("#alcantarilladoSocio").val());
+	parametros.mantenimiento = 0;
+	parametros.deudaanterior = 0;
+	parametros.reconexion = 0;
+	parametros.total = $("#totalSocio").text();
+	parametros.correlativo = $("#codigoReciboLuzSocio").val();
+		
+	$.ajax({
+		type: "POST",
+	    async:false,
+	    url: "grabar-agua-x-socio.json",
+	    cache : false,
+	    data: parametros,
+	    success: function(result){
+	            
+	        if(result.camposObligatorios.length == 0){
+                	
+            	$('#recibos_agua_por_socio_modal').modal('hide');
+            	
+	            $.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Mensaje',
+					// (string | mandatory) the text inside the notification
+					text: result.mensaje,
+					// (string | optional) the image to display on the left
+					image: "/" + ruta + "/recursos/images/confirm.png",
+					// (bool | optional) if you want it to fade out on its own or just sit there
+					sticky: false,
+					// (int | optional) the time you want it to be alive for before fading out
+					time: ''
+				});
+	            
+	            cargarReciboAguaSocio();
+	            limpiarReciboAguaSocio();
+	            
+			}else{
+                	
+            	colorEtiquetas();
+            	fila = "";
+            	$.each(result.camposObligatorios, function(id, obj){
+                        
+                	$("#" + obj.nombreCampo).css("color", "red");
+                    $("#" + obj.nombreCampo + "-img").show();
+                    $("#" + obj.nombreCampo + "-img").attr("data-content", obj.descripcion);
+                        
+				});
+                	
+			}
+                
+		}
+	});
+
+}
+
+
+function limpiarReciboAguaSocio(){
+	$("#nombreSocio").text('');
+	$("#puestoSocio").text('');
+	$("#sectorSocio").text('');
+	$("#giroSocio").text('');
+	$("#periodoSocio").text('');
+	$("#idRecibo").val('');
+	$("#consumoMesSocio").val('');
+	$("#consumoMesSocioTrabado").val('');
+	$("#alcantarilladoSocio").val('');
+	$("#totalSocio").text('');
+}
 
 </script>
 </head>
 <body id="body">
 <input type="hidden" id="codigorecibo" />
 <input type="hidden" id="codigoReciboAgua" />
+<input type="hidden" id="codigoSocio" />
+<input type="hidden" id="codigoServicioDetalle" />
+<input type="text" id="reciboAguaCreado" />
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td colspan="4">&nbsp;</td>
@@ -872,30 +1028,31 @@ function activaManual(){
 							</tr>
 							<tr>
 								<td><b>ID :</b></td>
-								<td><input type='text' id='idRecibo' name='idRecibo' size='10' class='text ui-widget-content ui-corner-all' style="text-align: center;" onKeyDown="campoEnter(event,this.form.lecturaInicialSocio);"/></td>
+								<td><input type='text' id='idRecibo' name='idRecibo' size='10' class='text ui-widget-content ui-corner-all' style="text-align: center;"/></td>
 							</tr>
-							<tr>
+							<!-- tr>
 								<td><b>Lectura Anterior :</b></td>
 								<td><input type='text' id='lecturaInicialSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('L');" style="text-align: center;" onKeyDown="campoEnter(event,this.form.lecturaFinalSocio);"/></td>
 							</tr>
 							<tr>
 								<td><b>Lectura Actual :</b></td>
 								<td><input type='text' id='lecturaFinalSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('L');" style="text-align: center;"/></td>
-							</tr>
+							</tr-->
 							<tr>
 								<td colspan="2" align="center"><label><input type="checkbox" id="cbox1" value="first_checkbox" onclick="activaManual()"> Medidor Trabado</label></td>
 							</tr>
-							<tr id="sintraba">
-								<td><b>Consumo de Mes :</b></td>
-								<td><div id="consumoMesSocio" style="border: 2px solid blue; width: 100px;" align="center"></div></td>
+							<tr id="sintraba" style="display:none">
+								<td><b>Consumo de Agua :</b></td>
+								<!-- td><div id="consumoMesSocio" style="border: 2px solid blue; width: 100px;" align="center"></div></td -->
+								<td><input type='text' id='consumoMesSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones();" style="text-align: center;border: 2px solid blue; width: 100px;"/></td>
 							</tr>
-							<tr id="contraba">
-								<td><b>Consumo de Mes :</b></td>
-								<td><input type='text' id='consumoMesSocioTrabado' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('L');" style="text-align: center;border: 2px solid blue; width: 100px;"/></td>
+							<tr id="contraba" style="display:none">
+								<td><b>Consumo de Agua :</b></td>
+								<td><input type='text' id='consumoMesSocioTrabado' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones();" style="text-align: center;border: 2px solid blue; width: 100px;"/></td>
 							</tr>
-							<tr>
+							<tr id="alcantarillado" style="display:none">
 								<td><b>Alcantarillado :</b></td>
-								<td><input type='text' id='alcantarillado' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('L');" style="text-align: center;"/></td>
+								<td><input type='text' id='alcantarilladoSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones();" style="text-align: center;"/></td>
 							</tr>
 							<tr>
 								<td><b>TOTAL DE AGUA</b></td>
@@ -911,7 +1068,8 @@ function activaManual(){
 		
 		<div class="modal-footer">
 			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="guardarRecibo()">Grabar</button>		
-			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="limpiarReciboAguaSocio()">Cerrar</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="">Cerrar</button>
+			<!-- button type="button" class="btn btn-primary" data-dismiss="modal" onclick="limpiarReciboAguaSocio()">Cerrar</button -->
 		</div>
 		
 		</div>

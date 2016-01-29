@@ -36,4 +36,5 @@ public interface FacturacionDao {
 	
 	public Facturacion buscarFacturacion(int codigoFacturacion);
 	
+	public Retorno anularEgreso(Egreso egreso);
 }

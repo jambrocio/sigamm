@@ -455,5 +455,48 @@ public class FacturacionDaoImpl implements FacturacionDao {
 		return  facturacion;
 		
 	}
+
 	
+	@Override
+	public Retorno anularEgreso(Egreso egreso) {
+
+		Retorno retorno = new Retorno();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_ANULAR_EGRESO").declareParameters(
+				new SqlParameter("vi_codigo_egreso", 			Types.INTEGER),
+				new SqlParameter("vi_motivo_anulacion", 		Types.VARCHAR),
+				new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
+				
+				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
+				new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
+				
+            
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_egreso", 			egreso.getCodigoEgreso());
+			parametros.addValue("vi_motivo_anulacion", 			egreso.getObservaciones());
+			parametros.addValue("vi_codigo_usuario", 			datosSession.getCodigoUsuario());
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
+		
+	}
+
 }
