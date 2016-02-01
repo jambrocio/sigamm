@@ -521,34 +521,46 @@ function editarReciboAguaXSocio(original, puesto){
 		        	});	        	
 
 		        	$.each(result.rows, function(key,val) {		        		
-		        		/*$("#codigoSocio").val(val.codigoSocio);
-		            	$("#nombreSocio").text(val.nombreFull);
-		            	$("#puestoSocio").text(val.puestoSocio);
+		        		$("#nombreSocio").text(val.nombreFull);
+		            	$("#puestoSocio").text(val.nroPuesto);
 		            	$("#sectorSocio").text(val.nombreSector);
 		            	$("#giroSocio").text(val.nombreGiro);
-		            	$("#periodoSocio").text(val.fecPeriodo);
-						$("#idRecibo").val(val.idRecibo);
-		            	$("#lecturaInicialSocio").val(val.lecturaInicial);
-		        		$("#lecturaFinalSocio").val(val.lecturaFinal);
-		        		if (val.trabado == 1){
-		        			$("input:checkbox").attr('checked', 'checked');
-	        				$("#sintraba").hide();
-	        				$("#contraba").show();
-	        				$("#consumoMesSocioTrabado").val(val.consumoMes);
-		        		} else {
-		        			$("input:checkbox").removeAttr('checked');
-	        				$("#sintraba").show();
-	        				$("#contraba").hide();
-	        				$("#consumoMesSocio").html(val.consumoMes);
-		        		}		        		
-		        		$("#cargoEnergiaSocio").val(val.cargoEnergia);
-		        		$("#alumbradoPublicoSocio").val(val.alumbradoPublico);
-		        		$("#servicioMantenimientoSocio").val(val.servicioMantenimiento);
-		        		$("#deudaAnteriorSocio").val(val.deudaAnterior);
-		        		$("#reconexionSocio").val(val.reconexion);
-		        		$("#totalSocio").html(val.total);
-		        		$("#costoWatts").val(val.costoWatts);
-		        		$("#codigoReciboLuzSocio").val(val.correlativo);*/
+		            	$("#periodoSocio").text(val.periodoSocio);
+		            	$("#codigoSocio").val(val.codigoSocio);
+		            	$("#reciboAguaCreado").val(val.reciboAguaCreado);            	          	
+		            	$("#codigoServicioDetalle").val(val.codigoServicioDetalle);
+		            	
+		            	if (val.codigoServicioDetalle==2) {
+		            		if( $('#sintraba').is(":visible") ){
+		            			$('#sintraba').hide();
+		            			$('#contraba').show();
+		            			$('#alcantarillado').hide();
+		            		} else {
+		            			$('#sintraba').show();
+		            			$('#contraba').hide();
+		            			$('#alcantarillado').hide();
+		            		}
+		            	} else if (val.codigoServicioDetalle==3) {
+		            		if( $('#sintraba').is(":visible") ){
+		            			$('#sintraba').hide();
+		            			$('#contraba').hide();
+		            			$('#alcantarillado').show();
+		            		} else {
+		            			$('#sintraba').hide();
+		            			$('#contraba').hide();
+		            			$('#alcantarillado').show();
+		            		}
+		            	} else if (val.codigoServicioDetalle==5) {
+		            		if( $('#sintraba').is(":visible") ){
+		            			$('#sintraba').hide();
+		            			$('#contraba').show();
+		            			$('#alcantarillado').show();
+		            		} else {
+		            			$('#sintraba').show();
+		            			$('#contraba').hide();
+		            			$('#alcantarillado').show();
+		            		}
+		            	}
 		            	
 		        	});
 	        	
