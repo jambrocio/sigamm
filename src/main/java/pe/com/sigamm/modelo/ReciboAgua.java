@@ -7,6 +7,7 @@ public class ReciboAgua {
 	double monto;
 	String periodo;
 	int estado;
+	int estadoAbierto;
 	
 	public int getCodigoRecibo() {
 		return codigoRecibo;
@@ -43,6 +44,12 @@ public class ReciboAgua {
 	}
 	public void setEstado(int estado) {
 		this.estado = estado;
+	}
+	public int getEstadoAbierto() {
+		return estadoAbierto;
+	}
+	public void setEstadoAbierto(int estadoAbierto) {
+		this.estadoAbierto = estadoAbierto;
 	}
 
 }

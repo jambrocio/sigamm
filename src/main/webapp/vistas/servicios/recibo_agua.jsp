@@ -827,7 +827,7 @@ function limpiarReciboAguaSocio(){
 <input type="hidden" id="codigoReciboAgua" />
 <input type="hidden" id="codigoSocio" />
 <input type="hidden" id="codigoServicioDetalle" />
-<input type="text" id="reciboAguaCreado" />
+<input type="hidden" id="reciboAguaCreado" />
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td colspan="4">&nbsp;</td>

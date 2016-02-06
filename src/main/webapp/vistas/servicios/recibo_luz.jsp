@@ -222,12 +222,6 @@ function nuevoRecibos(){
 }
 
 function guardar(){
-	
-	var ruta = obtenerContexto();
-
-	//alert("periodo: "+$('#periodo').val() + "\nVencimiento: " + $('#fecvencimiento').val() + "\nEmision: " + $('#fecemision').val() + "\nCostoWats: " + $('#costowats').val() + "\nEstado: " + $('#estado').val());
-	//alert("Reposicion: "+$('#repomancnx').val() + "\nCargoFijo: " + $('#cargofijo').val() + "\nAlumbradoPublico: " + $('#alumpublic').val() + "\nSubTotalMes: " + $('#subtotalmes').val() + "\nIgv: " + $('#igv').val());
-	
 	jsonObj = [];
 	var parametros = new Object();
 	parametros.periodo = $("#periodo").val();
@@ -291,11 +285,11 @@ function guardar(){
 	parametros.potGenFpPreuni = $("#potGenFpPreuni").val();
 	parametros.potGenFpTotal = $("#potGenFpTotal").val();
 	parametros.alumbradoPublicoOriginal = $("#alumbradoPublicoOriginal").val();
-	parametros.ajustePrecioRetroactivo = $("#ajustePreRet").val(0);
-	parametros.igvRefact = $("#igvRefact").val(0);
+	parametros.ajustePreRet = $("#ajustePreRet").val();
+	parametros.igvRefact = $("#igvRefact").val();	
 	parametros.total = $("#total").val();
 
-		
+
 	$.ajax({
 		type: "POST",
 	    async:false,
@@ -1587,7 +1581,7 @@ function botonEnter()
 		</div>
 		
 		<div class="modal-footer">
-			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="guardar()">Grabar</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="guardar(1)">Grabar</button>
 			<button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
 		</div>
 		

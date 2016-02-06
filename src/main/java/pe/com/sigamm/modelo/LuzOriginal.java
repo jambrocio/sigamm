@@ -64,10 +64,15 @@ public class LuzOriginal {
 	double potGenFpPreuni;
 	double potUsoRedDistTotal;
 	double potGenFpTotal;
-	double ajustePrecioRetroactivo;
+	double ajustePreRet;
 	double igvRefact;
 	int estadoAbierto;
-	
+	public int getCodigoReciboLuzOriginal() {
+		return codigoReciboLuzOriginal;
+	}
+	public void setCodigoReciboLuzOriginal(int codigoReciboLuzOriginal) {
+		this.codigoReciboLuzOriginal = codigoReciboLuzOriginal;
+	}
 	public String getPeriodo() {
 		return periodo;
 	}
@@ -110,6 +115,18 @@ public class LuzOriginal {
 	public void setCargoFijo(double cargoFijo) {
 		this.cargoFijo = cargoFijo;
 	}
+	public double getAlumbradoPublico() {
+		return alumbradoPublico;
+	}
+	public void setAlumbradoPublico(double alumbradoPublico) {
+		this.alumbradoPublico = alumbradoPublico;
+	}
+	public double getAlumbradoPublicoOriginal() {
+		return alumbradoPublicoOriginal;
+	}
+	public void setAlumbradoPublicoOriginal(double alumbradoPublicoOriginal) {
+		this.alumbradoPublicoOriginal = alumbradoPublicoOriginal;
+	}
 	public double getSubTotalMes() {
 		return subTotalMes;
 	}
@@ -134,6 +151,12 @@ public class LuzOriginal {
 	public void setAporteLey(double aporteLey) {
 		this.aporteLey = aporteLey;
 	}
+	public double getDeudaAnterior() {
+		return deudaAnterior;
+	}
+	public void setDeudaAnterior(double deudaAnterior) {
+		this.deudaAnterior = deudaAnterior;
+	}
 	public double getRedonMesAct() {
 		return redonMesAct;
 	}
@@ -145,6 +168,30 @@ public class LuzOriginal {
 	}
 	public void setRedonMesAnt(double redonMesAnt) {
 		this.redonMesAnt = redonMesAnt;
+	}
+	public double getRecargoMora() {
+		return recargoMora;
+	}
+	public void setRecargoMora(double recargoMora) {
+		this.recargoMora = recargoMora;
+	}
+	public double getTotal() {
+		return total;
+	}
+	public void setTotal(double total) {
+		this.total = total;
+	}
+	public double getMantenimiento() {
+		return mantenimiento;
+	}
+	public void setMantenimiento(double mantenimiento) {
+		this.mantenimiento = mantenimiento;
+	}
+	public double getInteresCompensatorio() {
+		return interesCompensatorio;
+	}
+	public void setInteresCompensatorio(double interesCompensatorio) {
+		this.interesCompensatorio = interesCompensatorio;
 	}
 	public double getEnergActFraPtaActual() {
 		return energActFraPtaActual;
@@ -368,6 +415,12 @@ public class LuzOriginal {
 	public void setPotGenFpConfac(double potGenFpConfac) {
 		this.potGenFpConfac = potGenFpConfac;
 	}
+	public double getPotGenFpPreuni() {
+		return potGenFpPreuni;
+	}
+	public void setPotGenFpPreuni(double potGenFpPreuni) {
+		this.potGenFpPreuni = potGenFpPreuni;
+	}
 	public double getPotUsoRedDistTotal() {
 		return potUsoRedDistTotal;
 	}
@@ -380,65 +433,11 @@ public class LuzOriginal {
 	public void setPotGenFpTotal(double potGenFpTotal) {
 		this.potGenFpTotal = potGenFpTotal;
 	}
-	public int getCodigoReciboLuzOriginal() {
-		return codigoReciboLuzOriginal;
+	public double getAjustePreRet() {
+		return ajustePreRet;
 	}
-	public void setCodigoReciboLuzOriginal(int codigoReciboLuzOriginal) {
-		this.codigoReciboLuzOriginal = codigoReciboLuzOriginal;
-	}
-	public double getDeudaAnterior() {
-		return deudaAnterior;
-	}
-	public void setDeudaAnterior(double deudaAnterior) {
-		this.deudaAnterior = deudaAnterior;
-	}
-	public double getRecargoMora() {
-		return recargoMora;
-	}
-	public void setRecargoMora(double recargoMora) {
-		this.recargoMora = recargoMora;
-	}
-	public double getInteresCompensatorio() {
-		return interesCompensatorio;
-	}
-	public void setInteresCompensatorio(double interesCompensatorio) {
-		this.interesCompensatorio = interesCompensatorio;
-	}
-	public double getAlumbradoPublico() {
-		return alumbradoPublico;
-	}
-	public void setAlumbradoPublico(double alumbradoPublico) {
-		this.alumbradoPublico = alumbradoPublico;
-	}
-	public double getPotGenFpPreuni() {
-		return potGenFpPreuni;
-	}
-	public void setPotGenFpPreuni(double potGenFpPreuni) {
-		this.potGenFpPreuni = potGenFpPreuni;
-	}
-	public double getAlumbradoPublicoOriginal() {
-		return alumbradoPublicoOriginal;
-	}
-	public void setAlumbradoPublicoOriginal(double alumbradoPublicoOriginal) {
-		this.alumbradoPublicoOriginal = alumbradoPublicoOriginal;
-	}
-	public double getTotal() {
-		return total;
-	}
-	public void setTotal(double total) {
-		this.total = total;
-	}
-	public double getMantenimiento() {
-		return mantenimiento;
-	}
-	public void setMantenimiento(double mantenimiento) {
-		this.mantenimiento = mantenimiento;
-	}
-	public double getAjustePrecioRetroactivo() {
-		return ajustePrecioRetroactivo;
-	}
-	public void setAjustePrecioRetroactivo(double ajustePrecioRetroactivo) {
-		this.ajustePrecioRetroactivo = ajustePrecioRetroactivo;
+	public void setAjustePreRet(double ajustePreRet) {
+		this.ajustePreRet = ajustePreRet;
 	}
 	public double getIgvRefact() {
 		return igvRefact;
@@ -452,5 +451,5 @@ public class LuzOriginal {
 	public void setEstadoAbierto(int estadoAbierto) {
 		this.estadoAbierto = estadoAbierto;
 	}
-	
+		
 }
