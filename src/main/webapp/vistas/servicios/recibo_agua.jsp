@@ -522,43 +522,60 @@ function editarReciboAguaXSocio(original, puesto){
 
 		        	$.each(result.rows, function(key,val) {		        		
 		        		$("#nombreSocio").text(val.nombreFull);
-		            	$("#puestoSocio").text(val.nroPuesto);
+		        		$("#puestoSocio").text(val.numeroPuesto);
 		            	$("#sectorSocio").text(val.nombreSector);
 		            	$("#giroSocio").text(val.nombreGiro);
 		            	$("#periodoSocio").text(val.periodoSocio);
+		            	$("#idRecibo").val(val.idRecibo);
 		            	$("#codigoSocio").val(val.codigoSocio);
 		            	$("#reciboAguaCreado").val(val.reciboAguaCreado);            	          	
 		            	$("#codigoServicioDetalle").val(val.codigoServicioDetalle);
+		            	$("#alcantarilladoSocio").val(val.alcantarillado);
+		            	$("#alcantarilladoSocio").val(val.alcantarillado);
+		            	$("#alcantarilladoSocio").val(val.alcantarillado);
+		            	$("#totalSocio").text(val.total);
+		            	$("#correlativo").val(val.correlativo);
+		            	
+		            	/*alert(val.codigoServicioDetalle);
+		            	alert(val.total);*/
 		            	
 		            	if (val.codigoServicioDetalle==2) {
 		            		if( $('#sintraba').is(":visible") ){
 		            			$('#sintraba').hide();
 		            			$('#contraba').show();
 		            			$('#alcantarillado').hide();
+		            			$('#consumoMesSocioTrabado').val(val.consumoMes);
 		            		} else {
 		            			$('#sintraba').show();
 		            			$('#contraba').hide();
 		            			$('#alcantarillado').hide();
+		            			$('#consumoMesSocio').val(val.consumoMes);
 		            		}
 		            	} else if (val.codigoServicioDetalle==3) {
 		            		if( $('#sintraba').is(":visible") ){
 		            			$('#sintraba').hide();
 		            			$('#contraba').hide();
 		            			$('#alcantarillado').show();
+		            			$("#alcantarilladoSocio").val(val.alcantarillado);
 		            		} else {
 		            			$('#sintraba').hide();
 		            			$('#contraba').hide();
 		            			$('#alcantarillado').show();
+		            			$("#alcantarilladoSocio").val(val.alcantarillado);
 		            		}
 		            	} else if (val.codigoServicioDetalle==5) {
 		            		if( $('#sintraba').is(":visible") ){
 		            			$('#sintraba').hide();
 		            			$('#contraba').show();
-		            			$('#alcantarillado').show();
+		            			$('#alcantarillado').show();		            			
+		            			$('#consumoMesSocioTrabado').val(val.consumoMes);
+		            			$("#alcantarilladoSocio").val(val.alcantarillado);
 		            		} else {
 		            			$('#sintraba').show();
 		            			$('#contraba').hide();
 		            			$('#alcantarillado').show();
+		            			$('#consumoMesSocio').val(val.consumoMes);
+		            			$("#alcantarilladoSocio").val(val.alcantarillado);
 		            		}
 		            	}
 		            	
@@ -743,12 +760,17 @@ function guardarRecibo(){
 	parametros.codigoReciboAgua = $("#nroRecibo").text();
 	parametros.lecturaInicial = 0;
 	parametros.lecturaFinal = 0;
+	parametros.codigoServicioDetalle = $("#codigoServicioDetalle").val();
+	parametros.correlativo = $("#correlativo").val();
+	
+	//alert("ServicioDetalle: " + $("#codigoServicioDetalle").val());
+	
 	if( $('#sintraba').is(":visible") ){
-		alert("1");
+		//alert("1");
 		parametros.consumoMes = parseFloat($("#consumoMesSocio").val());
 		parametros.trabado = 0;
 	} else {
-		alert("2");
+		//alert("2");
 		parametros.consumoMes = parseFloat($("#consumoMesSocioTrabado").val());
 		parametros.trabado = 1;
 	}
@@ -757,7 +779,7 @@ function guardarRecibo(){
 	parametros.deudaanterior = 0;
 	parametros.reconexion = 0;
 	parametros.total = $("#totalSocio").text();
-	parametros.correlativo = $("#codigoReciboLuzSocio").val();
+	parametros.correlativo = $("#correlativo").val();
 		
 	$.ajax({
 		type: "POST",
@@ -827,6 +849,7 @@ function limpiarReciboAguaSocio(){
 <input type="hidden" id="codigoReciboAgua" />
 <input type="hidden" id="codigoSocio" />
 <input type="hidden" id="codigoServicioDetalle" />
+<input type="text" id="correlativo" />
 <input type="hidden" id="reciboAguaCreado" />
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
 	<tr>

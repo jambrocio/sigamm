@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
+import aj.org.objectweb.asm.Type;
 import pe.com.sigamm.bean.ReporteReciboAguaSocio;
 import pe.com.sigamm.dao.ReciboAguaSocioDao;
 import pe.com.sigamm.modelo.ReciboAguaSocio;
@@ -177,6 +178,7 @@ public class ReciboSocioAguaDaoImpl implements ReciboAguaSocioDao {
 					new SqlParameter("vi_fecha_carga", 			Types.DATE),					
 					new SqlParameter("vi_usuario_modifica", 	Types.VARCHAR),	
 					new SqlParameter("vi_fecha_modifica", 		Types.DATE),
+					new SqlParameter("vi_codigo_servicio_detalle", Types.NUMERIC),
 					
 					new SqlOutParameter("vo_codigo_socio",  		Types.INTEGER),
 					new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
@@ -202,6 +204,7 @@ public class ReciboSocioAguaDaoImpl implements ReciboAguaSocioDao {
 			parametros.addValue("vi_fecha_carga",		null);
 			parametros.addValue("vi_usuario_modifica",	null);
 			parametros.addValue("vi_fecha_modifica",	null);
+			parametros.addValue("vi_codigo_servicio_detalle", reciboAguaSocio.getCodigoServicioDetalle());
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
 			
