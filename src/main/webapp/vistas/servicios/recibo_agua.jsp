@@ -44,6 +44,8 @@ $(document).ready(function(){
 	cargarReciboAgua();
 	$("#contraba").hide();
 	$("#correlativo").val('0');
+	$("#consumoMesSocio").val('0');
+	$("#consumoMesSocioTrabado").val('0');
 	
 });
 
@@ -532,10 +534,9 @@ function editarReciboAguaXSocio(original, puesto){
 		            	$("#reciboAguaCreado").val(val.reciboAguaCreado);            	          	
 		            	$("#codigoServicioDetalle").val(val.codigoServicioDetalle);
 		            	$("#alcantarilladoSocio").val(val.alcantarillado);
-		            	$("#alcantarilladoSocio").val(val.alcantarillado);
-		            	$("#alcantarilladoSocio").val(val.alcantarillado);
 		            	$("#totalSocio").text(val.total);
 		            	$("#correlativo").val(val.correlativo);
+		            	$("#mantenimientoSocio").val(val.servicioMantenimiento);
 		            	
 		            	/*alert(val.codigoServicioDetalle);
 		            	alert(val.total);*/
@@ -646,6 +647,7 @@ function cargarDatosReciboAguaSocio(sector, puesto, codigoRecibo){
             	$("#codigoSocio").val(val.codigoSocio);
             	$("#reciboAguaCreado").val(val.reciboAguaCreado);            	          	
             	$("#codigoServicioDetalle").val(val.codigoServicioDetalle);
+            	$("#mantenimientoSocio").val(val.servicioMantenimiento);
             	
             	if (val.codigoServicioDetalle==2) {
             		if( $('#sintraba').is(":visible") ){
@@ -725,20 +727,22 @@ function operaciones(){
 	var consumomessocio = 0;
 	var consumomessociotrabado = 0;
 	var alcantarillado = 0;
+	var mantenimiento = 0;
 	var total = 0;
-	
-	consumomessocio = parseFloat($('#consumoMesSocio').val());	 
+	consumomessocio = parseFloat($('#consumoMesSocio').val());
 	consumomessociotrabado = parseFloat($('#consumoMesSocioTrabado').val());
 	alcantarillado = parseFloat($('#alcantarilladoSocio').val()); 
-	
+	mantenimiento = parseFloat($('#mantenimientoSocio').val());	
 	if( $('#sintraba').is(":visible") ){
 		if ( isNaN(consumomessocio) ) consumomessocio = 0.0;
 		if ( isNaN(alcantarillado) ) alcantarillado = 0.0;
-		total = consumomessocio + alcantarillado;
+		total = consumomessocio + alcantarillado + mantenimiento;
+
 	} else {
 		if ( isNaN(consumomessociotrabado) ) consumomessociotrabado = 0.0;
 		if ( isNaN(alcantarillado) ) alcantarillado = 0.0;
-		total = consumomessociotrabado + alcantarillado;
+		total = consumomessociotrabado + alcantarillado + mantenimiento;
+		
 	}
 
 	$('#totalSocio').text(redondear_dos_decimal(total));	
@@ -762,8 +766,6 @@ function guardarRecibo(){
 	parametros.lecturaInicial = 0;
 	parametros.lecturaFinal = 0;
 	parametros.codigoServicioDetalle = $("#codigoServicioDetalle").val();
-	parametros.correlativo = $("#correlativo").val();
-	
 	//alert("ServicioDetalle: " + $("#codigoServicioDetalle").val());
 	
 	if( $('#sintraba').is(":visible") ){
@@ -776,7 +778,7 @@ function guardarRecibo(){
 		parametros.trabado = 1;
 	}
 	parametros.alcantarillado = parseFloat($("#alcantarilladoSocio").val());
-	parametros.mantenimiento = 0;
+	parametros.servicioMantenimiento = parseFloat($("#mantenimientoSocio").val());
 	parametros.deudaanterior = 0;
 	parametros.reconexion = 0;
 	parametros.total = $("#totalSocio").text();
@@ -840,6 +842,7 @@ function limpiarReciboAguaSocio(){
 	$("#consumoMesSocio").val('');
 	$("#consumoMesSocioTrabado").val('');
 	$("#alcantarilladoSocio").val('');
+	$("#mantenimientoSocio").val('');	
 	$("#totalSocio").text('');
 }
 
@@ -1078,17 +1081,21 @@ function limpiarReciboAguaSocio(){
 								<td colspan="2" align="center"><label><input type="checkbox" id="cbox1" value="first_checkbox" onclick="activaManual()"> Medidor Trabado</label></td>
 							</tr>
 							<tr id="sintraba" style="display:none">
-								<td><b>Consumo de Agua :</b></td>
+								<td><b>Consumo de Agua 1 :</b></td>
 								<!-- td><div id="consumoMesSocio" style="border: 2px solid blue; width: 100px;" align="center"></div></td -->
 								<td><input type='text' id='consumoMesSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones();" style="text-align: center;border: 2px solid blue; width: 100px;"/></td>
 							</tr>
 							<tr id="contraba" style="display:none">
-								<td><b>Consumo de Agua :</b></td>
+								<td><b>Consumo de Agua 2 :</b></td>
 								<td><input type='text' id='consumoMesSocioTrabado' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones();" style="text-align: center;border: 2px solid blue; width: 100px;"/></td>
 							</tr>
 							<tr id="alcantarillado" style="display:none">
 								<td><b>Alcantarillado :</b></td>
 								<td><input type='text' id='alcantarilladoSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones();" style="text-align: center;"/></td>
+							</tr>
+							<tr>
+								<td><b>Mantenimiento :</b></td>
+								<td><input type='text' id='mantenimientoSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones();" style="text-align: center;"/></td>
 							</tr>
 							<tr>
 								<td><b>TOTAL DE AGUA</b></td>
