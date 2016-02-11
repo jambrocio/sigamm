@@ -43,6 +43,7 @@ $(document).ready(function(){
 	cargarNuevo();
 	cargarReciboAgua();
 	$("#contraba").hide();
+	$("#correlativo").val('0');
 	
 });
 
@@ -849,7 +850,7 @@ function limpiarReciboAguaSocio(){
 <input type="hidden" id="codigoReciboAgua" />
 <input type="hidden" id="codigoSocio" />
 <input type="hidden" id="codigoServicioDetalle" />
-<input type="text" id="correlativo" />
+<input type="hidden" id="correlativo" />
 <input type="hidden" id="reciboAguaCreado" />
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
