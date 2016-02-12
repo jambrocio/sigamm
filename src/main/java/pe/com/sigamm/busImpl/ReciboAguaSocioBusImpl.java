@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 
+import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ReporteReciboAguaSocio;
 import pe.com.sigamm.bus.ReciboAguaSocioBus;
 import pe.com.sigamm.dao.ReciboAguaSocioDao;
@@ -41,10 +42,31 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 		return reciboAguaSocioDao.reportePuestoxAgua(pagina, registros, codigoSector, nroPuesto, codigoReciboOriginal);
 	}
 
+	@Override
 	public Retorno grabarReciboAguaxSocio(ReciboAguaSocio reciboAguaSocio) {
 		
 		return reciboAguaSocioDao.grabarReciboAguaxSocio(reciboAguaSocio);
 		
 	}
+	
+	@Override
+	public ReporteReciboAguaSocio buscarReciboAguaSocio(int codigoReciboAguaSocio) {
 
+		return reciboAguaSocioDao.buscarReciboAguaSocio(codigoReciboAguaSocio);
+		
+	}
+	
+	@Override
+	public ReporteReciboAguaSocio reporteAguaSocioExcel(int pagina, int registros, int exportar, int codigoAguaOriginal) {
+		
+		return reciboAguaSocioDao.reporteAguaSocioExcel(pagina, registros, exportar, codigoAguaOriginal);
+	}
+
+	
+	@Override
+	public Retorno pagarReciboAguaxSocio(ReciboAguaSocio reciboAguaSocio) {
+		
+		return reciboAguaSocioDao.grabarReciboAguaxSocio(reciboAguaSocio);
+		
+	}
 }

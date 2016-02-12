@@ -17,6 +17,13 @@ public class ReciboAguaSocio {
 	int lecturaInicial;
 	int lecturaFinal;
 	int trabado;
+	int pagado;
+	public int getPagado() {
+		return pagado;
+	}
+	public void setPagado(int pagado) {
+		this.pagado = pagado;
+	}
 	double consumoMes;
 	double servicioMantenimiento;
 	double deudaAnterior;

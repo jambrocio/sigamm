@@ -7,5 +7,7 @@
 	<bean id="excelView" class="pe.com.sigamm.excel.ExcelBuilder" />
 	
 	<bean id="excelViewEgresos" class="pe.com.sigamm.excel.ExcelBuilderEgresos" />
+	
+	<bean id="excelViewAguaSocio" class="pe.com.sigamm.excel.ExcelBuilderAguaSocio" />
 
 </beans>

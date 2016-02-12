@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 
 import pe.com.sigamm.bean.CamposObligatorios;
+import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ReportePuesto;
 import pe.com.sigamm.bean.ReporteReciboAgua;
 import pe.com.sigamm.bean.ReporteReciboAguaSocio;
@@ -23,6 +26,8 @@ import pe.com.sigamm.bean.ReporteReciboLuzSocio;
 import pe.com.sigamm.bean.ResponseListBean;
 import pe.com.sigamm.bus.ReciboAguaBus;
 import pe.com.sigamm.bus.ReciboAguaSocioBus;
+import pe.com.sigamm.modelo.Egreso;
+import pe.com.sigamm.modelo.Facturacion;
 import pe.com.sigamm.modelo.Puesto;
 import pe.com.sigamm.modelo.ReciboAgua;
 import pe.com.sigamm.modelo.ReciboAguaSocio;
@@ -241,4 +246,60 @@ public class ReciboAguaController {
 		return resultado;
 	}
 	
+	@RequestMapping(value = "/pagar-agua-x-socio.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String pagarReciboAguaxSocio(ReciboAguaSocio reciboAguaSocio){
+		
+		Gson gson = new Gson();
+		List<CamposObligatorios> camposObligatorios = new ArrayList<CamposObligatorios>();
+		
+		
+		int codigo = 0;
+		String mensaje = "";
+		String listaObligatorios = gson.toJson(camposObligatorios);
+		
+		if(camposObligatorios.size() > 0){
+			
+			codigo = 0;
+			
+		}else{
+			
+			Retorno retorno = reciboAguaSocioBus.pagarReciboAguaxSocio(reciboAguaSocio);
+			codigo = retorno.getCodigo();
+			mensaje = retorno.getMensaje();
+		}
+		 
+		String resultado = "{\"idUsuario\":" + codigo + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + mensaje + "\"}";
+		
+		
+		return resultado;
+	}
+	
+	@RequestMapping(value = "/generarImpresionPDF", method = RequestMethod.GET)
+    public ModelAndView generarFacturacionPdf(
+    		@RequestParam(value = "codigoReciboAguaSocio", defaultValue = "1") Integer codigoReciboAguaSocio, HttpServletResponse response, HttpServletRequest request) {
+		
+		ReporteReciboAguaSocio reporte = reciboAguaSocioBus.buscarReciboAguaSocio(codigoReciboAguaSocio);
+		Integer totalReciboPuestoxAgua = reporte.getTotalRegistros(); 
+		
+		response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=Impresion ReciboAguaSocio.pdf");
+        
+        // return a view which will be resolved by an excel view resolver
+        return new ModelAndView("pdfView", "reciboAguaSocio", reporte);
+    }
+	
+	
+	@RequestMapping(value = "/reporteAguaSocioExcel", method = RequestMethod.GET)
+    public ModelAndView downloadExcel(
+    		@RequestParam(value = "codigoAguaOriginal", defaultValue = "0") Integer codigoAguaOriginal) {
+        
+		// create some sample data
+		ReporteReciboAguaSocio reporte = reciboAguaSocioBus.reporteAguaSocioExcel(1, 1, 1, codigoAguaOriginal);
+		
+		List<ReciboAguaSocio> lista = reporte.getListaReciboAguaSocio();
+		
+		// return a view which will be resolved by an excel view resolver
+        return new ModelAndView("excelViewAguaSocio", "listaRegistrosEgresos", lista);
+         
+    }
 }

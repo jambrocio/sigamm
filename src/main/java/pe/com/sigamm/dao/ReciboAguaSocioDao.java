@@ -13,4 +13,10 @@ public interface ReciboAguaSocioDao {
 	public ReporteReciboAguaSocio reportePuestoxAgua(int pagina, int registros, int codigoSector, String nroPuesto, int codigoReciboOriginal);
 	
 	public Retorno grabarReciboAguaxSocio(ReciboAguaSocio reciboAguaSocio);
+	
+	public ReporteReciboAguaSocio buscarReciboAguaSocio(int codigoReciboAguaSocio);
+	
+	public ReporteReciboAguaSocio reporteAguaSocioExcel(int pagina, int registros, int exportar, int codigoAguaOriginal);
+	
+	public Retorno pagarReciboAguaxSocio(ReciboAguaSocio reciboAguaSocio);
 }

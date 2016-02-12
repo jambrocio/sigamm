@@ -153,8 +153,11 @@ function cargarReciboAgua(){
 				
 				opciones += "&nbsp;&nbsp;";
 				
-				opciones += "<a href=javascript:generarImpresión(";
+				/*opciones += "<a href=javascript:generarImpresion(";
 				opciones += rowObject.codigoRecibo + ") >";
+				opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Generar Impresión de todos los Recibo de Agua de los Socios'/>";
+				opciones += "</a>";*/
+				opciones += "<a href=/sigamm/generarImpresionPDF>";
 				opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Generar Impresión de todos los Recibo de Agua de los Socios'/>";
 				opciones += "</a>";
 				
@@ -409,6 +412,13 @@ function cargarReciboAguaSocio(codigoRecibo){
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/agregar2_24x24.png' border='0' title='Crear Recibo de Agua por Socio'/>";
 			opciones += "</a>";			
 
+			opciones += "&nbsp;&nbsp;";
+			
+			opciones += "<a href=javascript:pagarReciboAguaXSocio('";
+			opciones += opciones += rowObject.codigoReciboAgua + "','" + rowObject.numeroPuesto + "') >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/money_activo_24x24.png' border='0' title='Pagar el Recibo de Agua por Socio'/>";
+			opciones += "</a>";
+			
 			opciones += "</center>";
 			
 		return opciones;
@@ -514,7 +524,7 @@ function editarReciboAguaXSocio(original, puesto){
 		    success: function(result){
 		    	
 		    	//alert(result.records);
-		    	
+
 			    $('#alerta_modal').modal('hide');
 	
 		        if (result.records > 0) {
@@ -537,6 +547,7 @@ function editarReciboAguaXSocio(original, puesto){
 		            	$("#totalSocio").text(val.total);
 		            	$("#correlativo").val(val.correlativo);
 		            	$("#mantenimientoSocio").val(val.servicioMantenimiento);
+		            	$("#deudaAnteriorSocio").val(val.deudaAnterior);
 		            	
 		            	/*alert(val.codigoServicioDetalle);
 		            	alert(val.total);*/
@@ -599,6 +610,7 @@ function editarReciboAguaXSocio(original, puesto){
 					});
 	        	};
 	            //cargarPuestos();
+	            
 		            
 			}
 		});
@@ -608,9 +620,71 @@ function editarReciboAguaXSocio(original, puesto){
 }
 
 
+function pagarReciboAguaXSocio(original, puesto){
+	
+	var ruta = obtenerContexto();
+	mensaje = "Desea dar por PAGADO el recibo de agua del Puesto " + puesto + " ?"; 
+	
+	$("#mensajePagar").html(mensaje);
+	
+	$('#alerta_modal_pagar').modal({
+		backdrop: 'static',
+		keyboard: false
+	}).one('click', '#aceptar', function() {
+        
+		jsonObj = [];
+		var parametros = new Object();
+		parametros.puestoSocio = puesto;
+		parametros.codigoRecibo = original;
+		parametros.pagado = 1;
+		$.ajax({
+			type: "POST",
+		    async:false,
+		    url: "pagar-agua-x-socio.json",
+		    cache : false,
+		    data: parametros,
+		    success: function(result){
+		    	
+		    	//alert(result.records);
+
+			    $('#alerta_modal_pagar').modal('hide');
+	
+		        if (result.records > 0) {
+			        $('#recibos_agua_por_socio_modal').modal({
+		        		backdrop: 'static',
+		        		keyboard: false
+		        	});	        	
+		         
+	        	
+	        	} else {
+	        		
+	        		$.gritter.add({
+						// (string | mandatory) the heading of the notification
+						title: 'Mensaje',
+						// (string | mandatory) the text inside the notification
+						text: 'El Recibo de Agua del puesto ' + puesto + ' aún no se ha creado, verifique...',
+						// (string | optional) the image to display on the left
+						image: "/" + ruta + "/recursos/images/confirm.png",
+						// (bool | optional) if you want it to fade out on its own or just sit there
+						sticky: false,
+						// (int | optional) the time you want it to be alive for before fading out
+						time: ''
+					});
+	        	};
+	            cargarPuestos();
+	            
+		            
+			}
+		});
+		
+    });
+
+}
+
 
 function generarReciboAguaXSocio(sector, puesto, codigoRecibo){
 
+	limpiarReciboAguaSocio();
 	$("#sectorSocio").text(sector);
 	$("#puestoSocio").text(puesto);									
 	$("#reciboOriginal").text(codigoRecibo);
@@ -627,6 +701,7 @@ function cargarDatosReciboAguaSocio(sector, puesto, codigoRecibo){
 	parametros.codigoSector         = sector;
 	parametros.nroPuesto            = puesto;
 	parametros.codigoReciboOriginal = codigoRecibo;
+	parametros.consumomes           = parseFloat('0');
 	
 	$.ajax({
         type: "POST",
@@ -637,10 +712,10 @@ function cargarDatosReciboAguaSocio(sector, puesto, codigoRecibo){
         success: function(result){
             console.log(result);
         	//alert("Resultado : [" + result.rows + "]");
-        	
+        	limpiarReciboAguaSocio();
         	$.each(result.rows, function(key,val) {
             	$("#nombreSocio").text(val.nombreFull);
-            	$("#puestoSocio").text(val.nroPuesto);
+            	$("#puestoSocio").text(val.numeroPuesto);
             	$("#sectorSocio").text(val.nombreSector);
             	$("#giroSocio").text(val.nombreGiro);
             	$("#periodoSocio").text(val.periodoSocio);
@@ -648,12 +723,17 @@ function cargarDatosReciboAguaSocio(sector, puesto, codigoRecibo){
             	$("#reciboAguaCreado").val(val.reciboAguaCreado);            	          	
             	$("#codigoServicioDetalle").val(val.codigoServicioDetalle);
             	$("#mantenimientoSocio").val(val.servicioMantenimiento);
+            	$('#consumoMesSocio').val(val.consumoMes);
+            	$('#consumoMesSocioTrabado').val(val.consumoMes);
+            	$('#correlativo').val(val.correlativo);
+            	$('#deudaAnteriorSocio').val(val.deudaAnterior);
             	
             	if (val.codigoServicioDetalle==2) {
             		if( $('#sintraba').is(":visible") ){
             			$('#sintraba').hide();
             			$('#contraba').show();
             			$('#alcantarillado').hide();
+            			
             		} else {
             			$('#sintraba').show();
             			$('#contraba').hide();
@@ -728,20 +808,22 @@ function operaciones(){
 	var consumomessociotrabado = 0;
 	var alcantarillado = 0;
 	var mantenimiento = 0;
+	var deudaanteriorsocio = 0;
 	var total = 0;
 	consumomessocio = parseFloat($('#consumoMesSocio').val());
 	consumomessociotrabado = parseFloat($('#consumoMesSocioTrabado').val());
-	alcantarillado = parseFloat($('#alcantarilladoSocio').val()); 
+	alcantarillado = parseFloat($('#alcantarilladoSocio').val());
+	deudaanteriorsocio = parseFloat($('deudaAnteriorSocio').val());
 	mantenimiento = parseFloat($('#mantenimientoSocio').val());	
 	if( $('#sintraba').is(":visible") ){
 		if ( isNaN(consumomessocio) ) consumomessocio = 0.0;
 		if ( isNaN(alcantarillado) ) alcantarillado = 0.0;
-		total = consumomessocio + alcantarillado + mantenimiento;
+		total = consumomessocio + alcantarillado + mantenimiento + deudaanteriorsocio;
 
 	} else {
 		if ( isNaN(consumomessociotrabado) ) consumomessociotrabado = 0.0;
 		if ( isNaN(alcantarillado) ) alcantarillado = 0.0;
-		total = consumomessociotrabado + alcantarillado + mantenimiento;
+		total = consumomessociotrabado + alcantarillado + mantenimiento + deudaanteriorsocio;
 		
 	}
 
@@ -766,6 +848,8 @@ function guardarRecibo(){
 	parametros.lecturaInicial = 0;
 	parametros.lecturaFinal = 0;
 	parametros.codigoServicioDetalle = $("#codigoServicioDetalle").val();
+	parametros.deudaAnterior = $("#deudaAnteriorSocio").val();
+	
 	//alert("ServicioDetalle: " + $("#codigoServicioDetalle").val());
 	
 	if( $('#sintraba').is(":visible") ){
@@ -779,7 +863,6 @@ function guardarRecibo(){
 	}
 	parametros.alcantarillado = parseFloat($("#alcantarilladoSocio").val());
 	parametros.servicioMantenimiento = parseFloat($("#mantenimientoSocio").val());
-	parametros.deudaanterior = 0;
 	parametros.reconexion = 0;
 	parametros.total = $("#totalSocio").text();
 	parametros.correlativo = $("#correlativo").val();
@@ -842,8 +925,69 @@ function limpiarReciboAguaSocio(){
 	$("#consumoMesSocio").val('');
 	$("#consumoMesSocioTrabado").val('');
 	$("#alcantarilladoSocio").val('');
-	$("#mantenimientoSocio").val('');	
+	$("#mantenimientoSocio").val('');
+	$("#deudaAnteriorSocio").val('');
 	$("#totalSocio").text('');
+}
+
+
+function generarImpresion(codigoRecibo){
+	
+	var ruta = obtenerContexto();
+			
+	jsonObj = [];
+	var parametros = new Object();
+	parametros.codigoRecibo = codigoRecibo;
+
+	$.ajax({
+		type: "POST",
+	    async:false,
+	    url: "generarPDF",
+	    cache : false,
+	    data: parametros,
+	    success: function(result){
+	            
+	        if(result.camposObligatorios.length == 0){
+                	
+            	$('#recibo_modal').modal('hide');
+            	
+	            $.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Mensaje',
+					// (string | mandatory) the text inside the notification
+					text: result.mensaje,
+					// (string | optional) the image to display on the left
+					image: "/" + ruta + "/recursos/images/confirm.png",
+					// (bool | optional) if you want it to fade out on its own or just sit there
+					sticky: false,
+					// (int | optional) the time you want it to be alive for before fading out
+					time: ''
+				});
+	            
+	            cargarReciboAgua();
+	            
+			}else{
+                	
+            	colorEtiquetas();
+            	fila = "";
+            	$.each(result.camposObligatorios, function(id, obj){
+                        
+                	$("#" + obj.nombreCampo).css("color", "red");
+                    $("#" + obj.nombreCampo + "-img").show();
+                    $("#" + obj.nombreCampo + "-img").attr("data-content", obj.descripcion);
+                        
+				});
+                	
+			}
+                
+		}
+	});
+}
+
+function exportarAguaSocio(){
+	var codigo = $("#nroRecibo").text();
+	window.open('/sigamm/reporteAguaSocioExcel?codigoAguaOriginal='+codigo, 'Descarga', '1', '1');
+	
 }
 
 </script>
@@ -989,6 +1133,9 @@ function limpiarReciboAguaSocio(){
 						<button type="button" class="btn btn-primary" onclick="cargarReciboLuzSocio()">
 							<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 						</button>&nbsp;&nbsp;
+						<button type="button" class="btn btn-primary">
+							<img src="recursos/images/icons/excel_16x16.png" alt="Exportar a Excel" />&nbsp;<a href="#" style="color:white" onclick="exportarAguaSocio()">Exportar</a>
+						</button>					
 					</td>
 				</tr>
 				<tr>
@@ -1098,6 +1245,10 @@ function limpiarReciboAguaSocio(){
 								<td><input type='text' id='mantenimientoSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones();" style="text-align: center;"/></td>
 							</tr>
 							<tr>
+								<td><b>Deuda Anterior :</b></td>
+								<td><input type='text' id='deudaAnteriorSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones();" style="text-align: center;"/></td>
+							</tr>
+							<tr>
 								<td><b>TOTAL DE AGUA</b></td>
 								<td><div id="totalSocio" style="border: 2px solid blue; width: 100px;" align="center"></div></td>
 							</tr>
@@ -1145,5 +1296,30 @@ function limpiarReciboAguaSocio(){
 	</div>
 </div>
 
+<div class="modal fade" id="alerta_modal_pagar" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Pagar Recibo Agua</h4>
+			</div>
+			<div class="modal-body">
+					
+				<table border="0">
+					<tr>
+						<td><img src="recursos/images/icons/exclamation_32x32.png" border="0" />&nbsp;<b><span id="mensajePagar" /></b></td>
+					</tr>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" id="aceptar">Si</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+			</div>
+		</div>
+		  
+	</div>
+</div>
 </body>
 </html>
