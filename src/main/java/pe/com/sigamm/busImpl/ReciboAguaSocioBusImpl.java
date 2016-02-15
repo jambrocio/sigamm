@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 
-import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ReporteReciboAguaSocio;
 import pe.com.sigamm.bus.ReciboAguaSocioBus;
 import pe.com.sigamm.dao.ReciboAguaSocioDao;
@@ -66,7 +65,7 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 	@Override
 	public Retorno pagarReciboAguaxSocio(ReciboAguaSocio reciboAguaSocio) {
 		
-		return reciboAguaSocioDao.grabarReciboAguaxSocio(reciboAguaSocio);
+		return reciboAguaSocioDao.pagarReciboAguaxSocio(reciboAguaSocio);
 		
 	}
 }

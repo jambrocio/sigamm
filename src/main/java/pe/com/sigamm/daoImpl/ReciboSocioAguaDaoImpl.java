@@ -15,11 +15,8 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
-import aj.org.objectweb.asm.Type;
-import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ReporteReciboAguaSocio;
 import pe.com.sigamm.dao.ReciboAguaSocioDao;
-import pe.com.sigamm.modelo.Egreso;
 import pe.com.sigamm.modelo.ReciboAguaSocio;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.session.DatosSession;
@@ -181,6 +178,7 @@ public class ReciboSocioAguaDaoImpl implements ReciboAguaSocioDao {
 					new SqlParameter("vi_usuario_modifica", 	Types.VARCHAR),	
 					new SqlParameter("vi_fecha_modifica", 		Types.DATE),
 					new SqlParameter("vi_codigo_servicio_detalle", Types.NUMERIC),
+					new SqlParameter("vi_corte_agua", 			Types.NUMERIC),
 					
 					new SqlOutParameter("vo_codigo_socio",  		Types.INTEGER),
 					new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
@@ -207,6 +205,7 @@ public class ReciboSocioAguaDaoImpl implements ReciboAguaSocioDao {
 			parametros.addValue("vi_usuario_modifica",	null);
 			parametros.addValue("vi_fecha_modifica",	null);
 			parametros.addValue("vi_codigo_servicio_detalle", reciboAguaSocio.getCodigoServicioDetalle());
+			parametros.addValue("vi_corte_agua", 		reciboAguaSocio.getCorteAgua());
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
 			
@@ -271,51 +270,23 @@ public class ReciboSocioAguaDaoImpl implements ReciboAguaSocioDao {
 			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
 			jdbcCall.withCatalogName("PKG_RECIBO_AGUA_SOCIO");
 			jdbcCall.withProcedureName("SP_PAGAR_AGUA_X_SOCIO").declareParameters(
-					new SqlParameter("vi_idRecibo", 			Types.NUMERIC),
-					new SqlParameter("vi_codigo_socio", 		Types.NUMERIC),
 					new SqlParameter("vi_codigo_recibo", 		Types.NUMERIC),
 					new SqlParameter("vi_correlativo", 			Types.NUMERIC),
-					new SqlParameter("vi_lectura_inicial", 		Types.NUMERIC),
-					new SqlParameter("vi_lectura_final", 		Types.NUMERIC),
-					new SqlParameter("vi_consumo_mes", 			Types.NUMERIC),
-					new SqlParameter("vi_servicio_mantenimiento",Types.NUMERIC),
-					new SqlParameter("vi_deuda_anterior", 		Types.NUMERIC),
-					new SqlParameter("vi_reconexion", 			Types.NUMERIC),
-					new SqlParameter("vi_alcantarillado",		Types.NUMERIC),
-					new SqlParameter("vi_total", 				Types.NUMERIC),
-					new SqlParameter("vi_estado", 				Types.NUMERIC),
-					new SqlParameter("vi_trabado", 				Types.NUMERIC),					
-					new SqlParameter("vi_usuario_carga", 		Types.VARCHAR),
-					new SqlParameter("vi_fecha_carga", 			Types.DATE),					
-					new SqlParameter("vi_usuario_modifica", 	Types.VARCHAR),	
-					new SqlParameter("vi_fecha_modifica", 		Types.DATE),
-					new SqlParameter("vi_codigo_servicio_detalle", Types.NUMERIC),
+					new SqlParameter("vi_numero_puesto", 		Types.VARCHAR),
+					new SqlParameter("vi_usuario_carga", 		Types.NUMERIC),
+					new SqlParameter("vi_codigo_socio", 		Types.NUMERIC),
 					
 					new SqlOutParameter("vo_codigo_socio",  		Types.INTEGER),
 					new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
-					new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));	
+					new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
 			
 			MapSqlParameterSource parametros = new MapSqlParameterSource();
 
-			parametros.addValue("vi_idRecibo", 			reciboAguaSocio.getIdRecibo());
-			parametros.addValue("vi_codigo_socio", 		reciboAguaSocio.getCodigoSocio());
 			parametros.addValue("vi_codigo_recibo",		reciboAguaSocio.getCodigoReciboAgua());
 			parametros.addValue("vi_correlativo",		reciboAguaSocio.getCorrelativo());
-			parametros.addValue("vi_lectura_inicial", 	reciboAguaSocio.getLecturaInicial());
-			parametros.addValue("vi_lectura_final", 	reciboAguaSocio.getLecturaFinal());
-			parametros.addValue("vi_consumo_mes", 		reciboAguaSocio.getConsumoMes());
-			parametros.addValue("vi_servicio_mantenimiento",reciboAguaSocio.getServicioMantenimiento());
-			parametros.addValue("vi_deuda_anterior",	reciboAguaSocio.getDeudaAnterior());
-			parametros.addValue("vi_reconexion",		reciboAguaSocio.getReconexion());
-			parametros.addValue("vi_alcantarillado",	reciboAguaSocio.getAlcantarillado());
-			parametros.addValue("vi_total",				reciboAguaSocio.getTotal());
-			parametros.addValue("vi_estado",			reciboAguaSocio.getEstado());
-			parametros.addValue("vi_trabado",			reciboAguaSocio.getTrabado());
-			parametros.addValue("vi_usuario_carga",		datosSession.getCodigoUsuario());			
-			parametros.addValue("vi_fecha_carga",		null);
-			parametros.addValue("vi_usuario_modifica",	null);
-			parametros.addValue("vi_fecha_modifica",	null);
-			parametros.addValue("vi_codigo_servicio_detalle", reciboAguaSocio.getCodigoServicioDetalle());
+			parametros.addValue("vi_numero_puesto", 	reciboAguaSocio.getNumeroPuesto());
+			parametros.addValue("vi_usuario_carga",		datosSession.getCodigoUsuario());
+			parametros.addValue("vi_codigo_socio",		reciboAguaSocio.getCodigoSocio());
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
 			

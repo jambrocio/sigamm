@@ -443,7 +443,7 @@ function cargarReciboLuzOriginal(){
 		},{					
 			name:'codigoReciboLuzOriginal',
 			index:'codigoReciboLuzOriginal',
-			width:130,
+			width:150,
 			sortable:false,
 			search: false,
 			formatter:formatterBotones

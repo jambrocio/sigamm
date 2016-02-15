@@ -18,12 +18,7 @@ public class ReciboAguaSocio {
 	int lecturaFinal;
 	int trabado;
 	int pagado;
-	public int getPagado() {
-		return pagado;
-	}
-	public void setPagado(int pagado) {
-		this.pagado = pagado;
-	}
+	int corteAgua;
 	double consumoMes;
 	double servicioMantenimiento;
 	double deudaAnterior;
@@ -38,6 +33,7 @@ public class ReciboAguaSocio {
 	String nombreServicio;  
 	String nombreDetalle;
 	String periodoSocio;
+	
 	
 	public int getIdRecibo() {
 		return idRecibo;
@@ -135,6 +131,12 @@ public class ReciboAguaSocio {
 	public void setTrabado(int trabado) {
 		this.trabado = trabado;
 	}
+	public int getPagado() {
+		return pagado;
+	}
+	public void setPagado(int pagado) {
+		this.pagado = pagado;
+	}
 	public double getConsumoMes() {
 		return consumoMes;
 	}
@@ -218,6 +220,12 @@ public class ReciboAguaSocio {
 	}
 	public void setPeriodoSocio(String periodoSocio) {
 		this.periodoSocio = periodoSocio;
+	}
+	public int getCorteAgua() {
+		return corteAgua;
+	}
+	public void setCorteAgua(int corteAgua) {
+		this.corteAgua = corteAgua;
 	}
 
 }
