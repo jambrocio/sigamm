@@ -126,7 +126,7 @@ public class ExcelBuilderAguaSocio extends AbstractExcelView{
     		c.setCellStyle(csRight);
     		
     		c = aRow.createCell(3);
-    		c.setCellValue(reciboAguaSocio.getNumeroPuesto());
+    		c.setCellValue(reciboAguaSocio.getNroPuesto());
     		c.setCellStyle(csRight);
     		
     		c = aRow.createCell(4);

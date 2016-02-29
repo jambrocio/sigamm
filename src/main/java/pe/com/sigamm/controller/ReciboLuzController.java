@@ -27,11 +27,8 @@ import pe.com.sigamm.modelo.LuzOriginal;
 import pe.com.sigamm.modelo.Puesto;
 import pe.com.sigamm.modelo.ReciboLuzSocio;
 import pe.com.sigamm.modelo.Retorno;
-import pe.com.sigamm.modelo.Socio;
 import pe.com.sigamm.session.DatosSession;
-import pe.com.sigamm.util.Constantes;
 import pe.com.sigamm.util.OperadoresUtil;
-import pe.com.sigamm.util.Util;
 
 
 @Controller

@@ -490,8 +490,8 @@ function cargarReciboAguaSocio1(codigoRecibo){
 			width: 320,
 			align: 'left'
 		},{
-			name : 'numeroPuesto',
-			index: 'numeroPuesto',
+			name : 'nroPuesto',
+			index: 'nroPuesto',
 			sortable:false,
 			width: 50,
 			align: 'center'
@@ -527,17 +527,17 @@ function cargarReciboAguaSocio1(codigoRecibo){
 			//alert(rowId + ' - ' + data + ' - ' + item.pagado);
 			if ( (item.reciboAguaCreado == 0) && (item.corteAgua == 0 || item.corteAgua == null) ) {
 				$("#grillaReciboAgua").setCell(rowId, 'nombreFull', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });				
-				$("#grillaReciboAgua").setCell(rowId, 'numeroPuesto', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'nroPuesto', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'nombreGiro', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'total', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
 			} else if ( (item.reciboAguaCreado == 1) && (item.corteAgua == 1) ) {
 				$("#grillaReciboAgua").setCell(rowId, 'nombreFull', '', { 'background-color':'##FF8000','color':'white','font-weight':'bold' });				
-				$("#grillaReciboAgua").setCell(rowId, 'numeroPuesto', '', { 'background-color':'#FF8000','color':'white','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'nroPuesto', '', { 'background-color':'#FF8000','color':'white','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'nombreGiro', '', { 'background-color':'#FF8000','color':'white','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'total', '', { 'background-color':'#FF8000','color':'white','font-weight':'bold' });				
 			} else {
 				$("#grillaReciboAgua").setCell(rowId, 'nombreFull', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
-				$("#grillaReciboAgua").setCell(rowId, 'numeroPuesto', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'nroPuesto', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'nombreGiro', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'total', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
 			}
@@ -998,6 +998,30 @@ function limpiarReciboAguaSocio(){
 }
 
 
+function buscarReciboAguaPuesto(){
+	var codigoReciboAgua = $("#codigoReciboAgua").val();
+	var puestoSocio = $("#reciboAguaSocioBuscara").val();
+	//alert ("RECIBO: " + codigoReciboAgua + " PUESTO: " + puestoSocio);
+	jsonObj = [];
+	var parametros = new Object();
+	parametros.codigoReciboAgua = codigoReciboAgua;
+	parametros.numeroPuesto = puestoSocio;
+	//alert("INTENTOS: " + intentos);
+	if(intentos > 0){
+		$("#grillaReciboAgua").jqGrid('setGridParam',
+		{
+			url : 'reporte-recibo-agua-puesto.json',
+			datatype : "json",
+			postData:parametros,
+			page:1
+		}).trigger('reloadGrid');
+	}else{
+		//buscarReciboAguaSocio(codigoRecibo, codigoPuesto);
+	}
+		
+}
+
+
 function generarImpresion(codigoRecibo){
 	
 	var ruta = obtenerContexto();
@@ -1195,9 +1219,9 @@ function exportarAguaSocio(){
 				<tr>
 					<td width="150"><b>RECIBO AGUA SOCIOS<b/></td>
 					<td width="10">:</td>
-					<td width="250"><input type="text" id="reciboLuzSocioBuscara" class="text ui-widget-content ui-corner-all" maxlength="8" /></td>
+					<td width="250"><input type="text" id="reciboAguaSocioBuscara" class="text ui-widget-content ui-corner-all" maxlength="8" /></td>
 					<td>&nbsp;&nbsp;
-						<button type="button" class="btn btn-primary" onclick="cargarReciboLuzSocio()">
+						<button type="button" class="btn btn-primary" onclick="buscarReciboAguaPuesto()">
 							<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 						</button>&nbsp;&nbsp;
 						<button type="button" class="btn btn-primary">

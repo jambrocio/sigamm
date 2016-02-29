@@ -245,4 +245,40 @@ public class PuestoDaoImpl implements PuestoDao {
 		return  reporte;
 	}
 
+	@Override
+	public ReportePuesto reportePuestoAgua(int pagina, int registros, String numeroPuesto, int codigoRecibo) {
+		if (numeroPuesto=="") numeroPuesto="0";
+		ReportePuesto reporte = new ReportePuesto();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_RECIBO_AGUA_SOCIO");
+			
+			jdbcCall.withProcedureName("SP_REPORTE_PUESTO_AGUA_SOCIO").declareParameters(
+					new SqlParameter("vi_pagina", 					Types.INTEGER),
+					new SqlParameter("vi_registros", 				Types.INTEGER),
+					new SqlParameter("vi_codigo_puesto", 			Types.VARCHAR),
+					new SqlParameter("vi_codigo_recibo",	 		Types.INTEGER),
+					
+					new SqlOutParameter("vo_total_registros", 		Types.INTEGER),
+					new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(Puesto.class)));
+			
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_pagina", 		pagina);
+			parametros.addValue("vi_registros", 	registros);
+			parametros.addValue("vi_codigo_puesto",	numeroPuesto);
+			parametros.addValue("vi_codigo_recibo",	codigoRecibo);
+			
+			Map<String,Object> results = jdbcCall.execute(parametros);
+			int totalRegistros = (Integer) results.get("vo_total_registros");
+			List<Puesto> lista = (List<Puesto>) results.get("vo_result");
+			
+			reporte.setTotalRegistros(totalRegistros);
+			reporte.setListaPuesto(lista);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return  reporte;
+	}
+
 }
