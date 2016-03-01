@@ -238,9 +238,8 @@ public class ReciboSocioAguaDaoImpl implements ReciboAguaSocioDao {
 			System.out.println("Listando Recibo Agua Socio");
 			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
 			jdbcCall.withCatalogName("PKG_RECIBO_AGUA_SOCIO");
-			jdbcCall.withProcedureName("SP_REPORTE_PUESTO_AGUA_SOCIO_PDF").declareParameters(
+			jdbcCall.withProcedureName("SP_REPORTE_PTO_AGUA_SOCIO_PDF").declareParameters(
 				new SqlParameter("vi_codigo_recibo", 			Types.INTEGER),
-				
 				new SqlOutParameter("vo_total_registros", 		Types.INTEGER),
 				new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(ReciboAguaSocio.class)));
 				

@@ -171,10 +171,11 @@ function cargarReciboAgua(){
 				
 				opciones += "&nbsp;&nbsp;";
 				
-				/*opciones += "<a href=javascript:generarImpresion(";
+				/*opciones += "<a href=javascript:generarImpresionPDF(";
 				opciones += rowObject.codigoRecibo + ") >";
 				opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Generar Impresión de todos los Recibo de Agua de los Socios'/>";
 				opciones += "</a>";*/
+				
 				opciones += "<a href=/sigamm/generarImpresionPDF>";
 				opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Generar Impresión de todos los Recibo de Agua de los Socios'/>";
 				opciones += "</a>";
@@ -1024,7 +1025,7 @@ function buscarReciboAguaPuesto(){
 }
 
 
-function generarImpresion(codigoRecibo){
+function generarImpresionPDF(codigoRecibo){
 	
 	var ruta = obtenerContexto();
 			

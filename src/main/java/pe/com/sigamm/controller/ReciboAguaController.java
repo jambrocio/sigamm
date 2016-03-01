@@ -308,7 +308,7 @@ public class ReciboAguaController {
 	
 	@RequestMapping(value = "/generarImpresionPDF", method = RequestMethod.GET)
     public ModelAndView generarFacturacionPdf(
-    		@RequestParam(value = "codigoReciboAguaSocio", defaultValue = "1") Integer codigoReciboAguaSocio, HttpServletResponse response, HttpServletRequest request) {
+    		@RequestParam(value = "codigoReciboAguaSocio", defaultValue = "3") Integer codigoReciboAguaSocio, HttpServletResponse response, HttpServletRequest request) {
 		
 		ReporteReciboAguaSocio reporte = reciboAguaSocioBus.buscarReciboAguaSocio(codigoReciboAguaSocio);
 		Integer totalReciboPuestoxAgua = reporte.getTotalRegistros(); 
@@ -317,7 +317,8 @@ public class ReciboAguaController {
         response.setHeader("Content-Disposition", "attachment; filename=Impresion ReciboAguaSocio.pdf");
         
         // return a view which will be resolved by an excel view resolver
-        return new ModelAndView("pdfView", "reciboAguaSocio", reporte);
+        return new ModelAndView("pdfViewAguaSocio", "reciboAguaSocio", reporte);
+        //return new ModelAndView("pdfView", "reciboAguaSocio", reporte);
     }
 	
 	

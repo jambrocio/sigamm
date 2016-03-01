@@ -453,15 +453,15 @@ function cargarEgresos(){
 		},{
 			name : 'nombreDocumento',
 			index: 'nombreDocumento',
-			sortable:false,
+			sortable:true,
 			width: 150,
-			align: 'left'
+			align: 'center'
 		},{
 			name : 'numeroDocumento',
 			index: 'numeroDocumento',
 			sortable:false,
 			width: 150,
-			align: 'left'
+			align: 'center'
 		},{
 			name : 'fecha',
 			index: 'fecha',
@@ -472,24 +472,25 @@ function cargarEgresos(){
 			name : 'razonSocial',
 			index: 'razonSocial',
 			sortable:false,
-			width: 250,
-			align: 'center'
+			width: 380,
+			align: 'Left'
 		},{
 			name : 'representante',
 			index: 'representante',
 			sortable:false,
-			width: 350,
-			align: 'center'
+			width: 200,
+			align: 'left'
 		},{
 			name : 'total',
 			index: 'total',
 			sortable:false,
 			width: 100,
-			align: 'center'
+			align: 'right',
+			formatter: 'number'
 		},{					
 			name:'codigoEgreso',
 			index:'codigoEgreso',
-			width:200,
+			width: 120,
 			sortable:false,
 			search: false,
 			formatter:formatterBotones
@@ -502,6 +503,11 @@ function cargarEgresos(){
 		viewrecords : true,
 		sortorder : "codigoEgreso",				
 		caption : "Egreso",
+		formatter : {
+		     integer : {thousandsSeparator: ",", defaultValue: '0'},
+		     number : {decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2, defaultValue: '0.00'},
+		     currency : {decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2, prefix: "", suffix:"", defaultValue: '0.00'}
+		},
 		afterInsertRow: function(rowId, data, item){
 			//alert(rowId + ' - ' + data + ' - ' + item.total);
 			if (item.estado == 1){
