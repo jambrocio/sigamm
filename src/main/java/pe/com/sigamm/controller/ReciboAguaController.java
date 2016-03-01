@@ -285,12 +285,12 @@ public class ReciboAguaController {
 	public @ResponseBody ResponseListBean<Puesto> reporteReciboAguaPuesto(
 			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
 			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
-			@RequestParam(value = "numeroPuesto", defaultValue = "0") String numeroPuesto,
+			@RequestParam(value = "nroPuesto", defaultValue = "0") String nroPuesto,
 			@RequestParam(value = "codigoRecibo", defaultValue = "0") Integer codigoRecibo){
 		
 		ResponseListBean<Puesto> response = new ResponseListBean<Puesto>();
 		
-		ReportePuesto reporte = puestoBus.reportePuestoAgua(pagina, registros, numeroPuesto, codigoRecibo);
+		ReportePuesto reporte = puestoBus.reportePuestoAgua(pagina, registros, nroPuesto, codigoRecibo);
 		
 		Integer totalReciboPuestoLuz = reporte.getTotalRegistros(); 
 		

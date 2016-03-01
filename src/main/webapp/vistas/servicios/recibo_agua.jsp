@@ -441,14 +441,14 @@ function cargarReciboAguaSocio1(codigoRecibo){
 
 		if (rowObject.pagado != 1) {			
 			opciones += "<a href=javascript:editarReciboAguaXSocio('";
-			opciones += opciones += rowObject.codigoReciboAgua + "','" + rowObject.numeroPuesto + "') >";
+			opciones += opciones += rowObject.codigoReciboAgua + "','" + rowObject.nroPuesto + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Agua Socio'/>";
 			opciones += "</a>";
 			
 			opciones += "&nbsp;&nbsp;";
 			
 			opciones += "<a href=javascript:generarReciboAguaXSocio('";
-			opciones += rowObject.codigoSector + "','" + rowObject.numeroPuesto + "','" + rowObject.codigoReciboAgua + "') >";
+			opciones += rowObject.codigoSector + "','" + rowObject.nroPuesto + "','" + rowObject.codigoReciboAgua + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/agregar2_24x24.png' border='0' title='Crear Recibo de Agua por Socio'/>";
 			opciones += "</a>";			
  
@@ -456,7 +456,7 @@ function cargarReciboAguaSocio1(codigoRecibo){
 				opciones += "&nbsp;&nbsp;";
 				
 				opciones += "<a href=javascript:pagarReciboAguaXSocio('";
-				opciones += rowObject.codigoReciboAgua + "','" + rowObject.numeroPuesto + "'," + rowObject.codigoSocio + ") >";
+				opciones += rowObject.codigoReciboAgua + "','" + rowObject.nroPuesto + "'," + rowObject.codigoSocio + ") >";
 				opciones += "<img src='/"+ruta+"/recursos/images/icons/money_activo_24x24.png' border='0' title='PAGAR Recibo de Agua por Socio'/>";
 				opciones += "</a>";
 			}
@@ -585,7 +585,7 @@ function editarReciboAguaXSocio(original, puesto){
 
 		        	$.each(result.rows, function(key,val) {		        		
 		        		$("#nombreSocio").text(val.nombreFull);
-		        		$("#puestoSocio").text(val.numeroPuesto);
+		        		$("#puestoSocio").text(val.nroPuesto);
 		            	$("#sectorSocio").text(val.nombreSector);
 		            	$("#giroSocio").text(val.nombreGiro);
 		            	$("#periodoSocio").text(val.periodoSocio);
@@ -688,7 +688,7 @@ function pagarReciboAguaXSocio(original, puesto, codigoSocio){
         
 		jsonObj = [];
 		var parametros = new Object();
-		parametros.numeroPuesto = puesto;
+		parametros.nroPuesto = puesto;
 		parametros.codigoReciboAgua = original;
 		parametros.codigoSocio = codigoSocio;
 		parametros.pagado = 1;
@@ -738,6 +738,7 @@ function pagarReciboAguaXSocio(original, puesto, codigoSocio){
 
 function generarReciboAguaXSocio(sector, puesto, codigoRecibo){
 
+	//alert("Sector: " + sector + "\nPuesto: " + puesto + "\nCodigoRecibo: " + codigoRecibo);
 	limpiarReciboAguaSocio();
 	$("#sectorSocio").text(sector);
 	$("#puestoSocio").text(puesto);									
@@ -756,6 +757,7 @@ function generarReciboAguaXSocio(sector, puesto, codigoRecibo){
 
 function cargarDatosReciboAguaSocio(sector, puesto, codigoRecibo){
 	
+	//alert("Sector: " + sector + "\nPuesto: " + puesto + "\nCodigoRecibo: " + codigoRecibo);
 	var ruta = obtenerContexto();	
 	var parametros = new Object();
 	parametros.codigoSector         = sector;
@@ -775,7 +777,7 @@ function cargarDatosReciboAguaSocio(sector, puesto, codigoRecibo){
         	limpiarReciboAguaSocio();
         	$.each(result.rows, function(key,val) {
             	$("#nombreSocio").text(val.nombreFull);
-            	$("#puestoSocio").text(val.numeroPuesto);
+            	$("#puestoSocio").text(val.nroPuesto);
             	$("#sectorSocio").text(val.nombreSector);
             	$("#giroSocio").text(val.nombreGiro);
             	$("#periodoSocio").text(val.periodoSocio);
@@ -1005,7 +1007,7 @@ function buscarReciboAguaPuesto(){
 	jsonObj = [];
 	var parametros = new Object();
 	parametros.codigoReciboAgua = codigoReciboAgua;
-	parametros.numeroPuesto = puestoSocio;
+	parametros.nroPuesto = puestoSocio;
 	//alert("INTENTOS: " + intentos);
 	if(intentos > 0){
 		$("#grillaReciboAgua").jqGrid('setGridParam',

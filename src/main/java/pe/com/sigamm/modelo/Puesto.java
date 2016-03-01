@@ -6,6 +6,7 @@ public class Puesto {
 	int codigoUsuario;
 	int codigoGiro;
 	int codigoReciboOriginal;
+	int codigoReciboAgua;
 	int codigoSector;
 	int estadoReciboLuz;
 	//int estadoReciboAgua;
@@ -25,7 +26,6 @@ public class Puesto {
 	double alumbradoPublico;
 	double mantenimiento;
 	int estadoAbierto;
-	
 	public int getCodigoSocio() {
 		return codigoSocio;
 	}
@@ -55,6 +55,12 @@ public class Puesto {
 	}
 	public void setCodigoReciboOriginal(int codigoReciboOriginal) {
 		this.codigoReciboOriginal = codigoReciboOriginal;
+	}
+	public int getCodigoReciboAgua() {
+		return codigoReciboAgua;
+	}
+	public void setCodigoReciboAgua(int codigoReciboAgua) {
+		this.codigoReciboAgua = codigoReciboAgua;
 	}
 	public int getCodigoSector() {
 		return codigoSector;
@@ -152,5 +158,5 @@ public class Puesto {
 	public void setEstadoAbierto(int estadoAbierto) {
 		this.estadoAbierto = estadoAbierto;
 	}
-	
+
 }
