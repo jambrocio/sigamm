@@ -6,7 +6,7 @@ import pe.com.sigamm.modelo.Retorno;
 
 public interface ReciboAguaSocioBus {
 	
-	public ReporteReciboAguaSocio reportePuestoAguaSocio(int pagina, int registros, int codigoRecibo);
+	public ReporteReciboAguaSocio reportePuestoAguaSocio(int pagina, int registros, String numeroPuesto, int codigoRecibo);
 
 	public ReporteReciboAguaSocio editarReciboAguaxSocio(int pagina, int registros, String puestoSocio, int codigoRecibo);
 	

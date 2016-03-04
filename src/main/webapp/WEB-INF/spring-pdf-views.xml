@@ -6,4 +6,6 @@
 
 	<bean id="pdfView" class="pe.com.sigamm.excel.PDFBuilder" />
 
+	<bean id="pdfViewAguaSocio" class="pe.com.sigamm.excel.PDFBuilderAguaSocio" />
+	
 </beans>

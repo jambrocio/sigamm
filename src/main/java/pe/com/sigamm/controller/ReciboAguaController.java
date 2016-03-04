@@ -24,6 +24,7 @@ import pe.com.sigamm.bean.ReporteReciboAgua;
 import pe.com.sigamm.bean.ReporteReciboAguaSocio;
 import pe.com.sigamm.bean.ReporteReciboLuzSocio;
 import pe.com.sigamm.bean.ResponseListBean;
+import pe.com.sigamm.bus.PuestoBus;
 import pe.com.sigamm.bus.ReciboAguaBus;
 import pe.com.sigamm.bus.ReciboAguaSocioBus;
 import pe.com.sigamm.modelo.Egreso;
@@ -47,6 +48,9 @@ public class ReciboAguaController {
 	private DatosSession datosSession;
 	
 	@Autowired
+	private PuestoBus puestoBus;
+	
+	@Autowired
 	private ReciboAguaBus reciboAguaBus;
 	
 	@Autowired
@@ -63,6 +67,7 @@ public class ReciboAguaController {
 	public @ResponseBody ResponseListBean<ReciboAgua> reporteReciboAgua(
 			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
 			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
+			@RequestParam(value = "puestoSocio", defaultValue = "0") String puestoSocio,
 			@RequestParam(value = "codigoRecibo", defaultValue = "0") Integer codigoRecibo){
 		
 		ResponseListBean<ReciboAgua> response = new ResponseListBean<ReciboAgua>();
@@ -145,14 +150,15 @@ public class ReciboAguaController {
 	
 	
 	@RequestMapping(value = "/reporte-recibo-agua-socio.json", method = RequestMethod.POST, produces="application/json")
-	public @ResponseBody ResponseListBean<ReciboAguaSocio> reporteReciboAguaPuesto(
+	public @ResponseBody ResponseListBean<ReciboAguaSocio> reporteReciboAguaSocio(
 			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
 			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
+			@RequestParam(value = "puestoSocio", defaultValue = "0") String puestoSocio,
 			@RequestParam(value = "codigoRecibo", defaultValue = "0") Integer codigoRecibo){
 		
 		ResponseListBean<ReciboAguaSocio> response = new ResponseListBean<ReciboAguaSocio>();
 		
-		ReporteReciboAguaSocio reporte = reciboAguaSocioBus.reportePuestoAguaSocio(pagina, registros, codigoRecibo);
+		ReporteReciboAguaSocio reporte = reciboAguaSocioBus.reportePuestoAguaSocio(pagina, registros, puestoSocio, codigoRecibo);
 		
 		Integer totalReciboPuestoAgua = reporte.getTotalRegistros(); 
 		
@@ -274,9 +280,35 @@ public class ReciboAguaController {
 		return resultado;
 	}
 	
+	
+	@RequestMapping(value = "/reporte-recibo-agua-puesto.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody ResponseListBean<Puesto> reporteReciboAguaPuesto(
+			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
+			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
+			@RequestParam(value = "nroPuesto", defaultValue = "0") String nroPuesto,
+			@RequestParam(value = "codigoRecibo", defaultValue = "0") Integer codigoRecibo){
+		
+		ResponseListBean<Puesto> response = new ResponseListBean<Puesto>();
+		
+		ReportePuesto reporte = puestoBus.reportePuestoAgua(pagina, registros, nroPuesto, codigoRecibo);
+		
+		Integer totalReciboPuestoLuz = reporte.getTotalRegistros(); 
+		
+		response.setPage(pagina);
+		response.setRecords(totalReciboPuestoLuz);
+		
+		//total de paginas a mostrar
+		response.setTotal(OperadoresUtil.obtenerCociente(totalReciboPuestoLuz, registros));
+				
+		response.setRows(reporte.getListaPuesto());
+		
+		return response;
+	}
+	
+	
 	@RequestMapping(value = "/generarImpresionPDF", method = RequestMethod.GET)
     public ModelAndView generarFacturacionPdf(
-    		@RequestParam(value = "codigoReciboAguaSocio", defaultValue = "1") Integer codigoReciboAguaSocio, HttpServletResponse response, HttpServletRequest request) {
+    		@RequestParam(value = "codigoReciboAguaSocio", defaultValue = "3") Integer codigoReciboAguaSocio, HttpServletResponse response, HttpServletRequest request) {
 		
 		ReporteReciboAguaSocio reporte = reciboAguaSocioBus.buscarReciboAguaSocio(codigoReciboAguaSocio);
 		Integer totalReciboPuestoxAgua = reporte.getTotalRegistros(); 
@@ -285,7 +317,8 @@ public class ReciboAguaController {
         response.setHeader("Content-Disposition", "attachment; filename=Impresion ReciboAguaSocio.pdf");
         
         // return a view which will be resolved by an excel view resolver
-        return new ModelAndView("pdfView", "reciboAguaSocio", reporte);
+        return new ModelAndView("pdfViewAguaSocio", "reciboAguaSocio", reporte);
+        //return new ModelAndView("pdfView", "reciboAguaSocio", reporte);
     }
 	
 	
@@ -302,4 +335,7 @@ public class ReciboAguaController {
         return new ModelAndView("excelViewAguaSocio", "listaRegistrosEgresos", lista);
          
     }
+
+
+	
 }

@@ -25,7 +25,7 @@ public class ReciboAguaSocio {
 	double reconexion;
 	double alcantarillado;
 	double total;
-    String numeroPuesto;
+    String nroPuesto;
     String nombreFull; 
     String numeroPadron; 
     String nombreGiro;
@@ -33,8 +33,6 @@ public class ReciboAguaSocio {
 	String nombreServicio;  
 	String nombreDetalle;
 	String periodoSocio;
-	
-	
 	public int getIdRecibo() {
 		return idRecibo;
 	}
@@ -137,6 +135,12 @@ public class ReciboAguaSocio {
 	public void setPagado(int pagado) {
 		this.pagado = pagado;
 	}
+	public int getCorteAgua() {
+		return corteAgua;
+	}
+	public void setCorteAgua(int corteAgua) {
+		this.corteAgua = corteAgua;
+	}
 	public double getConsumoMes() {
 		return consumoMes;
 	}
@@ -173,11 +177,11 @@ public class ReciboAguaSocio {
 	public void setTotal(double total) {
 		this.total = total;
 	}
-	public String getNumeroPuesto() {
-		return numeroPuesto;
+	public String getNroPuesto() {
+		return nroPuesto;
 	}
-	public void setNumeroPuesto(String numeroPuesto) {
-		this.numeroPuesto = numeroPuesto;
+	public void setNroPuesto(String nroPuesto) {
+		this.nroPuesto = nroPuesto;
 	}
 	public String getNombreFull() {
 		return nombreFull;
@@ -221,11 +225,5 @@ public class ReciboAguaSocio {
 	public void setPeriodoSocio(String periodoSocio) {
 		this.periodoSocio = periodoSocio;
 	}
-	public int getCorteAgua() {
-		return corteAgua;
-	}
-	public void setCorteAgua(int corteAgua) {
-		this.corteAgua = corteAgua;
-	}
-
+	
 }

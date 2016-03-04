@@ -139,7 +139,7 @@ public class ExcelBuilderEgresos extends AbstractExcelView{
     		
     		c = aRow.createCell(3);
     		c.setCellValue(egreso.getTotal());
-    		c.setCellStyle(csRight);
+    		c.setCellStyle(csRightP);
     		
     		c = aRow.createCell(4);
     		c.setCellValue(egreso.getFecha());

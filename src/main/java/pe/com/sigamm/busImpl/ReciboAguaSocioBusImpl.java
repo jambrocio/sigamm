@@ -23,9 +23,9 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 	private ReciboAguaSocioDao reciboAguaSocioDao;
 
 	@Override
-	public ReporteReciboAguaSocio reportePuestoAguaSocio(int pagina,	int registros, int codigoRecibo) {
+	public ReporteReciboAguaSocio reportePuestoAguaSocio(int pagina, int registros, String numeroPuesto, int codigoRecibo) {
 		
-		return reciboAguaSocioDao.reporteReciboAguaSocio(pagina, registros, codigoRecibo);
+		return reciboAguaSocioDao.reporteReciboAguaSocio(pagina, registros, numeroPuesto, codigoRecibo);
 		
 	}
 

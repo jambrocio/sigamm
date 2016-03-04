@@ -8,11 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import pe.com.sigamm.modelo.Facturacion;
 import pe.com.sigamm.modelo.ReciboAguaSocio;
-import pe.com.sigamm.modelo.Usuario;
-import pe.com.sigamm.util.Constantes;
-
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -72,7 +68,7 @@ public class PDFBuilderAguaSocio extends AbstractPdfView{
         document.add(Chunk.NEWLINE);
         
         // 1.Resultado
-        Paragraph titulo = new Paragraph("Reporte del Recibo de Agua del Asocioado", FontFactory.getFont(
+        Paragraph titulo = new Paragraph("Reporte del Recibo de Agua del Asociado", FontFactory.getFont(
         		"arial",   						// fuente
                 12,                            // tamaño
                 Font.ITALIC,                   // estilo

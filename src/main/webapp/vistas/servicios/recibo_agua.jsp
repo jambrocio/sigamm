@@ -171,10 +171,11 @@ function cargarReciboAgua(){
 				
 				opciones += "&nbsp;&nbsp;";
 				
-				/*opciones += "<a href=javascript:generarImpresion(";
+				/*opciones += "<a href=javascript:generarImpresionPDF(";
 				opciones += rowObject.codigoRecibo + ") >";
 				opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Generar Impresión de todos los Recibo de Agua de los Socios'/>";
 				opciones += "</a>";*/
+				
 				opciones += "<a href=/sigamm/generarImpresionPDF>";
 				opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Generar Impresión de todos los Recibo de Agua de los Socios'/>";
 				opciones += "</a>";
@@ -441,14 +442,14 @@ function cargarReciboAguaSocio1(codigoRecibo){
 
 		if (rowObject.pagado != 1) {			
 			opciones += "<a href=javascript:editarReciboAguaXSocio('";
-			opciones += opciones += rowObject.codigoReciboAgua + "','" + rowObject.numeroPuesto + "') >";
+			opciones += opciones += rowObject.codigoReciboAgua + "','" + rowObject.nroPuesto + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Agua Socio'/>";
 			opciones += "</a>";
 			
 			opciones += "&nbsp;&nbsp;";
 			
 			opciones += "<a href=javascript:generarReciboAguaXSocio('";
-			opciones += rowObject.codigoSector + "','" + rowObject.numeroPuesto + "','" + rowObject.codigoReciboAgua + "') >";
+			opciones += rowObject.codigoSector + "','" + rowObject.nroPuesto + "','" + rowObject.codigoReciboAgua + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/agregar2_24x24.png' border='0' title='Crear Recibo de Agua por Socio'/>";
 			opciones += "</a>";			
  
@@ -456,7 +457,7 @@ function cargarReciboAguaSocio1(codigoRecibo){
 				opciones += "&nbsp;&nbsp;";
 				
 				opciones += "<a href=javascript:pagarReciboAguaXSocio('";
-				opciones += rowObject.codigoReciboAgua + "','" + rowObject.numeroPuesto + "'," + rowObject.codigoSocio + ") >";
+				opciones += rowObject.codigoReciboAgua + "','" + rowObject.nroPuesto + "'," + rowObject.codigoSocio + ") >";
 				opciones += "<img src='/"+ruta+"/recursos/images/icons/money_activo_24x24.png' border='0' title='PAGAR Recibo de Agua por Socio'/>";
 				opciones += "</a>";
 			}
@@ -490,8 +491,8 @@ function cargarReciboAguaSocio1(codigoRecibo){
 			width: 320,
 			align: 'left'
 		},{
-			name : 'numeroPuesto',
-			index: 'numeroPuesto',
+			name : 'nroPuesto',
+			index: 'nroPuesto',
 			sortable:false,
 			width: 50,
 			align: 'center'
@@ -527,17 +528,17 @@ function cargarReciboAguaSocio1(codigoRecibo){
 			//alert(rowId + ' - ' + data + ' - ' + item.pagado);
 			if ( (item.reciboAguaCreado == 0) && (item.corteAgua == 0 || item.corteAgua == null) ) {
 				$("#grillaReciboAgua").setCell(rowId, 'nombreFull', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });				
-				$("#grillaReciboAgua").setCell(rowId, 'numeroPuesto', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'nroPuesto', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'nombreGiro', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'total', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
 			} else if ( (item.reciboAguaCreado == 1) && (item.corteAgua == 1) ) {
 				$("#grillaReciboAgua").setCell(rowId, 'nombreFull', '', { 'background-color':'##FF8000','color':'white','font-weight':'bold' });				
-				$("#grillaReciboAgua").setCell(rowId, 'numeroPuesto', '', { 'background-color':'#FF8000','color':'white','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'nroPuesto', '', { 'background-color':'#FF8000','color':'white','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'nombreGiro', '', { 'background-color':'#FF8000','color':'white','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'total', '', { 'background-color':'#FF8000','color':'white','font-weight':'bold' });				
 			} else {
 				$("#grillaReciboAgua").setCell(rowId, 'nombreFull', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
-				$("#grillaReciboAgua").setCell(rowId, 'numeroPuesto', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'nroPuesto', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'nombreGiro', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'total', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
 			}
@@ -585,7 +586,7 @@ function editarReciboAguaXSocio(original, puesto){
 
 		        	$.each(result.rows, function(key,val) {		        		
 		        		$("#nombreSocio").text(val.nombreFull);
-		        		$("#puestoSocio").text(val.numeroPuesto);
+		        		$("#puestoSocio").text(val.nroPuesto);
 		            	$("#sectorSocio").text(val.nombreSector);
 		            	$("#giroSocio").text(val.nombreGiro);
 		            	$("#periodoSocio").text(val.periodoSocio);
@@ -688,7 +689,7 @@ function pagarReciboAguaXSocio(original, puesto, codigoSocio){
         
 		jsonObj = [];
 		var parametros = new Object();
-		parametros.numeroPuesto = puesto;
+		parametros.nroPuesto = puesto;
 		parametros.codigoReciboAgua = original;
 		parametros.codigoSocio = codigoSocio;
 		parametros.pagado = 1;
@@ -738,6 +739,7 @@ function pagarReciboAguaXSocio(original, puesto, codigoSocio){
 
 function generarReciboAguaXSocio(sector, puesto, codigoRecibo){
 
+	//alert("Sector: " + sector + "\nPuesto: " + puesto + "\nCodigoRecibo: " + codigoRecibo);
 	limpiarReciboAguaSocio();
 	$("#sectorSocio").text(sector);
 	$("#puestoSocio").text(puesto);									
@@ -756,6 +758,7 @@ function generarReciboAguaXSocio(sector, puesto, codigoRecibo){
 
 function cargarDatosReciboAguaSocio(sector, puesto, codigoRecibo){
 	
+	//alert("Sector: " + sector + "\nPuesto: " + puesto + "\nCodigoRecibo: " + codigoRecibo);
 	var ruta = obtenerContexto();	
 	var parametros = new Object();
 	parametros.codigoSector         = sector;
@@ -775,7 +778,7 @@ function cargarDatosReciboAguaSocio(sector, puesto, codigoRecibo){
         	limpiarReciboAguaSocio();
         	$.each(result.rows, function(key,val) {
             	$("#nombreSocio").text(val.nombreFull);
-            	$("#puestoSocio").text(val.numeroPuesto);
+            	$("#puestoSocio").text(val.nroPuesto);
             	$("#sectorSocio").text(val.nombreSector);
             	$("#giroSocio").text(val.nombreGiro);
             	$("#periodoSocio").text(val.periodoSocio);
@@ -998,7 +1001,31 @@ function limpiarReciboAguaSocio(){
 }
 
 
-function generarImpresion(codigoRecibo){
+function buscarReciboAguaPuesto(){
+	var codigoReciboAgua = $("#codigoReciboAgua").val();
+	var puestoSocio = $("#reciboAguaSocioBuscara").val();
+	//alert ("RECIBO: " + codigoReciboAgua + " PUESTO: " + puestoSocio);
+	jsonObj = [];
+	var parametros = new Object();
+	parametros.codigoReciboAgua = codigoReciboAgua;
+	parametros.nroPuesto = puestoSocio;
+	//alert("INTENTOS: " + intentos);
+	if(intentos > 0){
+		$("#grillaReciboAgua").jqGrid('setGridParam',
+		{
+			url : 'reporte-recibo-agua-puesto.json',
+			datatype : "json",
+			postData:parametros,
+			page:1
+		}).trigger('reloadGrid');
+	}else{
+		//buscarReciboAguaSocio(codigoRecibo, codigoPuesto);
+	}
+		
+}
+
+
+function generarImpresionPDF(codigoRecibo){
 	
 	var ruta = obtenerContexto();
 			
@@ -1195,9 +1222,9 @@ function exportarAguaSocio(){
 				<tr>
 					<td width="150"><b>RECIBO AGUA SOCIOS<b/></td>
 					<td width="10">:</td>
-					<td width="250"><input type="text" id="reciboLuzSocioBuscara" class="text ui-widget-content ui-corner-all" maxlength="8" /></td>
+					<td width="250"><input type="text" id="reciboAguaSocioBuscara" class="text ui-widget-content ui-corner-all" maxlength="8" /></td>
 					<td>&nbsp;&nbsp;
-						<button type="button" class="btn btn-primary" onclick="cargarReciboLuzSocio()">
+						<button type="button" class="btn btn-primary" onclick="buscarReciboAguaPuesto()">
 							<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 						</button>&nbsp;&nbsp;
 						<button type="button" class="btn btn-primary">
