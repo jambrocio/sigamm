@@ -309,6 +309,19 @@ function limpiarTablaFacturacion(){
  		}
  		
  	}
+	
+	var tabla2 = document.getElementById("tablaFacturacionDetalle2");
+	var filasTabla2 = tabla2.rows.length;
+	
+	for(var i = 0; i < filasTabla2; i++) {
+		
+		if(i > 0){
+ 			
+ 			tabla2.deleteRow(1);
+ 			
+ 		}
+ 		
+ 	}
 }
 
 function limpiarTablaDeudas(){

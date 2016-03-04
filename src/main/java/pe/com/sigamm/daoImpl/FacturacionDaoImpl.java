@@ -17,6 +17,9 @@ import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
 import pe.com.sigamm.bean.ReporteEgreso;
+import pe.com.sigamm.bean.ReporteFacturacion;
+import pe.com.sigamm.bean.ReporteSocio;
+import pe.com.sigamm.bean.VistaFacturacion;
 import pe.com.sigamm.dao.FacturacionDao;
 import pe.com.sigamm.modelo.Concepto;
 import pe.com.sigamm.modelo.DeudaSocio;
@@ -26,6 +29,7 @@ import pe.com.sigamm.modelo.Facturacion;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Retorno;
+import pe.com.sigamm.modelo.Socio;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.LoggerCustom;
 
@@ -496,6 +500,45 @@ public class FacturacionDaoImpl implements FacturacionDao {
 		}
 		
 		return retorno;
+		
+	}
+
+	@Override
+	public ReporteFacturacion reporteFacturacion(int pagina, int registros, String dni, String nombre, int exportar) {
+		
+		ReporteFacturacion reporte = new ReporteFacturacion();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_REPORTE_FACTURACION_DIARIO").declareParameters(
+					new SqlParameter("vi_pagina", 					Types.INTEGER),
+					new SqlParameter("vi_registros", 				Types.INTEGER),
+					new SqlParameter("vi_dni", 						Types.VARCHAR),
+					new SqlParameter("vi_nombre",					Types.VARCHAR),
+					new SqlParameter("vi_exportar", 				Types.INTEGER),
+					
+					new SqlOutParameter("vo_total_registros", 		Types.INTEGER),
+					new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(VistaFacturacion.class)));
+			
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_pagina", 		pagina);
+			parametros.addValue("vi_registros", 	registros);
+			parametros.addValue("vi_dni", 			dni);
+			parametros.addValue("vi_nombre", 		nombre);
+			parametros.addValue("vi_exportar", 		exportar);
+			
+			Map<String,Object> results = jdbcCall.execute(parametros);
+			int totalRegistros = (Integer) results.get("vo_total_registros");
+			List<VistaFacturacion> lista = (List<VistaFacturacion>) results.get("vo_result");
+			
+			reporte.setTotalRegistros(totalRegistros);
+			reporte.setListaFacturacion(lista);
+			
+		}catch(Exception e){
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return  reporte;
 		
 	}
 

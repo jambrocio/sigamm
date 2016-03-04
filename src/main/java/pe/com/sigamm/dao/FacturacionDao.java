@@ -3,6 +3,7 @@ package pe.com.sigamm.dao;
 import java.util.List;
 
 import pe.com.sigamm.bean.ReporteEgreso;
+import pe.com.sigamm.bean.ReporteFacturacion;
 import pe.com.sigamm.modelo.Concepto;
 import pe.com.sigamm.modelo.DeudaSocio;
 import pe.com.sigamm.modelo.Egreso;
@@ -37,4 +38,7 @@ public interface FacturacionDao {
 	public Facturacion buscarFacturacion(int codigoFacturacion);
 	
 	public Retorno anularEgreso(Egreso egreso);
+	
+	public ReporteFacturacion reporteFacturacion(int pagina, int registros, String dni, String nombre, int exportar);
+	
 }

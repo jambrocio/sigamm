@@ -82,7 +82,10 @@
 		<put-attribute name="contenido" value="/vistas/facturacion/egreso.jsp" />
 		<put-attribute name="titulo" value="Egresos" />
 	</definition>
-
+	<definition name="facturacion/reporteCobro" extends="main">
+		<put-attribute name="contenido" value="/vistas/facturacion/reporteCobro.jsp" />
+		<put-attribute name="titulo" value="Reporte de Facturacion" />
+	</definition>
 	<!-- SERVICIOS -->
 	<definition name="servicios/recibo_luz" extends="main">
 		<put-attribute name="contenido" value="/vistas/servicios/recibo_luz.jsp" />

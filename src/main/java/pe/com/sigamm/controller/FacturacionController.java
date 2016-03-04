@@ -18,7 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import pe.com.sigamm.bean.CamposObligatorios;
 import pe.com.sigamm.bean.ReporteEgreso;
+import pe.com.sigamm.bean.ReporteFacturacion;
 import pe.com.sigamm.bean.ResponseListBean;
+import pe.com.sigamm.bean.VistaFacturacion;
 import pe.com.sigamm.bus.FacturacionBus;
 import pe.com.sigamm.modelo.Concepto;
 import pe.com.sigamm.modelo.DeudaSocio;
@@ -28,6 +30,7 @@ import pe.com.sigamm.modelo.Facturacion;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Retorno;
+import pe.com.sigamm.modelo.Socio;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.Constantes;
 import pe.com.sigamm.util.OperadoresUtil;
@@ -51,6 +54,13 @@ public class FacturacionController {
 	public String reporteVisitas(HttpServletRequest request) {
 		
 		return "facturacion/cobro";
+	
+	}
+	
+	@RequestMapping(value = "/reporteCobro", method=RequestMethod.GET)
+	public String reporteCobro(HttpServletRequest request) {
+		
+		return "facturacion/reporteCobro";
 	
 	}
 	
@@ -250,4 +260,27 @@ public class FacturacionController {
 		return resultado;
 	}
 	
+	@RequestMapping(value = "/reporte-facturacion.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody ResponseListBean<VistaFacturacion> reporteSocios(
+			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
+			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
+			@RequestParam(value = "dni", defaultValue = "0") String dni,
+			@RequestParam(value = "nombre", defaultValue = "") String nombre){
+		
+		ResponseListBean<VistaFacturacion> response = new ResponseListBean<VistaFacturacion>();
+		
+		ReporteFacturacion reporte = facturacionBus.reporteFacturacion(pagina, registros, dni, nombre, 0);
+		
+		Integer totalSocios = reporte.getTotalRegistros(); 
+		
+		response.setPage(pagina);
+		response.setRecords(totalSocios);
+		
+		//total de paginas a mostrar
+		response.setTotal(OperadoresUtil.obtenerCociente(totalSocios, registros));
+				
+		response.setRows(reporte.getListaFacturacion());
+		
+		return response;
+	}
 }

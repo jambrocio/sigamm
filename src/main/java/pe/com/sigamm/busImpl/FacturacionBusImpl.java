@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import pe.com.sigamm.bean.ReporteEgreso;
+import pe.com.sigamm.bean.ReporteFacturacion;
 import pe.com.sigamm.bus.FacturacionBus;
 import pe.com.sigamm.dao.FacturacionDao;
 import pe.com.sigamm.modelo.Concepto;
@@ -111,5 +112,11 @@ public class FacturacionBusImpl implements FacturacionBus {
 	public Retorno anularEgreso(Egreso egreso) {
 
 		return facturacionDao.anularEgreso(egreso);
+	}
+
+	@Override
+	public ReporteFacturacion reporteFacturacion(int pagina, int registros, String dni, String nombre, int exportar) {
+		
+		return facturacionDao.reporteFacturacion(pagina, registros, dni, nombre, exportar);
 	}
 }
