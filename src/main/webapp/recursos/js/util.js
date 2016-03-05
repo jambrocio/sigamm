@@ -11,9 +11,20 @@ function obtenerContexto(){
 
 function replaceAll(text, busca, reemplaza)
 {
-	while (text.toString().indexOf(busca) != -1)
-		text = text.toString().replace(busca,reemplaza);
-	return text;
+	if (text === undefined) {
+	    //txt = "x is undefined";
+		
+		return "";
+		
+	} else {
+	    //txt = "x is defined";
+		
+		while (text.toString().indexOf(busca) != -1)
+			text = text.toString().replace(busca,reemplaza);
+		return text;
+		
+	}
+	
 }
 
 //Elimina marcadores anteriormente mostrado en google maps
