@@ -403,6 +403,58 @@ function guardar(){
 }
 
 
+function reportar(){
+	var ruta = obtenerContexto();
+	jsonObj = [];
+	var parametros = new Object();
+	parametros.fecha = $("#fecha").val();
+	
+	$.ajax({
+		type: "POST",
+	    async:false,
+	    url: "reportar-egreso.json",
+	    cache : false,
+	    data: parametros,
+	    success: function(result){
+	            
+	        if(result.camposObligatorios.length == 0){
+                	
+            	$('#egreso_modal').modal('hide');
+            	
+	            $.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Mensaje',
+					// (string | mandatory) the text inside the notification
+					text: result.mensaje,
+					// (string | optional) the image to display on the left
+					image: "/" + ruta + "/recursos/images/confirm.png",
+					// (bool | optional) if you want it to fade out on its own or just sit there
+					sticky: false,
+					// (int | optional) the time you want it to be alive for before fading out
+					time: ''
+				});
+	            
+	            cargarEgresos();
+	            
+			}else{
+                	
+            	colorEtiquetas();
+            	fila = "";
+            	$.each(result.camposObligatorios, function(id, obj){
+                        
+                	$("#" + obj.nombreCampo).css("color", "red");
+                    $("#" + obj.nombreCampo + "-img").show();
+                    $("#" + obj.nombreCampo + "-img").attr("data-content", obj.descripcion);
+                        
+				});
+                	
+			}
+                
+		}
+	});	
+}
+
+
 function cargarEgresos(){
 	
 	var ruta = obtenerContexto();
@@ -668,6 +720,9 @@ function anularEgreso(codigoEgreso){
 			</button>
 			<button type="button" class="btn btn-primary">
 				<img src="recursos/images/icons/excel_16x16.png" alt="Exportar a Excel" />&nbsp;<a href="/sigamm/reporteEgresoExcel" style="color:white">Exportar</a>
+			</button>
+			<button type="button" class="btn btn-primary" onclick="reportar(1)">
+				<img src="recursos/images/icons/guardar_16x16.png" alt="Reporte" />&nbsp;Reporte
 			</button>
 			&nbsp;
 			<!-- button type="button" class="btn btn-primary" onclick="guardar()">

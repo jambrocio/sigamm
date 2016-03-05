@@ -1,11 +1,25 @@
 package pe.com.sigamm.controller;
 
+import java.io.File;
 import java.lang.reflect.Type;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,6 +176,51 @@ public class FacturacionController {
 		return resultado;
 	}
 
+	
+	@RequestMapping(value = "/reportar-egreso.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String reportarEgreso(Egreso egreso){
+		Gson gson = new Gson();
+		
+		try{
+			String fileName = System.getProperty("user.dir") +"/src/main/resources/reportes/Reporte_General_Egresos.jasper";
+            
+            if (fileName == null) 
+            {                
+                System.out.println("No encuentro el archivo del reporte.");
+                System.exit(2);
+            }
+            
+            /*JasperReport masterReport = (JasperReport) JRLoader.loadObject(fileName);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(masterReport, null, (Connection) null);
+            JasperExportManager.exportReportToPdf(jasperPrint);*/
+            
+            String fileJasper = "D:\\tools\\workspaces\\Reportes\\Reporte_General_Egresos.jasper";
+            //JasperPrint print = JasperFillManager.fillReport(fileJasper,null,new JREmptyDataSource());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(fileJasper, null, (Connection) null);
+            JasperViewer jviewer = new JasperViewer(jasperPrint,false);
+            jviewer.setVisible(true);
+            
+	        /*File theFile = new File(fileName);
+	        JRDesignQuery newQuery = new JRDesignQuery();
+	        JasperDesign jasperDesign = JRXmlLoader.load(theFile);
+	        newQuery.setText(theQuery);
+	        jasperDesign.setQuery(newQuery);
+	        
+	         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+	         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, Connection);
+	         JasperViewer jviewer = new JasperViewer(jasperPrint,false);
+	         jviewer.setTitle("Sistema de gestión de Cartera");
+	         jviewer.setVisible(true);*/
+		}
+		catch (Exception e){
+			System.out.println("Mensaje de Error:"+e.getMessage());
+		}
+	 
+		String resultado = ""; //"{\"idUsuario\":" + codigo + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + mensaje + "\"}";
+		
+		return resultado;
+	}
+	
 	
 	@RequestMapping(value = "/reporte-egreso.json", method = RequestMethod.POST, produces="application/json")
 	public @ResponseBody ResponseListBean<Egreso> reporteEgreso(
