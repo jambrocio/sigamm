@@ -1,5 +1,7 @@
 package pe.com.sigamm.bus;
 
+import java.io.File;
+
 import pe.com.sigamm.bean.ReporteReciboAguaSocio;
 import pe.com.sigamm.modelo.ReciboAguaSocio;
 import pe.com.sigamm.modelo.Retorno;
@@ -19,4 +21,7 @@ public interface ReciboAguaSocioBus {
 	public ReporteReciboAguaSocio reporteAguaSocioExcel(int pagina, int registros, int exportar, int codigoAguaOriginal);
 	
 	public Retorno pagarReciboAguaxSocio(ReciboAguaSocio reciboAguaSocio);
+	
+	public File generarFacturacionAguaPDF(Integer codigoRecibo, String periodo);
+	
 }

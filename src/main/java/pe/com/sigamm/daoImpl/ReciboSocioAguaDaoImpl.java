@@ -347,4 +347,33 @@ public class ReciboSocioAguaDaoImpl implements ReciboAguaSocioDao {
 		return  reporte;
 		
 	}
+
+	@Override
+	public ReporteReciboAguaSocio reporteReciboAguaSocio(Integer codigoRecibo, String periodo) {
+		ReporteReciboAguaSocio reporte = new ReporteReciboAguaSocio();
+		try{
+			System.out.println("Listando Recibo Agua Socio");
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_RECIBO_AGUA_SOCIO");
+			jdbcCall.withProcedureName("SP_REPORTE_PUESTO_AGUA_SOCIO_P").declareParameters(
+				new SqlParameter("vi_codigo_recibo", 			Types.INTEGER),
+				new SqlParameter("vi_periodo", 					Types.VARCHAR),
+				new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(ReciboAguaSocio.class)));
+				
+            
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_recibo", 			codigoRecibo);
+			parametros.addValue("vi_periodo", 					periodo);
+			
+			Map<String,Object> results = jdbcCall.execute(parametros);
+			List<ReciboAguaSocio> lista = (List<ReciboAguaSocio>) results.get("vo_result");
+			
+			reporte.setListaReciboAguaSocio((lista));
+			
+		}catch(Exception e){
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return reporte;
+	}
 }

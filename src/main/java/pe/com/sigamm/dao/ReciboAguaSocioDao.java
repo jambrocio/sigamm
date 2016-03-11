@@ -19,4 +19,6 @@ public interface ReciboAguaSocioDao {
 	public ReporteReciboAguaSocio reporteAguaSocioExcel(int pagina, int registros, int exportar, int codigoAguaOriginal);
 	
 	public Retorno pagarReciboAguaxSocio(ReciboAguaSocio reciboAguaSocio);
+
+	public ReporteReciboAguaSocio reporteReciboAguaSocio(Integer codigoRecibo, String periodo);
 }
