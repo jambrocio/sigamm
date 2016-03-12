@@ -737,6 +737,7 @@ function editarReciboLuzXSocio(original, puesto){
 		parametros.puestoSocio = puesto;
 		parametros.codigoRecibo = original;
 			
+		
 		$.ajax({
 			type: "POST",
 		    async:false,
