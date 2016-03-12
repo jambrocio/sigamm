@@ -1,5 +1,6 @@
 package pe.com.sigamm.util;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -61,6 +62,11 @@ public class UtilPDF {
 		Date fechaActual = new Date();
         String fechaActualStr = new SimpleDateFormat("ddMMyyyyhhmmss").format(fechaActual);
         return fechaActualStr;
+	}
+	
+	public static String round(double value, int places) {
+		DecimalFormat df = new DecimalFormat("#0.00");
+		return df.format(value);
 	}
 	
 }
