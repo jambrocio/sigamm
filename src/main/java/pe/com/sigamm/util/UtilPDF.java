@@ -39,7 +39,7 @@ public class UtilPDF {
 		try {
 			BarcodeQRCode qrcode = new BarcodeQRCode(value.trim(), 1, 1, null);
 			qrcodeImage = qrcode.getImage();
-			qrcodeImage.scalePercent(400);
+			qrcodeImage.scalePercent(200);
 		} catch (BadElementException ex) {
 			System.out.println("Ocurrio un error al generar codigo QR");
 		}

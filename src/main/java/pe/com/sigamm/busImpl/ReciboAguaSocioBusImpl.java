@@ -113,7 +113,7 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				Paragraph title = UtilPDF.writeLegend(UtilPDF.TITULO_RECIBO,12);
 				doc.add(title);
 
-				Paragraph ruc = UtilPDF.writeLegend(UtilPDF.RUC, 12);
+				Paragraph ruc = UtilPDF.writeLegend(UtilPDF.RUC, 11);
 				doc.add(ruc);
 
 				Paragraph recibo = UtilPDF.writeLegend(UtilPDF.LEYENDA_RECIBO + reporte.getListaReciboAguaSocio().get(aw).getIdRecibo(), 12);
@@ -123,59 +123,69 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				qrcodeImage.setAlignment(Element.ALIGN_CENTER);
 				doc.add(qrcodeImage);
 				
-				PdfPTable table1 = new PdfPTable(4);
+				PdfPTable table1 = new PdfPTable(2);
 				table1.setWidthPercentage(100);
 				table1.addCell("ASOCIADO (A)");
-				table1.addCell("N° DE PUESTO");
-				table1.addCell("SECTOR");
-				table1.addCell("GIRO");
-				
-				table1.addCell(reporte.getListaReciboAguaSocio().get(aw).getNombreFull());
-				table1.addCell(reporte.getListaReciboAguaSocio().get(aw).getNroPuesto());
-				table1.addCell(reporte.getListaReciboAguaSocio().get(aw).getNombreSector());
-				table1.addCell(reporte.getListaReciboAguaSocio().get(aw).getNombreGiro());
-				
-				table1.setSpacingAfter(20);
-				
-				doc.add(table1);
+				table1.addCell(reporte.getListaReciboAguaSocio().get(aw).getNombreFull() + "");
 				
 				PdfPTable table2 = new PdfPTable(2);
 				table2.setWidthPercentage(100);
-				table2.addCell("CONSUMO DE AGUA");
-				table2.addCell(reporte.getListaReciboAguaSocio().get(aw).getConsumoMes() + "");
+				table2.addCell("N° DE PUESTO");
+				table2.addCell(reporte.getListaReciboAguaSocio().get(aw).getNroPuesto() + "");
 				
 				PdfPTable table3 = new PdfPTable(2);
-				table3.setWidthPercentage(100);
-				table3.addCell("ALCANTARILLADO");
-				table3.addCell(reporte.getListaReciboAguaSocio().get(aw).getAlcantarillado() + "");
-				
+				table3.setWidthPercentage(100);				
+				table3.addCell("SECTOR");
+				table3.addCell(reporte.getListaReciboAguaSocio().get(aw).getNombreSector() + "");
+								
 				PdfPTable table4 = new PdfPTable(2);
-				table4.setWidthPercentage(100);
-				table4.addCell("MANTENIMIENTO");
-				table4.addCell(reporte.getListaReciboAguaSocio().get(aw).getServicioMantenimiento() + "");
+				table4.setWidthPercentage(100);						
+				table4.addCell("GIRO");		
+				table4.addCell(reporte.getListaReciboAguaSocio().get(aw).getNombreGiro() + "");
+				
+				table4.setSpacingAfter(20);
+				
+				doc.add(table1);
+				doc.add(table2);
+				doc.add(table3);
+				doc.add(table4);
 				
 				PdfPTable table5 = new PdfPTable(2);
 				table5.setWidthPercentage(100);
-				table5.addCell("DEUDA ANTERIOR");
-				table5.addCell(reporte.getListaReciboAguaSocio().get(aw).getDeudaAnterior() + "");
+				table5.addCell("CONSUMO DE AGUA");
+				table5.addCell(reporte.getListaReciboAguaSocio().get(aw).getConsumoMes() + "");
 				
 				PdfPTable table6 = new PdfPTable(2);
 				table6.setWidthPercentage(100);
-				table6.addCell("TOTAL DE AGUA");
+				table6.addCell("ALCANTARILLADO");
+				table6.addCell(reporte.getListaReciboAguaSocio().get(aw).getAlcantarillado() + "");
+				
+				PdfPTable table7 = new PdfPTable(2);
+				table7.setWidthPercentage(100);
+				table7.addCell("MANTENIMIENTO");
+				table7.addCell(reporte.getListaReciboAguaSocio().get(aw).getServicioMantenimiento() + "");
+				
+				PdfPTable table8 = new PdfPTable(2);
+				table8.setWidthPercentage(100);
+				table8.addCell("DEUDA ANTERIOR");
+				table8.addCell(reporte.getListaReciboAguaSocio().get(aw).getDeudaAnterior() + "");
+				
+				PdfPTable table9 = new PdfPTable(2);
+				table9.setWidthPercentage(100);
+				table9.addCell("TOTAL DE AGUA");
+				table9.setSpacingBefore(10);
 				Double total = 	reporte.getListaReciboAguaSocio().get(aw).getConsumoMes() + 
 								reporte.getListaReciboAguaSocio().get(aw).getAlcantarillado() +
 								reporte.getListaReciboAguaSocio().get(aw).getServicioMantenimiento() +
 								reporte.getListaReciboAguaSocio().get(aw).getDeudaAnterior();
-				table6.addCell(total + "");
+				table9.addCell(total + "");
 				
 				
-				doc.add(table2);
-				doc.add(table3);
-				doc.add(table4);
 				doc.add(table5);
 				doc.add(table6);
-				
-				
+				doc.add(table7);
+				doc.add(table8);
+				doc.add(table9);				
 				
 				doc.newPage();
 				
