@@ -16,8 +16,10 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.lowagie.text.Cell;
 
 import pe.com.sigamm.bean.ReporteReciboAguaSocio;
 import pe.com.sigamm.bus.ReciboAguaSocioBus;
@@ -96,7 +98,7 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 		
 		Document doc = new Document();
 		PdfWriter docWriter = null;
-		String path = UtilPDF.getDatePDF();
+		String path = UtilPDF.getDatePDF() + ".pdf";
 		ReporteReciboAguaSocio reporte = reciboAguaSocioDao.reporteReciboAguaSocio(codigoRecibo, periodo);
 		
 		try {
@@ -153,22 +155,34 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				PdfPTable table5 = new PdfPTable(2);
 				table5.setWidthPercentage(100);
 				table5.addCell("CONSUMO DE AGUA");
-				table5.addCell(reporte.getListaReciboAguaSocio().get(aw).getConsumoMes() + "");
+				Paragraph p5 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getConsumoMes() + "");
+				PdfPCell celda5 = new PdfPCell(p5);
+				celda5.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table5.addCell(celda5);
 				
 				PdfPTable table6 = new PdfPTable(2);
 				table6.setWidthPercentage(100);
 				table6.addCell("ALCANTARILLADO");
-				table6.addCell(reporte.getListaReciboAguaSocio().get(aw).getAlcantarillado() + "");
+				Paragraph p6 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getAlcantarillado() + "");
+				PdfPCell celda6 = new PdfPCell(p6);
+				celda6.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table6.addCell(celda6);
 				
 				PdfPTable table7 = new PdfPTable(2);
 				table7.setWidthPercentage(100);
 				table7.addCell("MANTENIMIENTO");
-				table7.addCell(reporte.getListaReciboAguaSocio().get(aw).getServicioMantenimiento() + "");
+				Paragraph p7 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getServicioMantenimiento() + "");
+				PdfPCell celda7 = new PdfPCell(p7);
+				celda7.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table7.addCell(celda7);
 				
 				PdfPTable table8 = new PdfPTable(2);
 				table8.setWidthPercentage(100);
 				table8.addCell("DEUDA ANTERIOR");
-				table8.addCell(reporte.getListaReciboAguaSocio().get(aw).getDeudaAnterior() + "");
+				Paragraph p8 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getDeudaAnterior() + "");
+				PdfPCell celda8 = new PdfPCell(p8);
+				celda8.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table8.addCell(celda8);
 				
 				PdfPTable table9 = new PdfPTable(2);
 				table9.setWidthPercentage(100);
@@ -178,8 +192,10 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 								reporte.getListaReciboAguaSocio().get(aw).getAlcantarillado() +
 								reporte.getListaReciboAguaSocio().get(aw).getServicioMantenimiento() +
 								reporte.getListaReciboAguaSocio().get(aw).getDeudaAnterior();
-				table9.addCell(total + "");
-				
+				Paragraph p9 = new Paragraph(total + "");
+				PdfPCell celda9 = new PdfPCell(p9);
+				celda9.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table9.addCell(celda9);
 				
 				doc.add(table5);
 				doc.add(table6);

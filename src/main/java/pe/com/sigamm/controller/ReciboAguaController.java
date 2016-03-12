@@ -337,13 +337,16 @@ public class ReciboAguaController {
 	}
 
 	@RequestMapping(value = "/generarImpresionPDF", method = RequestMethod.GET)
-	public void generarFacturacionPdf(
+	public HttpServletResponse generarFacturacionPdf(
 			@RequestParam(value = "periodo", defaultValue = "") String periodo,
 			@RequestParam(value = "codigoRecibo", defaultValue = "") Integer codigoReciboAguaSocio,
 			HttpServletResponse response, HttpServletRequest request) {
 		
 		periodo = periodo.replace("_", " ");
 		File file = reciboAguaSocioBus.generarFacturacionAguaPDF(codigoReciboAguaSocio, periodo);
+		response.setContentType("application/x-download");
+		response.setHeader("Content-Disposition", "attachment; filename=\""
+				+ file.getName() + "\"");
 		InputStream is = null;
 		try {
 			is = new FileInputStream(file);
@@ -362,10 +365,8 @@ public class ReciboAguaController {
 			LoggerCustom.errorApp(this, "", e);
 		}
 		
-		response.setContentType("application/pdf");
-		response.setHeader("Content-Disposition", "attachment; filename=\""
-				+ file.getName() + "\"");
-
+		return response;
+		
 	}
 
 	@RequestMapping(value = "/reporteAguaSocioExcel", method = RequestMethod.GET)
