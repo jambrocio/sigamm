@@ -106,6 +106,33 @@ $(function() {
             'Sep', 'Oct', 'Nov', 'Dic'] 
     });  
 
+	$("#fechainicio").datepicker(
+    {   
+        changeMonth: true,
+        changeYear: false,
+        numberOfMonths: 1,
+        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo',
+            'Junio', 'Julio', 'Agosto', 'Septiembre',
+            'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr',
+            'May', 'Jun', 'Jul', 'Ago',
+            'Sep', 'Oct', 'Nov', 'Dic'] 
+    }); 
+	
+	$("#fechatermino").datepicker(
+    {   
+        changeMonth: true,
+        changeYear: false,
+        numberOfMonths: 1,
+        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo',
+            'Junio', 'Julio', 'Agosto', 'Septiembre',
+            'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr',
+            'May', 'Jun', 'Jul', 'Ago',
+            'Sep', 'Oct', 'Nov', 'Dic'] 
+    }); 
 });
 
 
@@ -404,23 +431,30 @@ function guardar(){
 
 
 function reportar(){
+
 	var ruta = obtenerContexto();
-	jsonObj = [];
-	var parametros = new Object();
-	parametros.fecha = $("#fecha").val();
+	/*mensaje = "Desea eliminar el egreso cuyo código es  " + codigoEgreso + "... ?"; 
 	
-	$.ajax({
-		type: "POST",
-	    async:false,
-	    url: "reportar-egreso.json",
-	    cache : false,
-	    data: parametros,
-	    success: function(result){
-	            
-	        if(result.camposObligatorios.length == 0){
-                	
-            	$('#egreso_modal').modal('hide');
-            	
+	$("#mensajeEliminar").html(mensaje);*/	
+	$('#reporte_egreso_modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	}).one('click', '#aceptar', function() {
+        
+		jsonObj = [];
+		var parametros = new Object();
+		parametros.fechaInicio = $("#fechainicio").val();
+		parametros.fechaTermino = $("#fechatermino").val();
+		$.ajax({
+			type: "POST",
+		    async:false,
+		    url: "reportar-egreso.json",
+		    cache : false,
+		    data: parametros,
+		    success: function(result){
+		            
+		        $('#reporte_egreso_modal').modal('hide');
+	            	
 	            $.gritter.add({
 					// (string | mandatory) the heading of the notification
 					title: 'Mensaje',
@@ -434,24 +468,13 @@ function reportar(){
 					time: ''
 				});
 	            
-	            cargarEgresos();
-	            
-			}else{
-                	
-            	colorEtiquetas();
-            	fila = "";
-            	$.each(result.camposObligatorios, function(id, obj){
-                        
-                	$("#" + obj.nombreCampo).css("color", "red");
-                    $("#" + obj.nombreCampo + "-img").show();
-                    $("#" + obj.nombreCampo + "-img").attr("data-content", obj.descripcion);
-                        
-				});
-                	
+	            //cargarEgresos();
+		            
 			}
-                
-		}
-	});	
+		});
+		
+	});
+
 }
 
 
@@ -972,6 +995,44 @@ function anularEgreso(codigoEgreso){
 						<td><span id="lblmotivoAnulacion" style="font-size: 11px;"><b>MOTIVO DE ANULACION (*)</b></span></td>
 						<td><b>:</b></td>
 						<td><input type="text" id="motivoAnulacion" class="form-control" maxlength="500" style="text-transform: uppercase;" /></td>
+					</tr>	
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" id="aceptar">Si</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+			</div>
+		</div>
+		  
+	</div>
+</div>
+	
+
+<div class="modal fade" id="reporte_egreso_modal" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Reporte Egreso</h4>
+			</div>
+			<div class="modal-body">
+					
+				<table border="0" width="100%">
+					<tr>
+						<td colspan="3"><img src="recursos/images/icons/exclamation_32x32.png" border="0" />&nbsp;<b><span id="">SELECCIONE LA FECHA DEL REPORTE...</span></b></td>
+					</tr>
+					<tr style="height: 30px">&nbsp;</tr>
+					<tr>
+						<td><span id="lblfechainicio" style="font-size: 11px;"><b>FECHA INICIO (*)</b></span></td>
+						<td><b>:</b></td>
+						<td><input type="text" id="fechainicio" class="form-control" maxlength="20" /></td>
+					</tr>
+					<tr>
+						<td><span id="lblfechatermino" style="font-size: 11px;"><b>FECHA TERMINO (*)</b></span></td>
+						<td><b>:</b></td>
+						<td><input type="text" id="fechatermino" class="form-control" maxlength="20" /></td>
 					</tr>	
 				</table>
 			</div>

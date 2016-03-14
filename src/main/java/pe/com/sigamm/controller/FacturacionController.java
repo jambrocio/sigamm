@@ -192,35 +192,7 @@ public class FacturacionController {
 		Gson gson = new Gson();
 		
 		try{
-			String fileName = System.getProperty("user.dir") +"/src/main/resources/reportes/Reporte_General_Egresos.jasper";
-            
-            if (fileName == null) 
-            {                
-                System.out.println("No encuentro el archivo del reporte.");
-                System.exit(2);
-            }
-            
-            /*JasperReport masterReport = (JasperReport) JRLoader.loadObject(fileName);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(masterReport, null, (Connection) null);
-            JasperExportManager.exportReportToPdf(jasperPrint);*/
-            
-            String fileJasper = "D:\\tools\\workspaces\\Reportes\\Reporte_General_Egresos.jasper";
-            //JasperPrint print = JasperFillManager.fillReport(fileJasper,null,new JREmptyDataSource());
-            JasperPrint jasperPrint = JasperFillManager.fillReport(fileJasper, null, (Connection) null);
-            JasperViewer jviewer = new JasperViewer(jasperPrint,false);
-            jviewer.setVisible(true);
-            
-	        /*File theFile = new File(fileName);
-	        JRDesignQuery newQuery = new JRDesignQuery();
-	        JasperDesign jasperDesign = JRXmlLoader.load(theFile);
-	        newQuery.setText(theQuery);
-	        jasperDesign.setQuery(newQuery);
-	        
-	         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
-	         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, Connection);
-	         JasperViewer jviewer = new JasperViewer(jasperPrint,false);
-	         jviewer.setTitle("Sistema de gestión de Cartera");
-	         jviewer.setVisible(true);*/
+
 		}
 		catch (Exception e){
 			System.out.println("Mensaje de Error:"+e.getMessage());

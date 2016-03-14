@@ -80,6 +80,9 @@ public class ReciboAguaDaoImpl implements ReciboAguaDao {
 				new SqlParameter("vi_lectura_final",			Types.INTEGER),
 				new SqlParameter("vi_monto", 					Types.INTEGER),
 				new SqlParameter("vi_periodo", 					Types.VARCHAR),
+				new SqlParameter("vi_fecha_corte", 				Types.VARCHAR),
+				new SqlParameter("vi_fecha_vencimiento", 		Types.VARCHAR),
+				new SqlParameter("vi_observaciones", 			Types.VARCHAR),
 				new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
 				
 				new SqlOutParameter("vo_codigo_recibo", 		Types.INTEGER),
@@ -93,6 +96,9 @@ public class ReciboAguaDaoImpl implements ReciboAguaDao {
 			parametros.addValue("vi_lectura_final", 			reciboAgua.getLecturaFinal());
 			parametros.addValue("vi_monto", 					reciboAgua.getMonto());
 			parametros.addValue("vi_periodo", 					reciboAgua.getPeriodo());
+			parametros.addValue("vi_fecha_corte",				reciboAgua.getFechaCorte());
+			parametros.addValue("vi_fecha_vencimiento",			reciboAgua.getFechaVencimiento());
+			parametros.addValue("vi_observaciones",				reciboAgua.getObservaciones());
 			parametros.addValue("vi_codigo_usuario", 			datosSession.getCodigoUsuario());
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
