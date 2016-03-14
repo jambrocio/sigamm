@@ -337,7 +337,7 @@ public class ReciboAguaController {
 	}
 
 	@RequestMapping(value = "/generarImpresionPDF", method = RequestMethod.GET)
-	public HttpServletResponse generarFacturacionPdf(
+	public void generarFacturacionPdf(
 			@RequestParam(value = "periodo", defaultValue = "") String periodo,
 			@RequestParam(value = "codigoRecibo", defaultValue = "") Integer codigoReciboAguaSocio,
 			HttpServletResponse response, HttpServletRequest request) {
@@ -364,8 +364,6 @@ public class ReciboAguaController {
 		catch (Exception e) {
 			LoggerCustom.errorApp(this, "", e);
 		}
-		
-		return response;
 		
 	}
 
