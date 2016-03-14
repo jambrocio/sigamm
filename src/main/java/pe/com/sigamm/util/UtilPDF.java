@@ -18,6 +18,7 @@ public class UtilPDF {
 	public static final String TITULO_RECIBO = "ASOCIACIÓN DE COMERCIANTES DEL MERCADO MODELO DE HUARAL";
 	public static final String RUC = "R.U.C 20530606334";
 	public static final String LEYENDA_RECIBO = "RECIBO PROVISIONAL N°: ";
+	public static final String RUTA_PDF = "/usr/share/jboss-eap-6.1/reportes/";
 	
 	public static void addEmptyLine(Paragraph paragraph, int number) {
 		for (int i = 0; i < number; i++) {
