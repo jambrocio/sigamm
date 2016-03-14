@@ -36,7 +36,9 @@ public class ReciboLuzSocio {
 	String fecPeriodo;
 	double costoWatts;
 	int estadoAbierto;
-	
+	String fechaVencimiento;
+	String fechaCorte;
+	String observaciones;
 	
 	public int getIdRecibo() {
 		return idRecibo;
@@ -229,6 +231,24 @@ public class ReciboLuzSocio {
 	}
 	public void setEstadoAbierto(int estadoAbierto) {
 		this.estadoAbierto = estadoAbierto;
+	}
+	public String getFechaVencimiento() {
+		return fechaVencimiento;
+	}
+	public void setFechaVencimiento(String fechaVencimiento) {
+		this.fechaVencimiento = fechaVencimiento;
+	}
+	public String getFechaCorte() {
+		return fechaCorte;
+	}
+	public void setFechaCorte(String fechaCorte) {
+		this.fechaCorte = fechaCorte;
+	}
+	public String getObservaciones() {
+		return observaciones;
+	}
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
 	}	
 	
 }

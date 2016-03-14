@@ -1,9 +1,14 @@
 package pe.com.sigamm.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +33,7 @@ import pe.com.sigamm.modelo.Puesto;
 import pe.com.sigamm.modelo.ReciboLuzSocio;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.session.DatosSession;
+import pe.com.sigamm.util.LoggerCustom;
 import pe.com.sigamm.util.OperadoresUtil;
 
 
@@ -255,5 +261,37 @@ public class ReciboLuzController {
 		
 		return response;
 	}
+
+	@RequestMapping(value = "/generarImpresionLuzPDF", method = RequestMethod.GET)
+	public void generarImpresionLuzPdf(
+			@RequestParam(value = "periodo", defaultValue = "") String periodo,
+			@RequestParam(value = "codigoRecibo", defaultValue = "") Integer codigoReciboLuzSocio,
+			HttpServletResponse response, HttpServletRequest request) {
+		
+		periodo = periodo.replace("_", " ");
+		File file = reciboLuzSocioBus.generarFacturacionLuzPDF(codigoReciboLuzSocio, periodo);
+		response.setContentType("application/x-download");
+		response.setHeader("Content-Disposition", "attachment; filename=\""
+				+ file.getName() + "\"");
+		InputStream is = null;
+		try {
+			is = new FileInputStream(file);
+			OutputStream os = response.getOutputStream();
+			byte[] buffer = new byte[1024];
+			int len;
+			while ((len = is.read(buffer)) != -1) {
+				os.write(buffer, 0, len);
+			}
+			os.flush();
+			os.close();
+			is.close();
+		}
+
+		catch (Exception e) {
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+	}
+
 	
 }

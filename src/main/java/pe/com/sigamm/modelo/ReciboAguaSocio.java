@@ -33,6 +33,10 @@ public class ReciboAguaSocio {
 	String nombreServicio;  
 	String nombreDetalle;
 	String periodoSocio;
+	String fechaCorte;
+	String fechaVencimiento;
+	String observaciones;
+	
 	public int getIdRecibo() {
 		return idRecibo;
 	}
@@ -224,6 +228,24 @@ public class ReciboAguaSocio {
 	}
 	public void setPeriodoSocio(String periodoSocio) {
 		this.periodoSocio = periodoSocio;
+	}
+	public String getFechaCorte() {
+		return fechaCorte;
+	}
+	public void setFechaCorte(String fechaCorte) {
+		this.fechaCorte = fechaCorte;
+	}
+	public String getFechaVencimiento() {
+		return fechaVencimiento;
+	}
+	public void setFechaVencimiento(String fechaVencimiento) {
+		this.fechaVencimiento = fechaVencimiento;
+	}
+	public String getObservaciones() {
+		return observaciones;
+	}
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
 	}
 	
 }
