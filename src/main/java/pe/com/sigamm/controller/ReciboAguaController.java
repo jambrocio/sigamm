@@ -336,8 +336,8 @@ public class ReciboAguaController {
 		return response;
 	}
 
-	@RequestMapping(value = "/generarImpresionPDF", method = RequestMethod.GET)
-	public void generarFacturacionPdf(
+	@RequestMapping(value = "/generarImpresionAguaPDF", method = RequestMethod.GET)
+	public void generarImpresionAguaPdf(
 			@RequestParam(value = "periodo", defaultValue = "") String periodo,
 			@RequestParam(value = "codigoRecibo", defaultValue = "") Integer codigoReciboAguaSocio,
 			HttpServletResponse response, HttpServletRequest request) {

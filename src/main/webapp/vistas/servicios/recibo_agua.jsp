@@ -176,7 +176,7 @@ function cargarReciboAgua(){
 				opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Generar Impresión de todos los Recibo de Agua de los Socios'/>";
 				opciones += "</a>";*/
 				
-				opciones += "<a href=/sigamm/generarImpresionPDF?codigoRecibo="+rowObject.codigoRecibo+"&periodo="+rowObject.periodo.replace(' ','_')+" target='_blank'>";
+				opciones += "<a href=/sigamm/generarImpresionAguaPDF?codigoRecibo="+rowObject.codigoRecibo+"&periodo="+rowObject.periodo.replace(' ','_')+" target='_blank'>";
 				opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Generar Impresión de todos los Recibo de Agua de los Socios'/>";
 				opciones += "</a>";
 				
