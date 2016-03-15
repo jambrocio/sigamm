@@ -17,12 +17,8 @@ public class UtilPDF {
 
 	public static final String TITULO_RECIBO = "ASOCIACIÓN DE COMERCIANTES DEL MERCADO MODELO DE HUARAL";
 	public static final String RUC = "R.U.C 20530606334";
-<<<<<<< HEAD
 	public static final String LEYENDA_RECIBO = "RECIBO DE AGUA N°: ";
-=======
-	public static final String LEYENDA_RECIBO = "RECIBO PROVISIONAL N°: ";
->>>>>>> 3333fc3496d1dbcaddd19416107807e1ba6ac165
-	public static final String RUTA_PDF = "/usr/share/jboss-eap-6.1/reportes/";
+	public static final String RUTA_PDF = "d:/usr/share/jboss-eap-6.1/reportes/";
 
 	public static void addEmptyLine(Paragraph paragraph, int number) {
 		for (int i = 0; i < number; i++) {
@@ -75,37 +71,39 @@ public class UtilPDF {
 		return df.format(value);
 	}
 
+	
 	public static String getID(String periodo, Integer correlativo) {
 
-		String id = periodo;
+		String[] id = periodo.split(" ");
 		correlativo = correlativo + 1;
-
-		if (id.contains("ENERO")) {
-			id = id.replace("ENERO ", "01") + correlativo;
-		} else if (id.contains("FEBRERO")) {
-			id = id.replace("FEBRERO ", "02") + correlativo;
-		} else if (id.contains("MARZO")) {
-			id = id.replace("MARZO ", "03") + correlativo;
-		} else if (id.contains("ABRIL")) {
-			id = id.replace("ABRIL ", "04") + correlativo;
-		} else if (id.contains("MAYO")) {
-			id = id.replace("MAYO ", "05") + correlativo;
-		} else if (id.contains("JUNIO")) {
-			id = id.replace("JUNIO ", "06") + correlativo;
-		} else if (id.contains("JULIO")) {
-			id = id.replace("JULIO ", "07") + correlativo;
-		} else if (id.contains("AGOSTO")) {
-			id = id.replace("AGOSTO ", "08") + correlativo;
-		} else if (id.contains("SEPTIEMBRE")) {
-			id = id.replace("SEPTIEMBRE ", "09") + correlativo;
-		} else if (id.contains("OCTUBRE")) {
-			id = id.replace("OCTUBRE ", "10") + correlativo;
-		} else if (id.contains("NOVIEMBRE")) {
-			id = id.replace("NOVIEMBRE ", "11") + correlativo;
-		} else if (id.contains("DICIEMBRE")) {
-			id = id.replace("DICIEMBRE ", "12") + correlativo;
+		String numero = "";
+		
+		if (id[0].contains("ENERO")) {
+			numero = id[1] + id[0].replace("ENERO", "01") + String.format("%09d", correlativo);
+		} else if (id[0].contains("FEBRERO")) {
+			numero = id[1] + id[0].replace("FEBRERO", "02") + String.format("%09d", correlativo);
+		} else if (id[0].contains("MARZO")) {
+			numero = id[1] + id[0].replace("MARZO", "03") + String.format("%09d", correlativo);
+		} else if (id[0].contains("ABRIL")) {
+			numero = id[1] + id[0].replace("ABRIL", "04") + String.format("%09d", correlativo);
+		} else if (id[0].contains("MAYO")) {
+			numero = id[1] + id[0].replace("MAYO", "05") + String.format("%09d", correlativo);
+		} else if (id[0].contains("JUNIO")) {
+			numero = id[1] + id[0].replace("JUNIO", "06") + String.format("%09d", correlativo);
+		} else if (id[0].contains("JULIO")) {
+			numero = id[1] + id[0].replace("JULIO", "07") + String.format("%09d", correlativo);
+		} else if (id[0].contains("AGOSTO")) {
+			numero = id[1] + id[0].replace("AGOSTO", "08") + String.format("%09d", correlativo);
+		} else if (id[0].contains("SEPTIEMBRE")) {
+			numero = id[1] + id[0].replace("SEPTIEMBRE", "09") + String.format("%09d", correlativo);
+		} else if (id[0].contains("OCTUBRE")) {
+			numero = id[1] + id[0].replace("OCTUBRE", "10") + String.format("%09d", correlativo);
+		} else if (id[0].contains("NOVIEMBRE")) {
+			numero = id[1] + id[0].replace("NOVIEMBRE", "11") + String.format("%09d", correlativo);
+		} else if (id[0].contains("DICIEMBRE")) {
+			numero = id[1] + id[0].replace("DICIEMBRE", "12") + String.format("%09d", correlativo);
 		}
-		return id;
+		return numero;
 
 	}
 
