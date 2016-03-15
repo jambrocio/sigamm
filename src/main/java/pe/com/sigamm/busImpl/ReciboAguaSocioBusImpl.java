@@ -115,6 +115,7 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				
 				Font fuente = new Font();
 				fuente.setStyle(Font.BOLD);
+				fuente.setSize(13);
 				
 				Image logo = Image.getInstance(getClass().getClassLoader().getResource("imagenes/logo.png"));
 				doc.add(logo);
@@ -226,7 +227,9 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				table9.setWidthPercentage(100);
 				Paragraph p15 = new Paragraph("TOTAL DE AGUA", fuente);
 				PdfPCell celda15 = new PdfPCell(p15);
+				celda15.setFixedHeight(50f);
 				celda15.setHorizontalAlignment(Element.ALIGN_CENTER);
+				celda15.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				table9.addCell(celda15);
 				table9.setSpacingBefore(30);
 				
@@ -237,6 +240,7 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				Paragraph p9 = new Paragraph(UtilPDF.round(total, 2) + "", fuente);
 				PdfPCell celda9 = new PdfPCell(p9);
 				celda9.setHorizontalAlignment(Element.ALIGN_CENTER);
+				celda9.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				table9.addCell(celda9);
 				//----------------------------------------------
 				PdfPTable table12 = new PdfPTable(2);
@@ -244,9 +248,12 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				Paragraph p16 = new Paragraph("FECHA DE VENCIMIENTO", fuente);
 				PdfPCell celda16 = new PdfPCell(p16);
 				celda16.setHorizontalAlignment(Element.ALIGN_CENTER);
+				celda16.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				celda16.setFixedHeight(50f);
 				Paragraph p17 = new Paragraph("FECHA DE CORTE", fuente);
 				PdfPCell celda17 = new PdfPCell(p17);
 				celda17.setHorizontalAlignment(Element.ALIGN_CENTER);
+				celda17.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				table12.addCell(celda16);
 				table12.addCell(celda17);
 				
@@ -256,12 +263,15 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				
 				Paragraph p12 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getFechaVencimiento() + "", fuente);
 				PdfPCell celda12 = new PdfPCell(p12);
+				celda12.setFixedHeight(50f);
 				celda12.setHorizontalAlignment(Element.ALIGN_CENTER);
+				celda12.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				table13.addCell(celda12);
 				
 				Paragraph p13 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getFechaCorte() + "", fuente);
 				PdfPCell celda13 = new PdfPCell(p13);
 				celda13.setHorizontalAlignment(Element.ALIGN_CENTER);
+				celda13.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				table13.addCell(celda13);
 				//----------------------------------------------
 				
