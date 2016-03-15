@@ -14,18 +14,18 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.BarcodeQRCode;
 
 public class UtilPDF {
-	
+
 	public static final String TITULO_RECIBO = "ASOCIACIÓN DE COMERCIANTES DEL MERCADO MODELO DE HUARAL";
 	public static final String RUC = "R.U.C 20530606334";
 	public static final String LEYENDA_RECIBO = "RECIBO PROVISIONAL N°: ";
-	public static final String RUTA_PDF = "/usr/share/jboss-eap-6.1/reportes/";
-	
+	public static final String RUTA_PDF = "e:/usr/share/jboss-eap-6.1/reportes/";
+
 	public static void addEmptyLine(Paragraph paragraph, int number) {
 		for (int i = 0; i < number; i++) {
 			paragraph.add(new Paragraph(" "));
 		}
 	}
-	
+
 	public static Document getAutorPDF(Document doc) {
 		doc.addAuthor("Sistema Sigamm");
 		doc.addCreationDate();
@@ -58,16 +58,51 @@ public class UtilPDF {
 		addEmptyLine(preface, 0);
 		return preface;
 	}
-	
-	public static String getDatePDF(){
+
+	public static String getDatePDF() {
 		Date fechaActual = new Date();
-        String fechaActualStr = new SimpleDateFormat("ddMMyyyyhhmmss").format(fechaActual);
-        return fechaActualStr;
+		String fechaActualStr = new SimpleDateFormat("ddMMyyyyhhmmss")
+				.format(fechaActual);
+		return fechaActualStr;
 	}
-	
+
 	public static String round(double value, int places) {
 		DecimalFormat df = new DecimalFormat("#0.00");
 		return df.format(value);
 	}
-	
+
+	public static String getID(String periodo, Integer correlativo) {
+
+		String id = periodo;
+		correlativo = correlativo + 1;
+
+		if (id.contains("ENERO")) {
+			id = id.replace("ENERO ", "01") + correlativo;
+		} else if (id.contains("FEBRERO")) {
+			id = id.replace("FEBRERO ", "02") + correlativo;
+		} else if (id.contains("MARZO")) {
+			id = id.replace("MARZO ", "03") + correlativo;
+		} else if (id.contains("ABRIL")) {
+			id = id.replace("ABRIL ", "04") + correlativo;
+		} else if (id.contains("MAYO")) {
+			id = id.replace("MAYO ", "05") + correlativo;
+		} else if (id.contains("JUNIO")) {
+			id = id.replace("JUNIO ", "06") + correlativo;
+		} else if (id.contains("JULIO")) {
+			id = id.replace("JULIO ", "07") + correlativo;
+		} else if (id.contains("AGOSTO")) {
+			id = id.replace("AGOSTO ", "08") + correlativo;
+		} else if (id.contains("SEPTIEMBRE")) {
+			id = id.replace("SEPTIEMBRE ", "09") + correlativo;
+		} else if (id.contains("OCTUBRE")) {
+			id = id.replace("OCTUBRE ", "10") + correlativo;
+		} else if (id.contains("NOVIEMBRE")) {
+			id = id.replace("NOVIEMBRE ", "11") + correlativo;
+		} else if (id.contains("DICIEMBRE")) {
+			id = id.replace("DICIEMBRE ", "12") + correlativo;
+		}
+		return id;
+
+	}
+
 }

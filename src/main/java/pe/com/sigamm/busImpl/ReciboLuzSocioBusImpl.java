@@ -12,7 +12,9 @@ import com.google.gson.Gson;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -95,13 +97,15 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				doc.add(recibo);
 				
 				Image qrcodeImage = UtilPDF.getQRCode(reporte.getListaReciboLuzSocio().get(aw).getIdRecibo() + "");
-				qrcodeImage.setAlignment(Element.ALIGN_CENTER);
+				qrcodeImage.setAbsolutePosition(500, 690);
 				doc.add(qrcodeImage);
 				
 				PdfPTable table0 = new PdfPTable(2);
 				table0.setWidthPercentage(100);
 				table0.addCell("ASOCIADO (A)");
 				table0.addCell(reporte.getListaReciboLuzSocio().get(aw).getNombreFull() + "");
+				
+				table0.setSpacingBefore(20);
 				
 				PdfPTable table1 = new PdfPTable(2);
 				table1.setWidthPercentage(100);

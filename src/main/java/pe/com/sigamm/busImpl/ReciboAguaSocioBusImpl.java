@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfContentByte;
@@ -112,6 +113,9 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 			
 			for (int aw = 0; aw < reporte.getListaReciboAguaSocio().size(); aw++) {
 				
+				Font fuente = new Font();
+				fuente.setStyle(Font.BOLD);
+				
 				Image logo = Image.getInstance(getClass().getClassLoader().getResource("imagenes/logo.png"));
 				doc.add(logo);
 				
@@ -123,12 +127,12 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				ruc.setAlignment(Element.ALIGN_CENTER);
 				doc.add(ruc);
 
-				Paragraph recibo = new Paragraph(UtilPDF.LEYENDA_RECIBO + reporte.getListaReciboAguaSocio().get(aw).getIdRecibo());
+				Paragraph recibo = new Paragraph(UtilPDF.LEYENDA_RECIBO + UtilPDF.getID(reporte.getListaReciboAguaSocio().get(aw).getPeriodoSocio(), aw));
 				recibo.setAlignment(Element.ALIGN_CENTER);
 				doc.add(recibo);
 				
 				Image qrcodeImage = UtilPDF.getQRCode(reporte.getListaReciboAguaSocio().get(aw).getIdRecibo() + "");
-				qrcodeImage.setAlignment(Element.ALIGN_CENTER);
+				qrcodeImage.setAbsolutePosition(500, 690);
 				doc.add(qrcodeImage);
 				
 				PdfPTable table0 = new PdfPTable(2);
@@ -140,6 +144,8 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				table1.setWidthPercentage(100);
 				table1.addCell("ASOCIADO (A)");
 				table1.addCell(reporte.getListaReciboAguaSocio().get(aw).getNombreFull() + "");
+				
+				table1.setSpacingBefore(30);
 				
 				PdfPTable table2 = new PdfPTable(2);
 				table2.setWidthPercentage(100);
@@ -156,7 +162,7 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				table4.addCell("GIRO");		
 				table4.addCell(reporte.getListaReciboAguaSocio().get(aw).getNombreGiro() + "");
 				
-				table4.setSpacingAfter(20);
+				table4.setSpacingAfter(30);
 				
 				PdfPTable table10 = new PdfPTable(2);
 				table10.setWidthPercentage(100);						
@@ -174,7 +180,7 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				celda11.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table11.addCell(celda11);
 				
-				table11.setSpacingAfter(20);
+				table11.setSpacingAfter(30);
 				
 				doc.add(table1);
 				doc.add(table2);
@@ -215,43 +221,49 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				PdfPCell celda8 = new PdfPCell(p8);
 				celda8.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table8.addCell(celda8);
-				
+				//----------------------------------------------
 				PdfPTable table9 = new PdfPTable(2);
 				table9.setWidthPercentage(100);
-				table9.addCell("TOTAL DE AGUA");
-				table9.setSpacingBefore(10);
+				Paragraph p15 = new Paragraph("TOTAL DE AGUA", fuente);
+				PdfPCell celda15 = new PdfPCell(p15);
+				celda15.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table9.addCell(celda15);
+				table9.setSpacingBefore(30);
+				
 				Double total = 	reporte.getListaReciboAguaSocio().get(aw).getConsumoMes() + 
 								reporte.getListaReciboAguaSocio().get(aw).getAlcantarillado() +
 								reporte.getListaReciboAguaSocio().get(aw).getServicioMantenimiento() +
 								reporte.getListaReciboAguaSocio().get(aw).getDeudaAnterior();
-				Paragraph p9 = new Paragraph(UtilPDF.round(total, 2) + "");
+				Paragraph p9 = new Paragraph(UtilPDF.round(total, 2) + "", fuente);
 				PdfPCell celda9 = new PdfPCell(p9);
 				celda9.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table9.addCell(celda9);
-				
+				//----------------------------------------------
 				PdfPTable table12 = new PdfPTable(2);
 				table12.setWidthPercentage(100);
-				table12.addCell("FECHA DE VENCIMIENTO");
-				Paragraph p12 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getFechaVencimiento() + "");
-				PdfPCell celda12 = new PdfPCell(p12);
-				celda12.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table12.addCell(celda12);
+				Paragraph p16 = new Paragraph("FECHA DE VENCIMIENTO", fuente);
+				PdfPCell celda16 = new PdfPCell(p16);
+				celda16.setHorizontalAlignment(Element.ALIGN_CENTER);
+				Paragraph p17 = new Paragraph("FECHA DE CORTE", fuente);
+				PdfPCell celda17 = new PdfPCell(p17);
+				celda17.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table12.addCell(celda16);
+				table12.addCell(celda17);
 				
+				//----------------------------------------------
 				PdfPTable table13 = new PdfPTable(2);
 				table13.setWidthPercentage(100);
-				table13.addCell("FECHA DE CORTE");
-				Paragraph p13 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getFechaCorte() + "");
+				
+				Paragraph p12 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getFechaVencimiento() + "", fuente);
+				PdfPCell celda12 = new PdfPCell(p12);
+				celda12.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table13.addCell(celda12);
+				
+				Paragraph p13 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getFechaCorte() + "", fuente);
 				PdfPCell celda13 = new PdfPCell(p13);
 				celda13.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table13.addCell(celda13);
-				
-				PdfPTable table14 = new PdfPTable(2);
-				table14.setWidthPercentage(100);
-				table14.addCell("OBSERVACIONES");
-				Paragraph p14 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getObservaciones() + "");
-				PdfPCell celda14 = new PdfPCell(p14);
-				celda14.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table14.addCell(celda14);
+				//----------------------------------------------
 				
 				doc.add(table5);
 				doc.add(table6);
@@ -260,7 +272,14 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				doc.add(table9);				
 				doc.add(table12);
 				doc.add(table13);
-				doc.add(table14);
+				
+				Paragraph observaciones = new Paragraph("OBSERVACIONES:");
+				Paragraph observacionesDetalle = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getObservaciones() + "");
+				
+				observaciones.setSpacingBefore(30);
+				
+				doc.add(observaciones);
+				doc.add(observacionesDetalle);
 				
 				doc.newPage();
 				
