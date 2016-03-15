@@ -542,4 +542,34 @@ public class FacturacionDaoImpl implements FacturacionDao {
 		
 	}
 
+	@Override
+	public ReporteEgreso reportarEgreso(String fechaInicio, String fechaTermino) {
+		ReporteEgreso reporte = new ReporteEgreso();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_REPORTAR_EGRESO").declareParameters(
+					new SqlParameter("vi_fecha_inicio", 			Types.VARCHAR),
+					new SqlParameter("vi_fecha_termino", 				Types.VARCHAR),
+					
+					new SqlOutParameter("vo_total_registros", 		Types.INTEGER),
+					new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(Egreso.class)));
+			
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_fecha_inicio", 	fechaInicio);
+			parametros.addValue("vi_fecha_termino", fechaTermino);
+			
+			Map<String,Object> results = jdbcCall.execute(parametros);
+			int totalRegistros = (Integer) results.get("vo_total_registros");
+			List<Egreso> lista = (List<Egreso>) results.get("vo_result");
+			
+			reporte.setTotalRegistros(totalRegistros);
+			reporte.setListaEgreso(lista);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return  reporte;
+	}
+
 }

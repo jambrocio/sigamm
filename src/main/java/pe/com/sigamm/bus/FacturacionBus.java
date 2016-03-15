@@ -38,4 +38,6 @@ public interface FacturacionBus {
 	public Retorno anularEgreso(Egreso egreso);
 	
 	public ReporteFacturacion reporteFacturacion(int pagina, int registros, String dni, String nombre, int exportar);
+	
+	public ReporteEgreso reportarEgreso(String fechaInicio, String fechaTermino);
 }

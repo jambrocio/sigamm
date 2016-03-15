@@ -188,19 +188,14 @@ public class FacturacionController {
 
 	
 	@RequestMapping(value = "/reportar-egreso.json", method = RequestMethod.POST, produces="application/json")
-	public @ResponseBody String reportarEgreso(Egreso egreso){
-		Gson gson = new Gson();
-		
-		try{
-
-		}
-		catch (Exception e){
-			System.out.println("Mensaje de Error:"+e.getMessage());
-		}
-	 
-		String resultado = ""; //"{\"idUsuario\":" + codigo + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + mensaje + "\"}";
-		
-		return resultado;
+	public ModelAndView reportarEgreso(
+			@RequestParam(value = "fechaInicio", defaultValue = "01/07/2015") String fechaInicio,
+			@RequestParam(value = "fechaTermino", defaultValue = "01/07/2015") String fechaTermino){
+			
+		ReporteEgreso reporteEgreso = facturacionBus.reportarEgreso(fechaInicio, fechaTermino);		
+		List<Egreso> lista = reporteEgreso.getListaEgreso();		
+		// return a view which will be resolved by an excel view resolver
+        return new ModelAndView("excelViewEgresos", "listaRegistrosEgresos", lista);
 	}
 	
 	
