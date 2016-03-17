@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -114,179 +115,233 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 			for (int aw = 0; aw < reporte.getListaReciboAguaSocio().size(); aw++) {
 				
 				Font fuente = new Font();
-				fuente.setStyle(Font.BOLD);
-				fuente.setSize(13);
+				fuente.setStyle(Font.NORMAL);
+				fuente.setSize(18);
+				
+				Font fuente0 = new Font();
+				fuente0.setStyle(Font.BOLD);
+				fuente0.setSize(18);
+				
+				Font fuente1 = new Font();
+				fuente1.setStyle(Font.BOLD);
+				fuente1.setSize(20);
 				
 				Image logo = Image.getInstance(getClass().getClassLoader().getResource("imagenes/logo.png"));
 				doc.add(logo);
 				
-				Paragraph title = new Paragraph(UtilPDF.TITULO_RECIBO);
+				Paragraph title = new Paragraph(UtilPDF.TITULO_RECIBO, fuente);
 				title.setAlignment(Element.ALIGN_CENTER);
 				doc.add(title);
 				
-				Paragraph ruc = new Paragraph(UtilPDF.RUC);
+				Paragraph ruc = new Paragraph(UtilPDF.RUC, fuente);
 				ruc.setAlignment(Element.ALIGN_CENTER);
 				doc.add(ruc);
 
-				Paragraph recibo = new Paragraph(UtilPDF.LEYENDA_RECIBO + UtilPDF.getID(reporte.getListaReciboAguaSocio().get(aw).getPeriodoSocio(), aw));
+				Paragraph recibo = new Paragraph(UtilPDF.LEYENDA_RECIBO + UtilPDF.getID(reporte.getListaReciboAguaSocio().get(aw).getPeriodoSocio(), aw), fuente);
 				recibo.setAlignment(Element.ALIGN_CENTER);
 				doc.add(recibo);
 				
 				Image qrcodeImage = UtilPDF.getQRCode(reporte.getListaReciboAguaSocio().get(aw).getIdRecibo() + "");
 				qrcodeImage.setAbsolutePosition(500, 690);
 				doc.add(qrcodeImage);
-				
+								
 				PdfPTable table0 = new PdfPTable(2);
 				table0.setWidthPercentage(100);
-				table0.addCell("PERIODO");
-				table0.addCell(reporte.getListaReciboAguaSocio().get(aw).getPeriodoSocio() + "");
-				
+				Paragraph p0 = new Paragraph("PERIODO", fuente);
+				PdfPCell celda0 = new PdfPCell(p0);
+				table0.addCell(celda0);
+				Paragraph p1 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getPeriodoSocio() + "", fuente0);
+				PdfPCell celda1 = new PdfPCell(p1);
+				celda1.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table0.addCell(celda1);
+								
 				PdfPTable table1 = new PdfPTable(2);
 				table1.setWidthPercentage(100);
-				table1.addCell("ASOCIADO (A)");
-				table1.addCell(reporte.getListaReciboAguaSocio().get(aw).getNombreFull() + "");
+				table1.setWidths(new int[] {60,120});
+				Paragraph p2 = new Paragraph("ASOCIADO (A)", fuente);
+				PdfPCell celda2 = new PdfPCell(p2);
+				table1.addCell(celda2);
+				Paragraph p3 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getNombreFull() + "", fuente);
+				PdfPCell celda3 = new PdfPCell(p3);
+				celda3.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table1.addCell(celda3);
 				
-				table1.setSpacingBefore(30);
+				table1.setSpacingBefore(15);
 				
 				PdfPTable table2 = new PdfPTable(2);
 				table2.setWidthPercentage(100);
-				table2.addCell("N° DE PUESTO");
-				table2.addCell(reporte.getListaReciboAguaSocio().get(aw).getNroPuesto() + "");
-				
+				table2.setWidths(new int[] {60,120});
+				Paragraph p4 = new Paragraph("N° DE PUESTO", fuente);
+				PdfPCell celda4 = new PdfPCell(p4);
+				table2.addCell(celda4);
+				Paragraph p5 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getNroPuesto() + "", fuente);
+				PdfPCell celda5 = new PdfPCell(p5);
+				celda5.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table2.addCell(celda5);
+
 				PdfPTable table3 = new PdfPTable(2);
-				table3.setWidthPercentage(100);				
-				table3.addCell("SECTOR");
-				table3.addCell(reporte.getListaReciboAguaSocio().get(aw).getNombreSector() + "");
-								
+				table3.setWidthPercentage(100);
+				table3.setWidths(new int[] {60,120});
+				Paragraph p6 = new Paragraph("SECTOR", fuente);
+				PdfPCell celda6 = new PdfPCell(p6);
+				table3.addCell(celda6);
+				Paragraph p7 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getNombreSector() + "", fuente);
+				PdfPCell celda7 = new PdfPCell(p7);
+				celda7.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table3.addCell(celda7);
+										
 				PdfPTable table4 = new PdfPTable(2);
-				table4.setWidthPercentage(100);						
-				table4.addCell("GIRO");		
-				table4.addCell(reporte.getListaReciboAguaSocio().get(aw).getNombreGiro() + "");
+				table4.setWidthPercentage(100);
+				table4.setWidths(new int[] {60,120});
+				Paragraph p8 = new Paragraph("GIRO", fuente);
+				PdfPCell celda8 = new PdfPCell(p8);
+				table4.addCell(celda8);
+				Paragraph p9 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getNombreGiro() + "", fuente);
+				PdfPCell celda9 = new PdfPCell(p9);
+				celda9.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table4.addCell(celda9);
 				
-				table4.setSpacingAfter(30);
-				
-				PdfPTable table10 = new PdfPTable(2);
-				table10.setWidthPercentage(100);						
-				table10.addCell("LECTURA ANTERIOR");		
-				Paragraph p10 = new Paragraph((reporte.getListaReciboAguaSocio().get(aw).getLecturaInicial() + ""));
+				table4.setSpacingAfter(15);
+
+				PdfPTable table5 = new PdfPTable(2);
+				table5.setWidthPercentage(100);
+				Paragraph p10 = new Paragraph("LECTURA ANTERIOR", fuente);
 				PdfPCell celda10 = new PdfPCell(p10);
-				celda10.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table10.addCell(celda10);
-				
-				PdfPTable table11 = new PdfPTable(2);
-				table11.setWidthPercentage(100);						
-				table11.addCell("LECTURA ACTUAL");		
-				Paragraph p11 = new Paragraph((reporte.getListaReciboAguaSocio().get(aw).getLecturaFinal() + ""));
+				table5.addCell(celda10);
+				Paragraph p11 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getLecturaInicial() + "", fuente);
 				PdfPCell celda11 = new PdfPCell(p11);
 				celda11.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table11.addCell(celda11);
+				table5.addCell(celda11);
 				
-				table11.setSpacingAfter(30);
+				PdfPTable table6 = new PdfPTable(2);
+				table6.setWidthPercentage(100);
+				Paragraph p12 = new Paragraph("LECTURA ACTUAL", fuente);
+				PdfPCell celda12 = new PdfPCell(p12);
+				table6.addCell(celda12);
+				Paragraph p13 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getLecturaFinal() + "", fuente);
+				PdfPCell celda13 = new PdfPCell(p13);
+				celda13.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table6.addCell(celda13);
+				
+				table6.setSpacingAfter(15);
 				
 				doc.add(table1);
 				doc.add(table2);
 				doc.add(table3);
 				doc.add(table4);
 				doc.add(table0);
-				doc.add(table10);
-				doc.add(table11);
-				
-				PdfPTable table5 = new PdfPTable(2);
-				table5.setWidthPercentage(100);
-				table5.addCell("CONSUMO DE AGUA");
-				Paragraph p5 = new Paragraph(UtilPDF.round(reporte.getListaReciboAguaSocio().get(aw).getConsumoMes(), 2) + "");
-				PdfPCell celda5 = new PdfPCell(p5);
-				celda5.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table5.addCell(celda5);
-				
-				PdfPTable table6 = new PdfPTable(2);
-				table6.setWidthPercentage(100);
-				table6.addCell("ALCANTARILLADO");
-				Paragraph p6 = new Paragraph(UtilPDF.round(reporte.getListaReciboAguaSocio().get(aw).getAlcantarillado(), 2) + "");
-				PdfPCell celda6 = new PdfPCell(p6);
-				celda6.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table6.addCell(celda6);
+				doc.add(table5);
+				doc.add(table6);
 				
 				PdfPTable table7 = new PdfPTable(2);
 				table7.setWidthPercentage(100);
-				table7.addCell("MANTENIMIENTO");
-				Paragraph p7 = new Paragraph(UtilPDF.round(reporte.getListaReciboAguaSocio().get(aw).getServicioMantenimiento(), 2) + "");
-				PdfPCell celda7 = new PdfPCell(p7);
-				celda7.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table7.addCell(celda7);
-				
+				Paragraph p14 = new Paragraph("CONSUMO DE AGUA", fuente);
+				PdfPCell celda14 = new PdfPCell(p14);
+				table7.addCell(celda14);
+				String valor1 = UtilPDF.round(reporte.getListaReciboAguaSocio().get(aw).getConsumoMes(), 2) + "";
+				Paragraph p15 = new Paragraph(valor1.replace(",", "."), fuente);
+				PdfPCell celda15 = new PdfPCell(p15);
+				celda15.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table7.addCell(celda15);
+
 				PdfPTable table8 = new PdfPTable(2);
 				table8.setWidthPercentage(100);
-				table8.addCell("DEUDA ANTERIOR");
-				Paragraph p8 = new Paragraph(UtilPDF.round(reporte.getListaReciboAguaSocio().get(aw).getDeudaAnterior(), 2) + "");
-				PdfPCell celda8 = new PdfPCell(p8);
-				celda8.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table8.addCell(celda8);
-				//----------------------------------------------
+				Paragraph p16 = new Paragraph("ALCANTARILLADO", fuente);
+				PdfPCell celda16 = new PdfPCell(p16);
+				table8.addCell(celda16);
+				String valor2 = UtilPDF.round(reporte.getListaReciboAguaSocio().get(aw).getAlcantarillado(), 2) + "";
+				Paragraph p17 = new Paragraph(valor2.replace(",", "."), fuente);
+				PdfPCell celda17 = new PdfPCell(p17);
+				celda17.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table8.addCell(celda17);
+				
 				PdfPTable table9 = new PdfPTable(2);
 				table9.setWidthPercentage(100);
-				Paragraph p15 = new Paragraph("TOTAL DE AGUA", fuente);
-				PdfPCell celda15 = new PdfPCell(p15);
-				celda15.setFixedHeight(50f);
-				celda15.setHorizontalAlignment(Element.ALIGN_CENTER);
-				celda15.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				table9.addCell(celda15);
-				table9.setSpacingBefore(30);
+				Paragraph p18 = new Paragraph("MANTENIMIENTO", fuente);
+				PdfPCell celda18 = new PdfPCell(p18);
+				table9.addCell(celda18);
+				String valor3 = UtilPDF.round(reporte.getListaReciboAguaSocio().get(aw).getServicioMantenimiento(), 2) + "";
+				Paragraph p19 = new Paragraph(valor3.replace(",", "."), fuente);
+				PdfPCell celda19 = new PdfPCell(p19);
+				celda19.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table9.addCell(celda19);
+							
+				PdfPTable table10 = new PdfPTable(2);
+				table10.setWidthPercentage(100);
+				Paragraph p20 = new Paragraph("DEUDA ANTERIOR", fuente);
+				PdfPCell celda20 = new PdfPCell(p20);
+				table10.addCell(celda20);
+				String valor4 = UtilPDF.round(reporte.getListaReciboAguaSocio().get(aw).getDeudaAnterior(), 2) + "";
+				Paragraph p21 = new Paragraph(valor4.replace(",", "."), fuente);
+				PdfPCell celda21 = new PdfPCell(p21);
+				celda21.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table10.addCell(celda21);
+				//----------------------------------------------
+				PdfPTable table11 = new PdfPTable(2);
+				table11.setWidthPercentage(100);
+				Paragraph p22 = new Paragraph("TOTAL DE AGUA       (S/.)", fuente1);
+				PdfPCell celda22 = new PdfPCell(p22);
+				celda22.setFixedHeight(50f);
+				celda22.setHorizontalAlignment(Element.ALIGN_CENTER);
+				celda22.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				table11.addCell(celda22);
+				table11.setSpacingBefore(15);
 				
 				Double total = 	reporte.getListaReciboAguaSocio().get(aw).getConsumoMes() + 
 								reporte.getListaReciboAguaSocio().get(aw).getAlcantarillado() +
 								reporte.getListaReciboAguaSocio().get(aw).getServicioMantenimiento() +
 								reporte.getListaReciboAguaSocio().get(aw).getDeudaAnterior();
-				Paragraph p9 = new Paragraph(UtilPDF.round(total, 2) + "", fuente);
-				PdfPCell celda9 = new PdfPCell(p9);
-				celda9.setHorizontalAlignment(Element.ALIGN_CENTER);
-				celda9.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				table9.addCell(celda9);
+				String valor5 = UtilPDF.round(total, 2) + "";
+				Paragraph p23 = new Paragraph(valor5.replace(",", "."), fuente1);
+				PdfPCell celda23 = new PdfPCell(p23);
+				celda23.setHorizontalAlignment(Element.ALIGN_CENTER);
+				celda23.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				table11.addCell(celda23);
 				//----------------------------------------------
 				PdfPTable table12 = new PdfPTable(2);
 				table12.setWidthPercentage(100);
-				Paragraph p16 = new Paragraph("FECHA DE VENCIMIENTO", fuente);
-				PdfPCell celda16 = new PdfPCell(p16);
+				Paragraph p24 = new Paragraph("FECHA DE VENCIMIENTO", fuente1);
+				PdfPCell celda24 = new PdfPCell(p24);
 				celda16.setHorizontalAlignment(Element.ALIGN_CENTER);
-				celda16.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				celda16.setVerticalAlignment(Element.ALIGN_BOTTOM);
 				celda16.setFixedHeight(50f);
-				Paragraph p17 = new Paragraph("FECHA DE CORTE", fuente);
-				PdfPCell celda17 = new PdfPCell(p17);
-				celda17.setHorizontalAlignment(Element.ALIGN_CENTER);
-				celda17.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				table12.addCell(celda16);
-				table12.addCell(celda17);
+				Paragraph p25 = new Paragraph("FECHA DE CORTE", fuente1);
+				PdfPCell celda25 = new PdfPCell(p25);
+				celda25.setHorizontalAlignment(Element.ALIGN_CENTER);
+				celda25.setVerticalAlignment(Element.ALIGN_BOTTOM);
+				table12.addCell(celda24);
+				table12.addCell(celda25);
 				
 				//----------------------------------------------
 				PdfPTable table13 = new PdfPTable(2);
 				table13.setWidthPercentage(100);
 				
-				Paragraph p12 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getFechaVencimiento() + "", fuente);
-				PdfPCell celda12 = new PdfPCell(p12);
-				celda12.setFixedHeight(50f);
-				celda12.setHorizontalAlignment(Element.ALIGN_CENTER);
-				celda12.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				table13.addCell(celda12);
+				Paragraph p26 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getFechaVencimiento() + "", fuente1);
+				PdfPCell celda26 = new PdfPCell(p26);
+				celda26.setFixedHeight(50f);
+				celda26.setHorizontalAlignment(Element.ALIGN_CENTER);
+				celda26.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				table13.addCell(celda26);
 				
-				Paragraph p13 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getFechaCorte() + "", fuente);
-				PdfPCell celda13 = new PdfPCell(p13);
-				celda13.setHorizontalAlignment(Element.ALIGN_CENTER);
-				celda13.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				table13.addCell(celda13);
+				Paragraph p27 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getFechaCorte() + "", fuente1);
+				PdfPCell celda27 = new PdfPCell(p27);
+				celda27.setHorizontalAlignment(Element.ALIGN_CENTER);
+				celda27.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				table13.addCell(celda27);
 				//----------------------------------------------
 				
-				doc.add(table5);
-				doc.add(table6);
 				doc.add(table7);
 				doc.add(table8);
 				doc.add(table9);				
+				doc.add(table10);
+				doc.add(table11);
 				doc.add(table12);
 				doc.add(table13);
 				
 				Paragraph observaciones = new Paragraph("OBSERVACIONES:");
 				Paragraph observacionesDetalle = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getObservaciones() + "");
 				
-				observaciones.setSpacingBefore(30);
+				observaciones.setSpacingBefore(15);
 				
 				doc.add(observaciones);
 				doc.add(observacionesDetalle);

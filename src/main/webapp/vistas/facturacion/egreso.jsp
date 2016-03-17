@@ -440,8 +440,11 @@ function reportar(){
 		backdrop: 'static',
 		keyboard: false
 	}).one('click', '#aceptar', function() {
-        
-		jsonObj = [];
+		
+		$('#reporte_egreso_modal').modal('hide');
+		exportarEgreso();
+		
+		/*jsonObj = [];
 		var parametros = new Object();
 		parametros.fechaInicio = $("#fechainicio").val();
 		parametros.fechaTermino = $("#fechatermino").val();
@@ -468,10 +471,9 @@ function reportar(){
 					time: ''
 				});
 	            
-	            //cargarEgresos();
 		            
 			}
-		});
+		});*/
 		
 	});
 
@@ -723,6 +725,14 @@ function anularEgreso(codigoEgreso){
 		});
 		
 	});
+	
+}
+
+
+function exportarEgreso(){
+	var fechaInicio = $("#fechainicio").val();
+	var fechaTermino = $("#fechatermino").val();
+	window.open("/sigamm/reportarEgresoExcel?fechaInicio="+fechaInicio+"&fechaTermino="+fechaTermino, 'Descarga', '1', '1');
 	
 }
 
