@@ -279,7 +279,7 @@ function cargarPuestos(){
 			opciones += rowObject.codigoGiro + ",'";
 			opciones += rowObject.dni + "','";
 			opciones += nombreGiro + "') >";
-			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Usuario'/>";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Ver Comprobante'/>";
 			opciones += "</a>";
 			
 			opciones += "&nbsp;&nbsp;";
