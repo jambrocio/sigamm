@@ -106,10 +106,14 @@ function guardar(){
         var this_row = $(this);
         var numero = $.trim(this_row.find('td:eq(0)').html());
         var codDeuda = $.trim(this_row.find('td:eq(1)').html());
+        var desConcepto = $.trim(this_row.find('td:eq(3)').html());
+        var monto = $.trim(this_row.find('td:eq(4)').html());
+        var codPuesto = $.trim(this_row.find('td:eq(5)').html());
+        /*
         var desConcepto = $.trim(this_row.find('td:eq(2)').html());
         var monto = $.trim(this_row.find('td:eq(3)').html());
         var codPuesto = $.trim(this_row.find('td:eq(4)').html());
-		
+		*/
         if(monto != "Monto" || codPuesto != "Cod.Puesto" || codDeuda != "Cod.Concepto"){
 	        objetos = {};
 	        objetos.codigoDeudaSocio = codDeuda;
@@ -157,9 +161,9 @@ function guardar(){
 				limpiarTablaFacturacion();
 				
 				$("#correlativo").html(result.idFacturacion);
-				$('#tablaFacturacionDetalle tbody tr:last').after("<tr><td>&nbsp;</td><td><b>" + $("#servicio option:selected").html() + "</b></td><td>&nbsp;</td>");
+				//$('#tablaFacturacionDetalle tbody tr:last').after("<tr><td>&nbsp;</td><td><b>" + $("#servicio option:selected").html() + "</b></td><td>&nbsp;</td>");
 				$("#correlativo2").html(result.idFacturacion);
-				$('#tablaFacturacionDetalle2 tbody tr:last').after("<tr><td>&nbsp;</td><td><b>" + $("#servicio option:selected").html() + "</b></td><td>&nbsp;</td>");
+				//$('#tablaFacturacionDetalle2 tbody tr:last').after("<tr><td>&nbsp;</td><td><b>" + $("#servicio option:selected").html() + "</b></td><td>&nbsp;</td>");
 				
 				dataTabla = "";
 				cantidadLineas = 1;
@@ -167,14 +171,21 @@ function guardar(){
 			        var this_row = $(this);
 			        var numero = $.trim(this_row.find('td:eq(0)').html());
 			        var codDeuda = $.trim(this_row.find('td:eq(1)').html());
+			        /*
 			        var desConcepto = $.trim(this_row.find('td:eq(2)').html());
 			        var monto = $.trim(this_row.find('td:eq(3)').html());
 			        var codPuesto = $.trim(this_row.find('td:eq(4)').html());
+					*/
 					
+					var tipoConcepto = $.trim(this_row.find('td:eq(2)').html());
+					var desConcepto = $.trim(this_row.find('td:eq(3)').html());
+			        var monto = $.trim(this_row.find('td:eq(4)').html());
+			        var codPuesto = $.trim(this_row.find('td:eq(5)').html());
+			        
 			        if(monto != "Monto" || codPuesto != "Cod.Puesto" || codDeuda != "Cod.Concepto"){
 				    	dataTabla += "<tr>";
 				    	dataTabla += "<td>&nbsp;</td>";
-				    	dataTabla += "<td>" + desConcepto + "</td>";
+				    	dataTabla += "<td><b>" + tipoConcepto + "</b><br>" + desConcepto + "</td>";
 				    	dataTabla += "<td align='right'>" + monto + "</td>";
 				    	dataTabla += "</tr>";
 			        }
@@ -471,7 +482,8 @@ function calculoTotal(){
 	var total = 0;
     $("#tabla_resultado tbody tr").each(function (item) {
         var this_row = $(this);
-        var monto = $.trim(this_row.find('td:eq(3)').html());
+        //var monto = $.trim(this_row.find('td:eq(3)').html());
+        var monto = $.trim(this_row.find('td:eq(4)').html());
 		if(monto != "" && monto != "Monto"){
 			//console.log("[" + monto + "]");
 			total = parseFloat(total) + parseFloat(monto);
@@ -543,6 +555,7 @@ function agregarDeuda(){
 	        				"<tr>" +
 	        	            "<td align='right'>1</td>" + 
 	        	            "<td align='center' style='display:none;'>" + codigoDeuda + "</td>" +
+	        	            "<td align='left'>" + $("#servicio option:selected").html() + "</td>" +
 	        				"<td align='left'>" + concepto + "</td>" +
 	        				"<td align='right'>" + importe + "</td>" +
 	        				"<td align='center' style='display:none;'>" + codigoPuesto + "</td>" +
@@ -609,7 +622,7 @@ function imprimir(){
 										<td colspan="3">&nbsp;</td>
 									</tr>
 									<tr>
-										<td width="200px"><b>FECHA</b></td>
+										<td width="100px"><b>FECHA</b></td>
 										<td><b>:</b></td>
 										<td><span id="printFecha" /></td>
 									</tr>
@@ -671,7 +684,7 @@ function imprimir(){
 										<td colspan="3">&nbsp;</td>
 									</tr>
 									<tr>
-										<td width="200px"><b>FECHA</b></td>
+										<td width="100px"><b>FECHA</b></td>
 										<td><b>:</b></td>
 										<td><span id="printFecha2" /></td>
 									</tr>
@@ -875,6 +888,7 @@ function imprimir(){
 							<tr>
 								<td align="center" class="tablaCabecera">Nro</td>
 								<td align="center" class="tablaCabecera" style="display:none;">Cod.Concepto</td>
+								<td align="center" class="tablaCabecera">Concepto</td>
 								<td align="center" class="tablaCabecera">Desc.Concepto</td>
 								<td align="center" class="tablaCabecera">Monto</td>
 								<td align="center" class="tablaCabecera" style="display:none;">Cod.Puesto</td>
@@ -882,7 +896,7 @@ function imprimir(){
 							</tr>
 							<tfoot>
 							<tr>
-								<td colspan="2" align="left"><b><span id="totalesLetras" /></b></td>
+								<td colspan="3" align="left"><b><span id="totalesLetras" /></b></td>
 								<td align="right"><b><span id="totales" /></b></td>
 								<td align="center"></td>
 							</tr>
