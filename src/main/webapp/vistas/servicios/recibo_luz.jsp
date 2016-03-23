@@ -736,7 +736,6 @@ function editarReciboLuzXSocio(original, puesto){
 		parametros.puestoSocio = puesto;
 		parametros.codigoRecibo = original;
 			
-		
 		$.ajax({
 			type: "POST",
 		    async:false,
@@ -1698,11 +1697,11 @@ function botonEnter()
 							</tr>
 							<tr>
 								<td><b>ID :</b></td>
-								<td><input type='text' id='idRecibo' name='idRecibo' size='10' class='text ui-widget-content ui-corner-all' style="text-align: center;" onKeyDown="campoEnter(event,this.form.lecturaInicialSocio);"/></td>
+								<td><input type='text' id='idRecibo' name='idRecibo' size='10' class='text ui-widget-content ui-corner-all' style="text-align: center;" onKeyDown=""/></td>
 							</tr>
 							<tr>
 								<td><b>Lectura Anterior :</b></td>
-								<td><input type='text' id='lecturaInicialSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('L');" style="text-align: center;" onKeyDown="campoEnter(event,this.form.lecturaFinalSocio);"/></td>
+								<td><input type='text' id='lecturaInicialSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('L');" style="text-align: center;" onKeyDown=""/></td>
 							</tr>
 							<tr>
 								<td><b>Lectura Actual :</b></td>
