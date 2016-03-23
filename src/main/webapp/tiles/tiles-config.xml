@@ -37,24 +37,9 @@
 	</definition>
 	
 	<!-- REPORTES -->
-	<definition name="reportes/reporteVisitas" extends="main">
-		<put-attribute name="contenido" value="/vistas/reportes/reporteVisitas.jsp" />
-		<put-attribute name="titulo" value="Reporte de Visitas" />
-	</definition>
-	
-	<definition name="reportes/reporteEleccionesResultado" extends="main">
-		<put-attribute name="contenido" value="/vistas/reportes/reporteEleccionesResultado.jsp" />
-		<put-attribute name="titulo" value="Reporte Resultado Elecciones" />
-	</definition>
-	
-	<definition name="reportes/reporteEleccionesResumen" extends="main">
-		<put-attribute name="contenido" value="/vistas/reportes/reporteEleccionesResumen.jsp" />
-		<put-attribute name="titulo" value="Reporte Resumen Elecciones" />
-	</definition>
-	
-	<definition name="reportes/reporteEleccionesUt" extends="main">
-		<put-attribute name="contenido" value="/vistas/reportes/reporteEleccionesUt.jsp" />
-		<put-attribute name="titulo" value="Reporte Elecciones por Unidad Territorial" />
+	<definition name="reportes/reporte_egreso" extends="main">
+		<put-attribute name="contenido" value="/vistas/reportes/reporte_egreso.jsp" />
+		<put-attribute name="titulo" value="Reporte de Egresos" />
 	</definition>
 	
 	<!-- MANTENIMIENTO -->
@@ -62,12 +47,10 @@
 		<put-attribute name="contenido" value="/vistas/mantenimiento/usuarios.jsp" />
 		<put-attribute name="titulo" value="Reporte de Usuarios" />
 	</definition>
-	
 	<definition name="mantenimiento/puesto" extends="main">
 		<put-attribute name="contenido" value="/vistas/mantenimiento/puesto.jsp" />
 		<put-attribute name="titulo" value="Reporte de Puestos" />
 	</definition>
-	
 	<definition name="mantenimiento/socio" extends="main">
 		<put-attribute name="contenido" value="/vistas/mantenimiento/socio.jsp" />
 		<put-attribute name="titulo" value="Reporte de Socios" />
@@ -86,12 +69,12 @@
 		<put-attribute name="contenido" value="/vistas/facturacion/reporteCobro.jsp" />
 		<put-attribute name="titulo" value="Reporte de Facturacion" />
 	</definition>
+	
 	<!-- SERVICIOS -->
 	<definition name="servicios/recibo_luz" extends="main">
 		<put-attribute name="contenido" value="/vistas/servicios/recibo_luz.jsp" />
 		<put-attribute name="titulo" value="Recibo de Luz Original" />
 	</definition>
-
 	<definition name="servicios/recibo_agua" extends="main">
 		<put-attribute name="contenido" value="/vistas/servicios/recibo_agua.jsp" />
 		<put-attribute name="titulo" value="Recibo de Agua" />

@@ -240,7 +240,7 @@ public class FacturacionController {
     }
 	
 	
-	@RequestMapping(value = "/reportarEgresoExcel", method = RequestMethod.GET)
+/*	@RequestMapping(value = "/reportarEgresoExcel", method = RequestMethod.GET)
 	public ModelAndView downloadEgresoExcel(
 			@RequestParam(value = "fechaInicio", defaultValue = "01/07/2015") String fechaInicio,
 			@RequestParam(value = "fechaTermino", defaultValue = "01/07/2015") String fechaTermino){
@@ -249,7 +249,7 @@ public class FacturacionController {
 		List<Egreso> lista = reporte.getListaEgreso();		
 		// return a view which will be resolved by an excel view resolver
         return new ModelAndView("excelViewEgresos", "listaRegistrosEgresos", lista);
-	}
+	}*/
 	
 	@RequestMapping(value = "/buscar-deuda-socio-concepto.json", method = RequestMethod.POST, produces="application/json")
 	public @ResponseBody List<DeudaSocio> buscarDeudaSocioConcepto(DeudaSocio deuda){

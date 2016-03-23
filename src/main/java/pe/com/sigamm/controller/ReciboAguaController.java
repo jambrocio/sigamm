@@ -382,14 +382,11 @@ public class ReciboAguaController {
 			@RequestParam(value = "codigoAguaOriginal", defaultValue = "0") Integer codigoAguaOriginal) {
 
 		// create some sample data
-		ReporteReciboAguaSocio reporte = reciboAguaSocioBus
-				.reporteAguaSocioExcel(1, 1, 1, codigoAguaOriginal);
-
+		ReporteReciboAguaSocio reporte = reciboAguaSocioBus.reporteAguaSocioExcel(1, 1, 1, codigoAguaOriginal);
 		List<ReciboAguaSocio> lista = reporte.getListaReciboAguaSocio();
 
 		// return a view which will be resolved by an excel view resolver
-		return new ModelAndView("excelViewAguaSocio", "listaRegistrosEgresos",
-				lista);
+		return new ModelAndView("excelViewAguaSocio", "listaRegistrosEgresos",lista);
 
 	}
 
