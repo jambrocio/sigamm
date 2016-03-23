@@ -5,7 +5,10 @@ public class ReciboAgua {
 	int lecturaInicial;
 	int lecturaFinal;
 	double monto;
+	String fechaCorte;
+	String fechaVencimiento;
 	String periodo;
+	String observaciones;
 	int estado;
 	int estadoAbierto;
 	
@@ -33,11 +36,29 @@ public class ReciboAgua {
 	public void setMonto(double monto) {
 		this.monto = monto;
 	}
+	public String getFechaCorte() {
+		return fechaCorte;
+	}
+	public void setFechaCorte(String fechaCorte) {
+		this.fechaCorte = fechaCorte;
+	}
+	public String getFechaVencimiento() {
+		return fechaVencimiento;
+	}
+	public void setFechaVencimiento(String fechaVencimiento) {
+		this.fechaVencimiento = fechaVencimiento;
+	}
 	public String getPeriodo() {
 		return periodo;
 	}
 	public void setPeriodo(String periodo) {
 		this.periodo = periodo;
+	}
+	public String getObservaciones() {
+		return observaciones;
+	}
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
 	}
 	public int getEstado() {
 		return estado;
@@ -51,5 +72,5 @@ public class ReciboAgua {
 	public void setEstadoAbierto(int estadoAbierto) {
 		this.estadoAbierto = estadoAbierto;
 	}
-
+	
 }

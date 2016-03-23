@@ -126,6 +126,16 @@ public class ReciboAguaController {
 			camposObligatorios.add(Util.retornarObjeto(
 					Constantes.ETIQUETA_MONTO, Constantes.MONTO_OBLIGATORIO));
 		}
+		
+		if (reciboAgua.getFechaCorte() == "") {
+			camposObligatorios.add(Util.retornarObjeto(
+					Constantes.ETIQUETA_FECHA_CORTE, Constantes.FECHA_CORTE_OBLIGATORIO));
+		}
+		
+		if (reciboAgua.getFechaVencimiento() == "") {
+			camposObligatorios.add(Util.retornarObjeto(
+					Constantes.ETIQUETA_FECHA_VENCIMIENTO, Constantes.FECHA_VENCIMIENTO_OBLIGATORIO));
+		}
 
 		int codigo = 0;
 		String mensaje = "";
@@ -336,8 +346,8 @@ public class ReciboAguaController {
 		return response;
 	}
 
-	@RequestMapping(value = "/generarImpresionPDF", method = RequestMethod.GET)
-	public HttpServletResponse generarFacturacionPdf(
+	@RequestMapping(value = "/generarImpresionAguaPDF", method = RequestMethod.GET)
+	public void generarImpresionAguaPdf(
 			@RequestParam(value = "periodo", defaultValue = "") String periodo,
 			@RequestParam(value = "codigoRecibo", defaultValue = "") Integer codigoReciboAguaSocio,
 			HttpServletResponse response, HttpServletRequest request) {
@@ -364,8 +374,6 @@ public class ReciboAguaController {
 		catch (Exception e) {
 			LoggerCustom.errorApp(this, "", e);
 		}
-		
-		return response;
 		
 	}
 

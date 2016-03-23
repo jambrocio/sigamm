@@ -113,6 +113,33 @@ $(function() {
         });    
     });
 	
+	$("#fechacorte").datepicker(
+    {   
+        changeMonth: true,
+        changeYear: false,
+        numberOfMonths: 1,
+        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo',
+            'Junio', 'Julio', 'Agosto', 'Septiembre',
+            'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr',
+            'May', 'Jun', 'Jul', 'Ago',
+            'Sep', 'Oct', 'Nov', 'Dic'] 
+    });
+	
+	$("#fechavencimiento").datepicker(
+    {   
+        changeMonth: true,
+        changeYear: false,
+        numberOfMonths: 1,
+        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo',
+            'Junio', 'Julio', 'Agosto', 'Septiembre',
+            'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr',
+            'May', 'Jun', 'Jul', 'Ago',
+            'Sep', 'Oct', 'Nov', 'Dic'] 
+    });
 });
 
 
@@ -137,7 +164,7 @@ function cargarReciboAgua(){
 		var opciones = "<center>";
 			
 			opciones += "<a href=javascript:editarReciboAgua(";
-			opciones += rowObject.codigoRecibo + ",'" + rowObject.periodo.replace(' ','_') + "','" + rowObject.lecturaInicial + "','" + rowObject.lecturaFinal + "','" + rowObject.monto + "') >";
+			opciones += rowObject.codigoRecibo + ",'" + rowObject.periodo.replace(' ','_') + "','" + rowObject.lecturaInicial + "','" + rowObject.lecturaFinal + "','" + rowObject.monto + "','" + rowObject.fechaCorte.replace(/\s/g,"_") + "','" + rowObject.fechaVencimiento.replace(/\s/g,"_") + "','" + rowObject.observaciones + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Agua'/>";
 			opciones += "</a>";
 			
@@ -176,7 +203,7 @@ function cargarReciboAgua(){
 				opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Generar Impresión de todos los Recibo de Agua de los Socios'/>";
 				opciones += "</a>";*/
 				
-				opciones += "<a href=/sigamm/generarImpresionPDF?codigoRecibo="+rowObject.codigoRecibo+"&periodo="+rowObject.periodo.replace(' ','_')+" target='_blank'>";
+				opciones += "<a href=/sigamm/generarImpresionAguaPDF?codigoRecibo="+rowObject.codigoRecibo+"&periodo="+rowObject.periodo.replace(' ','_')+" target='_blank'>";
 				opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Generar Impresión de todos los Recibo de Agua de los Socios'/>";
 				opciones += "</a>";
 				
@@ -277,6 +304,9 @@ function guardar(){
 	parametros.lecturaInicial = $("#lecturainicial").val();
 	parametros.lecturaFinal = $("#lecturafinal").val();
 	parametros.monto = $("#monto").val();
+	parametros.fechaCorte = $("#fechacorte").val();
+	parametros.fechaVencimiento = $("#fechavencimiento").val();
+	parametros.observaciones = $("#observaciones").val();
 	
 	$.ajax({
 		type: "POST",
@@ -323,7 +353,7 @@ function guardar(){
 	});
 }
 
-function editarReciboAgua(codigoRecibo, periodo, lecturaInicial, lecturaFinal, monto){
+function editarReciboAgua(codigoRecibo, periodo, lecturaInicial, lecturaFinal, monto, fechaCorte, fechaVencimiento, observaciones){
 	console.log("Editar Recibo Agua - [codigoRecibo] : " + codigoRecibo );
 	
 	$('#recibo_modal').modal({
@@ -340,6 +370,10 @@ function editarReciboAgua(codigoRecibo, periodo, lecturaInicial, lecturaFinal, m
 	$("#lecturainicial").val(lecturaInicial);
 	$("#lecturafinal").val(lecturaFinal);
 	$("#monto").val(monto);
+	$("#fechacorte").val(fechaCorte.replace(/\_/g," "));
+	$("#fechavencimiento").val(fechaVencimiento.replace(/\_/g," "));
+	if (observaciones == "null") observaciones = "";
+	$("#observaciones").val(observaciones);
 	
 }
 
@@ -1187,6 +1221,33 @@ function exportarAguaSocio(){
 							<td><input type="text" id="monto" class="form-control" maxlength="20"/></td>
 							<td valign="top">&nbsp;</td>
 						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td><span id="lblfechacorte"><b>FECHA CORTE (*)</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td><input type="text" id="fechacorte" class="form-control" maxlength="20"/></td>
+							<td valign="top">&nbsp;</td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td><span id="lblfechavencimiento"><b>FECHA VENCIMIENTO (*)</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td><input type="text" id="fechavencimiento" class="form-control" maxlength="20"/></td>
+							<td valign="top">&nbsp;</td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td><span id="lblobservaciones"><b>OBSERVACIONES</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td><input type="text" id="observaciones" class="form-control" maxlength="2000"/></td>
+							<td valign="top">&nbsp;</td>
+						</tr>						
 						<tr>
 							<td width="10px">&nbsp;</td>
 							<td colspan="6"><b>(*) Campos Obligatorios</b></td>

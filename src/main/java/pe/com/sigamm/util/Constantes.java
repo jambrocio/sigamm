@@ -29,6 +29,8 @@ public class Constantes {
 	public static final String LECTURA_INICIAL_OBLIGATORIO	= "Lectura Inicial es obligatorio.";
 	public static final String LECTURA_FINAL_OBLIGATORIO	= "Lectura Final es obligatorio.";
 	public static final String MONTO_OBLIGATORIO			= "Monto es obligatorio.";
+	public static final String FECHA_CORTE_OBLIGATORIO		= "La Fecha de Corte es obligatorio.";
+	public static final String FECHA_VENCIMIENTO_OBLIGATORIO= "La Fecha de Vencimiento es obligatorio.";
 	//--- VALIDACION RECIBO AGUA
 	public static final String RUC_OBLIGATORIO			    = "Número de RUC es obligatorio.";
 	public static final String RAZON_SOCIAL_OBLIGATORIO     = "Descripción de la RAZON SOCIAL es obligatoria.";
@@ -50,10 +52,12 @@ public class Constantes {
 	public static final String ETIQUETA_PADRON			= "lblpadron";
 
 	//--- ETIQUETAS RECIBO AGUA
-	public static final String ETIQUETA_PERIODO			= "lblperiodo";
-	public static final String ETIQUETA_LECTURA_INICIAL	= "lbllecturainicial";
-	public static final String ETIQUETA_LECTURA_FINAL	= "lbllecturafinal";
-	public static final String ETIQUETA_MONTO			= "lblmonto";
+	public static final String ETIQUETA_PERIODO			  = "lblperiodo";
+	public static final String ETIQUETA_LECTURA_INICIAL	  = "lbllecturainicial";
+	public static final String ETIQUETA_LECTURA_FINAL	  = "lbllecturafinal";
+	public static final String ETIQUETA_MONTO			  = "lblmonto";
+	public static final String ETIQUETA_FECHA_CORTE		  = "lblfechacorte";
+	public static final String ETIQUETA_FECHA_VENCIMIENTO = "lblfechavencimiento";
 	
 	//--- ETIQUETAS EGRESOS
 	public static final String ETIQUETA_RUC              = "lblrucnuevo";

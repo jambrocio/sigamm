@@ -19,6 +19,7 @@ public class Puesto {
 	//int reciboAgua;
 	double total;
 	int reciboLuzCreado;
+	int pagado;
 	//int reciboAguaCreado;
 	int codigoServicioDetalle;
 	String periodoSocio;
@@ -26,6 +27,7 @@ public class Puesto {
 	double alumbradoPublico;
 	double mantenimiento;
 	int estadoAbierto;
+	
 	public int getCodigoSocio() {
 		return codigoSocio;
 	}
@@ -122,6 +124,12 @@ public class Puesto {
 	public void setReciboLuzCreado(int reciboLuzCreado) {
 		this.reciboLuzCreado = reciboLuzCreado;
 	}
+	public int getPagado() {
+		return pagado;
+	}
+	public void setPagado(int pagado) {
+		this.pagado = pagado;
+	}
 	public int getCodigoServicioDetalle() {
 		return codigoServicioDetalle;
 	}
@@ -158,5 +166,5 @@ public class Puesto {
 	public void setEstadoAbierto(int estadoAbierto) {
 		this.estadoAbierto = estadoAbierto;
 	}
-
+	
 }

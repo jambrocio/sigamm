@@ -153,4 +153,36 @@ public class ReciboSocioLuzDaoImpl implements ReciboLuzSocioDao {
 		return reporte;
 	}
 
+	@Override
+	public ReporteReciboLuzSocio reporteReciboLuzSocio(
+			Integer codigoReciboLuzSocio, String periodo) {
+
+		ReporteReciboLuzSocio reporte = new ReporteReciboLuzSocio();
+		try{
+			System.out.println("Editando Recibo Luz Socio");
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_RECIBO_LUZ_SOCIO");
+			jdbcCall.withProcedureName("SP_REPORTE_PUESTO_LUZ_SOCIO_P").declareParameters(
+				new SqlParameter("vi_periodo", 			Types.VARCHAR),
+				new SqlParameter("vi_codigo_recibo", 			Types.INTEGER),
+				new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(ReciboLuzSocio.class)));
+				
+            
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_periodo", 					periodo);
+			parametros.addValue("vi_codigo_recibo", 				codigoReciboLuzSocio);
+			
+			Map<String,Object> results = jdbcCall.execute(parametros);
+			List<ReciboLuzSocio> lista = (List<ReciboLuzSocio>) results.get("vo_result");
+			
+			reporte.setListaReciboLuzSocio(lista);
+			
+		}catch(Exception e){
+			
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return reporte;
+	}
+
 }
