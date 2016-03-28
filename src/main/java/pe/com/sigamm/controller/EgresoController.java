@@ -5,7 +5,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.bouncycastle.asn1.ocsp.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +20,7 @@ import pe.com.sigamm.session.DatosSession;
 @Controller
 public class EgresoController {
 
-	private static final Logger log = Logger.getLogger(ReciboAguaController.class);
+	private static final Logger log = Logger.getLogger(EgresoController.class);
 	public String fechaIni = "01/07/2015";
 	public String fechaFin = "01/07/2015";
 	
@@ -51,7 +50,7 @@ public class EgresoController {
 		ReporteEgreso reporte = egresoBus.reportarEgreso(fechaInicial, fechaFinal);		
 		List<Egreso> lista = reporte.getListaEgreso();		
 		// return a view which will be resolved by an excel view resolver
-        return new ModelAndView("excelViewEgresos", "listaRegistrosEgresos", lista);
+        return new ModelAndView("excelViewReporteEgresos", "listaRegistrosEgresos", lista);
 	}
 	
 }

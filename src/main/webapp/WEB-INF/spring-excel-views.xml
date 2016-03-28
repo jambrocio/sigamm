@@ -5,9 +5,10 @@
 	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
 	<bean id="excelView" class="pe.com.sigamm.excel.ExcelBuilder" />
-	
-	<bean id="excelViewEgresos" class="pe.com.sigamm.excel.ExcelBuilderEgresos" />
-	
+	<!-- Egresos -->
+	<bean id="excelViewEgresos" class="pe.com.sigamm.excel.ExcelBuilderEgresos" />	
+	<bean id="excelViewReporteEgresos" class="pe.com.sigamm.excel.ExcelBuilderReporteEgresos" />
+	<!-- Agua Socios -->
 	<bean id="excelViewAguaSocio" class="pe.com.sigamm.excel.ExcelBuilderAguaSocio" />
 
 </beans>
