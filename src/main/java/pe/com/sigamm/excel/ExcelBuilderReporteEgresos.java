@@ -22,6 +22,7 @@ import pe.com.sigamm.modelo.Socio;
 
 public class ExcelBuilderReporteEgresos extends AbstractExcelView{
 	
+	private CellStyle csLeft = null;
 	private CellStyle csRight = null;
 	private CellStyle csRightP = null;
 	private CellStyle csTitulo = null;
@@ -70,14 +71,23 @@ public class ExcelBuilderReporteEgresos extends AbstractExcelView{
       
         //Estilo Derecha
 	  	Font fRight = workbook.createFont();
-	  	fRight.setFontHeightInPoints((short) 9);
-        csRight = workbook.createCellStyle();
+	  	fRight.setFontHeightInPoints((short) 10);
+        csLeft = workbook.createCellStyle();
+        csLeft.setBorderRight(CellStyle.BORDER_THIN);
+        csLeft.setRightBorderColor(IndexedColors.BLACK.getIndex());
+        csLeft.setBorderBottom(CellStyle.BORDER_THIN);
+        csLeft.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        csLeft.setAlignment(CellStyle.ALIGN_LEFT);
+        csLeft.setFont(fRight);
+		
+  	  	csRight = workbook.createCellStyle();
 		csRight.setBorderRight(CellStyle.BORDER_THIN);
 		csRight.setRightBorderColor(IndexedColors.BLACK.getIndex());
 		csRight.setBorderBottom(CellStyle.BORDER_THIN);
 		csRight.setBottomBorderColor(IndexedColors.BLACK.getIndex());
-  	  	csRight.setFont(fRight);
-		
+		csRight.setAlignment(CellStyle.ALIGN_RIGHT);
+	  	csRight.setFont(fRight);
+	  	
 		csRightP = workbook.createCellStyle();
 		csRightP.setBorderRight(CellStyle.BORDER_THIN);
 		csRightP.setRightBorderColor(IndexedColors.BLACK.getIndex());
@@ -128,15 +138,15 @@ public class ExcelBuilderReporteEgresos extends AbstractExcelView{
             
             c = aRow.createCell(0);
     		c.setCellValue(String.valueOf(rowCount - 1));
-    		c.setCellStyle(csRight);
+    		c.setCellStyle(csLeft);
     		
     		c = aRow.createCell(1);
     		c.setCellValue(egreso.getFecha());
-    		c.setCellStyle(csRight);
+    		c.setCellStyle(csLeft);
     		
     		c = aRow.createCell(2);
     		c.setCellValue(egreso.getDetalle());
-    		c.setCellStyle(csRight);
+    		c.setCellStyle(csLeft);
     		
     		/*c = aRow.createCell(3);
     		c.setCellValue(egreso.getDetalle());
@@ -144,7 +154,7 @@ public class ExcelBuilderReporteEgresos extends AbstractExcelView{
     		
     		c = aRow.createCell(3);
     		c.setCellValue(egreso.getObservaciones());
-    		c.setCellStyle(csRight);
+    		c.setCellStyle(csLeft);
     		
     		c = aRow.createCell(4);
     		c.setCellValue(egreso.getNumeroDocumento());
@@ -156,15 +166,15 @@ public class ExcelBuilderReporteEgresos extends AbstractExcelView{
 
     		c = aRow.createCell(6);
     		c.setCellValue(egreso.getRazonSocial());
-    		c.setCellStyle(csRight);
+    		c.setCellStyle(csLeft);
     		
     		c = aRow.createCell(7);
-    		c.setCellValue(egreso.getTipoCategoria());
-    		c.setCellStyle(csRight);
+    		c.setCellValue(egreso.getArea());
+    		c.setCellStyle(csLeft);
     		    		
     		c = aRow.createCell(8);
     		c.setCellValue(egreso.getRepresentante());
-    		c.setCellStyle(csRight);
+    		c.setCellStyle(csLeft);
         }
     }
 }

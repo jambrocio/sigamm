@@ -69,6 +69,10 @@
 		<put-attribute name="contenido" value="/vistas/facturacion/egreso.jsp" />
 		<put-attribute name="titulo" value="Egresos" />
 	</definition>
+	<definition name="facturacion/egreso_cuenta" extends="main">
+		<put-attribute name="contenido" value="/vistas/facturacion/egreso_cuenta.jsp" />
+		<put-attribute name="titulo" value="Deposito/Retiro Cuentas Bancarias" />
+	</definition>
 	<definition name="facturacion/reporteCobro" extends="main">
 		<put-attribute name="contenido" value="/vistas/facturacion/reporteCobro.jsp" />
 		<put-attribute name="titulo" value="Reporte de Facturacion" />

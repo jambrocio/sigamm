@@ -88,7 +88,9 @@ $(function() {
 function reporte(){
 	var fechaInicial = $("#fechainicial").val();
 	var fechaFinal = $("#fechafinal").val();
-	window.open("/sigamm/reportarEgresoExcel?fechaInicial="+fechaInicial+"&fechaFinal="+fechaFinal, 'Descarga', 'width=100px,height=50px,toolbar=no', '1');
+	//window.open("/sigamm/reportarEgresoExcel?fechaInicial="+fechaInicial+"&fechaFinal="+fechaFinal, 'Descarga', 'width=100px,height=50px,toolbar=no', '1');
+	//Reporte se muestra en la misma hoja
+	window.location = "/sigamm/reportarEgresoExcel?fechaInicial="+fechaInicial+"&fechaFinal="+fechaFinal;
 }
 
 </script>
