@@ -6,10 +6,16 @@
 <link rel="stylesheet" href="<c:url value="recursos/css/sm-blue/sm-blue.css"/>" />	
 <!-- Todas estas librerias son heredadas por las paginas que estan en contenido  -->
 <!-- Inicio -->
+<link rel="stylesheet" type="text/css" href="recursos/css/jquery.datetimepicker.css" />
+<script type="text/javascript" src="recursos/js/jquery.js"></script>
+<script type="text/javascript" src="recursos/js/jquery.datetimepicker.js"></script>
+
+
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript" src="recursos/js/jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="recursos/js/jquery.smartmenus.js"></script>
 <script type="text/javascript" src="recursos/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="recursos/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript" src="recursos/js/tooltip.js"></script>
 <script type="text/javascript" src="recursos/js/popover.js"></script>
 <script type="text/javascript" src="recursos/js/jquery-ui-1.10.4.custom.min.js"></script>
@@ -34,6 +40,7 @@
 <link rel="stylesheet" href="recursos/css/redmond/jquery.ui.all.css" type="text/css" />
 <link rel="stylesheet" href="recursos/css/estilos.css" type="text/css" />
 <link rel="stylesheet" href="recursos/css/bootstrap.css" type="text/css" />
+<link rel="stylesheet" href="recursos/css/bootstrap-datetimepicker.min.css" type="text/css" />
 <link rel="stylesheet" href="recursos/css/jquery.gritter.css" type="text/css" />
 <link rel="stylesheet" href="recursos/css/jquery.autocomplete.css" type="text/css" />
 <link rel="stylesheet" href="recursos/css/jquery.alerts.css" charset="utf-8" type="text/css" media="screen" />

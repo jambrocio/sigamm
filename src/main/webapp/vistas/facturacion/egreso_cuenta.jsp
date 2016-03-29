@@ -6,6 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title></title>
+
 <style>
     .gBubble
     {
@@ -79,6 +80,7 @@ $(function($){
         yearSuffix: ''
     };
     $.datepicker.setDefaults($.datepicker.regional['es']);
+    
 });
 
 
@@ -98,33 +100,6 @@ $(function() {
             'Sep', 'Oct', 'Nov', 'Dic'] 
     });  
 
-	$("#fechainicio").datepicker(
-    {   
-        changeMonth: true,
-        changeYear: false,
-        numberOfMonths: 1,
-        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo',
-            'Junio', 'Julio', 'Agosto', 'Septiembre',
-            'Octubre', 'Noviembre', 'Diciembre'],
-        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr',
-            'May', 'Jun', 'Jul', 'Ago',
-            'Sep', 'Oct', 'Nov', 'Dic'] 
-    }); 
-	
-	$("#fechatermino").datepicker(
-    {   
-        changeMonth: true,
-        changeYear: false,
-        numberOfMonths: 1,
-        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo',
-            'Junio', 'Julio', 'Agosto', 'Septiembre',
-            'Octubre', 'Noviembre', 'Diciembre'],
-        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr',
-            'May', 'Jun', 'Jul', 'Ago',
-            'Sep', 'Oct', 'Nov', 'Dic'] 
-    }); 
 });
 
 
@@ -457,7 +432,34 @@ function guardar(){
 							<td width="12px">&nbsp;</td>
 							<td><span id="lblrepresentante" style="font-size: 11px;"><b>REPRESENTANTE (*)</b></span></td>
 							<td><b>:</b></td>
-							<td colspan="7"><input type="text" id="representante" class="form-control" maxlength="200" style="text-transform: uppercase;"/></td>
+							<td><input type="text" id="representante" class="form-control" maxlength="200" style="text-transform: uppercase;"/></td>
+							<td>&nbsp;</td>
+							<td width="12px">&nbsp;</td>
+							<td><span id="lblnumerooperacion" style="font-size: 11px;"><b>OPERACION (*)</b></span></td>
+							<td><b>:</b></td>
+							<td><input type="text" id="datetimepicker" class="form-control" maxlength="20"/></td>
+							<td valign="top">&nbsp;</td>
+						</tr>
+						<tr>
+							<td colspan="10">
+								<div class="well">
+  <div id="datetimepicker2" class="input-append">
+    <input data-format="MM/dd/yyyy HH:mm:ss PP" type="text"></input>
+    <span class="add-on">
+      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+      </i>
+    </span>
+  </div>
+</div>
+<script type="text/javascript">
+  $(function() {
+    $('#datetimepicker2').datetimepicker({
+      language: 'en',
+      pick12HourFormat: true
+    });
+  });
+</script>															
+							</td>
 						</tr>
 						<tr>
 							<td width="12px">&nbsp;</td>
