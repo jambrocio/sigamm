@@ -132,10 +132,11 @@ public class EgresoDaoImpl implements EgresoDao {
 					
 				new SqlParameter("vi_codigo_opeban", 			Types.INTEGER),
 				new SqlParameter("vi_tipo_operacion", 			Types.VARCHAR),
-				new SqlParameter("vi_monto",			 		Types.VARCHAR),
+				new SqlParameter("vi_monto",			 		Types.DOUBLE),
 				new SqlParameter("vi_fecha", 					Types.VARCHAR),
+				new SqlParameter("vi_hora", 					Types.VARCHAR),
 				new SqlParameter("vi_responsable",	 			Types.VARCHAR),
-				new SqlParameter("vi_interes", 					Types.VARCHAR),
+				new SqlParameter("vi_voucher", 					Types.VARCHAR),
 				new SqlParameter("vi_codigo_usuario", 			Types.NUMERIC),
 				
 				new SqlOutParameter("vo_codigo_opeban", 		Types.INTEGER),
@@ -147,8 +148,9 @@ public class EgresoDaoImpl implements EgresoDao {
 			parametros.addValue("vi_tipo_operacion", 			operacionesBancarias.getTipoOperacion());
 			parametros.addValue("vi_monto", 					operacionesBancarias.getMonto());
 			parametros.addValue("vi_fecha", 					operacionesBancarias.getFecha());
+			parametros.addValue("vi_hora", 						operacionesBancarias.getHora());
 			parametros.addValue("vi_responsable", 				operacionesBancarias.getResponsable() == null ? "" : operacionesBancarias.getResponsable());
-			parametros.addValue("vi_interes", 					operacionesBancarias.getInteres());
+			parametros.addValue("vi_voucher", 					operacionesBancarias.getVoucher());
 			parametros.addValue("vi_codigo_usuario", 			datosSession.getCodigoUsuario());
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 

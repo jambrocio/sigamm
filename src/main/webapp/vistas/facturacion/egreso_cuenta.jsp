@@ -6,6 +6,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title></title>
+<script type="text/javascript" src="recursos/js/jquery.mask.min.js"></script>
+<script src="recursos/js/jquery.maskedinput.js" type="text/javascript"></script>
 
 <style>
     .gBubble
@@ -42,20 +44,62 @@
         /*font-size:12px;*/
         font-weight: bold;
 	}
+	
+	#div1{
+		float:left;
+	}
+	#div2{
+		float:left;	
+	} 
 </style>
 
 <script>
+jQuery(function($)
+{
+   /*$.mask.definitions['H']='[012]';
+   $.mask.definitions['N']='[012345]';
+   $.mask.definitions['n']='[0123456789]';
+   $("#time").mask("Hn:Nn:Nn");*/
+	$("#time").mask("99:99:99");
+});
+
+function valida(valor) 
+{
+   //que no existan elementos sin escribir
+   if(valor.indexOf("_") == -1)
+   {		      
+      var hora = valor.split(":")[0];
+      var min = valor.split(":")[1];
+      var seg = valor.split(":")[2];
+      if(parseInt(hora) > 23 )
+      {
+           $("#time").val("");		      
+      } 
+      if(parseInt(min) > 59 )
+      {
+           $("#time").val("");		      
+      }
+      if(parseInt(seg) > 59 )
+      {
+           $("#time").val("");		      
+      }
+   }
+}
+
 $(document).ready(function(){	
 	
-	$('[data-toggle="popover"]').popover({ placement : 'right', trigger: "hover" });
+	//$('[data-toggle="popover"]').popover({ placement : 'right', trigger: "hover" });
 	//jAlert("Actualidad jQuery", "Actualidad jQuery");
-	inicializaValores();	
+	inicializaValores();
+	   
 });
 
 function inicializaValores(){
 	$("#monto").val('0');
 	$("#fecha").val('');
 	$("#representante").val('');
+	$("#voucher").val('');
+	$("#time").val('');
 	cargarOperacionesBancarias();
 	cargarTipoOperacion();
 }
@@ -160,7 +204,7 @@ function cargarOperacionesBancarias(){
 		mtype: 'POST',
 		height: 'auto',
 		width: 'auto',
-		colNames : ['Estado','Tipo Operación', 'Monto', 'Fecha','Responsable', 'Opciones'],
+		colNames : ['Estado','Tipo Operación','Voucher', 'Monto', 'Fecha','Hora', 'Responsable', 'Opciones'],
 		colModel : [{
 			name : 'estado',
 			index: 'estado',
@@ -171,6 +215,12 @@ function cargarOperacionesBancarias(){
 			name : 'tipoOperacion',
 			index: 'tipoOperacion',
 			sortable:true,
+			width: 150,
+			align: 'center'
+		},{
+			name : 'voucher',
+			index: 'voucher',
+			sortable:false,
 			width: 150,
 			align: 'center'
 		},{
@@ -185,6 +235,12 @@ function cargarOperacionesBancarias(){
 			index: 'fecha',
 			sortable:false,
 			width: 100,
+			align: 'center'
+		},{
+			name : 'hora',
+			index: 'hora',
+			sortable:false,
+			width: 50,
 			align: 'center'
 		},{
 			name : 'responsable',
@@ -225,6 +281,8 @@ function cargarOperacionesBancarias(){
 				$("#grilla").setCell(rowId, 'tipoOperacion', 'DEPOSITO', { 'color':'blue','font-weight':'bold' });
 			} else if (item.tipoOperacion == 'R') {
 				$("#grilla").setCell(rowId, 'tipoOperacion', 'RETIRO', { 'color':'red','font-weight':'bold' });
+			} else if (item.tipoOperacion == 'I') {
+				$("#grilla").setCell(rowId, 'tipoOperacion', 'INTERES', { 'color':'green','font-weight':'bold' });
 			}
 		}
 		
@@ -288,6 +346,7 @@ function cargarTipoOperacion(){
 	var optionTipoOperacion = "<option value=0>SELECCIONAR</option>";
 	optionTipoOperacion += "<option value=D>DEPOSITO</option>";
 	optionTipoOperacion += "<option value=R>RETIRO</option>";
+	optionTipoOperacion += "<option value=I>INTERES</option>";
 			
 	$("#tipooperacion").html(optionTipoOperacion);
 	
@@ -300,8 +359,9 @@ function guardar(){
 	parametros.tipoOperacion = $("#tipooperacion").val();
 	parametros.monto = $("#monto").val();
 	parametros.fecha = $("#fecha").val();
+	parametros.hora = $("#time").val();
 	parametros.responsable = $("#representante").val();
-	parametros.interes = $("#interes").val();
+	parametros.voucher = $("#voucher").val();
 	
 	$.ajax({
 		type: "POST",
@@ -347,7 +407,6 @@ function guardar(){
 		}
 	});	
 }
-
 
 </script>
 </head>
@@ -406,59 +465,48 @@ function guardar(){
 						</tr>
 						<tr>
 							<td width="12px">&nbsp;</td>
-							<td><span id="lblcuentas" style="font-size: 11px;"><b>CUENTAS (*)</b></span></td>
+							<td><span id="lblcuentas" style="font-size: 12px;"><b>CUENTAS (*)</b></span></td>
 							<td><b>:</b></td>
 							<td><select id="cuentas" class="form-control"></select></td>
 							<td valign="top"><img id="lblcuentas-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 							<td width="12px">&nbsp;</td>
-							<td><span id="lbltipooperacion" style="font-size: 11px;"><b>TIPO OPERACIÓN (*)</b></span></td>
+							<td><span id="lbltipooperacion" style="font-size: 12px;"><b>TIPO OPERACIÓN (*)</b></span></td>
 							<td><b>:</b></td>
 							<td><select id="tipooperacion" class="form-control"></select></td>
 							<td valign="top">&nbsp;</td>
 						</tr>
 						<tr>
 							<td width="12px">&nbsp;</td>
-							<td><span id="lblmonto" style="font-size: 11px;"><b>MONTO (*)</b></span></td>
+							<td><span id="lblmonto" style="font-size: 12px;"><b>MONTO (*)</b></span></td>
 							<td><b>:</b></td>
 							<td><input type="text" id="monto" class="form-control" maxlength="20"/></td>
 							<td>&nbsp;</td>
 							<td width="12px">&nbsp;</td>
-							<td><span id="lblfecha" style="font-size: 11px;"><b>FECHA (*)</b></span></td>
+							<td><span id="lblvoucher" style="font-size: 12px;"><b>CODIGO VOUCHER (*)</b></span></td>
 							<td><b>:</b></td>
-							<td><input type="text" id="fecha" class="form-control" maxlength="20"/></td>
+							<td><input type="text" id="voucher" class="form-control" maxlength="20"/></td>
 							<td valign="top">&nbsp;</td>
 						</tr>
 						<tr>
 							<td width="12px">&nbsp;</td>
-							<td><span id="lblrepresentante" style="font-size: 11px;"><b>REPRESENTANTE (*)</b></span></td>
+							<td><span id="lblrepresentante" style="font-size: 12px;"><b>REPRESENTANTE (*)</b></span></td>
 							<td><b>:</b></td>
-							<td><input type="text" id="representante" class="form-control" maxlength="200" style="text-transform: uppercase;"/></td>
-							<td>&nbsp;</td>
-							<td width="12px">&nbsp;</td>
-							<td><span id="lblnumerooperacion" style="font-size: 11px;"><b>OPERACION (*)</b></span></td>
-							<td><b>:</b></td>
-							<td><input type="text" id="datetimepicker" class="form-control" maxlength="20"/></td>
-							<td valign="top">&nbsp;</td>
+							<td colspan="6"><input type="text" id="representante" class="form-control" maxlength="200" style="text-transform: uppercase;"/></td>					
 						</tr>
 						<tr>
 							<td colspan="10">
-								<div class="well">
-  <div id="datetimepicker2" class="input-append">
-    <input data-format="MM/dd/yyyy HH:mm:ss PP" type="text"></input>
-    <span class="add-on">
-      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-      </i>
-    </span>
-  </div>
-</div>
-<script type="text/javascript">
-  $(function() {
-    $('#datetimepicker2').datetimepicker({
-      language: 'en',
-      pick12HourFormat: true
-    });
-  });
-</script>															
+								<span id="lblnumerooperacion" style="font-size: 12px;"><b>OPERACION (*)</b></span>
+								<div class="well" style="height: 100px">									
+									<div id="div1" class="input-append date form_datetime" style="width: 300px">
+										<span id="lblfecha" style="font-size: 11px;"><b>FECHA (*)</b></span>
+									    <input type="text" id="fecha" class="form-control" maxlength="20"/>
+									</div>
+									&nbsp;&nbsp;
+									<div id="div2" class="input-append date form_datetime" style="width: 100px">
+									    <span id="lbltime" style="font-size: 11px;"><b>HORA (*)</b></span>
+									    <input type="text" id="time" name="time" class="form-control" maxlength="20" onblur="valida(this.value)"/>
+									</div>
+								</div>  													
 							</td>
 						</tr>
 						<tr>
