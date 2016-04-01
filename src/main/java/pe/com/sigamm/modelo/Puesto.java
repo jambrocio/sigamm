@@ -20,7 +20,7 @@ public class Puesto {
 	double total;
 	int reciboLuzCreado;
 	int pagado;
-	//int reciboAguaCreado;
+	int reciboAguaCreado;
 	int codigoServicioDetalle;
 	String periodoSocio;
 	double numCostoWatts;
@@ -130,6 +130,12 @@ public class Puesto {
 	public void setPagado(int pagado) {
 		this.pagado = pagado;
 	}
+	public int getReciboAguaCreado() {
+		return reciboAguaCreado;
+	}
+	public void setReciboAguaCreado(int reciboAguaCreado) {
+		this.reciboAguaCreado = reciboAguaCreado;
+	}
 	public int getCodigoServicioDetalle() {
 		return codigoServicioDetalle;
 	}
@@ -166,5 +172,5 @@ public class Puesto {
 	public void setEstadoAbierto(int estadoAbierto) {
 		this.estadoAbierto = estadoAbierto;
 	}
-	
+		
 }
