@@ -309,4 +309,10 @@ public class FacturacionController {
 		
 		return response;
 	}
+	
+	@RequestMapping(value = "/monto-total-diario.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String montoTotalDiario(){
+		
+		return facturacionBus.montoTotalDiario();
+	}
 }

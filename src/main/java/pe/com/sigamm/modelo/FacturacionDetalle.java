@@ -6,6 +6,7 @@ public class FacturacionDetalle {
 	int codigoDeudaSocio;
 	String monto;
 	int codigoFacturacioncab;
+	int codigoServicio;
 	
 	public int getCodigoFacturacionDet() {
 		return codigoFacturacionDet;
@@ -31,5 +32,11 @@ public class FacturacionDetalle {
 	public void setCodigoFacturacioncab(int codigoFacturacioncab) {
 		this.codigoFacturacioncab = codigoFacturacioncab;
 	}
-	
+	public int getCodigoServicio() {
+		return codigoServicio;
+	}
+	public void setCodigoServicio(int codigoServicio) {
+		this.codigoServicio = codigoServicio;
+	}
+		
 }

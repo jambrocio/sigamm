@@ -46,6 +46,14 @@
   		width: 900px;
 	}
 	
+	.marca-de-agua {
+	    background-image: url("../recursos/images/logo.png");
+	    background-repeat: no-repeat;
+	    background-position: center;
+	    width: 100%;
+	    height: auto;
+	    margin: auto;
+	}
 </style>
 <script>
 $(document).ready(function(){	
@@ -101,6 +109,7 @@ function guardar(){
 	parametros.codigoUsuario = $("#codigoUsuario").val();
 	parametros.serie = "0001";
 	parametros.secuencia = "00002";
+	parametros.codigoSocio = $("#codigoSocio").val();
 	
     $("#tabla_resultado tbody tr").each(function (item) {
         var this_row = $(this);
@@ -109,6 +118,7 @@ function guardar(){
         var desConcepto = $.trim(this_row.find('td:eq(3)').html());
         var monto = $.trim(this_row.find('td:eq(4)').html());
         var codPuesto = $.trim(this_row.find('td:eq(5)').html());
+        var codServicio = $.trim(this_row.find('td:eq(7)').html());
         /*
         var desConcepto = $.trim(this_row.find('td:eq(2)').html());
         var monto = $.trim(this_row.find('td:eq(3)').html());
@@ -118,6 +128,7 @@ function guardar(){
 	        objetos = {};
 	        objetos.codigoDeudaSocio = codDeuda;
 	        objetos.monto = monto;
+	        objetos.codigoServicio = codServicio;
 	        jsonObj.push(objetos);
         }
         
@@ -399,6 +410,7 @@ function buscarDeudasSocio(){
         				"<td align='center'><input type='checkbox' id='chk_" + serv.codigoDeudaSocio + "'></td>" +
         	            "<td align='left'>" + serv.fecPeriodo + "</td>" +
         				"<td align='right'>" + serv.importe + "</td>" +
+        				"<td style='display:none;'>" + $("#servicio").val() + "</td>" +
         				"</tr>");
         		        		
         		//console.log("Periodo : " + serv.fecPeriodo + "\nImporte : " + serv.importe);
@@ -530,6 +542,7 @@ function agregarDeuda(){
         var check = $.trim(this_row.find('td:eq(1)').html());
         var concepto = $.trim(this_row.find('td:eq(2)').html());
         var importe = $.trim(this_row.find('td:eq(3)').html());
+        var codigoServicio = $.trim(this_row.find('td:eq(4)').html());
         
         if(importe != "Importe"){
 	        
@@ -563,6 +576,7 @@ function agregarDeuda(){
 	        				"<button type='button' class='boton btnEliminar' onclick='eliminarFila(this);'>" +
 	        					"<img src='/"+ruta+"/recursos/images/icons/eliminar_16x16.png' alt='Eliminar' />" +
 	        				"</button></td>" +
+	        				"<td align='center' style='display:none;'>" + codigoServicio + "</td>" +
 	        				"</tr>");
         		}
         		
@@ -608,7 +622,8 @@ function imprimir(){
 					<table border="0" width="100%">
 						<tr>
 							<td width="48%" valign="top">
-								<table border="0" width="100%">
+								<div class="marca-de-agua"> 
+								<table border="0" width="100%" >
 									<tr>
 										<td colspan="3" align="center"><b>ASOCIACIÓN DE COMERCIANTES DEL MERCADO<BR>MODELO DE HUARAL<BR>Fundado el 13 de Noviembre de 1996<BR>R.U.C. 20530606334</b></td>
 									</tr>
@@ -667,6 +682,7 @@ function imprimir(){
 										<td colspan="3"><b>SON : <span id="totalLetras" /></b></td>
 									</tr>
 								</table>
+								</div>
 							</td>
 							<td width="4%" align="center"><div style="height:600px;width:0;border:0;border-left:3px;border-style:double;border-color:#000000" /></td>
 							<td width="48%" valign="top">
@@ -879,6 +895,7 @@ function imprimir(){
 								<td align="center" class="tablaCabecera" width="20px">&nbsp;</td>
 								<td align="center" class="tablaCabecera">Desc.Concepto</td>
 								<td align="center" class="tablaCabecera" width="100px">Importe</td>
+								<td align="center" class="tablaCabecera" width="20px" style="display:none;">&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -893,6 +910,7 @@ function imprimir(){
 								<td align="center" class="tablaCabecera">Monto</td>
 								<td align="center" class="tablaCabecera" style="display:none;">Cod.Puesto</td>
 								<td align="center" class="tablaCabecera">Accion</td>
+								<td align="center" class="tablaCabecera" style="display:none;">Cod.Servicio</td>
 							</tr>
 							<tfoot>
 							<tr>

@@ -11,6 +11,7 @@ public class ServiciosDetalle {
 	int obligatorio;
 	int ordenDetalle;
 	int seleccionado;
+	int flag_otros;
 	
 	public int getCodigoServicio() {
 		return codigoServicio;
@@ -66,5 +67,11 @@ public class ServiciosDetalle {
 	public void setSeleccionado(int seleccionado) {
 		this.seleccionado = seleccionado;
 	}
-		
+	public int getFlag_otros() {
+		return flag_otros;
+	}
+	public void setFlag_otros(int flag_otros) {
+		this.flag_otros = flag_otros;
+	}
+			
 }

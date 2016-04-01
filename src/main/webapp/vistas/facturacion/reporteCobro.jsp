@@ -64,7 +64,7 @@ $(document).ready(function(){
     });
 	
 	cargarPuestos();
-	
+	montoTotalDiario();
 });
 
 function colorEtiquetas(){
@@ -389,6 +389,22 @@ function buscarPuesto(){
 		
 }
 
+function montoTotalDiario(){
+	
+	$.ajax({
+        type: "POST",
+        async:false,
+        url: "monto-total-diario.json",
+        cache : false,
+        success: function(result){
+            //console.log(result.userid);
+        	//alert("Resultado : [" + result + "]");
+        	$("#totalFacturacion").html(result);
+        	
+        }
+    });
+}
+
 </script>
 </head>
 <body id="body">
@@ -397,7 +413,7 @@ function buscarPuesto(){
 <input type="hidden" id="codigoGiro" />
 <table border="0" width="100%">
 	<tr>
-		<td colspan="4">&nbsp;</td>
+		<td colspan="6">&nbsp;</td>
 	</tr>
 	<tr>
 		<td width="150"><b>DNI<b/></td>
@@ -411,15 +427,25 @@ function buscarPuesto(){
 				<a href="<c:url value="/cobro"/>">&nbsp;Nuevo</a>
 			</button>
 		</td>
+		<td width="80">&nbsp;</td>
+		<td width="80">&nbsp;</td>
 	</tr>
 	<tr>
-		<td colspan="4">&nbsp;</td>
+		<td colspan="6">&nbsp;</td>
 	</tr>
 	<tr>
-		<td colspan="4">
+		<td colspan="6">
 			<table id="grilla"></table>
 			<div id="pgrilla"></div>
 		</td>
+	</tr>
+	<tr>
+		<td colspan="6">&nbsp;</td>
+	</tr>
+	<tr>
+		<td colspan="4">&nbsp;</td>
+		<td><b>Total :</b></td>
+		<td align="right"><b><span id="totalFacturacion"></span></b></td>
 	</tr>
 </table>	
 

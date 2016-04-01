@@ -8,6 +8,7 @@ public class FacturacionCabecera {
 	String secuencia;
 	int estado;
 	String facturacionDetalle;
+	int codigoSocio;
 	
 	public int getCodigoFacturacionCab() {
 		return codigoFacturacionCab;
@@ -45,5 +46,11 @@ public class FacturacionCabecera {
 	public void setFacturacionDetalle(String facturacionDetalle) {
 		this.facturacionDetalle = facturacionDetalle;
 	}
-		
+	public int getCodigoSocio() {
+		return codigoSocio;
+	}
+	public void setCodigoSocio(int codigoSocio) {
+		this.codigoSocio = codigoSocio;
+	} 
+			
 }

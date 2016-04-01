@@ -119,5 +119,11 @@ public class FacturacionBusImpl implements FacturacionBus {
 		
 		return facturacionDao.reporteFacturacion(pagina, registros, dni, nombre, exportar);
 	}
+
+	@Override
+	public String montoTotalDiario() {
+		
+		return facturacionDao.montoTotalDiario();
+	}
 	
 }

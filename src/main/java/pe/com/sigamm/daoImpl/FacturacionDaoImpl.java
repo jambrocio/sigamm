@@ -55,6 +55,7 @@ public class FacturacionDaoImpl implements FacturacionDao {
 				new SqlParameter("vi_serie", 					Types.VARCHAR),
 				new SqlParameter("vi_secuencia", 				Types.VARCHAR),
 				new SqlParameter("vi_codigo_usuario_registro", 	Types.INTEGER),
+				new SqlParameter("vi_codigo_socio",				Types.INTEGER),
 				
 				new SqlOutParameter("vo_facturacion_cabecera", 	Types.INTEGER),
 				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
@@ -66,6 +67,7 @@ public class FacturacionDaoImpl implements FacturacionDao {
 			parametros.addValue("vi_serie", 					facturacion.getSerie());
 			parametros.addValue("vi_secuencia", 				facturacion.getSecuencia());
 			parametros.addValue("vi_codigo_usuario_registro", 	datosSession.getCodigoUsuario());
+			parametros.addValue("vi_codigo_socio",				facturacion.getCodigoSocio());
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
 			
@@ -100,6 +102,7 @@ public class FacturacionDaoImpl implements FacturacionDao {
 				new SqlParameter("vi_facturacion_cabecera", 	Types.INTEGER),
 				new SqlParameter("vi_codigo_deuda_socio", 		Types.INTEGER),
 				new SqlParameter("vi_monto", 					Types.VARCHAR),
+				new SqlParameter("vi_codigo_servicio", 			Types.INTEGER),
 				
 				new SqlOutParameter("vo_facturacion_detalle", 	Types.INTEGER),
 				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
@@ -110,6 +113,7 @@ public class FacturacionDaoImpl implements FacturacionDao {
 			parametros.addValue("vi_facturacion_cabecera", 		codigoFacturacion);
 			parametros.addValue("vi_codigo_deuda_socio", 		facturacion.getCodigoDeudaSocio());
 			parametros.addValue("vi_monto", 					facturacion.getMonto());
+			parametros.addValue("vi_codigo_servicio", 			facturacion.getCodigoServicio());
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
 			
@@ -540,6 +544,29 @@ public class FacturacionDaoImpl implements FacturacionDao {
 		
 		return  reporte;
 		
+	}
+
+	@Override
+	public String montoTotalDiario() {
+		
+		String importe = "0";
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_MONTO_TOTAL_DIARIO").declareParameters(
+				new SqlOutParameter("vo_monto_total", 	Types.VARCHAR));
+			
+			Map<String,Object> result = jdbcCall.execute(); 
+			
+			importe = (String) result.get("vo_monto_total");
+			
+			
+		}catch(Exception e){
+			
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return importe;
 	}
 
 }

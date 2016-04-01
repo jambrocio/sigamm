@@ -91,6 +91,7 @@ public class SocioBusImpl implements SocioBus {
 				detalle.setObligatorio(servicios.getObligatorio());
 				detalle.setOrdenDetalle(servicios.getOrdenDetalle());
 				detalle.setSeleccionado(servicios.getSeleccionado());
+				detalle.setFlagOtros(servicios.getFlag_otros());
 				
 				listaDetalleServicio.add(detalle);
 				
@@ -107,6 +108,7 @@ public class SocioBusImpl implements SocioBus {
 				detalle.setObligatorio(servicios.getObligatorio());
 				detalle.setOrdenDetalle(servicios.getOrdenDetalle());
 				detalle.setSeleccionado(servicios.getSeleccionado());
+				detalle.setFlagOtros(servicios.getFlag_otros());
 				
 				listaDetalleServicio.add(detalle);
 			}

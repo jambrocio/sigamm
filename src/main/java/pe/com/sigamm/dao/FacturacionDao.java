@@ -41,4 +41,5 @@ public interface FacturacionDao {
 	
 	public ReporteFacturacion reporteFacturacion(int pagina, int registros, String dni, String nombre, int exportar);
 	
+	public String montoTotalDiario();
 }

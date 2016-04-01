@@ -8,6 +8,7 @@ public class DetalleServicio {
 	int obligatorio;
 	int ordenDetalle;
 	int seleccionado;
+	int flagOtros;
 	
 	public int getCodigoServicioDetalle() {
 		return codigoServicioDetalle;
@@ -45,5 +46,11 @@ public class DetalleServicio {
 	public void setSeleccionado(int seleccionado) {
 		this.seleccionado = seleccionado;
 	}
-		
+	public int getFlagOtros() {
+		return flagOtros;
+	}
+	public void setFlagOtros(int flagOtros) {
+		this.flagOtros = flagOtros;
+	}
+			
 }
