@@ -470,12 +470,18 @@ function cargarEgresos(){
 		height: 'auto',
 		width: 'auto',
 		//colNames : ['Codigo', 'Tipo Documento', 'Número Documento', 'Fecha','Empresa','Representante','Total', 'Opciones'],
-		colNames : ['Estado','Tipo Documento', 'Número Documento', 'Fecha','Empresa','Representante','Total', 'Opciones'],
+		colNames : ['Id','Estado','Tipo Documento', 'Número Documento', 'Fecha','Empresa','Representante','Total', 'Opciones'],
 		colModel : [{
+			name : 'codigoEgreso',
+			index: 'codigoEgreso',
+			sortable:false,
+			width: 30,
+			align: 'center'
+		},{
 			name : 'estado',
 			index: 'estado',
 			sortable:false,
-			width: 90,
+			width: 80,
 			align: 'center'
 		},{
 			name : 'nombreDocumento',
@@ -487,13 +493,13 @@ function cargarEgresos(){
 			name : 'numeroDocumento',
 			index: 'numeroDocumento',
 			sortable:false,
-			width: 150,
+			width: 130,
 			align: 'center'
 		},{
 			name : 'fecha',
 			index: 'fecha',
 			sortable:false,
-			width: 100,
+			width: 80,
 			align: 'center'
 		},{
 			name : 'razonSocial',
@@ -511,7 +517,7 @@ function cargarEgresos(){
 			name : 'total',
 			index: 'total',
 			sortable:false,
-			width: 100,
+			width: 80,
 			align: 'right',
 			formatter: 'number'
 		},{					
@@ -692,7 +698,7 @@ function exportarEgreso(){
 <body id="body">
 <input type="hidden" id="codigoEgreso" />
 <input type="hidden" id="codigoEmpresa" />
-<table border="0" style="width: 1100px;">
+<table border="0" style="width: 1250px;">
 	<tr>
 		<td colspan="7" align="right">&nbsp;</td>
 	</tr>

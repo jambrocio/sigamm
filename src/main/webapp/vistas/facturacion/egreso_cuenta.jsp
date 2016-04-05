@@ -173,16 +173,9 @@ function cargarOperacionesBancarias(){
 		var opciones = "<center>";
 			
 			opciones += "<a href=javascript:editarOpeban(";
-			opciones += rowObject.id + ")>";
+			opciones += rowObject.id + ",'" + rowObject.tipoOperacion + "'," + rowObject.monto + ",'" + rowObject.fecha + "','" + rowObject.hora + "','" + rowObject.responsable.replace(/\s/g,"_") + "','" + rowObject.voucher + "','" + rowObject.numeroCuenta + "'," + rowObject.estado + ",'" + rowObject.observaciones.replace(/\s/g,"_") +"') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Operaciones Bancarias'/>";
 			opciones += "</a>";
-			
-			opciones += "&nbsp;&nbsp;";
-			
-			opciones += "<a href=javascript:eliminarOpeban(";
-			opciones += rowObject.id + ") >";
-			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Operaciones Bancarias'/>";
-			opciones += "</a>";			
 			
 			opciones += "&nbsp;&nbsp;";
 			
@@ -204,7 +197,7 @@ function cargarOperacionesBancarias(){
 		mtype: 'POST',
 		height: 'auto',
 		width: 'auto',
-		colNames : ['Estado','Tipo Operación','Voucher', 'Monto', 'Fecha','Hora', 'Responsable', 'Opciones'],
+		colNames : ['Estado','Tipo Operación','Voucher', 'Monto', 'Fecha','Hora', 'Responsable','Observaciones', 'Opciones'],
 		colModel : [{
 			name : 'estado',
 			index: 'estado',
@@ -215,26 +208,26 @@ function cargarOperacionesBancarias(){
 			name : 'tipoOperacion',
 			index: 'tipoOperacion',
 			sortable:true,
-			width: 150,
+			width: 100,
 			align: 'center'
 		},{
 			name : 'voucher',
 			index: 'voucher',
 			sortable:false,
-			width: 150,
+			width: 100,
 			align: 'center'
 		},{
 			name : 'monto',
 			index: 'monto',
 			sortable:false,
-			width: 150,
+			width: 100,
 			align: 'center',
 			formatter: 'number'
 		},{
 			name : 'fecha',
 			index: 'fecha',
 			sortable:false,
-			width: 100,
+			width: 90,
 			align: 'center'
 		},{
 			name : 'hora',
@@ -246,7 +239,13 @@ function cargarOperacionesBancarias(){
 			name : 'responsable',
 			index: 'responsable',
 			sortable:false,
-			width: 380,
+			width: 200,
+			align: 'Left'
+		},{
+			name : 'observaciones',
+			index: 'observaciones',
+			sortable:false,
+			width: 200,
 			align: 'Left'
 		},{					
 			name:'id',
@@ -299,6 +298,30 @@ function colorEtiquetas(){
 	
 }
 
+function editarOpeban(id, tipoOperacion, monto, fecha, hora, responsable, voucher, numeroCuenta, estado, observaciones){
+
+	$('#operaciones_bancarias_modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	});
+	
+	cargarCuentasBancarias();
+	cargarTipoOperacion();
+	$("#tituloRegistro").html("Modificar Datos - Egreso Cuentas Bancarias");
+	colorEtiquetas();
+	
+	$("#id").val(id);
+	$('#cuentas option[value="' +numeroCuenta+ '"]').attr("selected", "selected");
+	$('#tipooperacion option[value="' +tipoOperacion+ '"]').attr("selected", "selected");
+	$("#monto").val(monto);
+	$("#fecha").val(fecha.replace(/\_/g," "));
+	$("#time").val(hora);
+	$("#voucher").val(voucher);
+	$("#representante").val(responsable.replace(/\_/g," "));
+	$("#observaciones").val(observaciones.replace(/\_/g," "));
+}
+
+
 function nuevaOperacionBancaria(){
 	
 	colorEtiquetas();
@@ -330,7 +353,7 @@ function cargarCuentasBancarias(){
         	var optionCuentasBancarias = "<option value=0>SELECCIONAR</option>";
         	$.each(result, function(keyM, cuentas) {
         		
-        		optionCuentasBancarias += "<option value=" + cuentas.id + ">" + cuentas.numeroCuenta + "</option>";
+        		optionCuentasBancarias += "<option value=" + cuentas.idCuenta + ">" + cuentas.numeroCuenta + "</option>";
         		
         	});
         	
@@ -356,12 +379,15 @@ function guardar(){
 	var ruta = obtenerContexto();
 	jsonObj = [];
 	var parametros = new Object();
+	parametros.id = $("#id").val();
 	parametros.tipoOperacion = $("#tipooperacion").val();
 	parametros.monto = $("#monto").val();
 	parametros.fecha = $("#fecha").val();
 	parametros.hora = $("#time").val();
 	parametros.responsable = $("#representante").val();
 	parametros.voucher = $("#voucher").val();
+	parametros.observaciones = $("#observaciones").val();
+	parametros.numeroCuenta = $("#cuentas").val();
 	
 	$.ajax({
 		type: "POST",
@@ -492,6 +518,12 @@ function guardar(){
 							<td><span id="lblrepresentante" style="font-size: 12px;"><b>REPRESENTANTE (*)</b></span></td>
 							<td><b>:</b></td>
 							<td colspan="6"><input type="text" id="representante" class="form-control" maxlength="200" style="text-transform: uppercase;"/></td>					
+						</tr>
+						<tr>
+							<td width="12px">&nbsp;</td>
+							<td><span id="lblobservaciones" style="font-size: 12px;"><b>OBSERVACIONES (*)</b></span></td>
+							<td><b>:</b></td>
+							<td colspan="6"><input type="text" id="observaciones" class="form-control" maxlength="500" style="text-transform: uppercase;"/></td>					
 						</tr>
 						<tr>
 							<td colspan="10">

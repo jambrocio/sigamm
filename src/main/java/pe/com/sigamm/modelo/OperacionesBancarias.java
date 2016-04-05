@@ -8,6 +8,8 @@ public class OperacionesBancarias {
 	String hora;
 	String responsable;
 	String voucher;
+	String observaciones;
+	String numeroCuenta;
 	int estado;
 	
 	public int getId() {
@@ -52,11 +54,23 @@ public class OperacionesBancarias {
 	public void setVoucher(String voucher) {
 		this.voucher = voucher;
 	}
+	public String getObservaciones() {
+		return observaciones;
+	}
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
+	}
+	public String getNumeroCuenta() {
+		return numeroCuenta;
+	}
+	public void setNumeroCuenta(String numeroCuenta) {
+		this.numeroCuenta = numeroCuenta;
+	}
 	public int getEstado() {
 		return estado;
 	}
 	public void setEstado(int estado) {
 		this.estado = estado;
 	}
-	
+		
 }
