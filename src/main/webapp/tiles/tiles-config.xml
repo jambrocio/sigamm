@@ -87,5 +87,9 @@
 		<put-attribute name="contenido" value="/vistas/servicios/recibo_agua.jsp" />
 		<put-attribute name="titulo" value="Recibo de Agua" />
 	</definition>
+	<definition name="servicios/otros" extends="main">
+		<put-attribute name="contenido" value="/vistas/servicios/otros.jsp" />
+		<put-attribute name="titulo" value="Otros Servicios" />
+	</definition>
 	
 </tiles-definitions>
