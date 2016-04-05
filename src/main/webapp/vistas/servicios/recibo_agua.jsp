@@ -50,9 +50,61 @@
 	    -moz-box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,0.2);
 	    box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,0.2);
 	}
+	
+	
+	fieldset {
+  		border: 2px solid white;
+  		border-radius: 6px;
+	}
+	
+	legend {
+	  color: #fff;
+	  text-shadow: #34495e 2px 2px 1px;
+	  padding: 0 4px;
+	  font-size: 20px;
+	  text-align: right;
+	}
+	
+	label.check {
+	  display: block;
+	  cursor: pointer;
+	  line-height: 36px;
+	  padding-left: 26px;
+	  font-size: 28px;
+	  color: #e74c3c;
+	  text-shadow: #2c3e50 2px 2px 1px;
+	  transition: .3s;
+	  background: url('https://dl.dropboxusercontent.com/u/3522/check_off.png') left center no-repeat;
+	}
+	
+	label.check input {
+	  position: absolute;
+	  left: -9999px;
+	}
+	
+	label.check.c_on {
+	  background: url('https://dl.dropboxusercontent.com/u/3522/check_on.png')  left center no-repeat;
+	  color: #fff;
+	  text-shadow: #34495e 2px 2px 1px;
+	}
 </style>
 <script>
 var intentos = 0;
+var input = document.querySelectorAll("label.check input");
+
+if(input !== null) {
+  [].forEach.call(input, function(el) {
+  
+    if(el.checked) {
+      el.parentNode.classList.add('c_on');
+    }
+  
+    el.addEventListener("click", function(event) {
+      event.preventDefault();
+      el.parentNode.classList.toggle('c_on');
+    }, false);
+  });
+}
 
 $(document).ready(function(){
 	
@@ -1336,6 +1388,20 @@ function exportarAguaSocio(){
 				</tr>
 			</table>
 			<table border="1" width="100%">
+				<tr>
+					<td><fieldset>
+						  <legend>Easy checkbox replacement [CSS+JavaScript]</legend>
+						  <label class="check">
+						    <input type="checkbox" checked="checked">Check 1</input>
+						  </label>
+						</fieldset>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td width="40%"><b>SERVICIO SUSPENDIDO:</b></td>
+					<td><div style="padding: 2em; border: 1px solid"><input id="suspendidoSocio" type="checkbox" /></div></td>
+				</tr>
 				<tr>
 					<td>
 						<table border="0" width="100%">
