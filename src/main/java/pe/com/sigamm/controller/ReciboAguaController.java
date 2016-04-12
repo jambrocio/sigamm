@@ -184,20 +184,14 @@ public class ReciboAguaController {
 			@RequestParam(value = "codigoRecibo", defaultValue = "0") Integer codigoRecibo) {
 
 		ResponseListBean<ReciboAguaSocio> response = new ResponseListBean<ReciboAguaSocio>();
-
-		ReporteReciboAguaSocio reporte = reciboAguaSocioBus
-				.reportePuestoAguaSocio(pagina, registros, puestoSocio,
-						codigoRecibo);
-
+		ReporteReciboAguaSocio reporte = reciboAguaSocioBus.reportePuestoAguaSocio(pagina, registros, puestoSocio, codigoRecibo);
 		Integer totalReciboPuestoAgua = reporte.getTotalRegistros();
 
 		response.setPage(pagina);
 		response.setRecords(totalReciboPuestoAgua);
 
 		// total de paginas a mostrar
-		response.setTotal(OperadoresUtil.obtenerCociente(totalReciboPuestoAgua,
-				registros));
-
+		response.setTotal(OperadoresUtil.obtenerCociente(totalReciboPuestoAgua, registros));
 		response.setRows(reporte.getListaReciboAguaSocio());
 
 		return response;
@@ -276,15 +270,12 @@ public class ReciboAguaController {
 
 		} else {
 
-			Retorno retorno = reciboAguaSocioBus
-					.grabarReciboAguaxSocio(reciboAguaSocio);
+			Retorno retorno = reciboAguaSocioBus.grabarReciboAguaxSocio(reciboAguaSocio);
 			codigo = retorno.getCodigo();
 			mensaje = retorno.getMensaje();
 		}
 
-		String resultado = "{\"idUsuario\":" + codigo
-				+ ",\"camposObligatorios\":" + listaObligatorios
-				+ ",\"mensaje\":\"" + mensaje + "\"}";
+		String resultado = "{\"idUsuario\":" + codigo + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + mensaje + "\"}";
 
 		return resultado;
 	}
@@ -318,6 +309,35 @@ public class ReciboAguaController {
 
 		return resultado;
 	}
+	
+	
+	@RequestMapping(value = "/eliminar-agua-x-socio.json", method = RequestMethod.POST, produces = "application/json")
+	public @ResponseBody
+	String eliminarReciboAguaxSocio(ReciboAguaSocio reciboAguaSocio) {
+
+		Gson gson = new Gson();
+		List<CamposObligatorios> camposObligatorios = new ArrayList<CamposObligatorios>();
+
+		int codigo = 0;
+		String mensaje = "";
+		String listaObligatorios = gson.toJson(camposObligatorios);
+
+		if (camposObligatorios.size() > 0) {
+
+			codigo = 0;
+
+		} else {
+
+			Retorno retorno = reciboAguaSocioBus.eliminarReciboAguaxSocio(reciboAguaSocio);
+			codigo = retorno.getCodigo();
+			mensaje = retorno.getMensaje();
+		}
+
+		String resultado = "{\"idUsuario\":" + codigo + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + mensaje + "\"}";
+
+		return resultado;
+	}
+	
 
 	@RequestMapping(value = "/reporte-recibo-agua-puesto.json", method = RequestMethod.POST, produces = "application/json")
 	public @ResponseBody

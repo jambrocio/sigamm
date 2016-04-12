@@ -96,6 +96,13 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 	}
 
 	@Override
+	public Retorno eliminarReciboAguaxSocio(ReciboAguaSocio reciboAguaSocio) {
+
+		return reciboAguaSocioDao.eliminarReciboAguaxSocio(reciboAguaSocio);
+
+	}
+	
+	@Override
 	public File generarFacturacionAguaPDF(Integer codigoRecibo, String periodo) {
 		
 		Document doc = new Document();

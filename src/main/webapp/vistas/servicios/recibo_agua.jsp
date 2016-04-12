@@ -50,9 +50,20 @@
 	    -moz-box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,0.2);
 	    box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,0.2);
 	}
+
+/* CHECKBOX */	
+	/*body {
+	  font-family: 'Lily Script One', cursive;
+	  background-color: #c0392b;
+	  margin: 50px;
+	}*/
 	
-	
-	fieldset {
+	a {
+	  color: white;
+	  text-shadow: #34495e 2px 2px 1px;
+	}
+
+	/*fieldset {
   		border: 2px solid white;
   		border-radius: 6px;
 	}
@@ -63,7 +74,7 @@
 	  padding: 0 4px;
 	  font-size: 20px;
 	  text-align: right;
-	}
+	}*/
 	
 	label.check {
 	  display: block;
@@ -84,27 +95,14 @@
 	
 	label.check.c_on {
 	  background: url('https://dl.dropboxusercontent.com/u/3522/check_on.png')  left center no-repeat;
-	  color: #fff;
+	  /*color: #fff;*/
+	  color: #e74c3c;
 	  text-shadow: #34495e 2px 2px 1px;
 	}
 </style>
 <script>
 var intentos = 0;
-var input = document.querySelectorAll("label.check input");
 
-if(input !== null) {
-  [].forEach.call(input, function(el) {
-  
-    if(el.checked) {
-      el.parentNode.classList.add('c_on');
-    }
-  
-    el.addEventListener("click", function(event) {
-      event.preventDefault();
-      el.parentNode.classList.toggle('c_on');
-    }, false);
-  });
-}
 
 $(document).ready(function(){
 	
@@ -116,7 +114,48 @@ $(document).ready(function(){
 	$("#consumoMesSocioTrabado").val('0');
 	$("#alcantarilladoSocio").val('0');
 	$("#totalSocio").text('0');
+
 	
+	var input = document.querySelectorAll("label.check input");
+
+	if(input !== null) {
+	  [].forEach.call(input, function(el) {
+	  
+	    if(el.checked) {
+	      el.parentNode.classList.add('c_on');
+	    }
+	  
+	    el.addEventListener("click", function(event) {
+	      event.preventDefault();
+	      el.parentNode.classList.toggle('c_on');
+	    }, false);
+	  });
+	}
+	
+	
+	$( '#suspendidoSocio' ).on( 'click', function() {
+	    if( $("#seleccionador").attr("class") == 'check c_on' ){
+	    	//alert("El checkbox con valor " + $('#suspendidoSocio').val() + " ha sido seleccionado");
+	    	$('#consumoMesSocio').attr('disabled','-1');
+	    	$('#consumoMesSocioTrabado').attr('disabled','-1');
+	    	$('#alcantarilladoSocio').attr('disabled','-1');
+	    	$('#mantenimientoSocio').attr('disabled','-1');
+	    	$('#deudaAnteriorSocio').attr('disabled','-1');
+	    	$('#totalSocio').val('0.0');
+	    	$('#totalSocio').attr('disabled','-1');
+	    	$('#suspendido').val('1');
+	    	
+	    } else {
+	    	//alert("El checkbox con valor " + $('#suspendidoSocio').val() + " ha sido DEseleccionado");
+	    	$('#consumoMesSocio').removeAttr('disabled');
+	    	$('#consumoMesSocioTrabado').removeAttr('disabled');
+	    	$('#alcantarilladoSocio').removeAttr('disabled');
+	    	$('#mantenimientoSocio').removeAttr('disabled');
+	    	$('#deudaAnteriorSocio').removeAttr('disabled');
+	    	$('#totalSocio').removeAttr('disabled');
+	    	$('#suspendido').val('0');
+	    }
+	});
 });
 
 $(function($){
@@ -546,6 +585,13 @@ function cargarReciboAguaSocio1(codigoRecibo){
 				opciones += rowObject.codigoReciboAgua + "','" + rowObject.nroPuesto + "'," + rowObject.codigoSocio + ") >";
 				opciones += "<img src='/"+ruta+"/recursos/images/icons/money_activo_24x24.png' border='0' title='PAGAR Recibo de Agua por Socio'/>";
 				opciones += "</a>";
+				
+				opciones += "&nbsp;&nbsp;";
+				
+				opciones += "<a href=javascript:eliminarReciboAguaXSocio('";
+				opciones += rowObject.codigoReciboAgua + "','" + rowObject.nroPuesto + "'," + rowObject.codigoSocio + ") >";
+				opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='ELIMINAR Recibo de Agua por Socio'/>";
+				opciones += "</a>";
 			}
 		} else {
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/money_inactivo_24x24.png' border='0' title='Recibo de Agua del Socio, PAGADO'/>";
@@ -622,6 +668,11 @@ function cargarReciboAguaSocio1(codigoRecibo){
 				$("#grillaReciboAgua").setCell(rowId, 'nroPuesto', '', { 'background-color':'#FF8000','color':'white','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'nombreGiro', '', { 'background-color':'#FF8000','color':'white','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'total', '', { 'background-color':'#FF8000','color':'white','font-weight':'bold' });				
+			} else if ( (item.reciboAguaCreado == 1) && (item.suspendido == 1) ) {
+				$("#grillaReciboAgua").setCell(rowId, 'nombreFull', '', { 'background-color':'#FFBF00','color':'black','font-weight':'bold' });				
+				$("#grillaReciboAgua").setCell(rowId, 'nroPuesto', '', { 'background-color':'#FFBF00','color':'black','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'nombreGiro', '', { 'background-color':'#FFBF00','color':'black','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'total', '', { 'background-color':'#FFBF00','color':'black','font-weight':'bold' });		
 			} else {
 				$("#grillaReciboAgua").setCell(rowId, 'nombreFull', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'nroPuesto', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
@@ -688,6 +739,26 @@ function editarReciboAguaXSocio(original, puesto){
 		            	
 		            	/*alert(val.codigoServicioDetalle);
 		            	alert(val.total);*/
+		            	if (val.suspendido==1){
+		            		$("#seleccionador").attr("class","check c_on");
+			    	    	$('#consumoMesSocio').attr('disabled','-1');
+			    	    	$('#consumoMesSocioTrabado').attr('disabled','-1');
+			    	    	$('#alcantarilladoSocio').attr('disabled','-1');
+			    	    	$('#mantenimientoSocio').attr('disabled','-1');
+			    	    	$('#deudaAnteriorSocio').attr('disabled','-1');
+			    	    	$('#totalSocio').val('0.0');
+			    	    	$('#totalSocio').attr('disabled','-1');
+			    	    	$('#suspendido').val('1');
+		            	}else{
+		            		$("#seleccionador").attr("class","check");
+			    	    	$('#consumoMesSocio').removeAttr('disabled');
+			    	    	$('#consumoMesSocioTrabado').removeAttr('disabled');
+			    	    	$('#alcantarilladoSocio').removeAttr('disabled');
+			    	    	$('#mantenimientoSocio').removeAttr('disabled');
+			    	    	$('#deudaAnteriorSocio').removeAttr('disabled');
+			    	    	$('#totalSocio').removeAttr('disabled');
+			    	    	$('#suspendido').val('0');
+		            	}
 		            	if (val.corteAgua==1){
 		            		$("#cboxCorteAguaSocio").prop("checked", "checked");
 		            	}else{
@@ -805,6 +876,68 @@ function pagarReciboAguaXSocio(original, puesto, codigoSocio){
 						title: 'Mensaje',
 						// (string | mandatory) the text inside the notification
 						text: 'El Recibo de Agua del puesto ' + puesto + ' se ha PAGADO satisfactoriamente, verifique...',
+						// (string | optional) the image to display on the left
+						image: "/" + ruta + "/recursos/images/confirm.png",
+						// (bool | optional) if you want it to fade out on its own or just sit there
+						sticky: false,
+						// (int | optional) the time you want it to be alive for before fading out
+						time: ''
+					});
+	        	};
+	        	cargarReciboAguaSocio(original);
+	            
+			}
+		});
+		
+    });
+
+}
+
+
+function eliminarReciboAguaXSocio(original, puesto, codigoSocio){
+	
+	var ruta = obtenerContexto();
+	mensaje = "Esta seguro de ELIMINAR el recibo de agua del Puesto " + puesto + " ?"; 
+	
+	$("#mensajeEliminar").html(mensaje);
+	
+	$('#alerta_modal_eliminar').modal({
+		backdrop: 'static',
+		keyboard: false
+	}).one('click', '#aceptar', function() {
+        
+		jsonObj = [];
+		var parametros = new Object();
+		parametros.nroPuesto = puesto;
+		parametros.codigoReciboAgua = original;
+		parametros.codigoSocio = codigoSocio;
+		parametros.pagado = 1;
+		$.ajax({
+			type: "POST",
+		    async:false,
+		    url: "eliminar-agua-x-socio.json",
+		    cache : false,
+		    data: parametros,
+		    success: function(result){
+		    	
+		    	//alert(result.records);
+
+			    $('#alerta_modal_eliminar').modal('hide');
+	
+		        if (result.records > 0) {
+			        $('#recibos_agua_por_socio_modal').modal({
+		        		backdrop: 'static',
+		        		keyboard: false
+		        	});	        	
+		         
+	        	
+	        	} else {
+	        		
+	        		$.gritter.add({
+						// (string | mandatory) the heading of the notification
+						title: 'Mensaje',
+						// (string | mandatory) the text inside the notification
+						text: 'El Recibo de Agua del puesto ' + puesto + ' se ha ELIMINADO satisfactoriamente, verifique...',
 						// (string | optional) the image to display on the left
 						image: "/" + ruta + "/recursos/images/confirm.png",
 						// (bool | optional) if you want it to fade out on its own or just sit there
@@ -1022,6 +1155,7 @@ function guardarRecibo(){
 	parametros.reconexion = 0;
 	parametros.total = $("#totalSocio").text();
 	parametros.correlativo = $("#correlativo").val();
+	parametros.suspendido =  $("#suspendido").val();
 		
 	$.ajax({
 		type: "POST",
@@ -1179,6 +1313,7 @@ function exportarAguaSocio(){
 <input type="hidden" id="codigoServicioDetalle" />
 <input type="hidden" id="correlativo" />
 <input type="hidden" id="reciboAguaCreado" />
+<input type="hidden" id="suspendido" />
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td colspan="4">&nbsp;</td>
@@ -1346,7 +1481,24 @@ function exportarAguaSocio(){
 					</td>
 				</tr>
 				<tr>
-					<td colspan="4">&nbsp;</td>
+					<td colspan="3">&nbsp;</td>
+					<td><b>LEYENDA:</b></td>
+				</tr>
+				<tr>
+					<td colspan="3">&nbsp;</td>
+					<td bgcolor="#FFBF00">SUSPENDIDO</td>
+				</tr>
+				<tr>
+					<td colspan="3">&nbsp;</td>
+					<td bgcolor="#A9F5A9">CREADO</td>
+				</tr>
+				<tr>					
+					<td colspan="3">&nbsp;</td>
+					<td bgcolor="#FF8000">CORTADO</td>
+				</tr>
+				<tr>
+					<td colspan="3">&nbsp;</td>
+					<td bgcolor="#F5A9A9">NO CREADO</td>
 				</tr>
 				<tr>
 					<td colspan="4">
@@ -1389,18 +1541,11 @@ function exportarAguaSocio(){
 			</table>
 			<table border="1" width="100%">
 				<tr>
-					<td><fieldset>
-						  <legend>Easy checkbox replacement [CSS+JavaScript]</legend>
-						  <label class="check">
-						    <input type="checkbox" checked="checked">Check 1</input>
-						  </label>
-						</fieldset>
+					<td align="center">
+						<label id="seleccionador" class="check">
+							<input type="checkbox" id="suspendidoSocio" name="suspendidoSocio" >Servicio Suspendido</input>
+						</label>
 					</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td width="40%"><b>SERVICIO SUSPENDIDO:</b></td>
-					<td><div style="padding: 2em; border: 1px solid"><input id="suspendidoSocio" type="checkbox" /></div></td>
 				</tr>
 				<tr>
 					<td>
@@ -1536,6 +1681,32 @@ function exportarAguaSocio(){
 				<table border="0">
 					<tr>
 						<td><img src="recursos/images/icons/exclamation_32x32.png" border="0" />&nbsp;<b><span id="mensajePagar" /></b></td>
+					</tr>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" id="aceptar">Si</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+			</div>
+		</div>
+		  
+	</div>
+</div>
+
+<div class="modal fade" id="alerta_modal_eliminar" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Eliminar Recibo Agua</h4>
+			</div>
+			<div class="modal-body">
+					
+				<table border="0">
+					<tr>
+						<td><img src="recursos/images/icons/exclamation_32x32.png" border="0" />&nbsp;<b><span id="mensajeEliminar" /></b></td>
 					</tr>
 				</table>
 			</div>

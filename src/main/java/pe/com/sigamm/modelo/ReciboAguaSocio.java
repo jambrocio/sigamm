@@ -19,6 +19,7 @@ public class ReciboAguaSocio {
 	int trabado;
 	int pagado;
 	int corteAgua;
+	int suspendido;
 	double consumoMes;
 	double servicioMantenimiento;
 	double deudaAnterior;
@@ -144,6 +145,12 @@ public class ReciboAguaSocio {
 	}
 	public void setCorteAgua(int corteAgua) {
 		this.corteAgua = corteAgua;
+	}
+	public int getSuspendido() {
+		return suspendido;
+	}
+	public void setSuspendido(int suspendido) {
+		this.suspendido = suspendido;
 	}
 	public double getConsumoMes() {
 		return consumoMes;

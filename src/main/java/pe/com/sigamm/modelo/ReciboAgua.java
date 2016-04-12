@@ -11,6 +11,7 @@ public class ReciboAgua {
 	String observaciones;
 	int estado;
 	int estadoAbierto;
+	int suspendido;
 	
 	public int getCodigoRecibo() {
 		return codigoRecibo;
@@ -71,6 +72,12 @@ public class ReciboAgua {
 	}
 	public void setEstadoAbierto(int estadoAbierto) {
 		this.estadoAbierto = estadoAbierto;
+	}
+	public int getSuspendido() {
+		return suspendido;
+	}
+	public void setSuspendido(int suspendido) {
+		this.suspendido = suspendido;
 	}
 	
 }

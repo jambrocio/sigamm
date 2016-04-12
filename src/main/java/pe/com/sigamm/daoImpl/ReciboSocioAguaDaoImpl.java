@@ -181,6 +181,7 @@ public class ReciboSocioAguaDaoImpl implements ReciboAguaSocioDao {
 					new SqlParameter("vi_fecha_modifica", 		Types.DATE),
 					new SqlParameter("vi_codigo_servicio_detalle", Types.NUMERIC),
 					new SqlParameter("vi_corte_agua", 			Types.NUMERIC),
+					new SqlParameter("vi_suspendido", 			Types.NUMERIC),
 					
 					new SqlOutParameter("vo_codigo_socio",  		Types.INTEGER),
 					new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
@@ -208,6 +209,7 @@ public class ReciboSocioAguaDaoImpl implements ReciboAguaSocioDao {
 			parametros.addValue("vi_fecha_modifica",	null);
 			parametros.addValue("vi_codigo_servicio_detalle", reciboAguaSocio.getCodigoServicioDetalle());
 			parametros.addValue("vi_corte_agua", 		reciboAguaSocio.getCorteAgua());
+			parametros.addValue("vi_suspendido", 		reciboAguaSocio.getSuspendido());
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
 			
@@ -376,4 +378,48 @@ public class ReciboSocioAguaDaoImpl implements ReciboAguaSocioDao {
 		
 		return reporte;
 	}
+	
+	
+	@Override
+	public Retorno eliminarReciboAguaxSocio(ReciboAguaSocio reciboAguaSocio) {
+		Retorno retorno = new Retorno();
+		try{
+			System.out.println("Eliminando Recibo Agua Socio");
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_RECIBO_AGUA_SOCIO");
+			jdbcCall.withProcedureName("SP_ELIMINAR_AGUA_X_SOCIO").declareParameters(
+					new SqlParameter("vi_codigo_socio", 		Types.NUMERIC),
+					new SqlParameter("vi_codigo_recibo",		Types.NUMERIC),
+					new SqlParameter("vi_codigo_usuario", 		Types.NUMERIC),
+					
+					new SqlOutParameter("vo_codigo_socio",  		Types.INTEGER),
+					new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
+					new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
+			
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+
+			parametros.addValue("vi_codigo_socio",		reciboAguaSocio.getCodigoSocio());
+			parametros.addValue("vi_codigo_recibo",		reciboAguaSocio.getCodigoReciboAgua());
+			parametros.addValue("vi_codigo_usuario", 	datosSession.getCodigoUsuario());			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			int codigoSocio = (Integer) result.get("vo_codigo_socio");
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(codigoSocio);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
+	}
+	
 }

@@ -27,6 +27,7 @@ public class Puesto {
 	double alumbradoPublico;
 	double mantenimiento;
 	int estadoAbierto;
+	int suspendido;
 	
 	public int getCodigoSocio() {
 		return codigoSocio;
@@ -172,5 +173,12 @@ public class Puesto {
 	public void setEstadoAbierto(int estadoAbierto) {
 		this.estadoAbierto = estadoAbierto;
 	}
-		
+	public int getSuspendido() {
+		return suspendido;
+	}
+	public void setSuspendido(int suspendido) {
+		this.suspendido = suspendido;
+	}
+	
+	
 }
