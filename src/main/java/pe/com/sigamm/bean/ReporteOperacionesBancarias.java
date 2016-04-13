@@ -5,6 +5,7 @@ import java.util.List;
 import pe.com.sigamm.modelo.Egreso;
 import pe.com.sigamm.modelo.OperacionesBancarias;
 
+
 public class ReporteOperacionesBancarias {
 	List<OperacionesBancarias> listaOperacionesBancarias;
 	int totalRegistros;
