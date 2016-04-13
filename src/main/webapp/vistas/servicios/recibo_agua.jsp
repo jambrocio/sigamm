@@ -1463,15 +1463,15 @@ function exportarAguaSocio(){
 
 		<div class="modal-body">
 		
-			<table border="0" width="100%" cellpadding="0" cellspacing="0">
+			<table border="0" width="400px" cellpadding="0" cellspacing="0">
 				<tr>
-					<td colspan="4" style="color:red"><b>&nbsp;RECIBO DE AGUA ORIGINAL NRO. <span id="nroRecibo"></span></b></td>
+					<td colspan="5" style="color:red"><b>&nbsp;RECIBO DE AGUA ORIGINAL NRO. <span id="nroRecibo"></span></b></td>
 				</tr>
 				<tr>
-					<td width="150"><b>RECIBO AGUA SOCIOS<b/></td>
-					<td width="10">:</td>
-					<td width="250"><input type="text" id="reciboAguaSocioBuscara" class="text ui-widget-content ui-corner-all" maxlength="8" /></td>
-					<td>&nbsp;&nbsp;
+					<td><b>RECIBO AGUA SOCIOS<b/></td>
+					<td>:</td>
+					<td><input type="text" id="reciboAguaSocioBuscara" class="text ui-widget-content ui-corner-all" maxlength="8" /></td>
+					<td colspan="2">
 						<button type="button" class="btn btn-primary" onclick="buscarReciboAguaPuesto()">
 							<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 						</button>&nbsp;&nbsp;
@@ -1481,27 +1481,21 @@ function exportarAguaSocio(){
 					</td>
 				</tr>
 				<tr>
-					<td colspan="3">&nbsp;</td>
+					<td colspan="4">&nbsp;</td>
 					<td><b>LEYENDA:</b></td>
 				</tr>
 				<tr>
 					<td colspan="3">&nbsp;</td>
 					<td bgcolor="#FFBF00">SUSPENDIDO</td>
-				</tr>
-				<tr>
-					<td colspan="3">&nbsp;</td>
 					<td bgcolor="#A9F5A9">CREADO</td>
 				</tr>
-				<tr>					
-					<td colspan="3">&nbsp;</td>
-					<td bgcolor="#FF8000">CORTADO</td>
-				</tr>
 				<tr>
 					<td colspan="3">&nbsp;</td>
+					<td bgcolor="#FF8000">CORTADO</td>
 					<td bgcolor="#F5A9A9">NO CREADO</td>
 				</tr>
 				<tr>
-					<td colspan="4">
+					<td colspan="5">
 						<table id="grillaReciboAgua"></table>
 						<div id="pgrillaReciboAgua"></div>
 					</td>
