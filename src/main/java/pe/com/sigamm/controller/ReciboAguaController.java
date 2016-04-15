@@ -409,5 +409,19 @@ public class ReciboAguaController {
 		return new ModelAndView("excelViewAguaSocio", "listaRegistrosEgresos",lista);
 
 	}
+	
+	
+	@RequestMapping(value = "/generarFacturacionPrueba", method = RequestMethod.GET)
+	public void generargenerarFacturacionPrueba(
+			@RequestParam(value = "periodo", defaultValue = "") String periodo,
+			@RequestParam(value = "codigoRecibo", defaultValue = "") Integer codigoReciboAguaSocio,
+			HttpServletResponse response, HttpServletRequest request) {
+		
+		periodo = periodo.replace("_", " ");
+		reciboAguaSocioBus.imprimirFactura();
+		
+		
+		
+	}
 
 }
