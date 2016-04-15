@@ -1,5 +1,7 @@
 package pe.com.sigamm.bus;
 
+import java.util.List;
+
 import pe.com.sigamm.bean.ReporteSocio;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.modelo.Socio;
@@ -17,5 +19,7 @@ public interface SocioBus {
 	public String opcionesServicios(int codigoSocio);
 	
 	public Socio buscarSocioPuesto(Socio socio);
+
+	public List<Socio> listaSocios();
 	
 }

@@ -57,7 +57,7 @@
 	</definition>
 	<definition name="mantenimiento/socio" extends="main">
 		<put-attribute name="contenido" value="/vistas/mantenimiento/socio.jsp" />
-		<put-attribute name="titulo" value="Reporte de Socios" />
+		<put-attribute name="titulo" value="Reporte de Asociados" />
 	</definition>
 	
 	<!-- FACTURACION -->

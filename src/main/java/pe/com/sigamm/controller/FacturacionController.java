@@ -1,25 +1,11 @@
 package pe.com.sigamm.controller;
 
-import java.io.File;
 import java.lang.reflect.Type;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.design.JRDesignQuery;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import net.sf.jasperreports.view.JasperViewer;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import pe.com.sigamm.bean.CamposObligatorios;
+import pe.com.sigamm.bean.ListaServiciosOtros;
 import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ReporteFacturacion;
+import pe.com.sigamm.bean.ReporteServiciosOtros;
 import pe.com.sigamm.bean.ResponseListBean;
 import pe.com.sigamm.bean.VistaFacturacion;
 import pe.com.sigamm.bus.FacturacionBus;
@@ -44,7 +32,8 @@ import pe.com.sigamm.modelo.Facturacion;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Retorno;
-import pe.com.sigamm.modelo.Socio;
+import pe.com.sigamm.modelo.ServicioOtrosCabecera;
+import pe.com.sigamm.modelo.ServicioOtrosDetalle;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.Constantes;
 import pe.com.sigamm.util.OperadoresUtil;
@@ -314,5 +303,52 @@ public class FacturacionController {
 	public @ResponseBody String montoTotalDiario(){
 		
 		return facturacionBus.montoTotalDiario();
+	}
+	
+	@RequestMapping(value = "/cargar-banios.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String cargarBanios(){
+		
+		return facturacionBus.listarBanios();
+	}
+	
+	@RequestMapping(value = "/grabar-servicio-otros.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String grabarServicioOtros(ServicioOtrosCabecera servicio){
+		
+		Gson gson = new Gson();
+		Type type = new TypeToken<List<ServicioOtrosDetalle>>(){}.getType();
+		List<ServicioOtrosDetalle> lista = gson.fromJson(servicio.getServicioOtrosDetalle(), type);
+		List<CamposObligatorios> camposObligatorios = new ArrayList<CamposObligatorios>();
+		String listaObligatorios = gson.toJson(camposObligatorios);
+		
+		Retorno retorno = facturacionBus.grabarServicioOtros(servicio, lista);
+		
+		String resultado = "{\"idServicioOtros\":" + retorno.getCodigo() + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + retorno.getMensaje() + "\"}";
+		
+		return resultado;
+		
+	}
+	
+	@RequestMapping(value = "/reporte-servicios-otros.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody ResponseListBean<ListaServiciosOtros> reporteServiciosOtros(
+			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
+			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
+			@RequestParam(value = "codigoServicio", defaultValue = "0") Integer codigoServicio){
+		
+		ResponseListBean<ListaServiciosOtros> response = new ResponseListBean<ListaServiciosOtros>();
+		
+		//ListaServiciosOtros reporteServicioOtros = facturacionBus.reporteEgreso(pagina, registros, codigoEgreso);
+		ReporteServiciosOtros reporteServicioOtros = facturacionBus.listarServiciosOtros(pagina, registros, codigoServicio);
+		
+		Integer totalEgreso = reporteServicioOtros.getTotalRegistros(); 
+		
+		response.setPage(pagina);
+		response.setRecords(totalEgreso);
+		
+		//total de paginas a mostrar
+		response.setTotal(OperadoresUtil.obtenerCociente(totalEgreso, registros));
+				
+		response.setRows(reporteServicioOtros.getListaServiciosOtros());
+		
+		return response;
 	}
 }

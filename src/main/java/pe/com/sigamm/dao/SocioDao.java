@@ -26,4 +26,6 @@ public interface SocioDao {
 	
 	public Socio buscarSocioPuesto(Socio socio);
 	
+	public List<Socio> listaSocios();
+	
 }

@@ -26,13 +26,61 @@
 		 border-top-left-radius: 5px;
 		 border-top-right-radius: 5px;
 	}
+	
+	.tablaCabecera{
+		background-color: #428bca;
+		color:white;
+        /*font-family:Tahoma, Geneva, sans-serif;*/
+        /*font-size:12px;*/
+        font-weight: bold;
+	}
+	
+	.boton {
+		background:none;
+	  	border:0;
+	  	margin:0;
+	  	padding:0;
+	  	outline:0 none;
+	}
+	
+	.modal-dialog {
+  		width: 680px;
+	}
 </style>
 <script>
 $(document).ready(function(){	
 	
 	$('[data-toggle="popover"]').popover({ placement : 'right', trigger: "hover" });
 	
+	$.ajax({
+        type: "POST",
+        async: false,
+        url: "listar-socios.json",
+        cache: false,
+        success: function(result){
+        	
+        	$("#responsable").autocomplete(result, {
+                formatItem: function(item) {
+                    return item.nombreFull;
+                },
+                width: 460,
+                scroll: true,
+                matchContains: true,
+                minChars: 0//cuando se presiona el boton de flecha hacia abajo se muestra toda la lista
+            }).result(function(event, item) {
+            	
+            	$("#codigoSocio").val(item.codigoSocio);
+            	
+            });
+        	
+        }
+    });
+	
+	cargarBanios();
 	cargarServicios();
+	cargarServiciosOtros();
+	
+	$("#cboBanios").attr("disabled", true);
 	
 });
 
@@ -80,48 +128,41 @@ function guardar(){
 			
 	jsonObj = [];
 	var parametros = new Object();
-	parametros.codigoGiro 		= $("#codigoGiro").val();
-	parametros.nroPuesto 		= $("#puesto").val();
-	parametros.codigoSocio 		= $("#codigoSocio").val();
-	parametros.dni 				= $("#dni").val();
-	parametros.apellidoPaterno 	= $("#apePaterno").val();
-	parametros.apellidoMaterno 	= $("#apeMaterno").val();
-	parametros.nombres 			= $("#nombres").val();
-	parametros.fechaNacimiento 	= $("#fecnac").val();
-	parametros.fechaIngreso 	= $("#fecingreso").val();
-	parametros.padron 			= $("#padron").val();
-	parametros.telefono 		= $("#telefono").val();
-	parametros.celular 			= $("#celular").val();
-	parametros.correo 			= "";
 	
-	$("#tablaServicios tr").each(function (item) {
-        var this_row = $(this);
-        var nombreCheck = $.trim(this_row.find('td:eq(2)').html());
-        var codigoDetalle = $.trim(this_row.find('td:eq(3)').html());
-        
-        if(nombreCheck != ""){
-        	
-        	//console.log("nombreCheck : [" + nombreCheck + "] - codigoDetalle : " + codigoDetalle);
-        	
-        	if($("#" + nombreCheck).is(':checked')){  
-                //console.log("Está activado");
-                
-                objetos = {};
-                objetos.codigoServicioDetalle = codigoDetalle;
-                jsonObj.push(objetos);
-                
-            }   
-        	
-        }
-        
-    });
+	parametros.codigoSocio 			= $("#codigoSocio").val();
+	parametros.codigoServicio		= $("#cboServicio").val();
+	parametros.dniResponsable 		= $("#dniAsociado").val();
+	parametros.nombreResponsable 	= $("#nombresAsociado").val();
 	
-	parametros.listaDetalle = JSON.stringify(jsonObj);
+	$("#tabla_otros tbody tr").each(function (item) {
+		var this_row = $(this);
+        codServicioDetalle = $.trim(this_row.find('td:eq(0)').html());
+        nomServicioDetalle = $.trim(this_row.find('td:eq(1)').html());
+        codBanios = $.trim(this_row.find('td:eq(2)').html());
+        nomBanios = $.trim(this_row.find('td:eq(3)').html());
+        descRangos = $.trim(this_row.find('td:eq(4)').html());
+        ranInicio = $.trim(this_row.find('td:eq(5)').html());
+        ranFin = $.trim(this_row.find('td:eq(6)').html());
+       	
+        //[{"codigoServicioDetalle":"Codigo Detalle","codigoBanio":"Codigo Baños","rangoInicio":"Rango","rangoFin":"Importe"},{"codigoServicioDetalle":"6","codigoBanio":"0","rangoInicio":"1234 - 1254","rangoFin":"0"},{"codigoServicioDetalle":"9","codigoBanio":"0","rangoInicio":"1234 - 1254","rangoFin":"0"}]
+        
+        if(codServicioDetalle != "Codigo Detalle"){
+	        objetos = {};
+	        objetos.codigoServicioDetalle = codServicioDetalle;
+	        objetos.codigoBanio = codBanios;
+	        objetos.rangoInicio = ranInicio;
+	        objetos.rangoFin = ranFin;
+	        jsonObj.push(objetos);
+        }	       
+        
+	});
+	
+	parametros.servicioOtrosDetalle = JSON.stringify(jsonObj);
 	
 	$.ajax({
 		type: "POST",
 	    async:false,
-	    url: "grabar-socio.json",
+	    url: "grabar-servicio-otros.json",
 	    cache : false,
 	    data: parametros,
 	    success: function(result){
@@ -132,7 +173,6 @@ function guardar(){
 	        	if(result.codigoRetorno == "00"){
             		$('#socio_modal').modal('hide');
             		imagen = "ok";
-            		cargarSocios();
 	        	}else{
 	        		imagen = "advertencia";
 	        	}
@@ -154,6 +194,7 @@ function guardar(){
                 	
             	colorEtiquetas();
             	fila = "";
+            	/*
             	$.each(result.camposObligatorios, function(id, obj){
                         
                 	$("#" + obj.nombreCampo).css("color", "red");
@@ -161,7 +202,7 @@ function guardar(){
                     $("#" + obj.nombreCampo + "-img").attr("data-content", obj.descripcion);
                         
 				});
-                	
+                */	
 			}
                 
 		}
@@ -194,8 +235,9 @@ function cargarServicios(){
 
 function cargarServiciosDetalle(){
 	
+	var codigoServicio = $("#cboServicio").val();
 	var parametros = new Object();
-	parametros.codigoServicio = $("#cboServicio").val();
+	parametros.codigoServicio = codigoServicio;
 	
 	$.ajax({
         type: "POST",
@@ -217,7 +259,255 @@ function cargarServiciosDetalle(){
         }
     });
 	
+	if(codigoServicio == 7){
+		$("#cboBanios").attr("disabled", false);
+	}else{
+		$("#cboBanios").attr("disabled", true);
+	}
+	
+	$("#rangosInicio").val("");
+	$("#rangosFin").val("");
+	
+	limpiarTablaOtros();
+	
 }
+
+function cargarBanios(){
+	
+	$.ajax({
+        type: "POST",
+        async: false,
+        url: "cargar-banios.json",
+        cache: false,
+        success: function(result){
+        	
+        	var option = "<option value=0>SELECCIONAR</option>";
+        	$.each(result, function(keyM, serv) {
+        		
+        		option += "<option value=" + serv.codigoBanio + ">" + serv.nombreBanio + "</option>";
+        		
+        	});
+        	
+        	$("#cboBanios").html(option);
+    		
+        }
+    });
+	
+}
+
+function currencyFormat (num) {
+    return num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+}
+
+function agregarDetalleServicio(){
+	
+	var ruta = obtenerContexto();
+	
+	codigoServicio = $("#cboServicio").val();
+	codigoServicioDetalle = $("#cboServicioDetalle").val();
+	nombreServicioDetalle = $("#cboServicioDetalle option:selected").html();
+	codigoBanios = $("#cboBanios").val();
+	nombreBanios = $("#cboBanios option:selected").html();
+	rangoInicio = $("#rangosInicio").val();
+	rangoFin = $("#rangosFin").val();
+	
+	inicioImporte = nombreServicioDetalle.indexOf(" - ");
+	montoImporte = nombreServicioDetalle.substring(inicioImporte + 3);
+	total = (rangoFin - rangoInicio) * montoImporte;
+	
+	//alert("Importe : [" + montoImporte + "] - Total : [" + total + "]");
+	
+	if(codigoBanios == 0){
+		nombreBanios = "";
+	}
+	
+	cantidadErrores = 0;
+	//Si codigo de servicio es BANIO = 7
+	if(codigoServicio == 7){
+		
+		if(codigoServicioDetalle == 0){
+			cantidadErrores = 1;
+		}else{
+			if(rangoInicio == ""){
+				cantidadErrores = 1;
+			}
+			
+			if(rangoFin == ""){
+				cantidadErrores = 1;
+			}
+		}
+	}else{
+		if(codigoServicio == 0){
+			cantidadErrores = 1;
+		}else{
+			if(rangoInicio == ""){
+				cantidadErrores = 1;
+			}
+			
+			if(rangoFin == ""){
+				cantidadErrores = 1;
+			}
+		}
+	}
+	
+	$("#tabla_otros tbody tr").each(function (item) {
+        var this_row = $(this);
+        codServicioDetalle = $.trim(this_row.find('td:eq(0)').html());
+        nomServicioDetalle = $.trim(this_row.find('td:eq(1)').html());
+        codBanios = $.trim(this_row.find('td:eq(2)').html());
+        nomBanios = $.trim(this_row.find('td:eq(3)').html());
+        ranInicio = $.trim(this_row.find('td:eq(4)').html());
+        ranFin = $.trim(this_row.find('td:eq(5)').html());
+        
+        if(codServicioDetalle == codigoServicioDetalle){
+        	cantidadErrores == 1;
+        }
+        
+	});
+	
+	if(cantidadErrores == 0){
+		$('#tabla_otros tbody tr:last').after(
+			"<tr>" +
+	           	"<td align='center' style='display:none;'>" + codigoServicioDetalle + "</td>" + 
+	           	"<td align='left'>" + nombreServicioDetalle + "</td>" +
+	           	"<td align='center' style='display:none;'>" + codigoBanios + "</td>" +
+				"<td align='left'>" + nombreBanios + "</td>" +
+				"<td align='center'>" + rangoInicio + " - " + rangoFin + "</td>" +
+				"<td align='center' style='display:none;'>" + rangoInicio + "</td>" +
+				"<td align='center' style='display:none;'>" + rangoFin + "</td>" +
+				"<td align='center'>" + currencyFormat(total) + "</td>" +
+				"<td align='center'>" +
+				"<button type='button' class='boton btnEliminar' onclick='eliminarFila(this);'>" +
+					"<img src='/"+ruta+"/recursos/images/icons/eliminar_16x16.png' alt='Eliminar' />" +
+				"</button></td>" +
+			"</tr>");
+	}
+}
+
+function eliminarFila(t){
+
+	var td = t.parentNode;
+    var tr = td.parentNode;
+    var table = tr.parentNode;
+	table.removeChild(tr);
+	
+}
+
+function limpiarTablaOtros(){
+	
+	var tabla = document.getElementById("tabla_otros");
+	var filasTabla = tabla.rows.length;
+	
+	for(var i = 0; i < filasTabla; i++) {
+		
+		if(i > 0){
+ 			
+ 			tabla.deleteRow(1);
+ 			
+ 		}
+ 		
+ 	}
+}
+
+function cargarServiciosOtros(){
+	
+	var ruta = obtenerContexto();
+	var formatterBotones = function(cellVal,options,rowObject)
+	{	
+		nombreGiro = replaceAll(rowObject.nombreGiro, " ", "#");
+		nombre = replaceAll(nombreFull, " ", "#");
+		var opciones = "<center>";
+			
+			opciones += "<a href=javascript:eliminarPuesto(";
+			opciones += rowObject.codigoPuesto + ",'";
+			opciones += nombre + "','";
+			opciones += rowObject.nroPuesto + "') >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Puesto'/>";
+			opciones += "</a>";
+			
+			opciones += "</center>";
+			
+		return opciones;
+				
+	};
+	
+	jQuery("#grilla").jqGrid(
+	{
+		url : 'reporte-servicios-otros.json',
+		datatype : "json",
+		mtype: 'POST',
+		height: 'auto',
+		width: 'auto',
+		colNames : ['Servicio', 'DNI', 'Responsable', 'Detalle', 'R.Inicio', 'R.Fin', 'Importe', 'F.Registro', 'Opciones'],
+		colModel : [{
+			name : 'nombreServicio',
+			index: 'nombreServicio',
+			sortable:true,
+			width: 100,
+			align: 'left'						
+		},{
+			name : 'dniResponsable',
+			index: 'dniResponsable',
+			sortable:false,
+			width: 90,
+			align: 'center'
+		},{
+			name : 'nombreResponsable',
+			index: 'nombreResponsable',
+			sortable:false,
+			width: 100,
+			align: 'left'
+		},{
+			name : 'nombreDetalle',
+			index: 'nombreDetalle',
+			sortable:false,
+			width: 100,
+			align: 'left'
+		},{
+			name : 'rangoInicio',
+			index: 'rangoInicio',
+			sortable:false,
+			width: 100,
+			align: 'center'
+		},{
+			name : 'rangoFin',
+			index: 'rangoFin',
+			sortable:false,
+			width: 100,
+			align: 'center'
+		},{
+			name : 'importeTotal',
+			index: 'importeTotal',
+			sortable:false,
+			width: 300,
+			align: 'center'
+		},{
+			name : 'fechaRegistro',
+			index: 'fechaRegistro',
+			sortable:false,
+			width: 100,
+			align: 'right'
+		},{					
+			name:'codigoServicioOtros',
+			index:'codigoServicioOtros',
+			width:100,
+			sortable:false,
+			search: false,
+			formatter:formatterBotones
+		}],								
+		rowNum : 20,
+		//rowList : [ 20, 30, 40 ],
+		pager : '#pgrilla',
+		sortname : 'codigoServicioOtros',
+		autowidth: true,
+		rownumbers: true,
+		viewrecords : true,
+		sortorder : "codigoServicioOtros",				
+		caption : "Servicios Otros"				
+
+	}).trigger('reloadGrid');
+}
+
 </script>
 </head>
 <body id="body">
@@ -228,25 +518,12 @@ function cargarServiciosDetalle(){
 		<td colspan="7">&nbsp;</td>
 	</tr>
 	<tr>
-		<td width="150"><b>DNI<b/></td>
-		<td width="10">:</td>
-		<td width="100"><input type="text" id="dniBuscara" class="form-control" maxlength="8" /></td>
-		<td>&nbsp;&nbsp;</td>
-		<td width="150"><b>NOMBRE<b/></td>
-		<td width="10">:</td>
-		<td width="250"><input type="text" id="nombreBuscara" class="form-control" maxlength="150" /></td>		
-	</tr>
-	<tr><td colspan="7">&nbsp;</td></tr>
-	<tr>
 		<td colspan=7>&nbsp;&nbsp;
-			<button type="button" class="btn btn-primary" onclick="buscarSocio()">
+			<button type="button" class="btn btn-primary">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 			</button>&nbsp;&nbsp;
 			<button type="button" class="btn btn-primary" onclick="nuevoOtroServicio()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
-			</button>
-			<button type="button" class="btn btn-primary">
-				<img src="recursos/images/icons/excel_16x16.png" alt="Exportar a Excel" />&nbsp;<a href="/sigamm/reporteSociosExcel" style="color:white">Exportar</a>
 			</button>
 		</td>
 	</tr>
@@ -272,7 +549,7 @@ function cargarServiciosDetalle(){
 			</div>
 			<div class="modal-body">
 				
-					<table border="0" style="width: 500px;">
+					<table border="0" style="width: 650px;">
 						<tr>
 							<td colspan="7" align="right">&nbsp;</td>
 						</tr>
@@ -294,15 +571,6 @@ function cargarServiciosDetalle(){
 							<td width="5px">&nbsp;</td>
 							<td><select id="cboServicio" class="form-control" onchange="cargarServiciosDetalle();" /></td>
 							<td valign="top"><img id="lblcboServicio-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lblapepat"><b>Detalle (*)</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><select id="cboServicioDetalle" class="form-control" /></td>
-							<td valign="top"><img id="lblcboServicioDetalle-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 						</tr>
 						<tr>
 							<td width="10px">&nbsp;</td>
@@ -332,29 +600,68 @@ function cargarServiciosDetalle(){
 							<td valign="top"><img id="lblnombresAsociado-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 						</tr>
 						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lblapemat"><b>Inicio (*)</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="inicio" class="form-control" maxlength="30" /></td>
-							<td valign="top"><img id="lblinicio-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+							<td colspan="7"><hr align=center size=2 width=100% /></td>
 						</tr>
 						<tr>
 							<td width="10px">&nbsp;</td>
-							<td><span id="lblnombres"><b>Fin (*)</b></span></td>
+							<td><span id="lblapepat"><b>Detalle (*)</b></span></td>
 							<td width="5px">&nbsp;</td>
 							<td><b>:</b></td>
 							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="fin" class="form-control" maxlength="40" /></td>
-							<td valign="top"><img id="lblfin-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+							<td><select id="cboServicioDetalle" class="form-control" /></td>
+							<td valign="top"><img id="lblcboServicioDetalle-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 						</tr>
 						<tr>
 							<td width="10px">&nbsp;</td>
-							<td><b>Servicios</b></td>
+							<td><span id="lblapemat"><b>Baños (*)</b></span></td>
 							<td width="5px">&nbsp;</td>
 							<td><b>:</b></td>
-							<td colspan="3">&nbsp;</td>
+							<td width="5px">&nbsp;</td>
+							<td><select id="cboBanios" class="form-control" /></td>
+							<td valign="top"><img id="lblcboBanios-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td><span id="lblnombres"><b>Rangos (*)</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td>
+								<table border="0">
+									<tr>
+										<td><input type="text" id="rangosInicio" class="form-control" maxlength="10" style="width:100px" /></td>
+										<td>&nbsp;-&nbsp;</td>
+										<td><input type="text" id="rangosFin" class="form-control" maxlength="10" style="width:100px" /></td>
+										<td>&nbsp;&nbsp;</td>
+										<td>
+											<button type="button" id="btnAgregar" class="btn btn-primary" onclick="agregarDetalleServicio();">
+												<img src="recursos/images/icons/agregar2_16x16.png" alt="Agregar" />&nbsp;Agregar
+											</button>
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td valign="top"><img id="lblrangos-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+						</tr>
+						<tr>
+							<td colspan="7"><hr align=center size=2 width=100% /></td>
+						</tr>
+						<tr>
+							<td colspan="7">
+								<table border="1" width="100%" id="tabla_otros" cellspacing="5" cellpadding="5" class="tabla">
+									<tr>
+										<td align="center" class="tablaCabecera" width="20px" style="display:none;">Codigo Detalle</td>
+										<td align="center" class="tablaCabecera">Detalle</td>
+										<td align="center" class="tablaCabecera" width="20px" style="display:none;">Codigo Baños</td>
+										<td align="center" class="tablaCabecera">Baños</td>
+										<td align="center" class="tablaCabecera">Rango</td>
+										<td align="center" class="tablaCabecera" width="20px" style="display:none;">Rango Inicio</td>
+										<td align="center" class="tablaCabecera" width="20px" style="display:none;">Rango Fin</td>
+										<td align="center" class="tablaCabecera" width="100px">Importe</td>
+										<td align="center" class="tablaCabecera" width="20px">Acciones</td>
+									</tr>
+								</table>
+							</td>
 						</tr>
 						<tr>
 							<td colspan="7">&nbsp;</td>

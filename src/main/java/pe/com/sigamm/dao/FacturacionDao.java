@@ -4,6 +4,8 @@ import java.util.List;
 
 import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ReporteFacturacion;
+import pe.com.sigamm.bean.ReporteServiciosOtros;
+import pe.com.sigamm.modelo.Banio;
 import pe.com.sigamm.modelo.Concepto;
 import pe.com.sigamm.modelo.DeudaSocio;
 import pe.com.sigamm.modelo.Egreso;
@@ -12,6 +14,8 @@ import pe.com.sigamm.modelo.Facturacion;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Retorno;
+import pe.com.sigamm.modelo.ServicioOtrosCabecera;
+import pe.com.sigamm.modelo.ServicioOtrosDetalle;
 
 public interface FacturacionDao {
 
@@ -42,4 +46,13 @@ public interface FacturacionDao {
 	public ReporteFacturacion reporteFacturacion(int pagina, int registros, String dni, String nombre, int exportar);
 	
 	public String montoTotalDiario();
+
+	public List<Banio> listarBanios();
+	
+	public Retorno grabarServicioOtrosCabecera(ServicioOtrosCabecera servicio);
+	
+	public Retorno grabarServicioOtrosDetalle(ServicioOtrosDetalle servicio, int codigoServicio);
+	
+	public ReporteServiciosOtros listarServiciosOtros(int pagina, int registros, int codigoServicio);
+	
 }

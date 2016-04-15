@@ -16,11 +16,13 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
+import pe.com.sigamm.bean.ListaServiciosOtros;
 import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ReporteFacturacion;
-import pe.com.sigamm.bean.ReporteSocio;
+import pe.com.sigamm.bean.ReporteServiciosOtros;
 import pe.com.sigamm.bean.VistaFacturacion;
 import pe.com.sigamm.dao.FacturacionDao;
+import pe.com.sigamm.modelo.Banio;
 import pe.com.sigamm.modelo.Concepto;
 import pe.com.sigamm.modelo.DeudaSocio;
 import pe.com.sigamm.modelo.Egreso;
@@ -29,7 +31,8 @@ import pe.com.sigamm.modelo.Facturacion;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Retorno;
-import pe.com.sigamm.modelo.Socio;
+import pe.com.sigamm.modelo.ServicioOtrosCabecera;
+import pe.com.sigamm.modelo.ServicioOtrosDetalle;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.LoggerCustom;
 
@@ -567,6 +570,148 @@ public class FacturacionDaoImpl implements FacturacionDao {
 		}
 		
 		return importe;
+	}
+
+	@Override
+	public List<Banio> listarBanios() {
+		
+		jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+		jdbcCall.withCatalogName("PKG_FACTURACION");
+		jdbcCall.withProcedureName("SP_LISTAR_BANIOS").declareParameters(
+				new SqlOutParameter("vo_result", OracleTypes.CURSOR,new BeanPropertyRowMapper(Banio.class)));
+		
+		Map<String,Object> results = jdbcCall.execute();
+		List<Banio> lista = (List<Banio>) results.get("vo_result");
+		return  lista;
+		
+	}
+
+	@Override
+	public Retorno grabarServicioOtrosCabecera(ServicioOtrosCabecera servicio) {
+		
+		Retorno retorno = new Retorno();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_GRABAR_SERVICIO_OTROS").declareParameters(
+				new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
+				new SqlParameter("vi_codigo_servicio", 			Types.INTEGER),
+				new SqlParameter("vi_codigo_socio", 			Types.INTEGER),
+				new SqlParameter("vi_dni_responsable", 			Types.VARCHAR),
+				new SqlParameter("vi_nombre_responsable",		Types.VARCHAR),
+				
+				new SqlOutParameter("vo_codigo",				Types.INTEGER),
+				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
+				new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
+				
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_usuario", 			datosSession.getCodigoUsuario());
+			parametros.addValue("vi_codigo_servicio", 			servicio.getCodigoServicio());
+			parametros.addValue("vi_codigo_socio", 				servicio.getCodigoSocio());
+			parametros.addValue("vi_dni_responsable", 			servicio.getDniResponsable());
+			parametros.addValue("vi_nombre_responsable",		servicio.getNombreResponsable());
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			int codigoServicioOtros = (Integer) result.get("vo_codigo");
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(codigoServicioOtros);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
+		
+	}
+
+	@Override
+	public Retorno grabarServicioOtrosDetalle(ServicioOtrosDetalle servicio, int codigoServicio) {
+		
+		Retorno retorno = new Retorno();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_GRABAR_SERVICIO_OTROS_DETA").declareParameters(
+				new SqlParameter("vi_codigo_servicio_otros", 		Types.INTEGER),
+				new SqlParameter("vi_codigo_servicio_detalle", 		Types.INTEGER),
+				new SqlParameter("vi_codigo_banio", 				Types.INTEGER),
+				new SqlParameter("vi_rango_inicio", 				Types.INTEGER),
+				new SqlParameter("vi_rango_fin",					Types.INTEGER),
+				
+				new SqlOutParameter("vo_codigo",					Types.INTEGER),
+				new SqlOutParameter("vo_indicador", 				Types.VARCHAR),
+				new SqlOutParameter("vo_mensaje", 					Types.VARCHAR));
+			
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_servicio_otros", 	codigoServicio);
+			parametros.addValue("vi_codigo_servicio_detalle", 	servicio.getCodigoServicioDetalle());
+			parametros.addValue("vi_codigo_banio", 				servicio.getCodigoBanio());
+			parametros.addValue("vi_rango_inicio", 				servicio.getRangoInicio());
+			parametros.addValue("vi_rango_fin",					servicio.getRangoFin());
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			int codigoServicioOtros = (Integer) result.get("vo_codigo");
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(codigoServicioOtros);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
+		
+	}
+
+	@Override
+	public ReporteServiciosOtros listarServiciosOtros(int pagina, int registros, int codigoServicio) {
+		
+		ReporteServiciosOtros reporte = new ReporteServiciosOtros();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_REPORTE_OTROS_SERVICIOS").declareParameters(
+					new SqlParameter("vi_pagina", 				Types.INTEGER),
+					new SqlParameter("vi_registros", 			Types.INTEGER),
+					new SqlParameter("vi_codigo_servicio", 		Types.INTEGER),
+					
+					new SqlOutParameter("vo_total_registros",	Types.INTEGER),
+					new SqlOutParameter("vo_result", OracleTypes.CURSOR,new BeanPropertyRowMapper(ListaServiciosOtros.class)));
+			
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_pagina", 			pagina);
+			parametros.addValue("vi_registros", 		registros);
+			parametros.addValue("vi_codigo_servicio", 	codigoServicio);
+			
+			Map<String,Object> results = jdbcCall.execute(parametros);
+			int totalRegistros = (Integer) results.get("vo_total_registros");
+			List<ListaServiciosOtros> lista = (List<ListaServiciosOtros>) results.get("vo_result");
+			
+			reporte.setTotalRegistros(totalRegistros);
+			reporte.setListaServiciosOtros(lista);
+		
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return  reporte;
 	}
 
 }

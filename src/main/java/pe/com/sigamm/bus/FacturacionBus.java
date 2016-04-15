@@ -4,6 +4,7 @@ import java.util.List;
 
 import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ReporteFacturacion;
+import pe.com.sigamm.bean.ReporteServiciosOtros;
 import pe.com.sigamm.modelo.Concepto;
 import pe.com.sigamm.modelo.DeudaSocio;
 import pe.com.sigamm.modelo.Egreso;
@@ -12,6 +13,8 @@ import pe.com.sigamm.modelo.Facturacion;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Retorno;
+import pe.com.sigamm.modelo.ServicioOtrosCabecera;
+import pe.com.sigamm.modelo.ServicioOtrosDetalle;
 
 public interface FacturacionBus {
 
@@ -40,5 +43,11 @@ public interface FacturacionBus {
 	public ReporteFacturacion reporteFacturacion(int pagina, int registros, String dni, String nombre, int exportar);
 	
 	public String montoTotalDiario();
+	
+	public String listarBanios();
+	
+	public Retorno grabarServicioOtros(ServicioOtrosCabecera facturacion, List<ServicioOtrosDetalle> lista);
+	
+	public ReporteServiciosOtros listarServiciosOtros(int pagina, int registros, int codigoServicio);
 	
 }

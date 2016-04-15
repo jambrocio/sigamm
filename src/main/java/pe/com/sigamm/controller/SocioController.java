@@ -18,6 +18,7 @@ import pe.com.sigamm.bean.CamposObligatorios;
 import pe.com.sigamm.bean.ReporteSocio;
 import pe.com.sigamm.bean.ResponseListBean;
 import pe.com.sigamm.bus.SocioBus;
+import pe.com.sigamm.modelo.GiroComercial;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.modelo.Socio;
 import pe.com.sigamm.session.DatosSession;
@@ -192,5 +193,11 @@ private static final Logger log = Logger.getLogger(SocioController.class);
 	public @ResponseBody Socio buscarSocioPuesto(Socio socio){
 		
 		return socioBus.buscarSocioPuesto(socio);
+	}
+	
+	@RequestMapping(value = "/listar-socios.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody List<Socio> listarSocios(){
+		
+		return socioBus.listaSocios();
 	}
 }

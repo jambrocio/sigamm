@@ -126,4 +126,10 @@ public class SocioBusImpl implements SocioBus {
 		
 	}
 
+	@Override
+	public List<Socio> listaSocios() {
+		
+		return socioDao.listaSocios();
+	}
+
 }

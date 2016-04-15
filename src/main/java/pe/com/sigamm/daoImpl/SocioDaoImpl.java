@@ -20,6 +20,7 @@ import pe.com.sigamm.bean.DetalleServicio;
 import pe.com.sigamm.bean.ReporteSocio;
 import pe.com.sigamm.bean.ServiciosDetalle;
 import pe.com.sigamm.dao.SocioDao;
+import pe.com.sigamm.modelo.GiroComercial;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.modelo.Socio;
 import pe.com.sigamm.session.DatosSession;
@@ -300,6 +301,20 @@ public class SocioDaoImpl implements SocioDao {
 		}
 		
 		return  reporte;
+		
+	}
+
+	@Override
+	public List<Socio> listaSocios() {
+		
+		jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+		jdbcCall.withCatalogName("PKG_SOCIO");
+		jdbcCall.withProcedureName("SP_LISTAR_SOCIOS");
+		jdbcCall.addDeclaredParameter(new SqlOutParameter("vo_result", OracleTypes.CURSOR,new BeanPropertyRowMapper(Socio.class)));
+		
+		Map<String,Object> results = jdbcCall.execute();
+		List<Socio> lista = (List<Socio>) results.get("vo_result");
+		return  lista;
 		
 	}
 

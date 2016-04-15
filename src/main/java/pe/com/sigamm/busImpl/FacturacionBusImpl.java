@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ReporteFacturacion;
+import pe.com.sigamm.bean.ReporteServiciosOtros;
 import pe.com.sigamm.bus.FacturacionBus;
 import pe.com.sigamm.dao.FacturacionDao;
+import pe.com.sigamm.modelo.Banio;
 import pe.com.sigamm.modelo.Concepto;
 import pe.com.sigamm.modelo.DeudaSocio;
 import pe.com.sigamm.modelo.Egreso;
@@ -19,6 +21,8 @@ import pe.com.sigamm.modelo.Facturacion;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Retorno;
+import pe.com.sigamm.modelo.ServicioOtrosCabecera;
+import pe.com.sigamm.modelo.ServicioOtrosDetalle;
 
 import com.google.gson.Gson;
 
@@ -124,6 +128,38 @@ public class FacturacionBusImpl implements FacturacionBus {
 	public String montoTotalDiario() {
 		
 		return facturacionDao.montoTotalDiario();
+	}
+
+	@Override
+	public String listarBanios() {
+		
+		List<Banio> opciones = facturacionDao.listarBanios();		
+		return gson.toJson(opciones);
+		
+	}
+
+	@Override
+	public Retorno grabarServicioOtros(ServicioOtrosCabecera facturacion, List<ServicioOtrosDetalle> lista) {
+		
+		Retorno retornoCabecera = facturacionDao.grabarServicioOtrosCabecera(facturacion);
+		if(retornoCabecera.getIndicador().equals("00")){
+			
+			for(ServicioOtrosDetalle detalle : lista){
+				
+				Retorno retornoDetalle = facturacionDao.grabarServicioOtrosDetalle(detalle, retornoCabecera.getCodigo());
+				
+			}
+			
+		}
+		
+		return retornoCabecera;
+		
+	}
+
+	@Override
+	public ReporteServiciosOtros listarServiciosOtros(int pagina, int registros, int codigoServicio) {
+		
+		return facturacionDao.listarServiciosOtros(pagina, registros, codigoServicio);
 	}
 	
 }
