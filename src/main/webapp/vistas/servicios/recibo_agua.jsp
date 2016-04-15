@@ -1332,6 +1332,12 @@ function exportarAguaSocio(){
 			<button class="btn btn-primary" data-toggle="modal" data-target="#recibo_modal" onclick="cargarNuevo()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
 			</button>
+			<button class="btn btn-primary" data-toggle="modal" data-target="#recibo_modal">
+				<a href=/sigamm/generarFacturacionPrueba>
+					<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;FACTURACION PRUEBA
+				</a>
+			</button>
+			
 		</td>
 	</tr>
 	<tr>

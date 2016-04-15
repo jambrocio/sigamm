@@ -1,14 +1,29 @@
 package pe.com.sigamm.busImpl;
 
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import javax.annotation.Resource;
+import javax.print.Doc;
+import javax.print.DocFlavor;
+import javax.print.DocPrintJob;
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+import javax.print.SimpleDoc;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.swing.JFrame;
 
 import org.apache.log4j.Logger;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Service;
+
+import br.com.adilson.util.Extenso;
+import br.com.adilson.util.PrinterMatrix;
 
 import com.google.gson.Gson;
 import com.itextpdf.text.Document;
@@ -373,5 +388,68 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 
 		File file = new File(path);
 		return file;
+	}
+	
+	@Override
+	public void imprimirFactura(){
+		
+		 try {
+             //javax.swing.JPanel panel = new javax.swing.JPanel(new java.awt.BorderLayout());
+			 javax.swing.JPanel panel = new javax.swing.JPanel(new GridLayout(15,100,2,2));
+             panel.setSize(588, 600);
+             javax.swing.JTextArea area = new javax.swing.JTextArea(15,100);
+             area.setBounds(0, 0, 600, 500);
+             panel.add(area);
+             java.awt.Font font = new java.awt.Font("Arial",java.awt.Font.PLAIN,8);
+             area.setFont(font);
+             area.setLineWrap(true);
+             area.append("     ASOCIACION DE COMERCIANTES DEL MERCADO      |     ASOCIACION DE COMERCIANTES DEL MERCADO\n");
+             area.append("                               MODELO DE HUARAL                           |                     MODELO DE HUARAL           \n");
+             area.append("                       Fundado el 13 de Noviembre de 1996                    |             Fundado el 13 de Noviembre de 1996   \n");
+             area.append("                                 R.U.C. 20530606334                             |                    R.U.C. 20530606334             \n");
+             area.append("\n");
+             /*area.append("\u0020\u0020\u0020\u0020RECIBO Nº 202\u0020\u0020\u0020\u0020|\u0020\u0020\u0020\u0020RECIBO Nº 202\u0020\u0020\u0020\u0020\n");
+             area.append("\n");
+             area.append("\tFECHA:   02/04/2016                      |\tFECHA:   02/04/2016                      \n");
+             area.append("\tASOCIADO:AMBROCIO SERNAQUE, CHRISTIAN    |\tASOCIADO:AMBROCIO SERNAQUE, CHRISTIAN    \n");
+             area.append("\tSECTOR:  01                              |\tSECTOR:  01                              \n");
+             area.append("\tPUESTO:  9999                            |\tPUESTO:  9999                            \n");
+             area.append("\tGIRO:    BAZAR-ZAPATERIA                 |\tGIRO:    BAZAR-ZAPATERIA                 \n");
+             area.append("=============================================================================================\n");*/
+
+                      
+           //  System.out.println("Row Count is :" + tm.getRowCount());
+             //for (int i = 0; i < tm.getRowCount(); i++) {
+                 //area.append("\t" + tblRecord.getValueAt(i, 0) + "\t\t" + tblRecord.getValueAt(i, 1) + "\t" + tblRecord.getValueAt(i, 3) + "\t" + tblRecord.getValueAt(i, 5) );
+                 //area.append("\n--------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+                 area.append("\t  OneOneOne \t\tTwoTwoTwo\tThreeThreeThree\tFourFour" );
+                 area.append("\n--------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+
+
+            // }
+
+         //    area.append("\n\tTotal :\t"+lblTotal.getText()+"\tDiscounte :\t"+tfDisc.getText());
+          //    area.append("\n\tRecieve :\t"+tfRecieve.getText()+"\tFinal Total :\t"+lblFinal.getText());
+           //   area.append("\n\tBalance :\t"+lblBal.getText());
+
+             PrintUtilities pu = new PrintUtilities(area);
+             panel.setVisible(true);
+             pu.print();
+             
+             /*JFrame winMain = new JFrame("Mostrar / Ocultar Jpanel");
+             winMain.setLayout(new BorderLayout(4, 4));  
+        
+      
+             winMain.add(panel, BorderLayout.NORTH); 
+      
+             winMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+             winMain.setSize(360, 300);
+             winMain.setResizable(false);
+             winMain.setVisible(true);*/
+             
+         } catch (Exception e) {
+             System.out.println("Error in Print Button :" + e);
+         }
+
 	}
 }
