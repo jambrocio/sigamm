@@ -1,33 +1,16 @@
 package pe.com.sigamm.busImpl;
 
-import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import javax.annotation.Resource;
-import javax.print.Doc;
-import javax.print.DocFlavor;
-import javax.print.DocPrintJob;
-import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
-import javax.print.SimpleDoc;
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.swing.JFrame;
 
 import org.apache.log4j.Logger;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Service;
-
-import br.com.adilson.util.Extenso;
-import br.com.adilson.util.PrinterMatrix;
 
 import com.google.gson.Gson;
 import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
@@ -36,7 +19,6 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.lowagie.text.Cell;
 
 import pe.com.sigamm.bean.ReporteReciboAguaSocio;
 import pe.com.sigamm.bus.ReciboAguaSocioBus;
