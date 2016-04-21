@@ -322,7 +322,8 @@ public class FacturacionController {
 		
 		Retorno retorno = facturacionBus.grabarServicioOtros(servicio, lista);
 		
-		String resultado = "{\"idServicioOtros\":" + retorno.getCodigo() + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + retorno.getMensaje() + "\"}";
+		//String resultado = "{\"idServicioOtros\":" + retorno.getCodigo() + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + retorno.getMensaje() + "\"}";
+		String resultado = "{\"idServicioOtros\":" + retorno.getCodigo() + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + retorno.getMensaje() + "\",\"codigoRetorno\":\"" + retorno.getIndicador() + "\"}";
 		
 		return resultado;
 		

@@ -8,6 +8,7 @@ public class ServicioOtrosCabecera {
 	String dniResponsable;
 	String nombreResponsable;
 	String servicioOtrosDetalle;
+	int importeSobrante;
 	
 	public int getCodigoUsuario() {
 		return codigoUsuario;
@@ -44,6 +45,12 @@ public class ServicioOtrosCabecera {
 	}
 	public void setServicioOtrosDetalle(String servicioOtrosDetalle) {
 		this.servicioOtrosDetalle = servicioOtrosDetalle;
-	} 
+	}
+	public int getImporteSobrante() {
+		return importeSobrante;
+	}
+	public void setImporteSobrante(int importeSobrante) {
+		this.importeSobrante = importeSobrante;
+	}
 	    
 }

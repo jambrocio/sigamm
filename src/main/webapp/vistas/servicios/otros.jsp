@@ -133,6 +133,7 @@ function guardar(){
 	parametros.codigoServicio		= $("#cboServicio").val();
 	parametros.dniResponsable 		= $("#dniAsociado").val();
 	parametros.nombreResponsable 	= $("#nombresAsociado").val();
+	parametros.importeSobrante 		= $("#importeSobrante").val();
 	
 	$("#tabla_otros tbody tr").each(function (item) {
 		var this_row = $(this);
@@ -140,10 +141,10 @@ function guardar(){
         nomServicioDetalle = $.trim(this_row.find('td:eq(1)').html());
         codBanios = $.trim(this_row.find('td:eq(2)').html());
         nomBanios = $.trim(this_row.find('td:eq(3)').html());
-        descRangos = $.trim(this_row.find('td:eq(4)').html());
         ranInicio = $.trim(this_row.find('td:eq(5)').html());
         ranFin = $.trim(this_row.find('td:eq(6)').html());
-       	
+        importe = $.trim(this_row.find('td:eq(7)').html());
+        
         //[{"codigoServicioDetalle":"Codigo Detalle","codigoBanio":"Codigo Baños","rangoInicio":"Rango","rangoFin":"Importe"},{"codigoServicioDetalle":"6","codigoBanio":"0","rangoInicio":"1234 - 1254","rangoFin":"0"},{"codigoServicioDetalle":"9","codigoBanio":"0","rangoInicio":"1234 - 1254","rangoFin":"0"}]
         
         if(codServicioDetalle != "Codigo Detalle"){
@@ -166,7 +167,7 @@ function guardar(){
 	    cache : false,
 	    data: parametros,
 	    success: function(result){
-	            
+	        
 	        if(result.camposObligatorios.length == 0){
                 
 	        	imagen = "";
@@ -190,6 +191,16 @@ function guardar(){
 					time: ''
 				});
 	            
+	            cargarServiciosOtros();
+	            limpiarTablaOtros();
+	            calculoTotal();
+	            cargarServiciosDetalle();
+	            
+	            $("#rangosInicio").val("");
+	            $("#rangosFin").val("");
+	            $("#importeSobrante").val("");
+	            $("#cboBanios").val(0);
+	            $("#cboBanios").attr("disabled", true);
 			}else{
                 	
             	colorEtiquetas();
@@ -356,8 +367,9 @@ function agregarDetalleServicio(){
         nomServicioDetalle = $.trim(this_row.find('td:eq(1)').html());
         codBanios = $.trim(this_row.find('td:eq(2)').html());
         nomBanios = $.trim(this_row.find('td:eq(3)').html());
-        ranInicio = $.trim(this_row.find('td:eq(4)').html());
-        ranFin = $.trim(this_row.find('td:eq(5)').html());
+        ranInicio = $.trim(this_row.find('td:eq(5)').html());
+        ranFin = $.trim(this_row.find('td:eq(6)').html());
+        importe = $.trim(this_row.find('td:eq(7)').html());
         
         if(codServicioDetalle == codigoServicioDetalle){
         	cantidadErrores == 1;
@@ -375,12 +387,15 @@ function agregarDetalleServicio(){
 				"<td align='center'>" + rangoInicio + " - " + rangoFin + "</td>" +
 				"<td align='center' style='display:none;'>" + rangoInicio + "</td>" +
 				"<td align='center' style='display:none;'>" + rangoFin + "</td>" +
-				"<td align='center'>" + currencyFormat(total) + "</td>" +
+				"<td align='right'>" + currencyFormat(total) + "</td>" +
 				"<td align='center'>" +
 				"<button type='button' class='boton btnEliminar' onclick='eliminarFila(this);'>" +
 					"<img src='/"+ruta+"/recursos/images/icons/eliminar_16x16.png' alt='Eliminar' />" +
 				"</button></td>" +
 			"</tr>");
+		
+		calculoTotal();
+		
 	}
 }
 
@@ -398,9 +413,9 @@ function limpiarTablaOtros(){
 	var tabla = document.getElementById("tabla_otros");
 	var filasTabla = tabla.rows.length;
 	
-	for(var i = 0; i < filasTabla; i++) {
+	for(var i = 0; i < filasTabla - 1; i++) {
 		
-		if(i > 0){
+ 		if(i > 0){
  			
  			tabla.deleteRow(1);
  			
@@ -455,13 +470,13 @@ function cargarServiciosOtros(){
 			name : 'nombreResponsable',
 			index: 'nombreResponsable',
 			sortable:false,
-			width: 100,
+			width: 200,
 			align: 'left'
 		},{
 			name : 'nombreDetalle',
 			index: 'nombreDetalle',
 			sortable:false,
-			width: 100,
+			width: 200,
 			align: 'left'
 		},{
 			name : 'rangoInicio',
@@ -479,13 +494,13 @@ function cargarServiciosOtros(){
 			name : 'importeTotal',
 			index: 'importeTotal',
 			sortable:false,
-			width: 300,
+			width: 100,
 			align: 'center'
 		},{
 			name : 'fechaRegistro',
 			index: 'fechaRegistro',
 			sortable:false,
-			width: 100,
+			width: 150,
 			align: 'right'
 		},{					
 			name:'codigoServicioOtros',
@@ -508,6 +523,40 @@ function cargarServiciosOtros(){
 	}).trigger('reloadGrid');
 }
 
+function calculoTotal(){
+	
+	var total = 0;
+	/*
+    $("#tabla_resultado tbody tr").each(function (item) {
+        var this_row = $(this);
+        //var monto = $.trim(this_row.find('td:eq(3)').html());
+        var monto = $.trim(this_row.find('td:eq(4)').html());
+		if(monto != "" && monto != "Monto"){
+			//console.log("[" + monto + "]");
+			total = parseFloat(total) + parseFloat(monto);
+		}
+    });
+    */
+    $("#tabla_otros tbody tr").each(function (item) {
+        var this_row = $(this);
+        codServicioDetalle = $.trim(this_row.find('td:eq(0)').html());
+        nomServicioDetalle = $.trim(this_row.find('td:eq(1)').html());
+        codBanios = $.trim(this_row.find('td:eq(2)').html());
+        nomBanios = $.trim(this_row.find('td:eq(3)').html());
+        ranInicio = $.trim(this_row.find('td:eq(5)').html());
+        ranFin = $.trim(this_row.find('td:eq(6)').html());
+        importe = $.trim(this_row.find('td:eq(7)').html());
+        
+        if(codServicioDetalle != "Codigo Detalle"){
+        	//total = total + importe;
+        	total = parseFloat(total) + parseFloat(importe);
+        	
+        	//console.log("Total : " + total);
+        }
+	});
+	
+	$("#totales").html(currencyFormat(total));
+}
 </script>
 </head>
 <body id="body">
@@ -649,17 +698,27 @@ function cargarServiciosOtros(){
 						<tr>
 							<td colspan="7">
 								<table border="1" width="100%" id="tabla_otros" cellspacing="5" cellpadding="5" class="tabla">
-									<tr>
-										<td align="center" class="tablaCabecera" width="20px" style="display:none;">Codigo Detalle</td>
-										<td align="center" class="tablaCabecera">Detalle</td>
-										<td align="center" class="tablaCabecera" width="20px" style="display:none;">Codigo Baños</td>
-										<td align="center" class="tablaCabecera">Baños</td>
-										<td align="center" class="tablaCabecera">Rango</td>
-										<td align="center" class="tablaCabecera" width="20px" style="display:none;">Rango Inicio</td>
-										<td align="center" class="tablaCabecera" width="20px" style="display:none;">Rango Fin</td>
-										<td align="center" class="tablaCabecera" width="100px">Importe</td>
-										<td align="center" class="tablaCabecera" width="20px">Acciones</td>
-									</tr>
+									<tbody>
+										<tr>
+											<td align="center" class="tablaCabecera" width="20px" style="display:none;">Codigo Detalle</td>
+											<td align="center" class="tablaCabecera">Detalle</td>
+											<td align="center" class="tablaCabecera" width="20px" style="display:none;">Codigo Baños</td>
+											<td align="center" class="tablaCabecera">Baños</td>
+											<td align="center" class="tablaCabecera">Rango</td>
+											<td align="center" class="tablaCabecera" width="20px" style="display:none;">Rango Inicio</td>
+											<td align="center" class="tablaCabecera" width="20px" style="display:none;">Rango Fin</td>
+											<td align="center" class="tablaCabecera" width="100px">Importe</td>
+											<td align="center" class="tablaCabecera" width="20px">Acciones</td>
+										</tr>
+									</tbody>
+									<tfoot>
+										<tr>
+											<td colspan="2">&nbsp;</td>
+											<td align="center"><b>Total :</b></td>
+											<td align="right"><b><span id="totales" /></b></td>
+											<td align="center"></td>
+										</tr>
+									</tfoot>
 								</table>
 							</td>
 						</tr>
@@ -667,9 +726,15 @@ function cargarServiciosOtros(){
 							<td colspan="7">&nbsp;</td>
 						</tr>
 						<tr>
-							<td colspan="4">&nbsp;</td>
-							<td colspan="3">
-								<div id="servicios" />
+							<td colspan="7" valign="top">
+								<table border="0" width="100%" cellpadding="0" cellspacing="0">
+									<tr>
+										<td width="50%">&nbsp;</td>
+										<td align="right" valign="middle"><b>Importe Sobrante</b>&nbsp;&nbsp;</td>
+										<td valign="middle">&nbsp;:&nbsp;</td>
+										<td valign="middle"><input type="text" id="importeSobrante" class="form-control" maxlength="8" style="width:100px"/></td>
+									</tr>
+								</table>
 							</td>
 						</tr>
 						<tr>
