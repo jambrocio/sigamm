@@ -15,6 +15,9 @@ public class ListaServiciosOtros {
 	int rangoInicio;
 	int rangoFin;
 	String importeTotal;
+	int codigoServOtrosAlt;
+	String rangos;
+	String asociado;
 	
 	public int getCodigoServicioOtros() {
 		return codigoServicioOtros;
@@ -94,5 +97,23 @@ public class ListaServiciosOtros {
 	public void setImporteTotal(String importeTotal) {
 		this.importeTotal = importeTotal;
 	}
-	
+	public int getCodigoServOtrosAlt() {
+		return codigoServOtrosAlt;
+	}
+	public void setCodigoServOtrosAlt(int codigoServOtrosAlt) {
+		this.codigoServOtrosAlt = codigoServOtrosAlt;
+	}
+	public String getRangos() {
+		return rangos;
+	}
+	public void setRangos(String rangos) {
+		this.rangos = rangos;
+	}
+	public String getAsociado() {
+		return asociado;
+	}
+	public void setAsociado(String asociado) {
+		this.asociado = asociado;
+	}
+			
 }

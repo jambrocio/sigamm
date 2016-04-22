@@ -352,4 +352,26 @@ public class FacturacionController {
 		
 		return response;
 	}
+	
+	@RequestMapping(value = "/reporte-servicios-otros-detalle.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody ResponseListBean<ListaServiciosOtros> reporteServiciosOtrosDetalle(
+			@RequestParam(value = "codigoServicioOtros", defaultValue = "0") Integer codigoServicioOtros){
+		
+		ResponseListBean<ListaServiciosOtros> response = new ResponseListBean<ListaServiciosOtros>();
+		
+		//ListaServiciosOtros reporteServicioOtros = facturacionBus.reporteEgreso(pagina, registros, codigoEgreso);
+		ReporteServiciosOtros reporteServicioOtros = facturacionBus.listarServiciosOtrosDetalle(codigoServicioOtros);
+		
+		Integer totalEgreso = reporteServicioOtros.getTotalRegistros(); 
+		
+		response.setPage(1);
+		response.setRecords(totalEgreso);
+		
+		//total de paginas a mostrar
+		response.setTotal(OperadoresUtil.obtenerCociente(totalEgreso, 1));
+				
+		response.setRows(reporteServicioOtros.getListaServiciosOtros());
+		
+		return response;
+	}
 }

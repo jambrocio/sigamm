@@ -161,5 +161,11 @@ public class FacturacionBusImpl implements FacturacionBus {
 		
 		return facturacionDao.listarServiciosOtros(pagina, registros, codigoServicio);
 	}
+
+	@Override
+	public ReporteServiciosOtros listarServiciosOtrosDetalle(int codigoServicioOtros) {
+		
+		return facturacionDao.listarServiciosOtrosDetalle(codigoServicioOtros);
+	}
 	
 }

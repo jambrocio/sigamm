@@ -453,12 +453,24 @@ function cargarServiciosOtros(){
 		mtype: 'POST',
 		height: 'auto',
 		width: 'auto',
-		colNames : ['Servicio', 'DNI', 'Responsable', 'Detalle', 'R.Inicio', 'R.Fin', 'Importe', 'F.Registro', 'Opciones'],
+		colNames : ['Código','Servicio', 'Asociado', 'DNI', 'Responsable', 'Importe', 'F.Registro', 'Opciones'],
 		colModel : [{
+			name : 'codigoServOtrosAlt',
+			index: 'codigoServOtrosAlt',
+			sortable:true,
+			width: 50,
+			align: 'left'						
+		},{
 			name : 'nombreServicio',
 			index: 'nombreServicio',
 			sortable:true,
 			width: 100,
+			align: 'left'						
+		},{
+			name : 'asociado',
+			index: 'asociado',
+			sortable:true,
+			width: 200,
 			align: 'left'						
 		},{
 			name : 'dniResponsable',
@@ -473,34 +485,16 @@ function cargarServiciosOtros(){
 			width: 200,
 			align: 'left'
 		},{
-			name : 'nombreDetalle',
-			index: 'nombreDetalle',
-			sortable:false,
-			width: 200,
-			align: 'left'
-		},{
-			name : 'rangoInicio',
-			index: 'rangoInicio',
-			sortable:false,
-			width: 100,
-			align: 'center'
-		},{
-			name : 'rangoFin',
-			index: 'rangoFin',
-			sortable:false,
-			width: 100,
-			align: 'center'
-		},{
 			name : 'importeTotal',
 			index: 'importeTotal',
 			sortable:false,
-			width: 100,
+			width: 180,
 			align: 'center'
 		},{
 			name : 'fechaRegistro',
 			index: 'fechaRegistro',
 			sortable:false,
-			width: 150,
+			width: 100,
 			align: 'right'
 		},{					
 			name:'codigoServicioOtros',
@@ -518,8 +512,63 @@ function cargarServiciosOtros(){
 		rownumbers: true,
 		viewrecords : true,
 		sortorder : "codigoServicioOtros",				
-		caption : "Servicios Otros"				
-
+		caption : "Servicios Otros",				
+		
+		multiselect: false,
+		subGrid: true,
+		subGridRowExpanded: function(subgrid_id, row_id) {
+			// we pass two parameters
+			// subgrid_id is a id of the div tag created whitin a table data
+			// the id of this elemenet is a combination of the "sg_" + id of the row
+			// the row_id is the id of the row
+			// If we wan to pass additinal parameters to the url we can use
+			// a method getRowData(row_id) - which returns associative array in type name-value
+			// here we can easy construct the flowing
+			
+			var data = $("#grilla").getRowData(row_id);
+			var busqueda = data.codigoServOtrosAlt;
+			
+			var subgrid_table_id, pager_id;
+			subgrid_table_id = subgrid_id+"_t";
+			pager_id = "p_"+subgrid_table_id;
+			$("#"+subgrid_id).html("<table id='"+subgrid_table_id+"' class='scroll'></table><div id='"+pager_id+"' class='scroll'></div>");
+			jQuery("#"+subgrid_table_id).jqGrid({
+				url:"reporte-servicios-otros-detalle.json?codigoServicioOtros=" + busqueda,
+				datatype : "json",
+				mtype: 'POST',
+				colNames: ['Detalle', 'Rangos','Importe'],
+				colModel: [{
+					name:"nombreDetalle",
+					index:"nombreDetalle",
+					width:300,key:true
+				},{
+					name:"rangos",
+					index:"rangos",
+					width:130,
+					align: 'center'
+				},{
+					name:"importeTotal",
+					index:"importeTotal",
+					width:130,
+					align: 'right'
+				}],
+			   	rowNum:20,
+			   	pager: pager_id,
+			   	sortname: 'num',
+			    sortorder: "asc",
+			    height: '100%'
+			});
+			//jQuery("#"+subgrid_table_id).jqGrid('navGrid',"#"+pager_id,{edit:false,add:false,del:false})
+			
+			//alert("Row_id : " + row_id + " - codigoServicioOtros : " + data.codigoServicio);
+		}/*,
+		subGridRowColapsed: function(subgrid_id, row_id) {
+			// this function is called before removing the data
+			//var subgrid_table_id;
+			//subgrid_table_id = subgrid_id+"_t";
+			//jQuery("#"+subgrid_table_id).remove();
+		}*/
+    	
 	}).trigger('reloadGrid');
 }
 
@@ -623,7 +672,7 @@ function calculoTotal(){
 						</tr>
 						<tr>
 							<td width="10px">&nbsp;</td>
-							<td><span id="lblfecnac"><b>Responsable (*)</b></span></td>
+							<td><span id="lblfecnac"><b>Asociado (*)</b></span></td>
 							<td width="5px">&nbsp;</td>
 							<td><b>:</b></td>
 							<td width="5px">&nbsp;</td>
@@ -632,7 +681,7 @@ function calculoTotal(){
 						</tr>
 						<tr>
 							<td width="10px">&nbsp;</td>
-							<td><span id="lblfecingreso"><b>DNI Asociado (*)</b></span></td>
+							<td><span id="lblfecingreso"><b>DNI Responsable (*)</b></span></td>
 							<td width="5px">&nbsp;</td>
 							<td><b>:</b></td>
 							<td width="5px">&nbsp;</td>
@@ -641,7 +690,7 @@ function calculoTotal(){
 						</tr>
 						<tr>
 							<td width="10px">&nbsp;</td>
-							<td><span id="lbltelefono"><b>Nombres Asociado</b></span></td>
+							<td><span id="lbltelefono"><b>Nombres Responsable</b></span></td>
 							<td width="5px">&nbsp;</td>
 							<td><b>:</b></td>
 							<td width="5px">&nbsp;</td>

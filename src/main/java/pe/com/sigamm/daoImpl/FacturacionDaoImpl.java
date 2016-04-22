@@ -716,4 +716,33 @@ public class FacturacionDaoImpl implements FacturacionDao {
 		return  reporte;
 	}
 
+	@Override
+	public ReporteServiciosOtros listarServiciosOtrosDetalle(int codigoServicioOtros) {
+		
+		ReporteServiciosOtros reporte = new ReporteServiciosOtros();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_LISTAR_OTROS_SERV_DET").declareParameters(
+					new SqlParameter("vi_codigo_servicio_otros", 		Types.INTEGER),
+					new SqlOutParameter("vo_result", OracleTypes.CURSOR,new BeanPropertyRowMapper(ListaServiciosOtros.class)));
+			
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_servicio_otros", 	codigoServicioOtros);
+			
+			Map<String,Object> results = jdbcCall.execute(parametros);
+			//int totalRegistros = (Integer) results.get("vo_total_registros");
+			List<ListaServiciosOtros> lista = (List<ListaServiciosOtros>) results.get("vo_result");
+			
+			reporte.setTotalRegistros(1);
+			reporte.setListaServiciosOtros(lista);
+		
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return  reporte;
+		
+	}
+
 }

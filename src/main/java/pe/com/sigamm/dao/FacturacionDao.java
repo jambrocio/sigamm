@@ -55,4 +55,6 @@ public interface FacturacionDao {
 	
 	public ReporteServiciosOtros listarServiciosOtros(int pagina, int registros, int codigoServicio);
 	
+	public ReporteServiciosOtros listarServiciosOtrosDetalle(int codigoServicioOtros);
+	
 }
