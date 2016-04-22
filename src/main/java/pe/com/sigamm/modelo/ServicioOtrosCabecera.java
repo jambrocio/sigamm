@@ -8,8 +8,9 @@ public class ServicioOtrosCabecera {
 	String dniResponsable;
 	String nombreResponsable;
 	String servicioOtrosDetalle;
-	int importeSobrante;
-	
+	String importeSobrante;
+	String observacion;
+
 	public int getCodigoUsuario() {
 		return codigoUsuario;
 	}
@@ -46,11 +47,17 @@ public class ServicioOtrosCabecera {
 	public void setServicioOtrosDetalle(String servicioOtrosDetalle) {
 		this.servicioOtrosDetalle = servicioOtrosDetalle;
 	}
-	public int getImporteSobrante() {
+	public String getImporteSobrante() {
 		return importeSobrante;
 	}
-	public void setImporteSobrante(int importeSobrante) {
+	public void setImporteSobrante(String importeSobrante) {
 		this.importeSobrante = importeSobrante;
 	}
-	    
+	public String getObservacion() {
+		return observacion;
+	}
+	public void setObservacion(String observacion) {
+		this.observacion = observacion;
+	}
+			    
 }

@@ -134,6 +134,7 @@ function guardar(){
 	parametros.dniResponsable 		= $("#dniAsociado").val();
 	parametros.nombreResponsable 	= $("#nombresAsociado").val();
 	parametros.importeSobrante 		= $("#importeSobrante").val();
+	parametros.observacion	 		= $("#observacion").val();
 	
 	$("#tabla_otros tbody tr").each(function (item) {
 		var this_row = $(this);
@@ -324,7 +325,7 @@ function agregarDetalleServicio(){
 	
 	inicioImporte = nombreServicioDetalle.indexOf(" - ");
 	montoImporte = nombreServicioDetalle.substring(inicioImporte + 3);
-	total = (rangoFin - rangoInicio) * montoImporte;
+	total = (rangoFin - rangoInicio + 1) * montoImporte;
 	
 	//alert("Importe : [" + montoImporte + "] - Total : [" + total + "]");
 	
@@ -406,6 +407,7 @@ function eliminarFila(t){
     var table = tr.parentNode;
 	table.removeChild(tr);
 	
+	calculoTotal();
 }
 
 function limpiarTablaOtros(){
@@ -536,7 +538,7 @@ function cargarServiciosOtros(){
 				url:"reporte-servicios-otros-detalle.json?codigoServicioOtros=" + busqueda,
 				datatype : "json",
 				mtype: 'POST',
-				colNames: ['Detalle', 'Rangos','Importe'],
+				colNames: ['Detalle', 'Rangos','Importe', 'Observación'],
 				colModel: [{
 					name:"nombreDetalle",
 					index:"nombreDetalle",
@@ -551,6 +553,10 @@ function cargarServiciosOtros(){
 					index:"importeTotal",
 					width:130,
 					align: 'right'
+				},{
+					name:"observacion",
+					index:"observacion",
+					align: 'left'
 				}],
 			   	rowNum:20,
 			   	pager: pager_id,
@@ -781,10 +787,22 @@ function calculoTotal(){
 										<td width="50%">&nbsp;</td>
 										<td align="right" valign="middle"><b>Importe Sobrante</b>&nbsp;&nbsp;</td>
 										<td valign="middle">&nbsp;:&nbsp;</td>
-										<td valign="middle"><input type="text" id="importeSobrante" class="form-control" maxlength="8" style="width:100px"/></td>
+										<td valign="middle"><input type="text" id="importeSobrante" class="form-control" maxlength="9" style="width:100px"/></td>
 									</tr>
 								</table>
 							</td>
+						</tr>
+						<tr>
+							<td colspan="7">&nbsp;</td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td><span id="lblobservacion"><b>Observación</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td><textarea class="form-control" rows="5" id="observacion" maxlength="100"></textarea></td>
+							<td valign="top"><img id="lblobservacion-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 						</tr>
 						<tr>
 							<td colspan="7">&nbsp;</td>
