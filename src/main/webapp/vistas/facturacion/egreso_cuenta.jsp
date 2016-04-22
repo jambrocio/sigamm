@@ -325,9 +325,10 @@ function editarOpeban(id, tipoOperacion, monto, fecha, hora, responsable, vouche
 function nuevaOperacionBancaria(){
 	
 	colorEtiquetas();
- 	inicializaValores();
+ 	//inicializaValores();
 	cargarCuentasBancarias();
 	cargarTipoOperacion();
+ 	$("#id").val('0');
 }
 
 
