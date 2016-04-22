@@ -423,7 +423,7 @@ function montoTotalDiario(){
 			<button type="button" class="btn btn-primary" onclick="buscarPuesto()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 			</button>&nbsp;&nbsp;
-			<button type="button" class="btn btn-primary" class="boton btnNuevo" onclick="nuevoUsuario()">
+			<button type="button" class="btn btn-primary" class="boton btnNuevo">
 				<a href="<c:url value="/cobro"/>">&nbsp;Nuevo</a>
 			</button>
 		</td>
