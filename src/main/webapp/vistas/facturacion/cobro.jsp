@@ -14,6 +14,13 @@
         font-size:12px;    
     }
     
+    .tamanioPrinter
+    {
+        color:black;
+        font-family: Calibri;
+		font-size: 12px;    
+    }
+    
     .modal-header-primary {
 		color:#fff;
 		padding:9px 15px;
@@ -196,8 +203,8 @@ function guardar(){
 			        if(monto != "Monto" || codPuesto != "Cod.Puesto" || codDeuda != "Cod.Concepto"){
 				    	dataTabla += "<tr>";
 				    	dataTabla += "<td>&nbsp;</td>";
-				    	dataTabla += "<td><b>" + tipoConcepto + "</b><br>" + desConcepto + "</td>";
-				    	dataTabla += "<td align='right'>" + monto + "</td>";
+				    	dataTabla += "<td class='tamanioPrinter'><b>" + tipoConcepto + "</b><br>" + desConcepto + "</td>";
+				    	dataTabla += "<td align='right' class='tamanioPrinter'>" + monto + "</td>";
 				    	dataTabla += "</tr>";
 			        }
 			        cantidadLineas = cantidadLineas + 1; 
@@ -220,15 +227,15 @@ function guardar(){
 				dataTabla1 = dataTabla;
 				dataTabla1 += "<tr>";
 		    	dataTabla1 += "<td>&nbsp;</td>";
-		    	dataTabla1 += "<td><b>TOTAL</b></td>";
-		    	dataTabla1 += "<td align='right'><b><span id='totalImpresion' /></b></td>";
+		    	dataTabla1 += "<td class='tamanioPrinter'><b>TOTAL</b></td>";
+		    	dataTabla1 += "<td align='right' class='tamanioPrinter'><b><span id='totalImpresion'/></b></td>";
 		    	dataTabla1 += "</tr>";
 		    	
 		    	dataTabla2 = dataTabla;
 		    	dataTabla2 += "<tr>";
 		    	dataTabla2 += "<td>&nbsp;</td>";
-		    	dataTabla2 += "<td><b>TOTAL</b></td>";
-		    	dataTabla2 += "<td align='right'><b><span id='totalImpresion2' /></b></td>";
+		    	dataTabla2 += "<td class='tamanioPrinter'><b>TOTAL</b></td>";
+		    	dataTabla2 += "<td align='right' class='tamanioPrinter'><b><span id='totalImpresion2'/></b></td>";
 		    	dataTabla2 += "</tr>";
 		    			    	
 				$('#tablaFacturacionDetalle tbody tr:last').after(dataTabla1);
@@ -625,41 +632,41 @@ function imprimir(){
 								<div class="marca-de-agua"> 
 								<table border="0" width="100%" >
 									<tr>
-										<td colspan="3" align="center"><b>ASOCIACIÓN DE COMERCIANTES DEL MERCADO<BR>MODELO DE HUARAL<BR>Fundado el 13 de Noviembre de 1996<BR>R.U.C. 20530606334</b></td>
+										<td colspan="3" align="center" class="tamanioPrinter"><b>ASOCIACIÓN DE COMERCIANTES DEL MERCADO<BR>MODELO DE HUARAL<BR>Fundado el 13 de Noviembre de 1996<BR>R.U.C. 20530606334</b></td>
 									</tr>
 									<tr>
 										<td colspan="3">&nbsp;</td>
 									</tr>
 									<tr>
-										<td colspan="3" align="center"><b>RECIBO PROVISIONAL N° <span id="correlativo" /></b></td>
+										<td colspan="3" align="center" class="tamanioPrinter"><b>RECIBO PROVISIONAL N° <span id="correlativo" /></b></td>
 									</tr>
 									<tr>
 										<td colspan="3">&nbsp;</td>
 									</tr>
 									<tr>
-										<td width="100px"><b>FECHA</b></td>
+										<td width="100px" class="tamanioPrinter"><b>FECHA</b></td>
 										<td><b>:</b></td>
-										<td><span id="printFecha" /></td>
+										<td class="tamanioPrinter"><span id="printFecha"/></td>
 									</tr>
 									<tr>
-										<td><b>ASOCIADO</b></td>
+										<td class="tamanioPrinter"><b>ASOCIADO</b></td>
 										<td><b>:</b></td>
-										<td><span id="printAsociado" /></td>
+										<td class="tamanioPrinter"><span id="printAsociado"/></td>
 									</tr>
 									<tr>
-										<td><b>SECTOR</b></td>
+										<td class="tamanioPrinter"><b>SECTOR</b></td>
 										<td><b>:</b></td>
-										<td><span id="printSector" /></td>
+										<td class="tamanioPrinter"><span id="printSector"/></td>
 									</tr>
 									<tr>
-										<td><b>PUESTO</b></td>
+										<td class="tamanioPrinter"><b>PUESTO</b></td>
 										<td><b>:</b></td>
-										<td><span id="printPuesto" /></td>
+										<td class="tamanioPrinter"><span id="printPuesto"/></td>
 									</tr>
 									<tr>
-										<td><b>GIRO</b></td>
+										<td class="tamanioPrinter"><b>GIRO</b></td>
 										<td><b>:</b></td>
-										<td><span id="printGiro" /></td>
+										<td class="tamanioPrinter"><span id="printGiro"/></td>
 									</tr>
 									<tr>
 										<td colspan="3">&nbsp;</td>
@@ -668,9 +675,9 @@ function imprimir(){
 										<td colspan="3">
 											<table border="1" width="100%" cellspacing="5" cellpadding="5" class="tabla" id="tablaFacturacionDetalle">
 												<tr>
-													<td width="80px" align="center"><b>CANT.</b></td>
-													<td align="center"><b>DESCRIPCION</b></td>
-													<td width="100px" align="center"><b>IMPORTE</b></td>
+													<td width="80px" align="center" class="tamanioPrinter"><b>CANT.</b></td>
+													<td align="center" class="tamanioPrinter"><b>DESCRIPCION</b></td>
+													<td width="100px" align="center" class="tamanioPrinter"><b>IMPORTE</b></td>
 												</tr>
 											</table>
 										</td>
@@ -679,7 +686,7 @@ function imprimir(){
 										<td colspan="3">&nbsp;</td>
 									</tr>
 									<tr>
-										<td colspan="3"><b>SON : <span id="totalLetras" /></b></td>
+										<td colspan="3" class="tamanioPrinter"><b>SON : <span id="totalLetras" /></b></td>
 									</tr>
 								</table>
 								</div>
@@ -688,41 +695,41 @@ function imprimir(){
 							<td width="48%" valign="top">
 								<table border="0" width="100%">
 									<tr>
-										<td colspan="3" align="center"><b>ASOCIACIÓN DE COMERCIANTES DEL MERCADO<BR>MODELO DE HUARAL<BR>Fundado el 13 de Noviembre de 1996<BR>R.U.C. 20530606334</b></td>
+										<td colspan="3" align="center" class="tamanioPrinter"><b>ASOCIACIÓN DE COMERCIANTES DEL MERCADO<BR>MODELO DE HUARAL<BR>Fundado el 13 de Noviembre de 1996<BR>R.U.C. 20530606334</b></td>
 									</tr>
 									<tr>
 										<td colspan="3">&nbsp;</td>
 									</tr>
 									<tr>
-										<td colspan="3" align="center"><b>RECIBO PROVISIONAL N° <span id="correlativo2" /></b></td>
+										<td colspan="3" align="center" class="tamanioPrinter"><b>RECIBO PROVISIONAL N° <span id="correlativo2" /></b></td>
 									</tr>
 									<tr>
 										<td colspan="3">&nbsp;</td>
 									</tr>
 									<tr>
-										<td width="100px"><b>FECHA</b></td>
+										<td width="100px" class="tamanioPrinter"><b>FECHA</b></td>
 										<td><b>:</b></td>
-										<td><span id="printFecha2" /></td>
+										<td class="tamanioPrinter"><span id="printFecha2"/></td>
 									</tr>
 									<tr>
-										<td><b>ASOCIADO</b></td>
+										<td class="tamanioPrinter"><b>ASOCIADO</b></td>
 										<td><b>:</b></td>
-										<td><span id="printAsociado2" /></td>
+										<td class="tamanioPrinter"><span id="printAsociado2"/></td>
 									</tr>
 									<tr>
-										<td><b>SECTOR</b></td>
+										<td class="tamanioPrinter"><b>SECTOR</b></td>
 										<td><b>:</b></td>
-										<td><span id="printSector2" /></td>
+										<td class="tamanioPrinter"><span id="printSector2"/></td>
 									</tr>
 									<tr>
-										<td><b>PUESTO</b></td>
+										<td class="tamanioPrinter"><b>PUESTO</b></td>
 										<td><b>:</b></td>
-										<td><span id="printPuesto2" /></td>
+										<td class="tamanioPrinter"><span id="printPuesto2"/></td>
 									</tr>
 									<tr>
-										<td><b>GIRO</b></td>
+										<td class="tamanioPrinter"><b>GIRO</b></td>
 										<td><b>:</b></td>
-										<td><span id="printGiro2" /></td>
+										<td class="tamanioPrinter"><span id="printGiro2"/></td>
 									</tr>
 									<tr>
 										<td colspan="3">&nbsp;</td>
@@ -731,9 +738,9 @@ function imprimir(){
 										<td colspan="3">
 											<table border="1" width="100%" cellspacing="5" cellpadding="5" class="tabla" id="tablaFacturacionDetalle2">
 												<tr>
-													<td width="80px" align="center"><b>CANT.</b></td>
-													<td align="center"><b>DESCRIPCION</b></td>
-													<td width="100px" align="center"><b>IMPORTE</b></td>
+													<td width="80px" align="center" class="tamanioPrinter"><b>CANT.</b></td>
+													<td align="center" class="tamanioPrinter"><b>DESCRIPCION</b></td>
+													<td width="100px" align="center" class="tamanioPrinter"><b>IMPORTE</b></td>
 												</tr>
 											</table>
 										</td>
@@ -742,7 +749,7 @@ function imprimir(){
 										<td colspan="3">&nbsp;</td>
 									</tr>
 									<tr>
-										<td colspan="3"><b>SON : <span id="totalLetras2" /></b></td>
+										<td colspan="3" class="tamanioPrinter"><b>SON : <span id="totalLetras2" /></b></td>
 									</tr>
 								</table>
 							</td>
