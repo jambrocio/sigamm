@@ -56,3 +56,6 @@ Temporary Items
 *.class
 src/main/resources/spring/application-config.xml
 target/classes/pe/com/sigamm/controller/ReciboLuzController.class
+*.xml
+
+src/main/resources/spring/application-config.xml
