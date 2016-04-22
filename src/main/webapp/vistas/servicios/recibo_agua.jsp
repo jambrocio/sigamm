@@ -114,7 +114,7 @@ $(document).ready(function(){
 	$("#consumoMesSocioTrabado").val('0');
 	$("#alcantarilladoSocio").val('0');
 	$("#totalSocio").text('0');
-
+	$('#suspendido').val('0');
 	
 	var input = document.querySelectorAll("label.check input");
 
@@ -123,11 +123,18 @@ $(document).ready(function(){
 	  
 	    if(el.checked) {
 	      el.parentNode.classList.add('c_on');
-	    }
+	    } 
 	  
-	    el.addEventListener("click", function(event) {
-	      event.preventDefault();
-	      el.parentNode.classList.toggle('c_on');
+	    el.addEventListener("click", function(event) {	    	
+	      	event.preventDefault();	      
+ 	      	el.parentNode.classList.toggle('c_on');
+	      	/*$("#consumoMesSocio").val('0');
+		  	$("#consumoMesSocioTrabado").val('0');
+		  	$("#alcantarilladoSocio").val('0');
+		  	$("#mantenimientoSocio").val('0');
+		  	$("#deudaAnteriorSocio").val('0');
+		  	$("#totalSocio").text('0');*/
+
 	    }, false);
 	  });
 	}
@@ -737,6 +744,9 @@ function editarReciboAguaXSocio(original, puesto){
 		            	$("#mantenimientoSocio").val(val.servicioMantenimiento);
 		            	$("#deudaAnteriorSocio").val(val.deudaAnterior);
 		            	
+		            	$("#nropuesto").text(val.nroPuesto);
+		            	$("#codigorecibo").text(val.codigoRecibo);
+		            	
 		            	/*alert(val.codigoServicioDetalle);
 		            	alert(val.total);*/
 		            	if (val.suspendido==1){
@@ -963,12 +973,14 @@ function generarReciboAguaXSocio(sector, puesto, codigoRecibo){
 	$("#sectorSocio").text(sector);
 	$("#puestoSocio").text(puesto);									
 	$("#reciboOriginal").text(codigoRecibo);
+	$("#correlativo").val('0');
 	$("#consumoMesSocio").val('0');
 	$("#consumoMesSocioTrabado").val('0');
 	$("#alcantarilladoSocio").val('0');
 	$("#mantenimientoSocio").val('0');
 	$("#deudaAnteriorSocio").val('0');
 	$("#totalSocio").text('0');
+	$('#suspendido').val('0');
 	
 	colorEtiquetas();
 	cargarDatosReciboAguaSocio(sector, puesto, codigoRecibo);
@@ -1308,6 +1320,7 @@ function exportarAguaSocio(){
 </head>
 <body id="body">
 <input type="hidden" id="codigorecibo" />
+<input type="hidden" id="nropuesto" />
 <input type="hidden" id="codigoReciboAgua" />
 <input type="hidden" id="codigoSocio" />
 <input type="hidden" id="codigoServicioDetalle" />
