@@ -101,19 +101,19 @@ $(document).ready(function(){
 	
 	$("#cboBanios").attr("disabled", true);
 	
-	$("#fecha").datepicker({
-        dateFormat: 'MM yy',
+	$("#fecha").datepicker(
+    {   
         changeMonth: true,
-        changeYear: true,
-        showButtonPanel: true,
-		regional: 'es',
-        onClose: function(dateText, inst) {  
-            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
-            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
-            $(this).val($.datepicker.formatDate('dd/mm/yy', new Date(year, month, 1)));
-        }
+        changeYear: false,
+        numberOfMonths: 1,
+        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo',
+            'Junio', 'Julio', 'Agosto', 'Septiembre',
+            'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr',
+            'May', 'Jun', 'Jul', 'Ago',
+            'Sep', 'Oct', 'Nov', 'Dic'] 
     });
-	
 });
 
 function colorEtiquetas(){
@@ -150,6 +150,14 @@ function nuevoOtroServicio(){
 	$("#responsable").val("");
 	$("#dniAsociado").val("");
 	$("#nombresAsociado").val("");
+	
+	$("#rangosInicio").val("");
+    $("#rangosFin").val("");
+    $("#observacion").val("");
+    $("#fecha").val("");
+    $("#importeSobrante").val("0");
+    $("#cboBanios").val(0);
+    $("#cboBanios").attr("disabled", true);
 	
 	cargarServicios();
 }
@@ -232,7 +240,9 @@ function guardar(){
 	            
 	            $("#rangosInicio").val("");
 	            $("#rangosFin").val("");
-	            $("#importeSobrante").val("");
+	            $("#observacion").val("");
+	            $("#fecha").val("");
+	            $("#importeSobrante").val("0");
 	            $("#cboBanios").val(0);
 	            $("#cboBanios").attr("disabled", true);
 			}else{
