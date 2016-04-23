@@ -601,6 +601,7 @@ public class FacturacionDaoImpl implements FacturacionDao {
 				new SqlParameter("vi_nombre_responsable",		Types.VARCHAR),
 				new SqlParameter("vi_importe_sobrante", 		Types.VARCHAR),
 				new SqlParameter("vi_observacion", 				Types.VARCHAR),
+				new SqlParameter("vi_fecha", 					Types.VARCHAR),
 				
 				new SqlOutParameter("vo_codigo",				Types.INTEGER),
 				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
@@ -614,6 +615,7 @@ public class FacturacionDaoImpl implements FacturacionDao {
 			parametros.addValue("vi_nombre_responsable",		servicio.getNombreResponsable());
 			parametros.addValue("vi_importe_sobrante",			servicio.getImporteSobrante());
 			parametros.addValue("vi_observacion",				servicio.getObservacion());
+			parametros.addValue("vi_fecha",						servicio.getFecha());
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
 			

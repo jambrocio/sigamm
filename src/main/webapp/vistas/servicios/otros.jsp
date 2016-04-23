@@ -52,6 +52,25 @@ $(document).ready(function(){
 	
 	$('[data-toggle="popover"]').popover({ placement : 'right', trigger: "hover" });
 	
+	$.datepicker.regional['es'] = {
+        closeText: 'Cerrar',
+        prevText: '<Ant',
+        nextText: 'Sig>',
+        currentText: 'Hoy',
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+        dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+        weekHeader: 'Sm',
+        dateFormat: 'dd/mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''
+    };
+    $.datepicker.setDefaults($.datepicker.regional['es']);
+    
 	$.ajax({
         type: "POST",
         async: false,
@@ -81,6 +100,19 @@ $(document).ready(function(){
 	cargarServiciosOtros();
 	
 	$("#cboBanios").attr("disabled", true);
+	
+	$("#fecha").datepicker({
+        dateFormat: 'MM yy',
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+		regional: 'es',
+        onClose: function(dateText, inst) {  
+            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
+            $(this).val($.datepicker.formatDate('dd/mm/yy', new Date(year, month, 1)));
+        }
+    });
 	
 });
 
@@ -135,6 +167,7 @@ function guardar(){
 	parametros.nombreResponsable 	= $("#nombresAsociado").val();
 	parametros.importeSobrante 		= $("#importeSobrante").val();
 	parametros.observacion	 		= $("#observacion").val();
+	parametros.fecha		 		= $("#fecha").val();
 	
 	$("#tabla_otros tbody tr").each(function (item) {
 		var this_row = $(this);
@@ -702,6 +735,15 @@ function calculoTotal(){
 							<td width="5px">&nbsp;</td>
 							<td><input type="text" id="nombresAsociado" class="form-control" maxlength="100" /></td>
 							<td valign="top"><img id="lblnombresAsociado-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td><span id="lbltelefono"><b>Fecha</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td><input type="text" id="fecha" class="form-control" maxlength="10" style="width:100px" /></td>
+							<td valign="top"><img id="lblfecha-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 						</tr>
 						<tr>
 							<td colspan="7"><hr align=center size=2 width=100% /></td>

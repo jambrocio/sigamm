@@ -10,7 +10,8 @@ public class ServicioOtrosCabecera {
 	String servicioOtrosDetalle;
 	String importeSobrante;
 	String observacion;
-
+	String fecha;
+	
 	public int getCodigoUsuario() {
 		return codigoUsuario;
 	}
@@ -58,6 +59,12 @@ public class ServicioOtrosCabecera {
 	}
 	public void setObservacion(String observacion) {
 		this.observacion = observacion;
+	}
+	public String getFecha() {
+		return fecha;
+	}
+	public void setFecha(String fecha) {
+		this.fecha = fecha;
 	}
 			    
 }
