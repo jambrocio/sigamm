@@ -23,6 +23,7 @@ import pe.com.sigamm.dao.ReciboLuzOriginalDao;
 import pe.com.sigamm.modelo.LuzOriginal;
 import pe.com.sigamm.modelo.Puesto;
 import pe.com.sigamm.modelo.Retorno;
+import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.LoggerCustom;
 
 @Repository
@@ -32,6 +33,9 @@ public class ReciboLuzOriginalDaoImpl implements ReciboLuzOriginalDao {
 	private JdbcTemplate jdbcTemplate;
 	private SimpleJdbcCall jdbcCall;
 	
+	@Autowired
+	private DatosSession datosSession;
+	
 	@Override
 	public Retorno grabarReciboLuzOriginal(LuzOriginal luzoriginal) {
 		Retorno retorno = new Retorno();
@@ -40,7 +44,8 @@ public class ReciboLuzOriginalDaoImpl implements ReciboLuzOriginalDao {
 			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
 			jdbcCall.withCatalogName("PKG_RECIBO_LUZ_ORIG");
 			jdbcCall.withProcedureName("SP_INS_RECIBOORILUZ").declareParameters(
-					new SqlParameter("p_FEC_PERIODO", 			Types.VARCHAR),
+					new SqlParameter("P_CODIGO_RECIBO_ORIG", 	Types.NUMERIC),
+					new SqlParameter("P_FEC_PERIODO", 			Types.VARCHAR),
 					new SqlParameter("p_FECVENCIMIENTO",		Types.VARCHAR),
 					new SqlParameter("p_FECEMISION",			Types.VARCHAR),
 					new SqlParameter("p_NUM_COSTO_WATS",		Types.NUMERIC),
@@ -109,9 +114,9 @@ public class ReciboLuzOriginalDaoImpl implements ReciboLuzOriginalDao {
 			/*SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
 			String strFecha = "2007-12-25";
 			Date fechaPeriodo = null;
-			fechaPeriodo = formatoDelTexto.parse(luzoriginal.getPeriodo());*/
-			
-			parametros.addValue("p_FEC_PERIODO", 				luzoriginal.getPeriodo());
+			fechaPeriodo = formatoDelTexto.parse(luzoriginal.getPeriodo());*/			
+			parametros.addValue("P_CODIGO_RECIBO_ORIG",			luzoriginal.getCodigoReciboLuzOriginal());
+			parametros.addValue("P_FEC_PERIODO", 				luzoriginal.getPeriodo());
 			parametros.addValue("p_FECVENCIMIENTO",				luzoriginal.getFecVencimiento());
 			parametros.addValue("p_FECEMISION",					luzoriginal.getFecEmision());
 			parametros.addValue("p_NUM_COSTO_WATS",				luzoriginal.getCostoWats());
@@ -264,6 +269,46 @@ public class ReciboLuzOriginalDaoImpl implements ReciboLuzOriginalDao {
 		
 		return retorno;
 		
+	}
+
+	@Override
+	public Retorno eliminarReciboLuz(LuzOriginal reciboLuzOriginal) {
+
+		Retorno retorno = new Retorno();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_RECIBO_LUZ_ORIG");
+			jdbcCall.withProcedureName("SP_ELIMINAR_RECIBO_LUZ").declareParameters(
+				new SqlParameter("vi_codigo_recibo", 			Types.INTEGER),
+				new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
+				
+				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
+				new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
+				
+            
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_recibo", 			reciboLuzOriginal.getCodigoReciboLuzOriginal());
+			parametros.addValue("vi_codigo_usuario", 			datosSession.getCodigoUsuario());
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
+
 	}
 
 }

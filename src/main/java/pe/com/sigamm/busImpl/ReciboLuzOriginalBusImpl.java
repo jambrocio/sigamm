@@ -43,4 +43,10 @@ public class ReciboLuzOriginalBusImpl implements ReciboLuzOriginalBus {
 		
 	}
 
+	@Override
+	public Retorno eliminarReciboLuz(LuzOriginal reciboLuz) {
+		
+		return reciboLuzOriginalDao.eliminarReciboLuz(reciboLuz);
+	}
+
 }

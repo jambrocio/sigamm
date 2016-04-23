@@ -30,6 +30,7 @@ import pe.com.sigamm.bus.ReciboLuzOriginalBus;
 import pe.com.sigamm.bus.ReciboLuzSocioBus;
 import pe.com.sigamm.modelo.LuzOriginal;
 import pe.com.sigamm.modelo.Puesto;
+import pe.com.sigamm.modelo.ReciboAgua;
 import pe.com.sigamm.modelo.ReciboLuzSocio;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.session.DatosSession;
@@ -88,6 +89,24 @@ public class ReciboLuzController {
 		
 		return resultado;
 	}
+	
+	
+	@RequestMapping(value = "/eliminar-recibo-luz.json", method = RequestMethod.POST, produces = "application/json")
+	public @ResponseBody
+	String eliminarReciboLuz(LuzOriginal reciboLuz) {
+
+		Gson gson = new Gson();
+
+		Retorno retorno = reciboLuzOriginalBus.eliminarReciboLuz(reciboLuz);
+		int codigo = retorno.getCodigo();
+		String mensaje = retorno.getMensaje();
+
+		String resultado = "{\"idUsuario\":" + codigo + ",\"mensaje\":\""
+				+ mensaje + "\"}";
+
+		return resultado;
+	}
+	
 	
 	@RequestMapping(value = "/reporte-recibo-luz-original.json", method = RequestMethod.POST, produces="application/json")
 	public @ResponseBody ResponseListBean<LuzOriginal> reporteReciboLuzOriginal(

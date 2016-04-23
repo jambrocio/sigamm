@@ -128,13 +128,6 @@ $(document).ready(function(){
 	    el.addEventListener("click", function(event) {	    	
 	      	event.preventDefault();	      
  	      	el.parentNode.classList.toggle('c_on');
-	      	/*$("#consumoMesSocio").val('0');
-		  	$("#consumoMesSocioTrabado").val('0');
-		  	$("#alcantarilladoSocio").val('0');
-		  	$("#mantenimientoSocio").val('0');
-		  	$("#deudaAnteriorSocio").val('0');
-		  	$("#totalSocio").text('0');*/
-
 	    }, false);
 	  });
 	}
@@ -1345,11 +1338,11 @@ function exportarAguaSocio(){
 			<button class="btn btn-primary" data-toggle="modal" data-target="#recibo_modal" onclick="cargarNuevo()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
 			</button>
-			<button class="btn btn-primary" data-toggle="modal" data-target="#recibo_modal">
+			<!-- button class="btn btn-primary" data-toggle="modal" data-target="#recibo_modal">
 				<a href=/sigamm/generarFacturacionPrueba>
 					<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;FACTURACION PRUEBA
 				</a>
-			</button>
+			</button -->
 			
 		</td>
 	</tr>

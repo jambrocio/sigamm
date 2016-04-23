@@ -34,7 +34,32 @@
 		 border-top-right-radius: 5px;
 	}
 
+	label.check {
+	  display: block;
+	  cursor: pointer;
+	  line-height: 36px;
+	  padding-left: 26px;
+	  font-size: 28px;
+	  color: #e74c3c;
+	  text-shadow: #2c3e50 2px 2px 1px;
+	  transition: .3s;
+	  background: url('https://dl.dropboxusercontent.com/u/3522/check_off.png') left center no-repeat;
+	}
+	
+	label.check input {
+	  position: absolute;
+	  left: -9999px;
+	}
+	
+	label.check.c_on {
+	  background: url('https://dl.dropboxusercontent.com/u/3522/check_on.png')  left center no-repeat;
+	  /*color: #fff;*/
+	  color: #e74c3c;
+	  text-shadow: #34495e 2px 2px 1px;
+	}
+
 </style>
+
 <script>
 var intentos = 0;
 $(document).ready(function(){	
@@ -43,6 +68,49 @@ $(document).ready(function(){
 	$("#contraba").hide();
 	limpiar();
 	limpiarReciboLuzSocio();
+	
+	var input = document.querySelectorAll("label.check input");
+
+	if(input !== null) {
+	  [].forEach.call(input, function(el) {
+	  
+	    if(el.checked) {
+	      el.parentNode.classList.add('c_on');
+	    } 
+	  
+	    el.addEventListener("click", function(event) {	    	
+	      	event.preventDefault();	      
+ 	      	el.parentNode.classList.toggle('c_on');
+
+	    }, false);
+	  });
+	}
+
+
+	$( '#suspendidoSocio' ).on( 'click', function() {
+	    if( $("#seleccionador").attr("class") == 'check c_on' ){
+	    	//alert("El checkbox con valor " + $('#suspendidoSocio').val() + " ha sido seleccionado");
+	    	$('#consumoMesSocio').attr('disabled','-1');
+	    	$('#consumoMesSocioTrabado').attr('disabled','-1');
+	    	$('#alcantarilladoSocio').attr('disabled','-1');
+	    	$('#mantenimientoSocio').attr('disabled','-1');
+	    	$('#deudaAnteriorSocio').attr('disabled','-1');
+	    	$('#totalSocio').val('0.0');
+	    	$('#totalSocio').attr('disabled','-1');
+	    	$('#suspendido').val('1');
+	    	
+	    } else {
+	    	//alert("El checkbox con valor " + $('#suspendidoSocio').val() + " ha sido DEseleccionado");
+	    	$('#consumoMesSocio').removeAttr('disabled');
+	    	$('#consumoMesSocioTrabado').removeAttr('disabled');
+	    	$('#alcantarilladoSocio').removeAttr('disabled');
+	    	$('#mantenimientoSocio').removeAttr('disabled');
+	    	$('#deudaAnteriorSocio').removeAttr('disabled');
+	    	$('#totalSocio').removeAttr('disabled');
+	    	$('#suspendido').val('0');
+	    }
+	});
+	
 	
 });
 
@@ -145,16 +213,6 @@ function colorEtiquetas(){
 }
 
 function nuevoRecibos(){
-	
-/*	$('#puesto_modal').modal({
-		backdrop: 'static',
-		keyboard: false
-	});
-	
-	$("#tituloRegistro").html("Nuevo Recibo de Luz");
-*/	
-
-	//alert("Nuevo Recibo Original");
 	colorEtiquetas();
 	
 	$("#periodo").val('');
@@ -163,7 +221,7 @@ function nuevoRecibos(){
 	$("#costoWats").val(0);
 	$("#alumbradoPublico").val(0);
 	$("#mantenimiento").val(0);
-	$("#estado").val(0);
+	$("#estado").val(1);
 	$("#repoManCnx").val(0);
 	$("#cargoFijo").val(0);
 	$("#total").val(0);
@@ -171,7 +229,9 @@ function nuevoRecibos(){
 
 function guardar(){
 	jsonObj = [];
+	var ruta = obtenerContexto();
 	var parametros = new Object();
+	parametros.codigoReciboLuzOriginal = $("#codigoRecibo").val();
 	parametros.periodo = $("#periodo").val();
 	parametros.fecVencimiento = $("#fecVencimiento").val();
 	parametros.fecEmision = $("#fecEmision").val();
@@ -181,8 +241,8 @@ function guardar(){
 	parametros.estado = $("#estado").val();
 	parametros.repoManCnx = $("#repoManCnx").val();
 	parametros.cargoFijo = $("#cargoFijo").val();
-	parametros.total = $("#total").val();
-
+	parametros.totalMesAct = $("#totalmesactual").val();
+	parametros.deudaAnterior = $("#deudaanterior").val();
 
 	$.ajax({
 		type: "POST",
@@ -239,14 +299,14 @@ function cargarReciboLuzOriginal(){
 		var opciones = "<center>";
 			
 			opciones += "<a href=javascript:editarReciboLuzOriginal(";
-			opciones += rowObject.codigoOrgReciboLuz + ") >";
+			opciones += rowObject.codigoReciboLuzOriginal + ",'" + rowObject.periodo.replace(' ','_') + "','" + rowObject.fecVencimiento.replace(' ','_') + "','" + rowObject.fecEmision.replace(/\s/g,"_") + "','" + rowObject.costoWats + "','" + rowObject.alumbradoPublico + "','" + rowObject.mantenimiento + "','" + rowObject.totalMesAct +"','" + rowObject.deudaAnterior +"') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Luz'/>";
 			opciones += "</a>";
 			
 			opciones += "&nbsp;&nbsp;";
 			
 			opciones += "<a href=javascript:eliminarReciboLuzOriginal(";
-			opciones += rowObject.codigoOrgReciboLuz + "') >";
+			opciones += rowObject.codigoReciboLuzOriginal + ",'" + rowObject.periodo.replace(' ','_') + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Recibo Luz'/>";
 			opciones += "</a>";
 			
@@ -291,13 +351,7 @@ function cargarReciboLuzOriginal(){
 		height: 'auto',
 		width: 'auto',
 		colNames : ['Periodo', 'FechaEmision', 'FechaVencimiento','Total Mes Actual','Total Mes Anterior','Total', 'Opciones'],
-		colModel : [/*{
-			name : 'codigoReciboLuzOriginal',
-			index: 'codigoReciboLuzOriginal',
-			sortable:false,
-			width: 90,
-			align: 'center'
-		},*/{
+		colModel : [{
 			name : 'periodo',
 			index: 'periodo',
 			sortable:false,
@@ -308,7 +362,7 @@ function cargarReciboLuzOriginal(){
 			index: 'fecEmision',
 			sortable:false,
 			width: 100,
-			align: 'left'
+			align: 'center'
 		},{
 			name : 'fecVencimiento',
 			index: 'fecVencimiento',
@@ -365,6 +419,81 @@ function cargarReciboLuzOriginal(){
 
 
 	}).trigger('reloadGrid');
+}
+
+
+function eliminarReciboLuzOriginal(codigoReciboLuzOriginal, periodo){
+	//alert("Recibo a Eliminar " + periodo);
+	
+	var ruta = obtenerContexto();
+	mensaje = "Desea eliminar el recibo de luz cuyo periodo es " + periodo.replace('_',' ') + "... ?"; 
+	
+	$("#mensajeEliminar").html(mensaje);
+	
+	$('#alerta_modal_eliminar').modal({
+		backdrop: 'static',
+		keyboard: false
+	}).one('click', '#aceptar', function() {
+        
+		jsonObj = [];
+		var parametros = new Object();
+		parametros.codigoReciboLuzOriginal = codigoReciboLuzOriginal;
+		
+		$.ajax({
+			type: "POST",
+		    async:false,
+		    url: "eliminar-recibo-luz.json",
+		    cache : false,
+		    data: parametros,
+		    success: function(result){
+		            
+		        $('#alerta_modal_eliminar').modal('hide');
+	            	
+	            $.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Mensaje',
+					// (string | mandatory) the text inside the notification
+					text: result.mensaje,
+					// (string | optional) the image to display on the left
+					image: "/" + ruta + "/recursos/images/confirm.png",
+					// (bool | optional) if you want it to fade out on its own or just sit there
+					sticky: false,
+					// (int | optional) the time you want it to be alive for before fading out
+					time: ''
+				});
+	            
+	            cargarReciboLuzOriginal();
+		            
+			}
+		});
+		
+    });
+	
+}
+
+
+function editarReciboLuzOriginal(codigoReciboLuzOriginal, periodo, fecVencimiento, fecEmision, costoWats, alumbradoPublico, mantenimiento, totalMesAct, deudaAnterior ){
+	console.log("Editar Recibo Luz - [codigoRecibo] : " + codigoRecibo );
+	
+	$('#luz_original_modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	});
+	
+	$("#tituloRegistro").html("Modificar Recibo Luz");
+	
+	colorEtiquetas();
+	
+	$("#codigoRecibo").val(codigoReciboLuzOriginal);
+	$("#periodo").val(periodo.replace('_',' '));
+	$("#fecVencimiento").val(fecVencimiento.replace(/\_/g," "));
+	$("#fecEmision").val(fecEmision.replace(/\_/g," "));
+	$("#costoWats").val(costoWats);
+	$("#alumbradoPublico").val(alumbradoPublico);
+	$("#mantenimiento").val(mantenimiento);
+	$("#totalmesactual").val(totalMesAct);
+	$("#deudaanterior").val(deudaAnterior);
+	
 }
 
 
@@ -495,6 +624,11 @@ function cargarReciboLuzSocio(codigoRecibo){
 				$("#grillaReciboLuz").setCell(rowId, 'nroPuesto', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
 				$("#grillaReciboLuz").setCell(rowId, 'nombreGiro', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
 				$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+			} else if ( (item.reciboLuzCreado == 1) && (item.suspendido == 1) ) {
+				$("#grillaReciboAgua").setCell(rowId, 'nombreFull', '', { 'background-color':'#FFBF00','color':'black','font-weight':'bold' });				
+				$("#grillaReciboAgua").setCell(rowId, 'nroPuesto', '', { 'background-color':'#FFBF00','color':'black','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'nombreGiro', '', { 'background-color':'#FFBF00','color':'black','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'total', '', { 'background-color':'#FFBF00','color':'black','font-weight':'bold' });		
 			} else {
 				$("#grillaReciboLuz").setCell(rowId, 'nombreFull', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
 				$("#grillaReciboLuz").setCell(rowId, 'nroPuesto', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
@@ -682,7 +816,28 @@ function editarReciboLuzXSocio(original, puesto){
 			        		$("#reconexionSocio").val(val.reconexion);
 			        		$("#totalSocio").html(val.total);
 			        		$("#costoWatts").val(val.costoWatts);
-			        		$("#codigoReciboLuzSocio").val(val.correlativo);			            	
+			        		$("#codigoReciboLuzSocio").val(val.correlativo);
+			        		
+			        		if (val.suspendido==1){
+			            		$("#seleccionador").attr("class","check c_on");
+				    	    	$('#consumoMesSocio').attr('disabled','-1');
+				    	    	$('#consumoMesSocioTrabado').attr('disabled','-1');
+				    	    	$('#alcantarilladoSocio').attr('disabled','-1');
+				    	    	$('#mantenimientoSocio').attr('disabled','-1');
+				    	    	$('#deudaAnteriorSocio').attr('disabled','-1');
+				    	    	$('#totalSocio').val('0.0');
+				    	    	$('#totalSocio').attr('disabled','-1');
+				    	    	$('#suspendido').val('1');
+			            	}else{
+			            		$("#seleccionador").attr("class","check");
+				    	    	$('#consumoMesSocio').removeAttr('disabled');
+				    	    	$('#consumoMesSocioTrabado').removeAttr('disabled');
+				    	    	$('#alcantarilladoSocio').removeAttr('disabled');
+				    	    	$('#mantenimientoSocio').removeAttr('disabled');
+				    	    	$('#deudaAnteriorSocio').removeAttr('disabled');
+				    	    	$('#totalSocio').removeAttr('disabled');
+				    	    	$('#suspendido').val('0');
+			            	}
 			        	});
 		        	} else {
 		        		$.gritter.add({
@@ -1153,6 +1308,7 @@ function botonEnter()
 <input type="hidden" id="costoWatts" />
 <input type="hidden" id="codigoReciboLuzSocio" />
 <input type="hidden" id="reciboLuzCreado" />
+<input type="hidden" id="suspendido" />
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td colspan="4">&nbsp;</td>
@@ -1215,9 +1371,11 @@ function botonEnter()
 					<td><input type='text' id='mantenimiento' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="6"/></td>
 				</tr>
 				<tr>
-					<td><label><font size="2"><b>Total:</b></font></label></td>
-					<td><input type='text' id='total' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="5"/></td>
-					<td colspan="3">&nbsp;</td>
+					<td><label><font size="2"><b>Total Mes Actual:</b></font></label></td>
+					<td><input type='text' id='totalmesactual' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="7"/></td>
+					<td>&nbsp;</td>
+					<td><label><font size="2"><b>Total Mes Anterior:</b></font></label></td>	
+					<td><input type='text' id='deudaanterior' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="8"/></td>
 				</tr>
 			</table>
 
@@ -1253,7 +1411,7 @@ function botonEnter()
 					<td width="150"><b>PUESTO LUZ SOCIOS<b/></td>
 					<td width="10">:</td>
 					<td width="250"><input type="text" id="reciboLuzSocioBuscara" class="text ui-widget-content ui-corner-all" maxlength="8" /></td>
-					<td>&nbsp;&nbsp;
+					<td colspan="2">&nbsp;&nbsp;
 						<button type="button" class="btn btn-primary" onclick="buscarReciboLuz();">
 							<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 						</button>&nbsp;&nbsp;
@@ -1266,9 +1424,20 @@ function botonEnter()
 				</tr>
 				<tr>
 					<td colspan="4">&nbsp;</td>
+					<td><b>LEYENDA:</b></td>
 				</tr>
 				<tr>
-					<td colspan="4">
+					<td colspan="3">&nbsp;</td>
+					<td bgcolor="#FFBF00">SUSPENDIDO</td>
+					<td bgcolor="#A9F5A9">CREADO</td>
+				</tr>
+				<tr>
+					<td colspan="3">&nbsp;</td>
+					<td bgcolor="#FF8000">CORTADO</td>
+					<td bgcolor="#F5A9A9">NO CREADO</td>
+				</tr>
+				<tr>
+					<td colspan="5">
 						<table id="grillaReciboLuz"></table>
 						<div id="pgrillaReciboLuz"></div>
 					</td>
@@ -1308,6 +1477,13 @@ function botonEnter()
 				</tr>
 			</table>
 			<table border="1" width="100%">
+				<tr>
+					<td align="center">
+						<label id="seleccionador" class="check">
+							<input type="checkbox" id="suspendidoSocio" name="suspendidoSocio" >Servicio Suspendido</input>
+						</label>
+					</td>
+				</tr>
 				<tr>
 					<td>
 						<table border="0" width="100%">
@@ -1463,6 +1639,30 @@ function botonEnter()
 	</div>
 </div>
 
-
+<div class="modal fade" id="alerta_modal_eliminar" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Eliminar Recibo Luz</h4>
+			</div>
+			<div class="modal-body">
+					
+				<table border="0">
+					<tr>
+						<td><img src="recursos/images/icons/exclamation_32x32.png" border="0" />&nbsp;<b><span id="mensajeEliminar" /></b></td>
+					</tr>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" id="aceptar">Si</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+			</div>
+		</div>
+		  
+	</div>
+</div>
 </body>
 </html>
