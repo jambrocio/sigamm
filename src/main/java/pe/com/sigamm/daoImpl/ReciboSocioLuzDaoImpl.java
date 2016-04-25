@@ -16,12 +16,9 @@ import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
 import pe.com.sigamm.bean.ReporteReciboLuzSocio;
-import pe.com.sigamm.bean.ReporteSocio;
 import pe.com.sigamm.dao.ReciboLuzSocioDao;
-import pe.com.sigamm.modelo.Puesto;
 import pe.com.sigamm.modelo.ReciboLuzSocio;
 import pe.com.sigamm.modelo.Retorno;
-import pe.com.sigamm.modelo.Socio;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.LoggerCustom;
 
@@ -62,6 +59,9 @@ public class ReciboSocioLuzDaoImpl implements ReciboLuzSocioDao {
 					new SqlParameter("vi_fecha_carga", 			Types.DATE),					
 					new SqlParameter("vi_usuario_modifica", 	Types.VARCHAR),	
 					new SqlParameter("vi_fecha_modifica", 		Types.DATE),
+					new SqlParameter("vi_codigo_servicio_detalle", Types.NUMERIC),
+					new SqlParameter("vi_corte_luz", 			Types.NUMERIC),
+					new SqlParameter("vi_suspendido", 			Types.NUMERIC),
 					
 					new SqlOutParameter("vo_codigo_socio",  		Types.INTEGER),
 					new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
@@ -88,6 +88,9 @@ public class ReciboSocioLuzDaoImpl implements ReciboLuzSocioDao {
 			parametros.addValue("vi_fecha_carga",		reciboLuzSocio.getFechaCarga());
 			parametros.addValue("vi_usuario_modifica",	null);
 			parametros.addValue("vi_fecha_modifica",	null);
+			parametros.addValue("vi_codigo_servicio_detalle", null);
+			parametros.addValue("vi_corte_luz", 		null);
+			parametros.addValue("vi_suspendido", 		reciboLuzSocio.getSuspendido());
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
 			
@@ -183,6 +186,54 @@ public class ReciboSocioLuzDaoImpl implements ReciboLuzSocioDao {
 		}
 		
 		return reporte;
+	}
+
+	@Override
+	public Retorno pagarReciboLuzxSocio(ReciboLuzSocio reciboLuzSocio) {
+		Retorno retorno = new Retorno();
+		try{
+			System.out.println("Pagando Recibo Luz Socio");
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_RECIBO_LUZ_SOCIO");
+			jdbcCall.withProcedureName("SP_PAGAR_LUZ_X_SOCIO").declareParameters(
+					new SqlParameter("vi_codigo_recibo", 		Types.NUMERIC),
+					new SqlParameter("vi_correlativo", 			Types.NUMERIC),
+					new SqlParameter("vi_numero_puesto", 		Types.VARCHAR),
+					new SqlParameter("vi_usuario_carga", 		Types.NUMERIC),
+					new SqlParameter("vi_codigo_socio", 		Types.NUMERIC),
+					
+					new SqlOutParameter("vo_codigo_socio",  		Types.INTEGER),
+					new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
+					new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
+			
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+
+			parametros.addValue("vi_codigo_recibo",		reciboLuzSocio.getCodigoRecibo());
+			parametros.addValue("vi_correlativo",		reciboLuzSocio.getCorrelativo());
+			parametros.addValue("vi_numero_puesto", 	reciboLuzSocio.getPuestoSocio());
+			parametros.addValue("vi_usuario_carga",		datosSession.getCodigoUsuario());
+			parametros.addValue("vi_codigo_socio",		reciboLuzSocio.getCodigoSocio());
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			int codigoSocio = (Integer) result.get("vo_codigo_socio");
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(codigoSocio);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
+
 	}
 
 }

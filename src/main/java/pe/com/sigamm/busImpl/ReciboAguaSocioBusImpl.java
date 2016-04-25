@@ -141,7 +141,7 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				ruc.setAlignment(Element.ALIGN_CENTER);
 				doc.add(ruc);
 
-				Paragraph recibo = new Paragraph(UtilPDF.LEYENDA_RECIBO + UtilPDF.getID(reporte.getListaReciboAguaSocio().get(aw).getPeriodoSocio(), aw), fuente);
+				Paragraph recibo = new Paragraph(UtilPDF.LEYENDA_RECIBO_AGUA + UtilPDF.getID(reporte.getListaReciboAguaSocio().get(aw).getPeriodoSocio(), aw), fuente);
 				recibo.setAlignment(Element.ALIGN_CENTER);
 				doc.add(recibo);
 				

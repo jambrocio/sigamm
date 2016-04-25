@@ -31,6 +31,7 @@ import pe.com.sigamm.bus.ReciboLuzSocioBus;
 import pe.com.sigamm.modelo.LuzOriginal;
 import pe.com.sigamm.modelo.Puesto;
 import pe.com.sigamm.modelo.ReciboAgua;
+import pe.com.sigamm.modelo.ReciboAguaSocio;
 import pe.com.sigamm.modelo.ReciboLuzSocio;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.session.DatosSession;
@@ -313,4 +314,31 @@ public class ReciboLuzController {
 	}
 
 	
+	@RequestMapping(value = "/pagar-luz-x-socio.json", method = RequestMethod.POST, produces = "application/json")
+	public @ResponseBody
+	String pagarReciboLuzxSocio(ReciboLuzSocio reciboLuzSocio) {
+
+		Gson gson = new Gson();
+		List<CamposObligatorios> camposObligatorios = new ArrayList<CamposObligatorios>();
+
+		int codigo = 0;
+		String mensaje = "";
+		String listaObligatorios = gson.toJson(camposObligatorios);
+
+		if (camposObligatorios.size() > 0) {
+
+			codigo = 0;
+
+		} else {
+
+			Retorno retorno = reciboLuzSocioBus.pagarReciboLuzxSocio(reciboLuzSocio);
+			codigo = retorno.getCodigo();
+			mensaje = retorno.getMensaje();
+		}
+
+		String resultado = "{\"idUsuario\":" + codigo + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + mensaje + "\"}";
+
+		return resultado;
+	}
+
 }

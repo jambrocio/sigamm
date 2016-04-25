@@ -10,7 +10,8 @@ public interface ReciboLuzSocioDao {
 	
 	public ReporteReciboLuzSocio editarReciboLuzxSocio(int pagina, int registros, String puestoSocio, int codigoRecibo);
 
-	public ReporteReciboLuzSocio reporteReciboLuzSocio(
-			Integer codigoReciboLuzSocio, String periodo);
+	public ReporteReciboLuzSocio reporteReciboLuzSocio(Integer codigoReciboLuzSocio, String periodo);
+	
+	public Retorno pagarReciboLuzxSocio(ReciboLuzSocio reciboLuzSocio);
 	
 }

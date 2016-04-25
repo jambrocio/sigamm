@@ -39,6 +39,9 @@ public class ReciboLuzSocio {
 	String fechaVencimiento;
 	String fechaCorte;
 	String observaciones;
+	int corteLuz;
+	int pagado;
+	int suspendido;
 	
 	public int getIdRecibo() {
 		return idRecibo;
@@ -249,6 +252,23 @@ public class ReciboLuzSocio {
 	}
 	public void setObservaciones(String observaciones) {
 		this.observaciones = observaciones;
-	}	
-	
+	}
+	public int getCorteLuz() {
+		return corteLuz;
+	}
+	public void setCorteLuz(int corteLuz) {
+		this.corteLuz = corteLuz;
+	}
+	public int getPagado() {
+		return pagado;
+	}
+	public void setPagado(int pagado) {
+		this.pagado = pagado;
+	}
+	public int getSuspendido() {
+		return suspendido;
+	}
+	public void setSuspendido(int suspendido) {
+		this.suspendido = suspendido;
+	}
 }
