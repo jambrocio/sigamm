@@ -29,5 +29,5 @@ public interface ReciboAguaSocioBus {
 	public File generarFacturacionVigilanciaPDF(String periodo); 
 
 	public void imprimirFactura();
-	
+		
 }

@@ -37,6 +37,9 @@ public class ReciboAguaSocio {
 	String fechaCorte;
 	String fechaVencimiento;
 	String observaciones;
+	double deudaAnteriorVigilancia;
+	double deudaAnteriorCtaAdm;
+	double cuotaAdministrativa;
 	
 	public int getIdRecibo() {
 		return idRecibo;
@@ -254,5 +257,23 @@ public class ReciboAguaSocio {
 	public void setObservaciones(String observaciones) {
 		this.observaciones = observaciones;
 	}
-	
+	public double getDeudaAnteriorVigilancia() {
+		return deudaAnteriorVigilancia;
+	}
+	public void setDeudaAnteriorVigilancia(double deudaAnteriorVigilancia) {
+		this.deudaAnteriorVigilancia = deudaAnteriorVigilancia;
+	}
+	public double getDeudaAnteriorCtaAdm() {
+		return deudaAnteriorCtaAdm;
+	}
+	public void setDeudaAnteriorCtaAdm(double deudaAnteriorCtaAdm) {
+		this.deudaAnteriorCtaAdm = deudaAnteriorCtaAdm;
+	}
+	public double getCuotaAdministrativa() {
+		return cuotaAdministrativa;
+	}
+	public void setCuotaAdministrativa(double cuotaAdministrativa) {
+		this.cuotaAdministrativa = cuotaAdministrativa;
+	}
+			
 }

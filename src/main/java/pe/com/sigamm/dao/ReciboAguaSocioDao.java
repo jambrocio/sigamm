@@ -23,4 +23,7 @@ public interface ReciboAguaSocioDao {
 	public ReporteReciboAguaSocio reporteReciboAguaSocio(Integer codigoRecibo, String periodo);
 	
 	public Retorno eliminarReciboAguaxSocio(ReciboAguaSocio reciboAguaSocio);
+	
+	public ReporteReciboAguaSocio generacionPdfVigilancia(String periodo);
+	
 }
