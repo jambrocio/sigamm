@@ -1338,11 +1338,9 @@ function exportarAguaSocio(){
 			<button class="btn btn-primary" data-toggle="modal" data-target="#recibo_modal" onclick="cargarNuevo()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
 			</button>
-			<!-- button class="btn btn-primary" data-toggle="modal" data-target="#recibo_modal">
-				<a href=/sigamm/generarFacturacionPrueba>
-					<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;FACTURACION PRUEBA
-				</a>
-			</button -->
+			<a href="generarImpresionVigilanciaPDF?periodo=201604">
+				<img src='recursos/images/icons/print_24x24.png' border='0' title='Generar Impresión de todos los Recibo de Agua de los Socios'/>
+			</a>
 			
 		</td>
 	</tr>

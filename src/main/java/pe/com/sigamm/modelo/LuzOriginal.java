@@ -1,6 +1,5 @@
 package pe.com.sigamm.modelo; 
 
-
 public class LuzOriginal {
 	
 	int codigoReciboLuzOriginal;
@@ -66,7 +65,9 @@ public class LuzOriginal {
 	double potGenFpTotal;
 	double ajustePreRet;
 	double igvRefact;
+	double cableadoPrincipal;
 	int estadoAbierto;
+	
 	public int getCodigoReciboLuzOriginal() {
 		return codigoReciboLuzOriginal;
 	}
@@ -445,11 +446,16 @@ public class LuzOriginal {
 	public void setIgvRefact(double igvRefact) {
 		this.igvRefact = igvRefact;
 	}
+	public double getCableadoPrincipal() {
+		return cableadoPrincipal;
+	}
+	public void setCableadoPrincipal(double cableadoPrincipal) {
+		this.cableadoPrincipal = cableadoPrincipal;
+	}
 	public int getEstadoAbierto() {
 		return estadoAbierto;
 	}
 	public void setEstadoAbierto(int estadoAbierto) {
 		this.estadoAbierto = estadoAbierto;
 	}
-		
 }

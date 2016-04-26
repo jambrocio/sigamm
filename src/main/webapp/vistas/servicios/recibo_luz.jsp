@@ -13,6 +13,7 @@
 	
 </style>
 <title></title>
+
 <style>
     .gBubble
     {
@@ -231,6 +232,8 @@ function nuevoRecibos(){
 	$("#estado").val(1);
 	$("#repoManCnx").val(0);
 	$("#cargoFijo").val(0);
+	$("#codigoRecibo").val(0);
+	$("#cableadoPrincipal").val(0);
 	$("#total").val(0);
 }
 
@@ -250,6 +253,7 @@ function guardar(){
 	parametros.cargoFijo = $("#cargoFijo").val();
 	parametros.totalMesAct = $("#totalmesactual").val();
 	parametros.deudaAnterior = $("#deudaanterior").val();
+	parametros.cableadoPrincipal = $("#cableadoPrincipal").val();
 
 	$.ajax({
 		type: "POST",
@@ -306,7 +310,7 @@ function cargarReciboLuzOriginal(){
 		var opciones = "<center>";
 			
 			opciones += "<a href=javascript:editarReciboLuzOriginal(";
-			opciones += rowObject.codigoReciboLuzOriginal + ",'" + rowObject.periodo.replace(' ','_') + "','" + rowObject.fecVencimiento.replace(' ','_') + "','" + rowObject.fecEmision.replace(/\s/g,"_") + "','" + rowObject.costoWats + "','" + rowObject.alumbradoPublico + "','" + rowObject.mantenimiento + "','" + rowObject.totalMesAct +"','" + rowObject.deudaAnterior +"') >";
+			opciones += rowObject.codigoReciboLuzOriginal + ",'" + rowObject.periodo.replace(' ','_') + "','" + rowObject.fecVencimiento.replace(' ','_') + "','" + rowObject.fecEmision.replace(/\s/g,"_") + "','" + rowObject.costoWats + "','" + rowObject.alumbradoPublico + "','" + rowObject.mantenimiento + "','" + rowObject.totalMesAct +"','" + rowObject.deudaAnterior +"','" + rowObject.cableadoPrincipal +"') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Luz'/>";
 			opciones += "</a>";
 			
@@ -479,7 +483,7 @@ function eliminarReciboLuzOriginal(codigoReciboLuzOriginal, periodo){
 }
 
 
-function editarReciboLuzOriginal(codigoReciboLuzOriginal, periodo, fecVencimiento, fecEmision, costoWats, alumbradoPublico, mantenimiento, totalMesAct, deudaAnterior ){
+function editarReciboLuzOriginal(codigoReciboLuzOriginal, periodo, fecVencimiento, fecEmision, costoWats, alumbradoPublico, mantenimiento, totalMesAct, deudaAnterior, cableadoPrincipal ){
 	console.log("Editar Recibo Luz - [codigoRecibo] : " + codigoRecibo );
 	
 	$('#luz_original_modal').modal({
@@ -500,6 +504,7 @@ function editarReciboLuzOriginal(codigoReciboLuzOriginal, periodo, fecVencimient
 	$("#mantenimiento").val(mantenimiento);
 	$("#totalmesactual").val(totalMesAct);
 	$("#deudaanterior").val(deudaAnterior);
+	$("#cableadoPrincipal").val(cableadoPrincipal);
 	
 }
 
@@ -725,7 +730,7 @@ function cargarDatosReciboLuzSocio(sector, puesto, original){
 	            	$("#costoWatts").val(val.numCostoWatts);
 	            	$("#codigoSocio").val(val.codigoSocio);
 	            	$("#reciboLuzCreado").val(val.reciboLuzCreado);
-	            	          	
+	            	$("#cableadoPrincipalSocio").val(val.cableadoPrincipal);	            	          	
 	            	
 					if ($("#reciboLuzCreado").val() == 0) {
 						
@@ -847,6 +852,8 @@ function editarReciboLuzXSocio(original, puesto){
 			        		$("#totalSocio").html(val.total);
 			        		$("#costoWatts").val(val.costoWatts);
 			        		$("#codigoReciboLuzSocio").val(val.correlativo);
+			        		$("#igvSocio").val(val.igvCargo);
+			        		$("#cableadoPrincipalSocio").val(val.cableadoPrincipal);
 			        		
 			        		if (val.suspendido==1){
 			            		$("#seleccionador").attr("class","check c_on");
@@ -1092,8 +1099,10 @@ function calculaCampos(valor){
 
 function operaciones(valor){
 	var valores = valor;
-	var respuesta;
-	var cargoEnergia;
+	var respuesta = 0;
+	var cargoEnergia = 0;
+	var igvCargoEnergia = 0;
+	var totalCargoEnergia = 0;
 	//alert(valores);
 	
 	if (valores=='L'){
@@ -1114,10 +1123,18 @@ function operaciones(valor){
 		
 //		alert("cargo: " + cargoEnergia);
 		$("#cargoEnergiaSocio").val(cargoEnergia);
+		totalCargoEnergia = redondear_dos_decimal( cargoEnergia * 1.18 ); // IGV, considerarlo como parámetro
+		igvCargoEnergia = redondear_dos_decimal( totalCargoEnergia - cargoEnergia );
+		$("#igvSocio").val(igvCargoEnergia);
+		
 		operaciones('R');
 		
 	}else if (valores=='R'){
-		respuesta = redondear_dos_decimal( parseFloat($("#cargoEnergiaSocio").val()) + parseFloat($("#alumbradoPublicoSocio").val()) + parseFloat($("#servicioMantenimientoSocio").val()) + parseFloat($("#deudaAnteriorSocio").val()) + parseFloat($("#reconexionSocio").val()) );
+		
+		
+		//cargoEnergiaSocio, igvSocio, alumbradoPublicoSocio, servicioMantenimientoSocio, deudaAnteriorSocio, reconexionSocio, cableadoPrincipalSocio, totalSocio
+		
+		respuesta = redondear_dos_decimal( parseFloat($("#cargoEnergiaSocio").val()) + parseFloat($("#igvSocio").val()) + parseFloat($("#alumbradoPublicoSocio").val()) + parseFloat($("#servicioMantenimientoSocio").val()) + parseFloat($("#deudaAnteriorSocio").val()) + parseFloat($("#reconexionSocio").val()) + parseFloat($("#cableadoPrincipalSocio").val()) );
 //		alert(respuesta);
 		if (!isNaN(respuesta))
 			$("#totalSocio").html(respuesta);
@@ -1130,10 +1147,12 @@ function operaciones(valor){
 		$("#consumoMesSocioTrabado").val(0.00);
 		$("#consumoMesSocioTrabado").hidden();
 		$("#cargoEnergiaSocio").html(0.00);
+		$("#igvSocio").html(0.00);
 		$("#alumbradoPublicoSocio").html(0.00);
 		$("#servicioMantenimientoSocio").html(0.00);
 		$("#deudaAnteriorSocio").html(0.00);
 		$("#reconexionSocio").html(0.00);
+		$("#cableadoPrincipalSocio").html(0.00);
 		$("#totalSocio").html(0.00);
 	}
 	
@@ -1160,6 +1179,7 @@ function guardarRecibo(){
 		parametros.trabado = 1;
 	}
 	parametros.cargoEnergia = $("#cargoEnergiaSocio").val();
+	parametros.igvSocio = $("#igvSocio").val();
 	parametros.alumbradoPublico = $("#alumbradoPublicoSocio").val();
 	parametros.servicioMantenimiento = $("#servicioMantenimientoSocio").val();
 	parametros.deudaAnterior = $("#deudaAnteriorSocio").val();
@@ -1168,6 +1188,8 @@ function guardarRecibo(){
 	parametros.correlativo = $("#codigoReciboLuzSocio").val();
 	parametros.idRecibo = $("#idRecibo").val();
 	parametros.suspendido =  $("#suspendido").val();
+	parametros.cableadoPrincipal =  $("#cableadoPrincipalSocio").val();
+	parametros.igvCargo =  $("#igvSocio").val();
 		
 	$.ajax({
 		type: "POST",
@@ -1230,10 +1252,12 @@ function limpiarReciboLuzSocio(){
 	$("#consumoMesSocio").text('');
 	$("#ConsumoMesSocioTrabado").val('');
 	$("#cargoEnergiaSocio").val('');
+	$("#igvSocio").val('');
 	$("#alumbradoPublicoSocio").val('');
 	$("#servicioMantenimientoSocio").val('');
 	$("#deudaAnteriorSocio").val('');
 	$("#reconexionSocio").val('');
+	$("#cableadoPrincipalSocio").val('');
 	$("#totalSocio").text('');
 	$("#codigoReciboLuzSocio").val('0');
 	$("#reciboLuzCreado").val('');
@@ -1461,15 +1485,21 @@ function botonEnter()
 					<td><label><font size="2"><b>Alumbrado Público:</b></font></label></td>
 					<td><input type='text' id='alumbradoPublico' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="5"/></td>
 					<td>&nbsp;</td>
-					<td><label><font size="2"><b>Mantenimiento:</b></font></label></td>	
+					<!-- td><label><font size="2"><b>Mantenimiento:</b></font></label></td -->	
+					<td><label><font size="2"><b>Cargo Fijo:</b></font></label></td>
 					<td><input type='text' id='mantenimiento' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="6"/></td>
 				</tr>
 				<tr>
+					<td><label><font size="2"><b>Cableado Línea Principal:</b></font></label></td>
+					<td><input type='text' id='cableadoPrincipal' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="7"/></td>
+					<td colspan="3">&nbsp;</td>
+				</tr>
+				<tr>
 					<td><label><font size="2"><b>Total Mes Actual:</b></font></label></td>
-					<td><input type='text' id='totalmesactual' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="7"/></td>
+					<td><input type='text' id='totalmesactual' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="8"/></td>
 					<td>&nbsp;</td>
 					<td><label><font size="2"><b>Total Mes Anterior:</b></font></label></td>	
-					<td><input type='text' id='deudaanterior' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="8"/></td>
+					<td><input type='text' id='deudaanterior' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="9"/></td>
 				</tr>
 			</table>
 
@@ -1643,11 +1673,15 @@ function botonEnter()
 								<td><input type='text' id='cargoEnergiaSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;" disabled="disabled"/></td>
 							</tr>
 							<tr>
+								<td><b>IGV :</b></td>
+								<td><input type='text' id='igvSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
+							</tr>
+							<tr>
 								<td><b>Alumbrado Público :</b></td>
 								<td><input type='text' id='alumbradoPublicoSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;" disabled="disabled"/></td>
 							</tr>
 							<tr>
-								<td><b>Mantenimiento :</b></td>
+								<td><b>Cargo Fijo :</b></td>
 								<td><input type='text' id='servicioMantenimientoSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;" disabled="disabled"/></td>
 							</tr>
 							<tr>
@@ -1657,6 +1691,10 @@ function botonEnter()
 							<tr>
 								<td><b>Reconexión :</b></td>
 								<td><input type='text' id='reconexionSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
+							</tr>
+							<tr>
+								<td><b>Cableado Principal :</b></td>
+								<td><input type='text' id='cableadoPrincipalSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
 							</tr>
 							<tr>
 								<td><b>TOTAL DE LUZ</b></td>

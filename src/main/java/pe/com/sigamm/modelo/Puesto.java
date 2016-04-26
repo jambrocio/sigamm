@@ -9,14 +9,12 @@ public class Puesto {
 	int codigoReciboAgua;
 	int codigoSector;
 	int estadoReciboLuz;
-	//int estadoReciboAgua;
 	String nombreSector;
 	String nroPuesto;
 	String dni;
 	String nombreFull;
 	String nombreGiro;
 	int reciboLuz;
-	//int reciboAgua;
 	double total;
 	int reciboLuzCreado;
 	int pagado;
@@ -26,9 +24,10 @@ public class Puesto {
 	double numCostoWatts;
 	double alumbradoPublico;
 	double mantenimiento;
+	double cableadoPrincipal;
 	int estadoAbierto;
 	int suspendido;
-	
+
 	public int getCodigoSocio() {
 		return codigoSocio;
 	}
@@ -167,6 +166,12 @@ public class Puesto {
 	public void setMantenimiento(double mantenimiento) {
 		this.mantenimiento = mantenimiento;
 	}
+	public double getCableadoPrincipal() {
+		return cableadoPrincipal;
+	}
+	public void setCableadoPrincipal(double cableadoPrincipal) {
+		this.cableadoPrincipal = cableadoPrincipal;
+	}
 	public int getEstadoAbierto() {
 		return estadoAbierto;
 	}
@@ -179,6 +184,5 @@ public class Puesto {
 	public void setSuspendido(int suspendido) {
 		this.suspendido = suspendido;
 	}
-	
 	
 }

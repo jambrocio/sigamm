@@ -49,7 +49,7 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 		return reciboLuzSocioDao.grabarReciboLuzxSocio(reciboLuzSocio);
 
 	}
-
+ 
 	@Override
 	public ReporteReciboLuzSocio editarReciboLuzxSocio(int pagina, int registros, String puestoSocio, int codigoRecibo) {
 
@@ -210,7 +210,7 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				
 				PdfPTable table9 = new PdfPTable(2);
 				table9.setWidthPercentage(100);
-				Paragraph p18 = new Paragraph("MANTENIMIENTO", fuente);
+				Paragraph p18 = new Paragraph("CARGO FIJO", fuente);
 				PdfPCell celda18 = new PdfPCell(p18);
 				table9.addCell(celda18);
 				Paragraph p19 = new Paragraph(UtilPDF.round(reporte.getListaReciboLuzSocio().get(aw).getServicioMantenimiento(), 2) + "", fuente);
@@ -238,58 +238,69 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				celda23.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table11.addCell(celda23);
 				
-				table11.setSpacingAfter(10);
-				//----------------------------------------------
 				PdfPTable table12 = new PdfPTable(2);
 				table12.setWidthPercentage(100);
-				Paragraph p24 = new Paragraph("TOTAL DE LUZ       (S/.)", fuente1);
+				Paragraph p24 = new Paragraph("CABLEADO PRINCIPAL", fuente);
 				PdfPCell celda24 = new PdfPCell(p24);
-				celda24.setFixedHeight(50f);
-				celda24.setHorizontalAlignment(Element.ALIGN_CENTER);
-				celda24.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				table12.addCell(celda24);
+				Paragraph p25 = new Paragraph(UtilPDF.round(reporte.getListaReciboLuzSocio().get(aw).getCableadoPrincipal(), 2) + "", fuente);
+				PdfPCell celda25 = new PdfPCell(p25);
+				celda25.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table12.addCell(celda25);
+				
+				table12.setSpacingAfter(10);
+				//----------------------------------------------
+				PdfPTable table13 = new PdfPTable(2);
+				table13.setWidthPercentage(100);
+				Paragraph p26 = new Paragraph("TOTAL DE LUZ       (S/.)", fuente1);
+				PdfPCell celda26 = new PdfPCell(p26);
+				celda26.setFixedHeight(50f);
+				celda26.setHorizontalAlignment(Element.ALIGN_CENTER);
+				celda26.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				table13.addCell(celda26);
 				
 				Double total = 	reporte.getListaReciboLuzSocio().get(aw).getCargoEnergia() +
 								reporte.getListaReciboLuzSocio().get(aw).getAlumbradoPublico() +
 								reporte.getListaReciboLuzSocio().get(aw).getServicioMantenimiento() + 
 								reporte.getListaReciboLuzSocio().get(aw).getDeudaAnterior() +
-								reporte.getListaReciboLuzSocio().get(aw).getReconexion();
+								reporte.getListaReciboLuzSocio().get(aw).getReconexion() + 
+								reporte.getListaReciboLuzSocio().get(aw).getCableadoPrincipal();
 				String valor5 = UtilPDF.round(total, 2) + "";
-				Paragraph p25 = new Paragraph(valor5.replace(",", "."), fuente1);
-				PdfPCell celda25 = new PdfPCell(p25);
-				celda25.setHorizontalAlignment(Element.ALIGN_CENTER);
-				celda25.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				table12.addCell(celda25);
-				//----------------------------------------------
-				PdfPTable table13 = new PdfPTable(2);
-				table13.setWidthPercentage(100);
-				Paragraph p26 = new Paragraph("FECHA DE VENCIMIENTO", fuente1);
-				PdfPCell celda26 = new PdfPCell(p26);
-				celda16.setHorizontalAlignment(Element.ALIGN_CENTER);
-				celda16.setVerticalAlignment(Element.ALIGN_BOTTOM);
-				celda16.setFixedHeight(50f);
-				Paragraph p27 = new Paragraph("FECHA DE CORTE", fuente1);
+				Paragraph p27 = new Paragraph(valor5.replace(",", "."), fuente1);
 				PdfPCell celda27 = new PdfPCell(p27);
 				celda27.setHorizontalAlignment(Element.ALIGN_CENTER);
-				celda27.setVerticalAlignment(Element.ALIGN_BOTTOM);
-				table13.addCell(celda26);
-				table13.addCell(celda27);				
+				celda27.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				table13.addCell(celda27);
 				//----------------------------------------------
 				PdfPTable table14 = new PdfPTable(2);
 				table14.setWidthPercentage(100);
-				
-				Paragraph p28 = new Paragraph(reporte.getListaReciboLuzSocio().get(aw).getFechaVencimiento() + "", fuente1);
+				Paragraph p28 = new Paragraph("FECHA DE VENCIMIENTO", fuente1);
 				PdfPCell celda28 = new PdfPCell(p28);
+				celda16.setHorizontalAlignment(Element.ALIGN_CENTER);
+				celda16.setVerticalAlignment(Element.ALIGN_BOTTOM);
+				celda16.setFixedHeight(50f);
+				Paragraph p29 = new Paragraph("FECHA DE CORTE", fuente1);
+				PdfPCell celda29 = new PdfPCell(p29);
+				celda29.setHorizontalAlignment(Element.ALIGN_CENTER);
+				celda29.setVerticalAlignment(Element.ALIGN_BOTTOM);
+				table14.addCell(celda28);
+				table14.addCell(celda29);				
+				//----------------------------------------------
+				PdfPTable table15 = new PdfPTable(2);
+				table15.setWidthPercentage(100);
+				
+				Paragraph p30 = new Paragraph(reporte.getListaReciboLuzSocio().get(aw).getFechaVencimiento() + "", fuente1);
+				PdfPCell celda30 = new PdfPCell(p30);
 				celda16.setFixedHeight(50f);
 				celda16.setHorizontalAlignment(Element.ALIGN_CENTER);
 				celda16.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				table14.addCell(celda28);
+				table15.addCell(celda30);
 				
-				Paragraph p29 = new Paragraph(reporte.getListaReciboLuzSocio().get(aw).getFechaCorte() + "", fuente1);
-				PdfPCell celda29 = new PdfPCell(p29);
-				celda29.setHorizontalAlignment(Element.ALIGN_CENTER);
-				celda29.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				table14.addCell(celda29);
+				Paragraph p31 = new Paragraph(reporte.getListaReciboLuzSocio().get(aw).getFechaCorte() + "", fuente1);
+				PdfPCell celda31 = new PdfPCell(p31);
+				celda31.setHorizontalAlignment(Element.ALIGN_CENTER);
+				celda31.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				table15.addCell(celda31);
 				//----------------------------------------------
 								
 				doc.add(table1);
@@ -307,6 +318,7 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				doc.add(table12);
 				doc.add(table13);
 				doc.add(table14);
+				doc.add(table15);
 				
 				Paragraph observaciones = new Paragraph("OBSERVACIONES:");
 				Paragraph observacionesDetalle = new Paragraph(reporte.getListaReciboLuzSocio().get(aw).getObservaciones() + "");

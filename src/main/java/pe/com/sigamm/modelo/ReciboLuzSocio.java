@@ -16,7 +16,7 @@ public class ReciboLuzSocio {
 	double alumbradoPublico;
 	double cargoEnergia;
 	double subtotalMes;
-	double igv;
+	double igvCargo;
 	double totalMes;
 	double usoEquipo;
 	double servicioMantenimiento;
@@ -26,6 +26,7 @@ public class ReciboLuzSocio {
 	double redondeo;
 	double total;
 	double deudaAnterior;
+	double cableadoPrincipal;
 	int estado;
 	Date fechaCarga;
 	int reciboLuzCreado;
@@ -115,11 +116,11 @@ public class ReciboLuzSocio {
 	public void setSubtotalMes(double subtotalMes) {
 		this.subtotalMes = subtotalMes;
 	}
-	public double getIgv() {
-		return igv;
+	public double getIgvCargo() {
+		return igvCargo;
 	}
-	public void setIgv(double igv) {
-		this.igv = igv;
+	public void setIgvCargo(double igvCargo) {
+		this.igvCargo = igvCargo;
 	}
 	public double getTotalMes() {
 		return totalMes;
@@ -174,6 +175,12 @@ public class ReciboLuzSocio {
 	}
 	public void setDeudaAnterior(double deudaAnterior) {
 		this.deudaAnterior = deudaAnterior;
+	}
+	public double getCableadoPrincipal() {
+		return cableadoPrincipal;
+	}
+	public void setCableadoPrincipal(double cableadoPrincipal) {
+		this.cableadoPrincipal = cableadoPrincipal;
 	}
 	public int getEstado() {
 		return estado;

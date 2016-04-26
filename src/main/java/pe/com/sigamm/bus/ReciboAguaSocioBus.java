@@ -25,6 +25,8 @@ public interface ReciboAguaSocioBus {
 	public Retorno eliminarReciboAguaxSocio(ReciboAguaSocio reciboAguaSocio);
 	
 	public File generarFacturacionAguaPDF(Integer codigoRecibo, String periodo);
+	
+	public File generarFacturacionVigilanciaPDF(String periodo); 
 
 	public void imprimirFactura();
 	

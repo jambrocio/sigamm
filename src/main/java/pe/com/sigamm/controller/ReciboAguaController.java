@@ -397,6 +397,39 @@ public class ReciboAguaController {
 		
 	}
 
+	
+	@RequestMapping(value = "/generarImpresionVigilanciaPDF", method = RequestMethod.GET)
+	public void generarImpresionVigilanciaPdf(
+			@RequestParam(value = "periodo", defaultValue = "ABRIL 2016") String periodo,
+			HttpServletResponse response, HttpServletRequest request) {
+		
+		periodo = periodo.replace("_", " ");
+		File file = reciboAguaSocioBus.generarFacturacionVigilanciaPDF(periodo);
+		response.setContentType("application/x-download");
+		response.setHeader("Content-Disposition", "attachment; filename=\""
+				+ file.getName() + "\"");
+		InputStream is = null;
+		try {
+			is = new FileInputStream(file);
+			OutputStream os = response.getOutputStream();
+			byte[] buffer = new byte[1024];
+			int len;
+			while ((len = is.read(buffer)) != -1) {
+				os.write(buffer, 0, len);
+			}
+			os.flush();
+			os.close();
+			is.close();
+		}
+
+		catch (Exception e) {
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+	}
+
+	
+	
 	@RequestMapping(value = "/reporteAguaSocioExcel", method = RequestMethod.GET)
 	public ModelAndView downloadExcel(
 			@RequestParam(value = "codigoAguaOriginal", defaultValue = "0") Integer codigoAguaOriginal) {
