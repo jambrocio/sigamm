@@ -42,9 +42,9 @@ public class FacturacionBusImpl implements FacturacionBus {
 		if(retornoCabecera.getIndicador().equals("00")){
 			
 			for(FacturacionDetalle detalle : lista){
-				
+					
 				Retorno retornoDetalle = facturacionDao.grabarFacturacionDetalle(detalle, retornoCabecera.getCodigo());
-				
+					
 			}
 			
 		}
@@ -144,12 +144,14 @@ public class FacturacionBusImpl implements FacturacionBus {
 		Retorno retornoCabecera = facturacionDao.grabarServicioOtrosCabecera(facturacion);
 		if(retornoCabecera.getIndicador().equals("00")){
 			
-			for(ServicioOtrosDetalle detalle : lista){
+			Retorno retornoEliminaCabeceraDetalle = facturacionDao.eliminarOtrosServiciosDetalle(retornoCabecera.getCodigo());
+			if(retornoEliminaCabeceraDetalle.getIndicador().equals("00")){
+				for(ServicioOtrosDetalle detalle : lista){
 				
-				Retorno retornoDetalle = facturacionDao.grabarServicioOtrosDetalle(detalle, retornoCabecera.getCodigo());
+					Retorno retornoDetalle = facturacionDao.grabarServicioOtrosDetalle(detalle, retornoCabecera.getCodigo());
 				
+				}
 			}
-			
 		}
 		
 		return retornoCabecera;
@@ -166,6 +168,30 @@ public class FacturacionBusImpl implements FacturacionBus {
 	public ReporteServiciosOtros listarServiciosOtrosDetalle(int codigoServicioOtros) {
 		
 		return facturacionDao.listarServiciosOtrosDetalle(codigoServicioOtros);
+	}
+
+	@Override
+	public ServicioOtrosCabecera ServiciosOtrosCabecera(int codigoServicioOtros) {
+		
+		return facturacionDao.ServiciosOtrosCabecera(codigoServicioOtros);
+	}
+
+	@Override
+	public List<ServicioOtrosDetalle> ServiciosOtrosDetalle(int codigoServicioOtros) {
+		
+		return facturacionDao.ServiciosOtrosDetalle(codigoServicioOtros);
+	}
+
+	@Override
+	public Retorno eliminarOtrosServiciosCabeceraDetalle(int codigoServicioOtros) {
+		
+		return facturacionDao.eliminarOtrosServiciosCabeceraDetalle(codigoServicioOtros);
+	}
+
+	@Override
+	public Retorno eliminarOtrosServiciosDetalle(int codigoServicioOtros) {
+		
+		return facturacionDao.eliminarOtrosServiciosDetalle(codigoServicioOtros);
 	}
 	
 }

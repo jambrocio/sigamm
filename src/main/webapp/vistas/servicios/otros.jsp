@@ -144,6 +144,7 @@ function nuevoOtroServicio(){
 	colorEtiquetas();
 	
 	$("#codigoSocio").val(0);
+	$("#codigoServicioOtros").val(0);
 	
 	$("#inicio").val("");
 	$("#fin").val("");
@@ -176,6 +177,7 @@ function guardar(){
 	parametros.importeSobrante 		= $("#importeSobrante").val();
 	parametros.observacion	 		= $("#observacion").val();
 	parametros.fecha		 		= $("#fecha").val();
+	parametros.codigoServicioOtros	= $("#codigoServicioOtros").val();
 	
 	$("#tabla_otros tbody tr").each(function (item) {
 		var this_row = $(this);
@@ -469,6 +471,127 @@ function limpiarTablaOtros(){
  	}
 }
 
+function editarOtrosServicios(codigoServicioOtros){
+	
+	nuevoOtroServicio();
+	
+	var ruta = obtenerContexto();
+	var parametros = new Object();
+	parametros.codigoServicioOtros = codigoServicioOtros;
+	
+	$("#codigoServicioOtros").val(codigoServicioOtros);
+	
+	$.ajax({
+        type: "POST",
+        async:false,
+        url: "buscar-servicioOtrosCabecera.json",
+        cache : false,
+        data: parametros,
+        success: function(result){
+            
+        	$("#dniAsociado").val(result.dniResponsable);
+        	$("#nombresAsociado").val(result.nombreResponsable);
+        	$("#importeSobrante").val(result.importeSobrante);
+        	$("#fecha").val(result.fecha);
+        	$("#observacion").val(result.observacion);
+        	$("#cboServicio").val(result.codigoServicio);
+        	$("#codigoSocio").val(result.codigoSocio);
+        	$("#responsable").val(result.nombreFull);
+        	cargarServiciosDetalle();
+        	
+        }
+    });
+	
+	$.ajax({
+        type: "POST",
+        async:false,
+        url: "buscar-servicioOtrosDetalle.json",
+        cache : false,
+        data: parametros,
+        success: function(result){
+            
+        	var option = "<option value=0>SELECCIONAR</option>";
+        	$.each(result, function(keyM, serv) {
+        		
+        		option += "<option value=" + serv.codigoBanio + ">" + serv.nombreBanio + "</option>";
+        		
+        		var codigoServicioDetalle = serv.codigoServicioDetalle;
+        		var nombreDetalle = serv.nombreDetalle;
+        		var codigoBanio = serv.codigoBanio;
+        		var nombreBanio = serv.nombreBanio;
+        		var rango = serv.rango;
+        		var rangoInicio = serv.rangoInicio; 
+        		var rangoFin = serv.rangoFin;
+        		var importe = serv.importe;
+        		
+        		$('#tabla_otros tbody tr:last').after(
+      				"<tr>" +
+      		           	"<td align='center' style='display:none;'>" + codigoServicioDetalle + "</td>" + 
+      		           	"<td align='left'>" + nombreDetalle + "</td>" +
+      		           	"<td align='center' style='display:none;'>" + codigoBanio + "</td>" +
+      					"<td align='left'>" + nombreBanio + "</td>" +
+      					"<td align='center'>" + rango + "</td>" +
+      					"<td align='center' style='display:none;'>" + rangoInicio + "</td>" +
+      					"<td align='center' style='display:none;'>" + rangoFin + "</td>" +
+      					"<td align='right'>" + currencyFormat(importe) + "</td>" +
+      					"<td align='center'>" +
+      					"<button type='button' class='boton btnEliminar' onclick='eliminarFila(this);'>" +
+      						"<img src='/"+ruta+"/recursos/images/icons/eliminar_16x16.png' alt='Eliminar' />" +
+      					"</button></td>" +
+      				"</tr>");
+        		
+        	});
+        	
+        	calculoTotal();
+        	
+        }
+    });
+	
+}
+
+function eliminarOtrosServicios(codigoServicioOtros){
+	
+	var ruta = obtenerContexto();
+	mensaje = "Desea eliminar Otros Servicios con codigo : " + codigoServicioOtros + " ?"; 
+	
+	$("#mensajeEliminar").html(mensaje);
+	
+	$('#alerta_modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	}).one('click', '#aceptar', function() {
+        
+		jsonObj = [];
+		var parametros = new Object();
+		parametros.codigoServicioOtros = codigoServicioOtros;
+			
+		$.ajax({
+			type: "POST",
+		    async:false,
+		    url: "eliminar-servicio-otros.json",
+		    cache : false,
+		    data: parametros,
+		    success: function(result){
+		            
+		        $('#alerta_modal').modal('hide');
+	            	
+	            $.gritter.add({
+					title: 'Mensaje',
+					text: result.mensaje,
+					image: "/" + ruta + "/recursos/images/confirm.png",
+					sticky: false,
+					time: ''
+				});
+	            
+	            //cargarPuestos();
+		            
+			}
+		});
+		
+    });
+	
+}
+
 function cargarServiciosOtros(){
 	
 	var ruta = obtenerContexto();
@@ -478,11 +601,16 @@ function cargarServiciosOtros(){
 		nombre = replaceAll(nombreFull, " ", "#");
 		var opciones = "<center>";
 			
-			opciones += "<a href=javascript:eliminarPuesto(";
-			opciones += rowObject.codigoPuesto + ",'";
-			opciones += nombre + "','";
-			opciones += rowObject.nroPuesto + "') >";
-			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Puesto'/>";
+			opciones += "<a href=javascript:editarOtrosServicios(";
+			opciones += rowObject.codigoServOtrosAlt + ") >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Otros Servicios'/>";
+			opciones += "</a>";
+			
+			opciones += "&nbsp;&nbsp;";
+		
+			opciones += "<a href=javascript:eliminarOtrosServicios(";
+			opciones += rowObject.codigoServOtrosAlt + ") >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Otros Servicios'/>";
 			opciones += "</a>";
 			
 			opciones += "</center>";
@@ -659,7 +787,7 @@ function calculoTotal(){
 </head>
 <body id="body">
 <input type="hidden" id="codigoSocio" />
-<input type="hidden" id="codigoGiro" />
+<input type="hidden" id="codigoServicioOtros" />
 <table border="0" width="100%">
 	<tr>
 		<td colspan="7">&nbsp;</td>

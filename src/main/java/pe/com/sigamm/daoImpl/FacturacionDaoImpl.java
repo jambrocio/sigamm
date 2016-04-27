@@ -33,6 +33,7 @@ import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.modelo.ServicioOtrosCabecera;
 import pe.com.sigamm.modelo.ServicioOtrosDetalle;
+import pe.com.sigamm.modelo.Usuario;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.LoggerCustom;
 
@@ -594,6 +595,7 @@ public class FacturacionDaoImpl implements FacturacionDao {
 			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
 			jdbcCall.withCatalogName("PKG_FACTURACION");
 			jdbcCall.withProcedureName("SP_GRABAR_SERVICIO_OTROS").declareParameters(
+				new SqlParameter("vi_codigo_servicio_otros", 	Types.INTEGER),
 				new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
 				new SqlParameter("vi_codigo_servicio", 			Types.INTEGER),
 				new SqlParameter("vi_codigo_socio", 			Types.INTEGER),
@@ -608,6 +610,7 @@ public class FacturacionDaoImpl implements FacturacionDao {
 				new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
 				
 			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_servicio_otros", 	servicio.getCodigoServicioOtros());
 			parametros.addValue("vi_codigo_usuario", 			datosSession.getCodigoUsuario());
 			parametros.addValue("vi_codigo_servicio", 			servicio.getCodigoServicio());
 			parametros.addValue("vi_codigo_socio", 				servicio.getCodigoSocio());
@@ -746,6 +749,117 @@ public class FacturacionDaoImpl implements FacturacionDao {
 		}
 		
 		return  reporte;
+		
+	}
+
+	@Override
+	public ServicioOtrosCabecera ServiciosOtrosCabecera(int codigoServicioOtros) {
+		
+		jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+		jdbcCall.withCatalogName("PKG_FACTURACION");
+		jdbcCall.withProcedureName("SP_BUSCAR_OTROS_SERVICIOS_CAB");
+		jdbcCall.addDeclaredParameter(new SqlOutParameter("vo_result", OracleTypes.CURSOR,new BeanPropertyRowMapper(ServicioOtrosCabecera.class)));
+		
+		MapSqlParameterSource parametros = new MapSqlParameterSource();
+		parametros.addValue("vi_codigo_servicio_otros", codigoServicioOtros);
+		
+		Map<String,Object> results = jdbcCall.execute(parametros);
+		List<ServicioOtrosCabecera> lista = (List<ServicioOtrosCabecera>) results.get("vo_result");
+		
+		ServicioOtrosCabecera cabecera = lista.get(0);
+		
+		return cabecera;
+		
+	}
+
+	@Override
+	public List<ServicioOtrosDetalle> ServiciosOtrosDetalle(int codigoServicioOtros) {
+		
+		jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+		jdbcCall.withCatalogName("PKG_FACTURACION");
+		jdbcCall.withProcedureName("SP_BUSCAR_OTROS_SERVICIOS_DET");
+		jdbcCall.addDeclaredParameter(new SqlOutParameter("vo_result", OracleTypes.CURSOR,new BeanPropertyRowMapper(ServicioOtrosDetalle.class)));
+		
+		MapSqlParameterSource parametros = new MapSqlParameterSource();
+		parametros.addValue("vi_codigo_servicio_otros", codigoServicioOtros);
+		
+		Map<String,Object> results = jdbcCall.execute(parametros);
+		List<ServicioOtrosDetalle> lista = (List<ServicioOtrosDetalle>) results.get("vo_result");
+		
+		return lista;
+		
+	}
+
+	@Override
+	public Retorno eliminarOtrosServiciosCabeceraDetalle(int codigoServicioOtros) {
+		
+		Retorno retorno = new Retorno();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_ELIMINAR_SERVICIO_OTROS").declareParameters(
+				new SqlParameter("vi_codigo_servicio_otros", 			Types.INTEGER),
+				
+				new SqlOutParameter("vo_indicador", 					Types.VARCHAR),
+				new SqlOutParameter("vo_mensaje", 						Types.VARCHAR));
+				
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_servicio_otros", 			codigoServicioOtros);
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
+	}
+
+	@Override
+	public Retorno eliminarOtrosServiciosDetalle(int codigoServicioOtros) {
+		
+		Retorno retorno = new Retorno();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_ELIMINAR_SERV_OTROS_DETA").declareParameters(
+				new SqlParameter("vi_codigo_servicio_otros", 			Types.INTEGER),
+				
+				new SqlOutParameter("vo_indicador", 					Types.VARCHAR),
+				new SqlOutParameter("vo_mensaje", 						Types.VARCHAR));
+				
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_servicio_otros", 			codigoServicioOtros);
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
 		
 	}
 

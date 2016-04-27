@@ -8,6 +8,11 @@ public class ServicioOtrosDetalle {
     int rangoInicio;
     int rangoFin;
     
+    String rango;
+    String nombreBanio;
+    int importe;
+    String nombreDetalle;
+    
 	public int getCodigoServicioOtros() {
 		return codigoServicioOtros;
 	}
@@ -38,5 +43,29 @@ public class ServicioOtrosDetalle {
 	public void setRangoFin(int rangoFin) {
 		this.rangoFin = rangoFin;
 	}
-    
+	public String getRango() {
+		return rango;
+	}
+	public void setRango(String rango) {
+		this.rango = rango;
+	}
+	public String getNombreBanio() {
+		return nombreBanio;
+	}
+	public void setNombreBanio(String nombreBanio) {
+		this.nombreBanio = nombreBanio;
+	}
+	public int getImporte() {
+		return importe;
+	}
+	public void setImporte(int importe) {
+		this.importe = importe;
+	}
+	public String getNombreDetalle() {
+		return nombreDetalle;
+	}
+	public void setNombreDetalle(String nombreDetalle) {
+		this.nombreDetalle = nombreDetalle;
+	}
+            
 }

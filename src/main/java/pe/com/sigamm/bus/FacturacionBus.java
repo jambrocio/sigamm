@@ -52,4 +52,12 @@ public interface FacturacionBus {
 	
 	public ReporteServiciosOtros listarServiciosOtrosDetalle(int codigoServicioOtros);
 	
+	public ServicioOtrosCabecera ServiciosOtrosCabecera(int codigoServicioOtros);
+	
+	public List<ServicioOtrosDetalle> ServiciosOtrosDetalle(int codigoServicioOtros);
+	
+	public Retorno eliminarOtrosServiciosCabeceraDetalle(int codigoServicioOtros);
+	
+	public Retorno eliminarOtrosServiciosDetalle(int codigoServicioOtros);
+	
 }

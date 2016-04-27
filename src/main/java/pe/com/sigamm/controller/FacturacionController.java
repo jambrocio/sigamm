@@ -34,6 +34,7 @@ import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.modelo.ServicioOtrosCabecera;
 import pe.com.sigamm.modelo.ServicioOtrosDetalle;
+import pe.com.sigamm.modelo.Usuario;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.Constantes;
 import pe.com.sigamm.util.OperadoresUtil;
@@ -373,5 +374,31 @@ public class FacturacionController {
 		response.setRows(reporteServicioOtros.getListaServiciosOtros());
 		
 		return response;
+	}
+	
+	@RequestMapping(value = "/buscar-servicioOtrosCabecera.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody ServicioOtrosCabecera buscarServicioOtrosCabecera(
+			@RequestParam(value = "codigoServicioOtros", defaultValue = "0") Integer codigoServicioOtros){
+		
+		return facturacionBus.ServiciosOtrosCabecera(codigoServicioOtros);
+	}
+	
+	@RequestMapping(value = "/buscar-servicioOtrosDetalle.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody List<ServicioOtrosDetalle> buscarServicioOtrosDetalle(
+			@RequestParam(value = "codigoServicioOtros", defaultValue = "0") Integer codigoServicioOtros){
+		
+		return facturacionBus.ServiciosOtrosDetalle(codigoServicioOtros);
+	}
+	
+	@RequestMapping(value = "/eliminar-servicio-otros.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String eliminarServicioOtros(
+			@RequestParam(value = "codigoServicioOtros", defaultValue = "0") Integer codigoServicioOtros){
+		
+		Retorno retorno = facturacionBus.eliminarOtrosServiciosCabeceraDetalle(codigoServicioOtros);
+		
+		String resultado = "{\"mensaje\":\"" + retorno.getMensaje() + "\",\"codigoRetorno\":\"" + retorno.getIndicador() + "\"}";
+		
+		return resultado;
+		
 	}
 }

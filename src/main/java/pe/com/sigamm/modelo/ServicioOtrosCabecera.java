@@ -11,6 +11,8 @@ public class ServicioOtrosCabecera {
 	String importeSobrante;
 	String observacion;
 	String fecha;
+	String nombreFull;
+	int codigoServicioOtros;
 	
 	public int getCodigoUsuario() {
 		return codigoUsuario;
@@ -66,5 +68,17 @@ public class ServicioOtrosCabecera {
 	public void setFecha(String fecha) {
 		this.fecha = fecha;
 	}
-			    
+	public String getNombreFull() {
+		return nombreFull;
+	}
+	public void setNombreFull(String nombreFull) {
+		this.nombreFull = nombreFull;
+	}
+	public int getCodigoServicioOtros() {
+		return codigoServicioOtros;
+	}
+	public void setCodigoServicioOtros(int codigoServicioOtros) {
+		this.codigoServicioOtros = codigoServicioOtros;
+	}
+		
 }
