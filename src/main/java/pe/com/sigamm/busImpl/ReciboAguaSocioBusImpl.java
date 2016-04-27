@@ -485,40 +485,40 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 
 				PdfPTable table5 = new PdfPTable(2);
 				table5.setWidthPercentage(100);
-				Paragraph p10 = new Paragraph("DEUDA ANTERIOR VIGILANCIA", fuente);
+				Paragraph p10 = new Paragraph("VIGILANCIA DEL MES", fuente);
 				PdfPCell celda10 = new PdfPCell(p10);
 				table5.addCell(celda10);
-				Paragraph p11 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getDeudaAnteriorVigilancia() + "", fuente);
+				Paragraph p11 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getConsumoMes() + "", fuente);
 				PdfPCell celda11 = new PdfPCell(p11);
 				celda11.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table5.addCell(celda11);
 				
 				PdfPTable table6 = new PdfPTable(2);
 				table6.setWidthPercentage(100);
-				Paragraph p12 = new Paragraph("DEUDA ACTUAL VIGILANCIA", fuente);
+				Paragraph p12 = new Paragraph("DEUDA ANTERIOR VIGILANCIA", fuente);
 				PdfPCell celda12 = new PdfPCell(p12);
 				table6.addCell(celda12);
-				Paragraph p13 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getConsumoMes() + "", fuente);
+				Paragraph p13 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getDeudaAnteriorVigilancia() + "", fuente);
 				PdfPCell celda13 = new PdfPCell(p13);
 				celda13.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table6.addCell(celda13);
 				
 				PdfPTable table7 = new PdfPTable(2);
 				table7.setWidthPercentage(100);
-				Paragraph p14 = new Paragraph("DEUDA ANTERIOR CUOTA ADMINISTRATIVA", fuente);
+				Paragraph p14 = new Paragraph("CUOTA ADMINISTRATIVA DEL MES", fuente);
 				PdfPCell celda14 = new PdfPCell(p14);
 				table7.addCell(celda14);
-				Paragraph p15 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getDeudaAnteriorCtaAdm() + "", fuente);
+				Paragraph p15 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getCuotaAdministrativa() + "", fuente);
 				PdfPCell celda15 = new PdfPCell(p15);
 				celda15.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table7.addCell(celda15);
 				
 				PdfPTable table8 = new PdfPTable(2);
 				table8.setWidthPercentage(100);
-				Paragraph p16 = new Paragraph("DEUDA ACTUAL CUOTA ADMINISTRATIVA", fuente);
+				Paragraph p16 = new Paragraph("DEUDA ANTERIOR CUOTA ADMINISTRATIVA", fuente);
 				PdfPCell celda16 = new PdfPCell(p16);
 				table8.addCell(celda16);
-				Paragraph p17 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getCuotaAdministrativa() + "", fuente);
+				Paragraph p17 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getDeudaAnteriorCtaAdm() + "", fuente);
 				PdfPCell celda17 = new PdfPCell(p17);
 				celda17.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table8.addCell(celda17);
