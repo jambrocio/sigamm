@@ -233,7 +233,21 @@
 			<artifactId>bcprov-jdk15on</artifactId>
 			<version>1.51</version>
 		</dependency>
-		
+		<!-- para Ireport -->
+		<dependency>
+		    <groupId>net.sf.jasperreports</groupId>
+		    <artifactId>jasperreports</artifactId>
+		    <version>5.1.0</version>
+		    <scope>provided</scope>
+		</dependency>
+		 
+		<dependency>
+		    <groupId>commons-collections</groupId>
+		    <artifactId>commons-collections</artifactId>
+		    <version>3.2.1</version>
+		    <scope>provided</scope>
+		</dependency>
+		 
 	</dependencies>
 
 	<build>

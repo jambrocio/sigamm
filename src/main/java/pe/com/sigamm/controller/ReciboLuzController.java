@@ -30,8 +30,6 @@ import pe.com.sigamm.bus.ReciboLuzOriginalBus;
 import pe.com.sigamm.bus.ReciboLuzSocioBus;
 import pe.com.sigamm.modelo.LuzOriginal;
 import pe.com.sigamm.modelo.Puesto;
-import pe.com.sigamm.modelo.ReciboAgua;
-import pe.com.sigamm.modelo.ReciboAguaSocio;
 import pe.com.sigamm.modelo.ReciboLuzSocio;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.session.DatosSession;

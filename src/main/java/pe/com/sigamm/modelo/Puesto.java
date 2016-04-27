@@ -27,7 +27,9 @@ public class Puesto {
 	double cableadoPrincipal;
 	int estadoAbierto;
 	int suspendido;
-
+	String lecturaInicial;
+	String lecturaFinal;
+	
 	public int getCodigoSocio() {
 		return codigoSocio;
 	}
@@ -184,5 +186,17 @@ public class Puesto {
 	public void setSuspendido(int suspendido) {
 		this.suspendido = suspendido;
 	}
-	
+	public String getLecturaInicial() {
+		return lecturaInicial;
+	}
+	public void setLecturaInicial(String lecturaInicial) {
+		this.lecturaInicial = lecturaInicial;
+	}
+	public String getLecturaFinal() {
+		return lecturaFinal;
+	}
+	public void setLecturaFinal(String lecturaFinal) {
+		this.lecturaFinal = lecturaFinal;
+	}
+
 }

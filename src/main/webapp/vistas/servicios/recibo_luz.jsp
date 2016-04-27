@@ -606,12 +606,12 @@ function cargarReciboLuzSocio(codigoRecibo){
 		height: 'auto',
 		width: 'auto',
 		postData: parametros,
-		colNames : ['Nombre Usuario', 'Puesto', 'Giro','Total', 'Opciones'],
+		colNames : ['Nombre Usuario', 'Puesto', 'Giro','Anterior','Actual','Total', 'Opciones'],
 		colModel : [{
 			name : 'nombreFull',
 			index: 'nombreFull',
 			sortable:false,
-			width: 320,
+			width: 240,
 			align: 'left'
 		},{
 			name : 'nroPuesto',
@@ -624,6 +624,18 @@ function cargarReciboLuzSocio(codigoRecibo){
 			index: 'nombreGiro',
 			sortable:false,
 			width: 150,
+			align: 'center'
+		},{
+			name : 'lecturaInicial',
+			index: 'lecturaInicial',
+			sortable:false,
+			width: 35,
+			align: 'center'
+		},{
+			name : 'lecturaFinal',
+			index: 'lecturaFinal',
+			sortable:false,
+			width: 35,
 			align: 'center'
 		},{
 			name : 'total',
@@ -653,21 +665,29 @@ function cargarReciboLuzSocio(codigoRecibo){
 				$("#grillaReciboLuz").setCell(rowId, 'nombreFull', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
 				$("#grillaReciboLuz").setCell(rowId, 'nroPuesto', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
 				$("#grillaReciboLuz").setCell(rowId, 'nombreGiro', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'lecturaInicial', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'lecturaFinal', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
 				$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
 			} else if ( (item.reciboLuzCreado == 1) && (item.corteLuz == 1) ) {
 				$("#grillaReciboLuz").setCell(rowId, 'nombreFull', '', { 'background-color':'##FF8000','color':'white','font-weight':'bold' });				
 				$("#grillaReciboLuz").setCell(rowId, 'nroPuesto', '', { 'background-color':'#FF8000','color':'white','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'lecturaInicial', '', { 'background-color':'#FF8000','color':'white','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'lecturaFinal', '', { 'background-color':'#FF8000','color':'white','font-weight':'bold' });
 				$("#grillaReciboLuz").setCell(rowId, 'nombreGiro', '', { 'background-color':'#FF8000','color':'white','font-weight':'bold' });
 				$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color':'#FF8000','color':'white','font-weight':'bold' });
 			} else if ( (item.reciboLuzCreado == 1) && (item.suspendido == 1) ) {
 				$("#grillaReciboLuz").setCell(rowId, 'nombreFull', '', { 'background-color':'#FFBF00','color':'black','font-weight':'bold' });				
 				$("#grillaReciboLuz").setCell(rowId, 'nroPuesto', '', { 'background-color':'#FFBF00','color':'black','font-weight':'bold' });
 				$("#grillaReciboLuz").setCell(rowId, 'nombreGiro', '', { 'background-color':'#FFBF00','color':'black','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'lecturaInicial', '', { 'background-color':'#FFBF00','color':'black','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'lecturaFinal', '', { 'background-color':'#FFBF00','color':'black','font-weight':'bold' });
 				$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color':'#FFBF00','color':'black','font-weight':'bold' });		
 			} else {
 				$("#grillaReciboLuz").setCell(rowId, 'nombreFull', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
 				$("#grillaReciboLuz").setCell(rowId, 'nroPuesto', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
 				$("#grillaReciboLuz").setCell(rowId, 'nombreGiro', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'lecturaInicial', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
+				$("#grillaReciboLuz").setCell(rowId, 'lecturaFinal', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
 				$("#grillaReciboLuz").setCell(rowId, 'total', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
 			}
 
@@ -1097,6 +1117,13 @@ function calculaCampos(valor){
 
 }
 
+function redondeo(numero, decimales)
+{
+	var flotante = parseFloat(numero);
+	var resultado = Math.round(flotante*Math.pow(10,decimales))/Math.pow(10,decimales);
+	return resultado;
+}
+
 function operaciones(valor){
 	var valores = valor;
 	var respuesta = 0;
@@ -1134,10 +1161,10 @@ function operaciones(valor){
 		
 		//cargoEnergiaSocio, igvSocio, alumbradoPublicoSocio, servicioMantenimientoSocio, deudaAnteriorSocio, reconexionSocio, cableadoPrincipalSocio, totalSocio
 		
-		respuesta = redondear_dos_decimal( parseFloat($("#cargoEnergiaSocio").val()) + parseFloat($("#igvSocio").val()) + parseFloat($("#alumbradoPublicoSocio").val()) + parseFloat($("#servicioMantenimientoSocio").val()) + parseFloat($("#deudaAnteriorSocio").val()) + parseFloat($("#reconexionSocio").val()) + parseFloat($("#cableadoPrincipalSocio").val()) );
+		respuesta = redondeo( redondear_dos_decimal( parseFloat($("#cargoEnergiaSocio").val()) + parseFloat($("#igvSocio").val()) + parseFloat($("#alumbradoPublicoSocio").val()) + parseFloat($("#servicioMantenimientoSocio").val()) + parseFloat($("#deudaAnteriorSocio").val()) + parseFloat($("#reconexionSocio").val()) + parseFloat($("#cableadoPrincipalSocio").val()) ), 1);
 //		alert(respuesta);
 		if (!isNaN(respuesta))
-			$("#totalSocio").html(respuesta);
+			$("#totalSocio").html( respuesta );
 		else
 			$("#totalSocio").html(0.00);
 	}else{
@@ -1670,7 +1697,8 @@ function botonEnter()
 						<table border="0" width="100%">
 							<tr>
 								<td width="40%"><b>Cargo por Energía :</b></td>
-								<td><input type='text' id='cargoEnergiaSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;" disabled="disabled"/></td>
+								<!-- td><input type='text' id='cargoEnergiaSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;" disabled="disabled"/></td -->
+								<td><input type='text' id='cargoEnergiaSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
 							</tr>
 							<tr>
 								<td><b>IGV :</b></td>
@@ -1678,11 +1706,11 @@ function botonEnter()
 							</tr>
 							<tr>
 								<td><b>Alumbrado Público :</b></td>
-								<td><input type='text' id='alumbradoPublicoSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;" disabled="disabled"/></td>
+								<td><input type='text' id='alumbradoPublicoSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
 							</tr>
 							<tr>
 								<td><b>Cargo Fijo :</b></td>
-								<td><input type='text' id='servicioMantenimientoSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;" disabled="disabled"/></td>
+								<td><input type='text' id='servicioMantenimientoSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
 							</tr>
 							<tr>
 								<td><b>Deuda Anterior :</b></td>

@@ -449,7 +449,8 @@ function guardar(){
 				<img src="recursos/images/icons/nuevo_16x16.png" alt="Nuevo" />&nbsp;Nuevo
 			</button>
 			<button type="button" class="btn btn-primary">
-				<img src="recursos/images/icons/excel_16x16.png" alt="Exportar a Excel" />&nbsp;<a href="/sigamm/reporteOpebanExcel" style="color:white">Exportar</a>
+				<!-- img src="recursos/images/icons/excel_16x16.png" alt="Exportar a Excel" />&nbsp;<a href="/sigamm/reporteOpebanExcel" style="color:white">Exportar</a> -->
+				<img src="recursos/images/icons/excel_16x16.png" alt="Exportar a Excel" />&nbsp;<a href="/sigamm/operacionesBancarias" style="color:white">Reporte Operaciones Bancarias</a>
 			</button>
 		</td>
 	</tr>
