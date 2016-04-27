@@ -1,6 +1,10 @@
 package pe.com.sigamm.controller;
 
 import java.io.File;
+import java.io.InputStream;
+import java.net.URI;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import pe.com.sigamm.session.DatosSession;
-import pe.com.sigamm.modelo.OperacionesBancarias;
 
 @Controller
 public class EstadoCuentaController {
@@ -46,61 +49,37 @@ public class EstadoCuentaController {
 		return "reportes/reporte_estado_cuenta";
 
 	}
-	/*
+	
 	@RequestMapping(value = "/operacionesBancarias", method = RequestMethod.GET)
     public String reporteOperacionesBancariasPdf(ModelMap modelMap, HttpServletResponse response) {
-        log.info("exec reciboPdf() .:. RM= pdf/recibo");
-        /*try {
-            List<Recibo> lista = new ArrayList<Recibo>(1);
-            Recibo recibo = new Recibo();
-            recibo.setMonto("123.34");
-            lista.add(recibo);
-            JRBeanCollectionDataSource jrbean = new JRBeanCollectionDataSource(lista, false);
-            modelMap.put("reciboKey", jrbean);
-            return ("operacionesBancarias");
- 
-        } catch (Exception e) {
-            log.info("Ocurrio un error al generar el PDF.", e);
-        }*/
-        /*List<OperacionesBancarias> lista = new ArrayList<OperacionesBancarias>(1);
-        JRBeanCollectionDataSource jrbean = new JRBeanCollectionDataSource(lista);
-        JasperReport reporte = null;
-		try {
-			reporte = (JasperReport) JRLoader.loadObject("jasperTemplates/Reporte_Operaciones_Bancarias.jasper");
-		} catch (JRException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        JasperPrint jasperPrint = null;
-		try {
-			jasperPrint = JasperFillManager.fillReport(reporte, null, jrbean);
-		} catch (JRException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}      
-
-        JRExporter exporter = new JRPdfExporter();     
-        exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);     
-        exporter.setParameter(JRExporterParameter.OUTPUT_FILE, new File("reporte grafica.pdf"));      
-
+        log.info("exec reciboPdf() .:. RM= pdf/recibo");      
         
-        return ("operacionesBancarias");*/
-        
-        /*try {
-        	 
-            JasperReport report = JasperCompileManager.compileReport(archivo);
- 
+        try {
+        	log.info(getClass());
+        	//String ruta =  getClass().getResource("reportes/Reporte_Operaciones_Bancarias.jrxml").getPath();
+            JasperReport report = JasperCompileManager.compileReport("D://Proyectos//MMH//reportes//Reporte_Operaciones_Bancarias.jrxml");
             JasperPrint print = JasperFillManager.fillReport(report, new HashMap(), coneccionSQL());
- 
             JasperViewer.viewReport(print, false);
- 
         } catch (JRException jRException) {
- 
             System.out.println(jRException.getMessage());
- 
         }
- 
         return ("operacionesBancarias");
  
-    }	*/
+    }
+	
+
+	private Connection coneccionSQL() {
+			Connection con = null;
+            try {
+                    String cadena;
+                    cadena="jdbc:oracle:thin:@192.168.32.6:7980:p65dbprd";
+                    Class.forName("oracle.jdbc.OracleDriver");
+                    con = DriverManager.getConnection(cadena, "contraloria","contraloria");
+            } catch(Exception e) {
+                   System.out.println(e.getMessage());
+            }
+            
+			return con;
+    }
+ 
 }
