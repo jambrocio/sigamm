@@ -18,7 +18,7 @@ public class SessionListener implements HttpSessionListener{
 	public void sessionCreated(HttpSessionEvent event) {
 		System.out.println("==== Session is created ====");
 		
-		int sessionTimeOut = 30;		//30 minutos
+		int sessionTimeOut = 60;		//60 minutos
 		event.getSession().setMaxInactiveInterval(sessionTimeOut * 60);
 		
 	}
