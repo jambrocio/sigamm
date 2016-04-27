@@ -505,7 +505,7 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				
 				PdfPTable table7 = new PdfPTable(2);
 				table7.setWidthPercentage(100);
-				Paragraph p14 = new Paragraph("DEUDA ANTERIOR GASTO ADMINISTRATIVO", fuente);
+				Paragraph p14 = new Paragraph("DEUDA ANTERIOR CUOTA ADMINISTRATIVA", fuente);
 				PdfPCell celda14 = new PdfPCell(p14);
 				table7.addCell(celda14);
 				Paragraph p15 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getDeudaAnteriorCtaAdm() + "", fuente);
@@ -515,7 +515,7 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				
 				PdfPTable table8 = new PdfPTable(2);
 				table8.setWidthPercentage(100);
-				Paragraph p16 = new Paragraph("DEUDA ACTUAL GASTO ADMINISTRATIVO", fuente);
+				Paragraph p16 = new Paragraph("DEUDA ACTUAL CUOTA ADMINISTRATIVA", fuente);
 				PdfPCell celda16 = new PdfPCell(p16);
 				table8.addCell(celda16);
 				Paragraph p17 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getCuotaAdministrativa() + "", fuente);
@@ -554,23 +554,25 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				celda23.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				table11.addCell(celda23);
 				//----------------------------------------------
-				/*
+				
 				PdfPTable table12 = new PdfPTable(2);
 				table12.setWidthPercentage(100);
+				
 				Paragraph p24 = new Paragraph("FECHA DE VENCIMIENTO", fuente1);
 				PdfPCell celda24 = new PdfPCell(p24);
 				celda12.setHorizontalAlignment(Element.ALIGN_CENTER);
 				celda12.setVerticalAlignment(Element.ALIGN_BOTTOM);
 				celda12.setFixedHeight(50f);
-				Paragraph p25 = new Paragraph("FECHA DE CORTE", fuente1);
+				
+				Paragraph p25 = new Paragraph(" ", fuente1);
 				PdfPCell celda25 = new PdfPCell(p25);
 				celda25.setHorizontalAlignment(Element.ALIGN_CENTER);
 				celda25.setVerticalAlignment(Element.ALIGN_BOTTOM);
 				table12.addCell(celda24);
 				table12.addCell(celda25);
-				*/
+				
 				//----------------------------------------------
-				/*
+				
 				PdfPTable table13 = new PdfPTable(2);
 				table13.setWidthPercentage(100);
 				
@@ -581,16 +583,16 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				celda26.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				table13.addCell(celda26);
 				
-				Paragraph p27 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getFechaCorte() + "", fuente1);
+				Paragraph p27 = new Paragraph("", fuente1);
 				PdfPCell celda27 = new PdfPCell(p27);
 				celda27.setHorizontalAlignment(Element.ALIGN_CENTER);
 				celda27.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				table13.addCell(celda27);
-				*/
+				
 				//----------------------------------------------				
 				doc.add(table11);
-				//doc.add(table12);
-				//doc.add(table13);
+				doc.add(table12);
+				doc.add(table13);
 				
 				/*
 				Paragraph observaciones = new Paragraph("OBSERVACIONES:");
