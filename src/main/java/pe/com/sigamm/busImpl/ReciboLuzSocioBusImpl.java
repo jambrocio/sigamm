@@ -2,6 +2,8 @@ package pe.com.sigamm.busImpl;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.annotation.Resource;
 
@@ -198,6 +200,16 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				celda15.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table7.addCell(celda15);
 				
+				PdfPTable table16 = new PdfPTable(2);
+				table16.setWidthPercentage(100);
+				Paragraph p32 = new Paragraph("IGV CARGO", fuente);
+				PdfPCell celda32 = new PdfPCell(p32);
+				table16.addCell(celda32);
+				Paragraph p33 = new Paragraph(UtilPDF.round(reporte.getListaReciboLuzSocio().get(aw).getIgvCargo(), 2) + "", fuente);
+				PdfPCell celda33 = new PdfPCell(p33);
+				celda33.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table16.addCell(celda33);
+				
 				PdfPTable table8 = new PdfPTable(2);
 				table8.setWidthPercentage(100);
 				Paragraph p16 = new Paragraph("ALUMBRADO PUBLICO", fuente);
@@ -260,12 +272,16 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				table13.addCell(celda26);
 				
 				Double total = 	reporte.getListaReciboLuzSocio().get(aw).getCargoEnergia() +
+								reporte.getListaReciboLuzSocio().get(aw).getIgvCargo() +
 								reporte.getListaReciboLuzSocio().get(aw).getAlumbradoPublico() +
 								reporte.getListaReciboLuzSocio().get(aw).getServicioMantenimiento() + 
 								reporte.getListaReciboLuzSocio().get(aw).getDeudaAnterior() +
 								reporte.getListaReciboLuzSocio().get(aw).getReconexion() + 
 								reporte.getListaReciboLuzSocio().get(aw).getCableadoPrincipal();
-				String valor5 = UtilPDF.round(total, 2) + "";
+				String valor5 = UtilPDF.round(total, 1) + "";
+				//String valor5 = UtilPDF.Redondear(total, 2) + "";		
+			
+			    
 				Paragraph p27 = new Paragraph(valor5.replace(",", "."), fuente1);
 				PdfPCell celda27 = new PdfPCell(p27);
 				celda27.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -311,6 +327,7 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				doc.add(table5);
 				doc.add(table6);
 				doc.add(table7);
+				doc.add(table16);				
 				doc.add(table8);
 				doc.add(table9);
 				doc.add(table10);

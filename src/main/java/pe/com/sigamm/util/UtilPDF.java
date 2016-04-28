@@ -69,11 +69,23 @@ public class UtilPDF {
 		return fechaActualStr;
 	}
 
-	public static String round(double value, int places) {
-		DecimalFormat df = new DecimalFormat("#0.00");
-		return df.format(value);
+	public static double round(double value, int places) {
+		//DecimalFormat df = new DecimalFormat("#0.00");
+		double rounded = 0.0;
+		if (places == 1){
+			rounded = (double) Math.round(value * 10) / 10;
+		}
+		if (places == 2){
+			rounded = (double) Math.round(value * 100) / 100;
+		}
+		return rounded;
 	}
 
+	public static double Redondear(double numero,int digitos)
+	{
+	      int cifras=(int) Math.pow(10,digitos);
+	      return Math.rint(numero*cifras)/cifras;
+	}
 	
 	public static String getID(String periodo, Integer correlativo) {
 
