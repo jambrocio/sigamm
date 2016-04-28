@@ -33,7 +33,7 @@ ORDER BY OPERACION, b.FECHA]]>
 		<groupHeader>
 			<band height="25">
 				<rectangle>
-					<reportElement x="3" y="3" width="510" height="20" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="995e9c5c-b11f-41b7-a673-d3f77bbf0fb4"/>
+					<reportElement x="3" y="3" width="550" height="20" forecolor="#CCCCCC" backcolor="#CCCCCC" uuid="995e9c5c-b11f-41b7-a673-d3f77bbf0fb4"/>
 				</rectangle>
 				<textField>
 					<reportElement x="3" y="3" width="100" height="20" uuid="e0e0c0a1-732f-4514-a33e-52d624bf44aa"/>

@@ -104,7 +104,7 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				recibo.setAlignment(Element.ALIGN_CENTER);
 				doc.add(recibo);
 				
-				Image qrcodeImage = UtilPDF.getQRCode(reporte.getListaReciboLuzSocio().get(aw).getIdRecibo() + "");
+				Image qrcodeImage = UtilPDF.getQRCode(reporte.getListaReciboLuzSocio().get(aw).getPuestoSocio() + "-" + reporte.getListaReciboLuzSocio().get(aw).getNombreFull() + "");
 				qrcodeImage.setAbsolutePosition(500, 690);
 				doc.add(qrcodeImage);
 				
