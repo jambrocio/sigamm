@@ -8,6 +8,9 @@ public class FacturacionDetalle {
 	int codigoFacturacioncab;
 	int codigoServicio;
 	
+	String fecPeriodo;
+	String nombreDetalle;
+	
 	public int getCodigoFacturacionDet() {
 		return codigoFacturacionDet;
 	}
@@ -38,5 +41,17 @@ public class FacturacionDetalle {
 	public void setCodigoServicio(int codigoServicio) {
 		this.codigoServicio = codigoServicio;
 	}
-		
+	public String getFecPeriodo() {
+		return fecPeriodo;
+	}
+	public void setFecPeriodo(String fecPeriodo) {
+		this.fecPeriodo = fecPeriodo;
+	}
+	public String getNombreDetalle() {
+		return nombreDetalle;
+	}
+	public void setNombreDetalle(String nombreDetalle) {
+		this.nombreDetalle = nombreDetalle;
+	}
+			
 }

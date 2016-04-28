@@ -533,7 +533,7 @@ function editarOtrosServicios(codigoServicioOtros){
       					"<td align='center'>" + rango + "</td>" +
       					"<td align='center' style='display:none;'>" + rangoInicio + "</td>" +
       					"<td align='center' style='display:none;'>" + rangoFin + "</td>" +
-      					"<td align='right'>" + currencyFormat(importe) + "</td>" +
+      					"<td align='right'>" + importe + "</td>" +
       					"<td align='center'>" +
       					"<button type='button' class='boton btnEliminar' onclick='eliminarFila(this);'>" +
       						"<img src='/"+ruta+"/recursos/images/icons/eliminar_16x16.png' alt='Eliminar' />" +
@@ -777,6 +777,7 @@ function calculoTotal(){
         	//total = total + importe;
         	total = parseFloat(total) + parseFloat(importe);
         	
+        	//console.log("Importe : " + importe);
         	//console.log("Total : " + total);
         }
 	});

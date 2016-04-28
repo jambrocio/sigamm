@@ -10,7 +10,7 @@ public class ServicioOtrosDetalle {
     
     String rango;
     String nombreBanio;
-    int importe;
+    String importe;
     String nombreDetalle;
     
 	public int getCodigoServicioOtros() {
@@ -55,10 +55,10 @@ public class ServicioOtrosDetalle {
 	public void setNombreBanio(String nombreBanio) {
 		this.nombreBanio = nombreBanio;
 	}
-	public int getImporte() {
+	public String getImporte() {
 		return importe;
 	}
-	public void setImporte(int importe) {
+	public void setImporte(String importe) {
 		this.importe = importe;
 	}
 	public String getNombreDetalle() {
@@ -67,5 +67,5 @@ public class ServicioOtrosDetalle {
 	public void setNombreDetalle(String nombreDetalle) {
 		this.nombreDetalle = nombreDetalle;
 	}
-            
+                
 }

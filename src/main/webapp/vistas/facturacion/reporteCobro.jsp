@@ -14,7 +14,21 @@
         font-family:Tahoma, Geneva, sans-serif;
         font-size:12px;    
     }
+	
+	.tamanioPrinter14
+    {
+        color:black;
+        font-family: Calibri;
+		font-size: 14px;    
+    }
     
+    .tamanioPrinter12
+    {
+        color:black;
+        font-family: Calibri;
+		font-size: 12px;    
+    }
+        
     .modal-header-primary {
 		color:#fff;
 		padding:9px 15px;
@@ -263,6 +277,136 @@ function eliminarPuesto(codigoPuesto, nombre, nroPuesto){
 
 }
 
+function limpiarTablaFacturacion(){
+	
+	var tabla = document.getElementById("tablaFacturacionDetalle");
+	var filasTabla = tabla.rows.length;
+	
+	for(var i = 0; i < filasTabla; i++) {
+		
+		if(i > 0){
+ 			
+ 			tabla.deleteRow(1);
+ 			
+ 		}
+ 		
+ 	}
+	
+}
+
+function visualizar(codigoFacturacionCab){
+	
+	limpiarTablaFacturacion();
+	
+	var ruta = obtenerContexto();
+	var parametros = new Object();
+	parametros.codigoFacturacionCab = codigoFacturacionCab;
+	
+	$.ajax({
+        type: "POST",
+        async:false,
+        url: "buscar-facturacionCabecera.json",
+        cache : false,
+        data: parametros,
+        success: function(result){
+            
+        	$("#printFecha").html(result.fechaCreacion);
+        	$("#printAsociado").html(result.nombresFull);
+        	$("#printSector").html(result.nombreSector);
+        	$("#printPuesto").html(result.nroPuesto);
+        	$("#printGiro").html(result.nombreGiro);
+        		
+        }
+    });
+	
+	$.ajax({
+        type: "POST",
+        async:false,
+        url: "buscar-facturacionDetalle.json",
+        cache : false,
+        data: parametros,
+        success: function(result){
+            
+        	dataTabla = "";
+        	cantidadLineas = 1;
+        	$.each(result, function(keyM, serv) {
+        		
+        		var nombreDetalle = serv.nombreDetalle;
+        		var monto = parseInt(serv.monto);
+        		var fecPeriodo = serv.fecPeriodo;
+        		
+        		dataTabla += "<tr>" +
+		           	"<td align='center'></td>" + 
+  		           	"<td align='left' class='tamanioPrinter12'><b>" + nombreDetalle + "</b><br>" + fecPeriodo + "</td>" +
+  		           	"<td align='right' class='tamanioPrinter12'>S/. " + currencyFormat(monto) + "</td>" +
+  		          	"<td align='right' class='tamanioPrinter12' style='display:none;'>" + monto + "</td>" +
+  				"</tr>";
+  				
+  				cantidadLineas = cantidadLineas + 1;
+  				
+        	});
+        	
+        	var j = 8 - cantidadLineas; 
+			for (i=0 ;i < j; i++) { 
+				 
+				dataTabla += "<tr>";
+		    	dataTabla += "<td>&nbsp;</td>";
+		    	dataTabla += "<td>&nbsp;</td>";
+		    	dataTabla += "<td>&nbsp;</td>";
+		    	dataTabla += "<td style='display:none;'></td>";
+		    	dataTabla += "</tr>";
+		    	
+		    	//console.log("Linea : " + i);
+			}
+			
+			dataTabla1 = dataTabla;
+			dataTabla1 += "<tr>";
+	    	dataTabla1 += "<td>&nbsp;</td>";
+	    	dataTabla1 += "<td class='tamanioPrinter12'><b>TOTAL</b></td>";
+	    	dataTabla1 += "<td align='right' class='tamanioPrinter12'><b>S/. <span id='totalImpresion'/></b></td>";
+	    	dataTabla1 += "<td style='display:none;'></td>";
+	    	dataTabla1 += "</tr>";
+	    	
+	    	dataTabla2 = dataTabla;
+	    	dataTabla2 += "<tr>";
+	    	dataTabla2 += "<td>&nbsp;</td>";
+	    	dataTabla2 += "<td class='tamanioPrinter12'><b>TOTAL</b></td>";
+	    	dataTabla2 += "<td align='right' class='tamanioPrinter12'><b>S/. <span id='totalImpresion2'/></b></td>";
+	    	dataTabla2 += "<td style='display:none;'></td>";
+	    	dataTabla2 += "</tr>";
+	    			    	
+			$('#tablaFacturacionDetalle tbody tr:last').after(dataTabla1);
+			
+        	calculoTotal();
+        	
+        }
+    });
+	
+	$('#visualizacion_modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	});
+	
+}
+
+function calculoTotal(){
+	
+	var total = 0;
+    $("#tablaFacturacionDetalle tbody tr").each(function (item) {
+        var this_row = $(this);
+        //var monto = $.trim(this_row.find('td:eq(3)').html());
+        var monto = $.trim(this_row.find('td:eq(3)').html());
+		if(monto != "" && monto != "IMPORTE OCULTO"){
+			//console.log("[" + monto + "]");
+			total = parseFloat(total) + parseFloat(monto);
+		}
+    });
+	
+    $("#totalImpresion").html(total.toFixed(2));
+	$("#totalLetras").html(NumeroALetras(total));
+	
+}
+
 function cargarPuestos(){
 	
 	var ruta = obtenerContexto();
@@ -272,19 +416,14 @@ function cargarPuestos(){
 		nombre = replaceAll(nombreFull, " ", "#");
 		var opciones = "<center>";
 			
-			opciones += "<a href=javascript:editarPuesto(";
-			opciones += rowObject.codigoPuesto + ",'";
-			opciones += rowObject.nroPuesto + "',";
-			opciones += rowObject.codigoUsuario  + ",";
-			opciones += rowObject.codigoGiro + ",'";
-			opciones += rowObject.dni + "','";
-			opciones += nombreGiro + "') >";
+			opciones += "<a href=javascript:visualizar(";
+			opciones += rowObject.codigoFacturacionCab + ") >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Ver Comprobante'/>";
 			opciones += "</a>";
 			
 			opciones += "&nbsp;&nbsp;";
 			
-			opciones += "<a href=javascript:eliminarPuesto(";
+			opciones += "<a href=javascript:eliminarFactura(";
 			opciones += rowObject.codigoPuesto + ",'";
 			opciones += nombre + "','";
 			opciones += rowObject.nroPuesto + "') >";
@@ -339,7 +478,7 @@ function cargarPuestos(){
 			name : 'nombreDetalle',
 			index: 'nombreDetalle',
 			sortable:false,
-			width: 110,
+			width: 200,
 			align: 'center'
 		},{
 			name : 'fecPeriodo',
@@ -374,6 +513,10 @@ function cargarPuestos(){
 	}).trigger('reloadGrid');
 }
 
+function currencyFormat (num) {
+    return num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+}
+
 function buscarPuesto(){
 	
 	var parametros=new Object();
@@ -397,10 +540,10 @@ function montoTotalDiario(){
         url: "monto-total-diario.json",
         cache : false,
         success: function(result){
-            //console.log(result.userid);
+            console.log();
         	//alert("Resultado : [" + result + "]");
-        	$("#totalFacturacion").html(result);
-        	
+        	total = parseFloat(result.monto);
+            $("#totalFacturacion").html(currencyFormat(total));
         }
     });
 }
@@ -602,6 +745,96 @@ function montoTotalDiario(){
 		  
 	</div>
 </div>
-	
+
+<div class="modal fade" id="visualizacion_modal" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Visualización</h4>
+			</div>
+			<div class="modal-body">
+					
+				<div id="myPrintArea">
+					<table border="0" width="100%">
+						<tr>
+							<td width="48%" valign="top">
+								<div class="marca-de-agua"> 
+								<table border="0" width="100%" >
+									<tr>
+										<td colspan="3" align="center" class="tamanioPrinter14"><b>ASOCIACIÓN DE COMERCIANTES DEL MERCADO MODELO<BR>DE HUARAL<BR>Fundado el 13 de Noviembre de 1996<BR>R.U.C. 20530606334</b></td>
+									</tr>
+									<tr>
+										<td colspan="3">&nbsp;</td>
+									</tr>
+									<tr>
+										<td colspan="3" align="center" class="tamanioPrinter14"><b>RECIBO PROVISIONAL N° <span id="correlativo" /></b></td>
+									</tr>
+									<tr>
+										<td colspan="3">&nbsp;</td>
+									</tr>
+									<tr>
+										<td width="100px" class="tamanioPrinter12"><b>FECHA</b></td>
+										<td class="tamanioPrinter12"><b>:</b></td>
+										<td class="tamanioPrinter12"><span id="printFecha"/></td>
+									</tr>
+									<tr>
+										<td class="tamanioPrinter12"><b>ASOCIADO</b></td>
+										<td class="tamanioPrinter12"><b>:</b></td>
+										<td class="tamanioPrinter12"><span id="printAsociado"/></td>
+									</tr>
+									<tr>
+										<td class="tamanioPrinter12"><b>SECTOR</b></td>
+										<td class="tamanioPrinter12"><b>:</b></td>
+										<td class="tamanioPrinter12"><span id="printSector"/></td>
+									</tr>
+									<tr>
+										<td class="tamanioPrinter12"><b>PUESTO</b></td>
+										<td class="tamanioPrinter12"><b>:</b></td>
+										<td class="tamanioPrinter12"><span id="printPuesto"/></td>
+									</tr>
+									<tr>
+										<td class="tamanioPrinter12"><b>GIRO</b></td>
+										<td class="tamanioPrinter12"><b>:</b></td>
+										<td class="tamanioPrinter12"><span id="printGiro"/></td>
+									</tr>
+									<tr>
+										<td colspan="3">&nbsp;</td>
+									</tr>
+									<tr>
+										<td colspan="3">
+											<table border="1" width="100%" cellspacing="5" cellpadding="5" class="tabla" id="tablaFacturacionDetalle">
+												<tr>
+													<td width="80px" align="center" class="tamanioPrinter12"><b>CANT.</b></td>
+													<td align="center" class="tamanioPrinter12"><b>DESCRIPCION</b></td>
+													<td width="100px" align="center" class="tamanioPrinter12"><b>IMPORTE</b></td>
+													<td width="100px" align="center" class="tamanioPrinter12" style="display:none;">IMPORTE OCULTO</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="3">&nbsp;</td>
+									</tr>
+									<tr>
+										<td colspan="3" class="tamanioPrinter12"><b>SON : <span id="totalLetras" /></b></td>
+									</tr>
+								</table>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				
+			</div>
+		</div>
+		  
+	</div>
+</div>
+
 </body>
 </html>

@@ -303,7 +303,9 @@ public class FacturacionController {
 	@RequestMapping(value = "/monto-total-diario.json", method = RequestMethod.POST, produces="application/json")
 	public @ResponseBody String montoTotalDiario(){
 		
-		return facturacionBus.montoTotalDiario();
+		String resultado = "{\"monto\":\"" + facturacionBus.montoTotalDiario() + "\"}";
+		return resultado;
+		
 	}
 	
 	@RequestMapping(value = "/cargar-banios.json", method = RequestMethod.POST, produces="application/json")
@@ -400,5 +402,17 @@ public class FacturacionController {
 		
 		return resultado;
 		
+	}
+	
+	@RequestMapping(value = "/buscar-facturacionCabecera.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody FacturacionCabecera buscarfacturacionCabecera(FacturacionCabecera facturacion){
+		
+		return facturacionBus.buscarFacturacionCabecera(facturacion);
+	}
+	
+	@RequestMapping(value = "/buscar-facturacionDetalle.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody List<FacturacionDetalle> buscarfacturacionDetalle(FacturacionCabecera facturacion){
+		
+		return facturacionBus.buscarFacturacionDetalle(facturacion);
 	}
 }

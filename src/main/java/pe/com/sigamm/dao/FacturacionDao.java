@@ -65,4 +65,8 @@ public interface FacturacionDao {
 	
 	public Retorno eliminarOtrosServiciosDetalle(int codigoServicioOtros);
 	
+	public FacturacionCabecera buscarFacturacionCabecera(FacturacionCabecera facturacion);
+	
+	public List<FacturacionDetalle> buscarFacturacionDetalle(FacturacionCabecera facturacion);
+	
 }

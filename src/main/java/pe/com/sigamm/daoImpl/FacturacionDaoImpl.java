@@ -863,4 +863,42 @@ public class FacturacionDaoImpl implements FacturacionDao {
 		
 	}
 
+	@Override
+	public FacturacionCabecera buscarFacturacionCabecera(FacturacionCabecera facturacion) {
+		
+		jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+		jdbcCall.withCatalogName("PKG_FACTURACION");
+		jdbcCall.withProcedureName("SP_BUSCAR_FACTURACION_CABECERA");
+		jdbcCall.addDeclaredParameter(new SqlOutParameter("vo_result", OracleTypes.CURSOR,new BeanPropertyRowMapper(FacturacionCabecera.class)));
+		
+		MapSqlParameterSource parametros = new MapSqlParameterSource();
+		parametros.addValue("vi_facturacion_cabecera", facturacion.getCodigoFacturacionCab());
+		
+		Map<String,Object> results = jdbcCall.execute(parametros);
+		List<FacturacionCabecera> lista = (List<FacturacionCabecera>) results.get("vo_result");
+		
+		FacturacionCabecera cabecera = lista.get(0);
+		
+		return cabecera;
+		
+	}
+
+	@Override
+	public List<FacturacionDetalle> buscarFacturacionDetalle(FacturacionCabecera facturacion) {
+		
+		jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+		jdbcCall.withCatalogName("PKG_FACTURACION");
+		jdbcCall.withProcedureName("SP_BUSCAR_FACTURACION_DETALLE");
+		jdbcCall.addDeclaredParameter(new SqlOutParameter("vo_result", OracleTypes.CURSOR,new BeanPropertyRowMapper(FacturacionDetalle.class)));
+		
+		MapSqlParameterSource parametros = new MapSqlParameterSource();
+		parametros.addValue("vi_facturacion_cabecera", facturacion.getCodigoFacturacionCab());
+		
+		Map<String,Object> results = jdbcCall.execute(parametros);
+		List<FacturacionDetalle> lista = (List<FacturacionDetalle>) results.get("vo_result");
+		
+		return lista;
+		
+	}
+
 }

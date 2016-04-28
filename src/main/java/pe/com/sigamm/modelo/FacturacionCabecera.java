@@ -10,6 +10,12 @@ public class FacturacionCabecera {
 	String facturacionDetalle;
 	int codigoSocio;
 	
+	String fechaCreacion;
+	String nombresFull;
+	String nroPuesto;
+	String nombreGiro;
+	String nombreSector;
+	
 	public int getCodigoFacturacionCab() {
 		return codigoFacturacionCab;
 	}
@@ -51,6 +57,36 @@ public class FacturacionCabecera {
 	}
 	public void setCodigoSocio(int codigoSocio) {
 		this.codigoSocio = codigoSocio;
-	} 
-			
+	}
+	public String getFechaCreacion() {
+		return fechaCreacion;
+	}
+	public void setFechaCreacion(String fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+	public String getNombresFull() {
+		return nombresFull;
+	}
+	public void setNombresFull(String nombresFull) {
+		this.nombresFull = nombresFull;
+	}
+	public String getNroPuesto() {
+		return nroPuesto;
+	}
+	public void setNroPuesto(String nroPuesto) {
+		this.nroPuesto = nroPuesto;
+	}
+	public String getNombreGiro() {
+		return nombreGiro;
+	}
+	public void setNombreGiro(String nombreGiro) {
+		this.nombreGiro = nombreGiro;
+	}
+	public String getNombreSector() {
+		return nombreSector;
+	}
+	public void setNombreSector(String nombreSector) {
+		this.nombreSector = nombreSector;
+	}
+				
 }

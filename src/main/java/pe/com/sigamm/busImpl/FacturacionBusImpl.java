@@ -193,5 +193,17 @@ public class FacturacionBusImpl implements FacturacionBus {
 		
 		return facturacionDao.eliminarOtrosServiciosDetalle(codigoServicioOtros);
 	}
+
+	@Override
+	public FacturacionCabecera buscarFacturacionCabecera(FacturacionCabecera facturacion) {
+		
+		return facturacionDao.buscarFacturacionCabecera(facturacion);
+	}
+
+	@Override
+	public List<FacturacionDetalle> buscarFacturacionDetalle(FacturacionCabecera facturacion) {
+
+		return facturacionDao.buscarFacturacionDetalle(facturacion);
+	}
 	
 }
