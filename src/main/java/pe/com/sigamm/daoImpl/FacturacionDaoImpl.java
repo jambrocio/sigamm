@@ -19,8 +19,10 @@ import org.springframework.stereotype.Repository;
 import pe.com.sigamm.bean.ListaServiciosOtros;
 import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ReporteFacturacion;
+import pe.com.sigamm.bean.ReporteFacturacionDetalle;
 import pe.com.sigamm.bean.ReporteServiciosOtros;
 import pe.com.sigamm.bean.VistaFacturacion;
+import pe.com.sigamm.bean.VistaFacturacionDetalle;
 import pe.com.sigamm.dao.FacturacionDao;
 import pe.com.sigamm.modelo.Banio;
 import pe.com.sigamm.modelo.Concepto;
@@ -33,7 +35,6 @@ import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.modelo.ServicioOtrosCabecera;
 import pe.com.sigamm.modelo.ServicioOtrosDetalle;
-import pe.com.sigamm.modelo.Usuario;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.LoggerCustom;
 
@@ -899,6 +900,34 @@ public class FacturacionDaoImpl implements FacturacionDao {
 		
 		return lista;
 		
+	}
+
+	@Override
+	public ReporteFacturacionDetalle reporteFacturacionDetalle(int codigoFacturacionCab) {
+		
+		ReporteFacturacionDetalle reporte = new ReporteFacturacionDetalle();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_REPORTE_FACT_DIARIO_DETA").declareParameters(
+					new SqlParameter("vi_codigo_facturacion_cab", 		Types.INTEGER),
+					new SqlOutParameter("vo_result", OracleTypes.CURSOR,new BeanPropertyRowMapper(VistaFacturacionDetalle.class)));
+			
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_facturacion_cab", 	codigoFacturacionCab);
+			
+			Map<String,Object> results = jdbcCall.execute(parametros);
+			//int totalRegistros = (Integer) results.get("vo_total_registros");
+			List<VistaFacturacionDetalle> lista = (List<VistaFacturacionDetalle>) results.get("vo_result");
+			
+			reporte.setTotalRegistros(1);
+			reporte.setListaFacturacion(lista);
+		
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return  reporte;
 	}
 
 }

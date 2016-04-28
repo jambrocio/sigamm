@@ -20,9 +20,11 @@ import pe.com.sigamm.bean.CamposObligatorios;
 import pe.com.sigamm.bean.ListaServiciosOtros;
 import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ReporteFacturacion;
+import pe.com.sigamm.bean.ReporteFacturacionDetalle;
 import pe.com.sigamm.bean.ReporteServiciosOtros;
 import pe.com.sigamm.bean.ResponseListBean;
 import pe.com.sigamm.bean.VistaFacturacion;
+import pe.com.sigamm.bean.VistaFacturacionDetalle;
 import pe.com.sigamm.bus.FacturacionBus;
 import pe.com.sigamm.modelo.Concepto;
 import pe.com.sigamm.modelo.DeudaSocio;
@@ -34,7 +36,6 @@ import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.modelo.ServicioOtrosCabecera;
 import pe.com.sigamm.modelo.ServicioOtrosDetalle;
-import pe.com.sigamm.modelo.Usuario;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.Constantes;
 import pe.com.sigamm.util.OperadoresUtil;
@@ -361,8 +362,6 @@ public class FacturacionController {
 			@RequestParam(value = "codigoServicioOtros", defaultValue = "0") Integer codigoServicioOtros){
 		
 		ResponseListBean<ListaServiciosOtros> response = new ResponseListBean<ListaServiciosOtros>();
-		
-		//ListaServiciosOtros reporteServicioOtros = facturacionBus.reporteEgreso(pagina, registros, codigoEgreso);
 		ReporteServiciosOtros reporteServicioOtros = facturacionBus.listarServiciosOtrosDetalle(codigoServicioOtros);
 		
 		Integer totalEgreso = reporteServicioOtros.getTotalRegistros(); 
@@ -415,4 +414,25 @@ public class FacturacionController {
 		
 		return facturacionBus.buscarFacturacionDetalle(facturacion);
 	}
+	
+	@RequestMapping(value = "/reporte-facturacion-detalle.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody ResponseListBean<VistaFacturacionDetalle> reporteFacturacionDetalle(
+			@RequestParam(value = "codigoFacturacionCab", defaultValue = "0") Integer codigoFacturacionCab){
+		
+		ResponseListBean<VistaFacturacionDetalle> response = new ResponseListBean<VistaFacturacionDetalle>();
+		ReporteFacturacionDetalle reporteServicioOtros = facturacionBus.reporteFacturacionDetalle(codigoFacturacionCab);
+		
+		Integer totalEgreso = reporteServicioOtros.getTotalRegistros(); 
+		
+		response.setPage(1);
+		response.setRecords(totalEgreso);
+		
+		//total de paginas a mostrar
+		response.setTotal(OperadoresUtil.obtenerCociente(totalEgreso, 1));
+				
+		response.setRows(reporteServicioOtros.getListaFacturacion());
+		
+		return response;
+	}
+	
 }

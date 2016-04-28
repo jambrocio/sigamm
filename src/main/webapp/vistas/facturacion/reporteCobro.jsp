@@ -443,8 +443,14 @@ function cargarPuestos(){
 		mtype: 'POST',
 		height: 'auto',
 		width: 'auto',
-		colNames : ['Puesto', 'DNI', 'Ap.Paterno', 'Ap.Materno', 'Nombres', 'Servicio', 'Descripción', 'Monto', 'Opciones'],
+		colNames : ['Código', 'Puesto', 'DNI', 'Ap.Paterno', 'Ap.Materno', 'Nombres', 'Fecha', 'Monto', 'Opciones'],
 		colModel : [{
+			name : 'codigoFactCabAlt',
+			index: 'codigoFactCabAlt',
+			sortable:true,
+			width: 100,
+			align: 'right'						
+		},{
 			name : 'nroPuesto',
 			index: 'nroPuesto',
 			sortable:true,
@@ -475,16 +481,10 @@ function cargarPuestos(){
 			width: 150,
 			align: 'left'
 		},{
-			name : 'nombreDetalle',
-			index: 'nombreDetalle',
+			name : 'fechaCreacion',
+			index: 'fechaCreacion',
 			sortable:false,
 			width: 200,
-			align: 'center'
-		},{
-			name : 'fecPeriodo',
-			index: 'fecPeriodo',
-			sortable:false,
-			width: 300,
 			align: 'center'
 		},{
 			name : 'monto',
@@ -508,8 +508,55 @@ function cargarPuestos(){
 		rownumbers: true,
 		viewrecords : true,
 		sortorder : "codigoFacturacionCab",				
-		caption : "Facturación"				
-
+		caption : "Facturación",			
+		
+		multiselect: false,
+		subGrid: true,
+		subGridRowExpanded: function(subgrid_id, row_id) {
+			// we pass two parameters
+			// subgrid_id is a id of the div tag created whitin a table data
+			// the id of this elemenet is a combination of the "sg_" + id of the row
+			// the row_id is the id of the row
+			// If we wan to pass additinal parameters to the url we can use
+			// a method getRowData(row_id) - which returns associative array in type name-value
+			// here we can easy construct the flowing
+			
+			var data = $("#grilla").getRowData(row_id);
+			var busqueda = data.codigoFactCabAlt;
+			
+			var subgrid_table_id, pager_id;
+			subgrid_table_id = subgrid_id+"_t";
+			pager_id = "p_"+subgrid_table_id;
+			$("#"+subgrid_id).html("<table id='"+subgrid_table_id+"' class='scroll'></table><div id='"+pager_id+"' class='scroll'></div>");
+			jQuery("#"+subgrid_table_id).jqGrid({
+				url:"reporte-facturacion-detalle.json?codigoFacturacionCab=" + busqueda,
+				datatype : "json",
+				mtype: 'POST',
+				colNames: ['Detalle', 'Periodo', 'Importe'],
+				colModel: [{
+					name:"nombreDetalle",
+					index:"nombreDetalle",
+					width:300,
+					align: 'left',
+					key:true
+				},{
+					name:"fecPeriodo",
+					index:"fecPeriodo",
+					width:250,
+					align: 'left'
+				},{
+					name:"monto",
+					index:"monto",
+					width:130,
+					align: 'right'
+				}],
+			   	rowNum:20,
+			   	pager: pager_id,
+			   	sortname: 'num',
+			    sortorder: "asc",
+			    height: '100%'
+			});
+		}
 	}).trigger('reloadGrid');
 }
 
@@ -540,10 +587,10 @@ function montoTotalDiario(){
         url: "monto-total-diario.json",
         cache : false,
         success: function(result){
-            console.log();
+            //console.log("monto : " + result.monto);
         	//alert("Resultado : [" + result + "]");
-        	total = parseFloat(result.monto);
-            $("#totalFacturacion").html(currencyFormat(total));
+        	//total = parseFloat(result.monto);
+            $("#totalFacturacion").html(result.monto);
         }
     });
 }

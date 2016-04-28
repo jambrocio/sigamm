@@ -4,6 +4,7 @@ import java.util.List;
 
 import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ReporteFacturacion;
+import pe.com.sigamm.bean.ReporteFacturacionDetalle;
 import pe.com.sigamm.bean.ReporteServiciosOtros;
 import pe.com.sigamm.modelo.Banio;
 import pe.com.sigamm.modelo.Concepto;
@@ -68,5 +69,7 @@ public interface FacturacionDao {
 	public FacturacionCabecera buscarFacturacionCabecera(FacturacionCabecera facturacion);
 	
 	public List<FacturacionDetalle> buscarFacturacionDetalle(FacturacionCabecera facturacion);
+
+	public ReporteFacturacionDetalle reporteFacturacionDetalle(int codigoFacturacionCab);
 	
 }

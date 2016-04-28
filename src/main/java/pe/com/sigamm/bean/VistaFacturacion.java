@@ -11,6 +11,8 @@ public class VistaFacturacion {
 	String fecPeriodo;
 	String monto;
 	int codigoFacturacionCab;
+	String fechaCreacion;
+	int codigoFactCabAlt;
 	
 	public String getDni() {
 		return dni;
@@ -66,5 +68,17 @@ public class VistaFacturacion {
 	public void setCodigoFacturacionCab(int codigoFacturacionCab) {
 		this.codigoFacturacionCab = codigoFacturacionCab;
 	}
-			
+	public String getFechaCreacion() {
+		return fechaCreacion;
+	}
+	public void setFechaCreacion(String fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+	public int getCodigoFactCabAlt() {
+		return codigoFactCabAlt;
+	}
+	public void setCodigoFactCabAlt(int codigoFactCabAlt) {
+		this.codigoFactCabAlt = codigoFactCabAlt;
+	}
+						
 }

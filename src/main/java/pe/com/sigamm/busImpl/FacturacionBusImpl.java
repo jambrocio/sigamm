@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ReporteFacturacion;
+import pe.com.sigamm.bean.ReporteFacturacionDetalle;
 import pe.com.sigamm.bean.ReporteServiciosOtros;
 import pe.com.sigamm.bus.FacturacionBus;
 import pe.com.sigamm.dao.FacturacionDao;
@@ -204,6 +205,12 @@ public class FacturacionBusImpl implements FacturacionBus {
 	public List<FacturacionDetalle> buscarFacturacionDetalle(FacturacionCabecera facturacion) {
 
 		return facturacionDao.buscarFacturacionDetalle(facturacion);
+	}
+
+	@Override
+	public ReporteFacturacionDetalle reporteFacturacionDetalle(int codigoFacturacionCab) {
+		
+		return facturacionDao.reporteFacturacionDetalle(codigoFacturacionCab);
 	}
 	
 }
