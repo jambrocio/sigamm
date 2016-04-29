@@ -131,7 +131,7 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				celda3.setHorizontalAlignment(Element.ALIGN_LEFT);
 				table1.addCell(celda3);
 				
-				table1.setSpacingBefore(10);
+				table1.setSpacingBefore(5);
 				
 				PdfPTable table2 = new PdfPTable(2);
 				table2.setWidthPercentage(100);
@@ -166,7 +166,7 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				celda9.setHorizontalAlignment(Element.ALIGN_LEFT);
 				table4.addCell(celda9);
 				
-				table4.setSpacingAfter(10);
+				table4.setSpacingAfter(5);
 				
 				PdfPTable table5 = new PdfPTable(2);
 				table5.setWidthPercentage(100);						
@@ -188,7 +188,17 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				celda13.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table6.addCell(celda13);
 				
-				table6.setSpacingAfter(10);
+				PdfPTable table17 = new PdfPTable(2);
+				table17.setWidthPercentage(100);
+				Paragraph p34 = new Paragraph("CONSUMO MES", fuente);
+				PdfPCell celda34 = new PdfPCell(p34);
+				table17.addCell(celda34);
+				Paragraph p35 = new Paragraph(reporte.getListaReciboLuzSocio().get(aw).getConsumoMes() + "", fuente);
+				PdfPCell celda35 = new PdfPCell(p35);
+				celda35.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table17.addCell(celda35);
+				
+				table17.setSpacingAfter(5);
 				
 				PdfPTable table7 = new PdfPTable(2);
 				table7.setWidthPercentage(100);
@@ -260,7 +270,7 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				celda25.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table12.addCell(celda25);
 				
-				table12.setSpacingAfter(10);
+				table12.setSpacingAfter(5);
 				//----------------------------------------------
 				PdfPTable table13 = new PdfPTable(2);
 				table13.setWidthPercentage(100);
@@ -326,6 +336,7 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				doc.add(table0);
 				doc.add(table5);
 				doc.add(table6);
+				doc.add(table17);
 				doc.add(table7);
 				doc.add(table16);				
 				doc.add(table8);
@@ -340,7 +351,7 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				Paragraph observaciones = new Paragraph("OBSERVACIONES:");
 				Paragraph observacionesDetalle = new Paragraph(reporte.getListaReciboLuzSocio().get(aw).getObservaciones() + "");
 				
-				observaciones.setSpacingBefore(10);
+				observaciones.setSpacingBefore(5);
 				
 				doc.add(observaciones);
 				doc.add(observacionesDetalle);

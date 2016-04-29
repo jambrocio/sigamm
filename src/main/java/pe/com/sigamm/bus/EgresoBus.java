@@ -10,6 +10,8 @@ public interface EgresoBus {
 
 	public ReporteEgreso reportarEgreso(String fechaInicial, String fechaFinal);
 	
+	public ReporteOperacionesBancarias reportarOperacionesBancarias(String fechaInicial, String fechaFinal);
+	
 	public ReporteOperacionesBancarias reporteOperacionesBancarias(int pagina, int registros, String codigoOperacionesBancarias);
 	
 	public String opcionesCuentas(Cuenta cuenta);

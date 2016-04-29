@@ -42,10 +42,19 @@ public class EgresoController {
 	@Autowired
 	private DatosSession datosSession;
 	
+	//Reporte de Egreso del menu REPORTE
 	@RequestMapping(value = "/reporte_egreso", method = RequestMethod.GET)
 	public String reporte_egreso(HttpServletRequest request) {
 
 		return "reportes/reporte_egreso";
+
+	}
+
+	//Reporte de Operaciones Bancarias del menu REPORTE
+	@RequestMapping(value = "/reporte_operaciones_bancarias", method = RequestMethod.GET)
+	public String reporte_operaciones_bancarias(HttpServletRequest request) {
+
+		return "reportes/reporte_operaciones_bancarias";
 
 	}
 	
@@ -130,5 +139,20 @@ public class EgresoController {
 		String resultado = "{\"idUsuario\":" + codigo + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + mensaje + "\"}";
 		
 		return resultado;
+	}
+	
+	
+	@RequestMapping(value = "/reportarOperacionesBancariasExcel", method = RequestMethod.GET)
+	public ModelAndView downloadOperacionesBancariasExcel(HttpServletRequest request,
+			@RequestParam(value = "fechaInicial", defaultValue = "01/07/2015") String fechaInicial,
+			@RequestParam(value = "fechaFinal", defaultValue = "01/07/2015") String fechaFinal){
+			
+
+		fechaIni = request.getParameter("fechaInicial");
+		fechaFin = request.getParameter("fechaFinal");
+		
+		ReporteOperacionesBancarias reporte = egresoBus.reportarOperacionesBancarias(fechaInicial, fechaFinal);		
+		List<OperacionesBancarias> lista = reporte.getListaOperacionesBancarias();		
+        return new ModelAndView("excelViewReporteOperacionesBancarias", "listaRegistrosOperacionesBancarias", lista);
 	}
 }

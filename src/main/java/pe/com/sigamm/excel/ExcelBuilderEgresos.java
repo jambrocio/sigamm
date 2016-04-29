@@ -113,10 +113,10 @@ public class ExcelBuilderEgresos extends AbstractExcelView{
         header.getCell(7).setCellStyle(csCabecera);
         
         header.createCell(8).setCellValue("Observaciones");
-        header.getCell(7).setCellStyle(csCabecera);
+        header.getCell(8).setCellStyle(csCabecera);
         
         header.createCell(9).setCellValue("Estado");
-        header.getCell(7).setCellStyle(csCabecera);
+        header.getCell(8).setCellStyle(csCabecera);
         // create data rows
         int rowCount = 1;
          

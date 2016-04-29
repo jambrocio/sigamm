@@ -147,7 +147,7 @@ public class EgresoDaoImpl implements EgresoDao {
             
 			MapSqlParameterSource parametros = new MapSqlParameterSource();
 			parametros.addValue("vi_codigo_opeban", 			operacionesBancarias.getId());
-			parametros.addValue("vi_tipo_operacion", 			operacionesBancarias.getTipoOperacion());
+			parametros.addValue("vi_tipo_operacion", 			operacionesBancarias.getOperacion());
 			parametros.addValue("vi_numero_cuenta", 			operacionesBancarias.getNumeroCuenta());
 			parametros.addValue("vi_monto", 					operacionesBancarias.getMonto());
 			parametros.addValue("vi_fecha", 					operacionesBancarias.getFecha());
@@ -176,6 +176,40 @@ public class EgresoDaoImpl implements EgresoDao {
 		}
 		
 		return retorno;
+		
+	}
+
+	@Override
+	public ReporteOperacionesBancarias reportarOperacionesBancarias(String fechaInicial, String fechaFinal) {
+
+		ReporteOperacionesBancarias reporte = new ReporteOperacionesBancarias();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_EGRESO");
+			jdbcCall.withProcedureName("SP_REPORTAR_OPEBAN_XLS").declareParameters(
+					new SqlParameter("vi_fecha_inicio", 				Types.VARCHAR),
+					new SqlParameter("vi_fecha_termino", 				Types.VARCHAR),
+					
+					new SqlOutParameter("vo_total_registros", 		Types.INTEGER),
+					new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(OperacionesBancarias.class)));
+			
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_fecha_inicio", 		fechaInicial);
+			parametros.addValue("vi_fecha_termino", 	fechaFinal);
+			
+			Map<String,Object> results = jdbcCall.execute(parametros);
+			
+			int totalRegistros = (Integer) results.get("vo_total_registros");
+			List<OperacionesBancarias> lista = (List<OperacionesBancarias>) results.get("vo_result");
+			
+			reporte.setTotalRegistros(totalRegistros);
+			reporte.setListaOperacionesBancarias(lista);
+			
+		}catch(Exception e){
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return  reporte;
 		
 	}
 	

@@ -55,4 +55,10 @@ public class EgresoBusImpl implements EgresoBus {
 		return retornoEgreso;
 		
 	}
+
+	@Override
+	public ReporteOperacionesBancarias reportarOperacionesBancarias(String fechaInicial, String fechaFinal) {
+
+		return egresoDao.reportarOperacionesBancarias(fechaInicial, fechaFinal);
+	}
 }

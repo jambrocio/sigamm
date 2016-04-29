@@ -8,6 +8,7 @@
 	<!-- Egresos -->
 	<bean id="excelViewEgresos" class="pe.com.sigamm.excel.ExcelBuilderEgresos" />	
 	<bean id="excelViewReporteEgresos" class="pe.com.sigamm.excel.ExcelBuilderReporteEgresos" />
+	<bean id="excelViewReporteOperacionesBancarias" class="pe.com.sigamm.excel.ExcelBuilderOperacionesBancarias" />
 	<!-- Agua Socios -->
 	<bean id="excelViewAguaSocio" class="pe.com.sigamm.excel.ExcelBuilderAguaSocio" />
 

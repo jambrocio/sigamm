@@ -12,6 +12,8 @@ public interface EgresoDao {
 
 	public ReporteEgreso reportarEgreso(String fechaInicial, String fechaFinal);
 	
+	public ReporteOperacionesBancarias reportarOperacionesBancarias(String fechaInicial, String fechaFinal);
+	
 	public ReporteOperacionesBancarias reporteOperacionesBancarias(int pagina, int registros, String codigoOperacionesBancarias);
 	
 	public List<Cuenta> opcionesCuentas(Cuenta cuenta);

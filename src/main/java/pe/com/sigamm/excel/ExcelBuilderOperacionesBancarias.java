@@ -18,6 +18,7 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.springframework.web.servlet.view.document.AbstractExcelView;
 
 import pe.com.sigamm.modelo.Egreso;
+import pe.com.sigamm.modelo.OperacionesBancarias;
 import pe.com.sigamm.modelo.Socio;
 
 public class ExcelBuilderOperacionesBancarias extends AbstractExcelView{
@@ -32,7 +33,7 @@ public class ExcelBuilderOperacionesBancarias extends AbstractExcelView{
             HSSFWorkbook workbook, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         // get data model which is passed by the Spring container
-        List<Egreso> listaRegistros = (List<Egreso>) model.get("listaRegistrosEgresos");
+        List<OperacionesBancarias> listaRegistros = (List<OperacionesBancarias>) model.get("listaRegistrosOperacionesBancarias");
          
         // create a new Excel sheet
         HSSFSheet sheet = workbook.createSheet("Registros");
@@ -88,39 +89,36 @@ public class ExcelBuilderOperacionesBancarias extends AbstractExcelView{
         // create header row
         HSSFRow header = sheet.createRow(0);
         
-        header.createCell(0).setCellValue("Nro.");
+        header.createCell(0).setCellValue("ID");
         header.getCell(0).setCellStyle(csCabecera);
         
-        header.createCell(1).setCellValue("Documento");
+        header.createCell(1).setCellValue("ENTIDAD BANCARIA");
         header.getCell(1).setCellStyle(csCabecera);
-         
-        header.createCell(2).setCellValue("Nro. Documento");
+        
+        header.createCell(2).setCellValue("CUENTA");
         header.getCell(2).setCellStyle(csCabecera);
          
-        header.createCell(3).setCellValue("Total");
+        header.createCell(3).setCellValue("FECHA");
         header.getCell(3).setCellStyle(csCabecera);
          
-        header.createCell(4).setCellValue("Fecha");
+        header.createCell(4).setCellValue("HORA");
         header.getCell(4).setCellStyle(csCabecera);
          
-        header.createCell(5).setCellValue("Ruc");
+        header.createCell(5).setCellValue("VOUCHER");
         header.getCell(5).setCellStyle(csCabecera);
-        
-        header.createCell(6).setCellValue("Razón Social");
+         
+        header.createCell(6).setCellValue("MONTO");
         header.getCell(6).setCellStyle(csCabecera);
+        
+        header.createCell(7).setCellValue("RESPONSABLE");
+        header.getCell(7).setCellStyle(csCabecera);
 
-        header.createCell(7).setCellValue("Detalle");
-        header.getCell(7).setCellStyle(csCabecera);
-        
-        header.createCell(8).setCellValue("Observaciones");
-        header.getCell(7).setCellStyle(csCabecera);
-        
-        header.createCell(9).setCellValue("Estado");
-        header.getCell(7).setCellStyle(csCabecera);
+        header.createCell(8).setCellValue("TIPO OPERACION");
+        header.getCell(8).setCellStyle(csCabecera);
         // create data rows
         int rowCount = 1;
          
-        for (Egreso egreso : listaRegistros) {
+        for (OperacionesBancarias opeban : listaRegistros) {
         	
         	Cell c = null;
             HSSFRow aRow = sheet.createRow(rowCount++);
@@ -130,42 +128,35 @@ public class ExcelBuilderOperacionesBancarias extends AbstractExcelView{
     		c.setCellStyle(csRight);
     		
     		c = aRow.createCell(1);
-    		c.setCellValue(egreso.getNombreDocumento());
+    		c.setCellValue(opeban.getEntidadBancaria());
     		c.setCellStyle(csRight);
     		
     		c = aRow.createCell(2);
-    		c.setCellValue(egreso.getNumeroDocumento());
+    		c.setCellValue(opeban.getNumeroCuenta());
     		c.setCellStyle(csRight);
     		
     		c = aRow.createCell(3);
-    		c.setCellValue(egreso.getTotal());
+    		c.setCellValue(opeban.getFecha());
     		c.setCellStyle(csRightP);
     		
     		c = aRow.createCell(4);
-    		c.setCellValue(egreso.getFecha());
+    		c.setCellValue(opeban.getHora());
     		c.setCellStyle(csRight);
     		
     		c = aRow.createCell(5);
-    		c.setCellValue(egreso.getRuc());
+    		c.setCellValue(opeban.getVoucher());
     		c.setCellStyle(csRight);
     		
     		c = aRow.createCell(6);
-    		c.setCellValue(egreso.getRazonSocial());
-    		c.setCellStyle(csRight);
+    		c.setCellValue(opeban.getMonto());
+    		c.setCellStyle(csRightP);
 
     		c = aRow.createCell(7);
-    		c.setCellValue(egreso.getDetalle());
-    		c.setCellStyle(csRight);
-    		
-    		c = aRow.createCell(8);
-    		c.setCellValue(egreso.getObservaciones());
+    		c.setCellValue(opeban.getResponsable());
     		c.setCellStyle(csRight);
     		    		
-    		c = aRow.createCell(9);
-    		if (egreso.getEstado()==1)
-    			c.setCellValue("ACEPTADO");
-    		else if (egreso.getEstado()==2)
-    			c.setCellValue("ANULADO");
+    		c = aRow.createCell(8);
+    		c.setCellValue(opeban.getOperacion());
     		c.setCellStyle(csRight);
         }
     }

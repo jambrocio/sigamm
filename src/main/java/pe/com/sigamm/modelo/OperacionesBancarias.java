@@ -2,7 +2,7 @@ package pe.com.sigamm.modelo;
 
 public class OperacionesBancarias {
 	int id;
-	String tipoOperacion;
+	String operacion;
 	double monto;
 	String fecha;
 	String hora;
@@ -10,6 +10,7 @@ public class OperacionesBancarias {
 	String voucher;
 	String observaciones;
 	String numeroCuenta;
+	String entidadBancaria;
 	int estado;
 	
 	public int getId() {
@@ -18,11 +19,11 @@ public class OperacionesBancarias {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getTipoOperacion() {
-		return tipoOperacion;
+	public String getOperacion() {
+		return operacion;
 	}
-	public void setTipoOperacion(String tipoOperacion) {
-		this.tipoOperacion = tipoOperacion;
+	public void setOperacion(String operacion) {
+		this.operacion = operacion;
 	}
 	public double getMonto() {
 		return monto;
@@ -66,11 +67,17 @@ public class OperacionesBancarias {
 	public void setNumeroCuenta(String numeroCuenta) {
 		this.numeroCuenta = numeroCuenta;
 	}
+	public String getEntidadBancaria() {
+		return entidadBancaria;
+	}
+	public void setEntidadBancaria(String entidadBancaria) {
+		this.entidadBancaria = entidadBancaria;
+	}
 	public int getEstado() {
 		return estado;
 	}
 	public void setEstado(int estado) {
 		this.estado = estado;
 	}
-		
+
 }
