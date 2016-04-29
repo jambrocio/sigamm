@@ -352,10 +352,6 @@ function cargarBanios(){
 	
 }
 
-function currencyFormat (num) {
-    return num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
-}
-
 function agregarDetalleServicio(){
 	
 	var ruta = obtenerContexto();
@@ -433,7 +429,7 @@ function agregarDetalleServicio(){
 				"<td align='center'>" + rangoInicio + " - " + rangoFin + "</td>" +
 				"<td align='center' style='display:none;'>" + rangoInicio + "</td>" +
 				"<td align='center' style='display:none;'>" + rangoFin + "</td>" +
-				"<td align='right'>" + currencyFormat(total) + "</td>" +
+				"<td align='right'>" + formatearImporte(total) + "</td>" +
 				"<td align='center'>" +
 				"<button type='button' class='boton btnEliminar' onclick='eliminarFila(this);'>" +
 					"<img src='/"+ruta+"/recursos/images/icons/eliminar_16x16.png' alt='Eliminar' />" +
@@ -782,7 +778,7 @@ function calculoTotal(){
         }
 	});
 	
-	$("#totales").html(currencyFormat(total));
+	$("#totales").html(formatearImporte(total));
 }
 </script>
 </head>

@@ -68,5 +68,7 @@ public class Constantes {
 	
 	public static final String RUTA_FOTOS_WINDOWS	= "D:\\fotos_personal\\";
 	public static final String RUTA_FOTOS_LINUX		= "/media/local/FOTOS_PERSONAL/";
+	
+	public static final String SigammDS = "java:jboss/datasources/SigammDS";
 		
 }

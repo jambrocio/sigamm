@@ -435,6 +435,12 @@ function guardar(){
 	});	
 }
 
+function openNewWindowForJasperWithCharts(){
+	var url  = "/sigamm/operacionesBancarias";
+	var strWindowFeatures = "menubar=no,location=no,width=800,height=500";
+	window.open(url,"_blank", "location=0,height=500,width=800");
+}
+
 </script>
 </head>
 <body id="body">
@@ -450,7 +456,7 @@ function guardar(){
 			</button>
 			<button type="button" class="btn btn-primary">
 				<!-- img src="recursos/images/icons/excel_16x16.png" alt="Exportar a Excel" />&nbsp;<a href="/sigamm/reporteOpebanExcel" style="color:white">Exportar</a> -->
-				<img src="recursos/images/icons/excel_16x16.png" alt="Exportar a Excel" />&nbsp;<a href="/sigamm/operacionesBancarias" style="color:white">Reporte Operaciones Bancarias</a>
+				<img src="recursos/images/icons/excel_16x16.png" alt="Exportar a Excel" />&nbsp;<a href="" onclick="openNewWindowForJasperWithCharts();" style="color:white">Reporte Operaciones Bancarias</a>
 			</button>
 		</td>
 	</tr>

@@ -38,3 +38,7 @@ function pad (str, max) {
 	  str = str.toString();
 	  return str.length < max ? pad("0" + str, max) : str;
 }
+
+function formatearImporte (num) {
+    return num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+}

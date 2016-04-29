@@ -85,10 +85,6 @@ function colorEtiquetas(){
 	
 }
 
-function currencyFormat (num) {
-    return num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
-}
-
 function nuevoCobro(){
 	
 	colorEtiquetas();
@@ -218,7 +214,7 @@ function guardar(){
 				    	dataTabla += "<tr>";
 				    	dataTabla += "<td>&nbsp;</td>";
 				    	dataTabla += "<td class='tamanioPrinter10'><b>" + tipoConcepto + "</b><br>" + desConcepto + "</td>";
-				    	dataTabla += "<td align='right' class='tamanioPrinter10'>S/. " + currencyFormat(importe) + "</td>";
+				    	dataTabla += "<td align='right' class='tamanioPrinter10'>S/. " + formatearImporte(importe) + "</td>";
 				    	dataTabla += "</tr>";
 				    	
 			        }
