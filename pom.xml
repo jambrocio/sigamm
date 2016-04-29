@@ -277,6 +277,15 @@
 		    <version>2.2</version>
 		    <scope>provided</scope>
 		</dependency>
+		
+		<!-- SOLUCIONA EL PROBLEMA DEL TIPO DE LETRA ARIAL -->
+		<!-- net.sf.jasperreports.engine.util.JRFontNotFoundException: Font 'Arial' is not available to the JVM. See the Javadoc for more details. -->
+		<dependency>
+  			<groupId>ar.com.fdvs</groupId>
+  			<artifactId>DynamicJasper-core-fonts</artifactId>
+  			<version>1.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

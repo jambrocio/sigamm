@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.Constantes;
+import pe.com.sigamm.util.LoggerCustom;
 
 @Controller
 public class EstadoCuentaController {
@@ -52,8 +53,16 @@ public class EstadoCuentaController {
     public void reporteOperacionesBancariasPdf(HttpServletRequest request, HttpServletResponse response) throws IOException {
         
         
-		String rutaJRXML = this.getClass().getClassLoader().getResource("/reportes/Reporte_Operaciones_Bancarias.jrxml").getPath();
-		String rutaJASPER = this.getClass().getClassLoader().getResource("/reportes/Reporte_Operaciones_Bancarias.jasper").getPath();
+		//String rutaJRXML = this.getClass().getClassLoader().getResource("/reportes/Reporte_Operaciones_Bancarias.jrxml").getPath();
+		//String rutaJASPER = this.getClass().getClassLoader().getResource("/reportes/Reporte_Operaciones_Bancarias.jasper").getPath();
+		
+		String ruta = System.getProperty("ruta_ireport") != null ? System.getProperty("ruta_ireport") : ""; 
+		
+		String rutaJRXML = ruta + "Reporte_Operaciones_Bancarias.jrxml";
+		String rutaJASPER = ruta + "Reporte_Operaciones_Bancarias.jasper";
+		
+		log.info("Ruta JRXML : " + rutaJRXML);
+		log.info("Ruta JASPER : " + rutaJASPER);
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("ReportTitle", "Reporte de Operaciones Bancarias");
@@ -84,29 +93,13 @@ public class EstadoCuentaController {
 				response.getOutputStream().close();
 			}
 		} catch (JRException e) {
-			e.printStackTrace();
+			LoggerCustom.errorApp(this, "", e);
 		} catch (NamingException e) {
-			e.printStackTrace();
+			LoggerCustom.errorApp(this, "", e);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LoggerCustom.errorApp(this, "", e);
 		}
  
     }
 	
-
-	private Connection coneccionSQL() {
-			Connection con = null;
-            try {
-                    String cadena;
-                    cadena="jdbc:oracle:thin:@192.168.32.6:7980:p65dbprd";
-                    Class.forName("oracle.jdbc.OracleDriver");
-                    con = DriverManager.getConnection(cadena, "contraloria","contraloria1");
-            } catch(Exception e) {
-                   System.out.println(e.getMessage());
-            }
-            
-			return con;
-    }
- 
-
 }
