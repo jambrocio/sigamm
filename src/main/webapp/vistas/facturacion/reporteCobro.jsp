@@ -338,7 +338,7 @@ function visualizar(codigoFacturacionCab){
         		dataTabla += "<tr>" +
 		           	"<td align='center'></td>" + 
   		           	"<td align='left' class='tamanioPrinter12'><b>" + nombreDetalle + "</b><br>" + fecPeriodo + "</td>" +
-  		           	"<td align='right' class='tamanioPrinter12'>S/. " + currencyFormat(monto) + "</td>" +
+  		           	"<td align='right' class='tamanioPrinter12'>S/. " + formatearImporte(monto) + "</td>" +
   		          	"<td align='right' class='tamanioPrinter12' style='display:none;'>" + monto + "</td>" +
   				"</tr>";
   				
@@ -407,6 +407,53 @@ function calculoTotal(){
 	
 }
 
+function eliminarFactura(codigoFacturacionCab){
+	
+	var ruta = obtenerContexto();
+	mensaje = "Desea Anular la factura con codigo : " + codigoFacturacionCab + " ?"; 
+	
+	$("#mensajeEliminar").html(mensaje);
+	
+	
+	$('#alerta_modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	}).one('click', '#aceptar', function() {
+		
+		//este pendiente la eliminacion de la facturacion
+		
+        /*
+		jsonObj = [];
+		var parametros = new Object();
+		parametros.codigoServicioOtros = codigoServicioOtros;
+			
+		$.ajax({
+			type: "POST",
+		    async:false,
+		    url: "eliminar-servicio-otros.json",
+		    cache : false,
+		    data: parametros,
+		    success: function(result){
+		            
+		        $('#alerta_modal').modal('hide');
+	            	
+	            $.gritter.add({
+					title: 'Mensaje',
+					text: result.mensaje,
+					image: "/" + ruta + "/recursos/images/confirm.png",
+					sticky: false,
+					time: ''
+				});
+	            
+	            //cargarPuestos();
+		            
+			}
+		});
+		*/
+    });
+	
+}
+
 function cargarPuestos(){
 	
 	var ruta = obtenerContexto();
@@ -424,10 +471,8 @@ function cargarPuestos(){
 			opciones += "&nbsp;&nbsp;";
 			
 			opciones += "<a href=javascript:eliminarFactura(";
-			opciones += rowObject.codigoPuesto + ",'";
-			opciones += nombre + "','";
-			opciones += rowObject.nroPuesto + "') >";
-			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Puesto'/>";
+			opciones += rowObject.codigoFacturacionCab + ") >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Anular Factura'/>";
 			opciones += "</a>";
 			
 			opciones += "</center>";
@@ -558,10 +603,6 @@ function cargarPuestos(){
 			});
 		}
 	}).trigger('reloadGrid');
-}
-
-function currencyFormat (num) {
-    return num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 }
 
 function buscarPuesto(){
@@ -774,7 +815,7 @@ function montoTotalDiario(){
 		<div class="modal-content">
 			<div class="modal-header modal-header-primary">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Eliminar Puesto</h4>
+				<h4 class="modal-title">Anular Factura</h4>
 			</div>
 			<div class="modal-body">
 					
