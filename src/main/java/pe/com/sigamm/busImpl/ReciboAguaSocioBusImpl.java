@@ -143,11 +143,7 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 
 				Paragraph recibo = new Paragraph(UtilPDF.LEYENDA_RECIBO_AGUA + UtilPDF.getID(reporte.getListaReciboAguaSocio().get(aw).getPeriodoSocio(), aw), fuente);
 				recibo.setAlignment(Element.ALIGN_CENTER);
-				doc.add(recibo);
-				
-				Image qrcodeImage = UtilPDF.getQRCode(reporte.getListaReciboAguaSocio().get(aw).getIdRecibo() + "");
-				qrcodeImage.setAbsolutePosition(500, 690);
-				doc.add(qrcodeImage);
+				doc.add(recibo);				
 								
 				PdfPTable table0 = new PdfPTable(2);
 				table0.setWidthPercentage(100);
@@ -228,14 +224,6 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				table6.addCell(celda13);
 				
 				table6.setSpacingAfter(15);
-				
-				doc.add(table1);
-				doc.add(table2);
-				doc.add(table3);
-				doc.add(table4);
-				doc.add(table0);
-				doc.add(table5);
-				doc.add(table6);
 				
 				PdfPTable table7 = new PdfPTable(2);
 				table7.setWidthPercentage(100);
@@ -334,6 +322,17 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				table13.addCell(celda27);
 				//----------------------------------------------
 				
+				Image qrcodeImage = UtilPDF.getQRCode("PUESTO: " + reporte.getListaReciboAguaSocio().get(aw).getNroPuesto() + "- NOMBRE: " + reporte.getListaReciboAguaSocio().get(aw).getNombreFull() + "- TOTAL A PAGAR: S/. [" + valor5 + "]");
+				qrcodeImage.setAbsolutePosition(500, 690);
+				doc.add(qrcodeImage);
+				
+				doc.add(table1);
+				doc.add(table2);
+				doc.add(table3);
+				doc.add(table4);
+				doc.add(table0);
+				doc.add(table5);
+				doc.add(table6);
 				doc.add(table7);
 				doc.add(table8);
 				doc.add(table9);				
@@ -375,8 +374,6 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 	
 	@Override
 	public File generarFacturacionVigilanciaPDF(String periodo) {
-		
-		String per = "JULIO 2015";
 		
 		Document doc = new Document();
 		PdfWriter docWriter = null;
@@ -420,10 +417,6 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				Paragraph recibo = new Paragraph(UtilPDF.LEYENDA_RECIBO_VIGILANCIA + UtilPDF.getID(reporte.getListaReciboAguaSocio().get(aw).getPeriodoSocio(), aw), fuente);
 				recibo.setAlignment(Element.ALIGN_CENTER);
 				doc.add(recibo);
-				
-				Image qrcodeImage = UtilPDF.getQRCode(reporte.getListaReciboAguaSocio().get(aw).getIdRecibo() + "");
-				qrcodeImage.setAbsolutePosition(500, 690);
-				doc.add(qrcodeImage);
 								
 				PdfPTable table0 = new PdfPTable(2);
 				table0.setWidthPercentage(100);
@@ -524,17 +517,7 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				table8.addCell(celda17);
 				
 				table8.setSpacingAfter(15);
-				
-				doc.add(table1);
-				doc.add(table2);
-				doc.add(table3);
-				doc.add(table4);
-				doc.add(table0);
-				doc.add(table5);
-				doc.add(table6);
-				doc.add(table7);
-				doc.add(table8);
-				
+								
 				//----------------------------------------------
 				PdfPTable table11 = new PdfPTable(2);
 				table11.setWidthPercentage(100);
@@ -590,6 +573,19 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				table13.addCell(celda27);
 				
 				//----------------------------------------------				
+				Image qrcodeImage = UtilPDF.getQRCode("PUESTO: " + reporte.getListaReciboAguaSocio().get(aw).getNroPuesto() + "- NOMBRE: " + reporte.getListaReciboAguaSocio().get(aw).getNombreFull() + "- TOTAL A PAGAR S/. [" + valor5 + "]");
+				qrcodeImage.setAbsolutePosition(500, 690);
+				doc.add(qrcodeImage);
+				
+				doc.add(table1);
+				doc.add(table2);
+				doc.add(table3);
+				doc.add(table4);
+				doc.add(table0);
+				doc.add(table5);
+				doc.add(table6);
+				doc.add(table7);
+				doc.add(table8);
 				doc.add(table11);
 				doc.add(table12);
 				doc.add(table13);

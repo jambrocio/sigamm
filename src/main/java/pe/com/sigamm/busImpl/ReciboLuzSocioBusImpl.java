@@ -106,10 +106,6 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				recibo.setAlignment(Element.ALIGN_CENTER);
 				doc.add(recibo);
 				
-				Image qrcodeImage = UtilPDF.getQRCode(reporte.getListaReciboLuzSocio().get(aw).getPuestoSocio() + "-" + reporte.getListaReciboLuzSocio().get(aw).getNombreFull() + "");
-				qrcodeImage.setAbsolutePosition(500, 690);
-				doc.add(qrcodeImage);
-				
 				PdfPTable table0 = new PdfPTable(2);
 				table0.setWidthPercentage(100);
 				Paragraph p0 = new Paragraph("PERIODO", fuente);
@@ -329,6 +325,10 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				table15.addCell(celda31);
 				//----------------------------------------------
 								
+				Image qrcodeImage = UtilPDF.getQRCode("PUESTO: " + reporte.getListaReciboLuzSocio().get(aw).getPuestoSocio() + "- NOMBRE: " + reporte.getListaReciboLuzSocio().get(aw).getNombreFull() + "- TOTAL A PAGAR: S/. [" + valor5  + "]");
+				qrcodeImage.setAbsolutePosition(500, 690);
+				doc.add(qrcodeImage);
+				
 				doc.add(table1);
 				doc.add(table2);
 				doc.add(table3);

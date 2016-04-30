@@ -255,7 +255,7 @@ function cargarReciboAgua(){
 		var opciones = "<center>";
 			
 			opciones += "<a href=javascript:editarReciboAgua(";
-			opciones += rowObject.codigoRecibo + ",'" + rowObject.periodo.replace(' ','_') + "','" + rowObject.lecturaInicial + "','" + rowObject.lecturaFinal + "','" + rowObject.monto + "','" + rowObject.fechaCorte.replace(/\s/g,"_") + "','" + rowObject.fechaVencimiento.replace(/\s/g,"_") + "','" + rowObject.observaciones + "') >";
+			opciones += rowObject.codigoRecibo + ",'" + rowObject.periodo.replace(' ','_') + "','" + rowObject.lecturaInicial + "','" + rowObject.lecturaFinal + "','" + rowObject.monto + "','" + rowObject.fechaCorte.replace(/\s/g,"_") + "','" + rowObject.fechaVencimiento.replace(/\s/g,"_") + "','" + replaceAll(rowObject.observaciones," ","_") + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Agua'/>";
 			opciones += "</a>";
 			
@@ -464,7 +464,7 @@ function editarReciboAgua(codigoRecibo, periodo, lecturaInicial, lecturaFinal, m
 	$("#fechacorte").val(fechaCorte.replace(/\_/g," "));
 	$("#fechavencimiento").val(fechaVencimiento.replace(/\_/g," "));
 	if (observaciones == "null") observaciones = "";
-	$("#observaciones").val(observaciones);
+	$("#observaciones").val(replaceAll(observaciones,"_"," "));
 	
 }
 

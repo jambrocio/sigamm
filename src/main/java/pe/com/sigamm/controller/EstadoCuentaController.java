@@ -61,7 +61,7 @@ public class EstadoCuentaController {
         
         try {
         	log.info(getClass());
-        	System.setProperty("java.awt.headless", "true");
+        	//System.setProperty("java.awt.headless", "true");
         	//String ruta =  getClass().getResource("reportes/Reporte_Operaciones_Bancarias.jrxml").getPath();
             JasperReport report = JasperCompileManager.compileReport("D://Proyectos//MMH//reportes//Reporte_Operaciones_Bancarias.jrxml");
             JasperPrint print = JasperFillManager.fillReport(report, new HashMap(), coneccionSQL());
