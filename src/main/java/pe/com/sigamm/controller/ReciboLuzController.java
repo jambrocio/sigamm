@@ -2,13 +2,30 @@ package pe.com.sigamm.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +50,7 @@ import pe.com.sigamm.modelo.Puesto;
 import pe.com.sigamm.modelo.ReciboLuzSocio;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.session.DatosSession;
+import pe.com.sigamm.util.Constantes;
 import pe.com.sigamm.util.LoggerCustom;
 import pe.com.sigamm.util.OperadoresUtil;
 
@@ -59,6 +77,13 @@ public class ReciboLuzController {
 		
 		return "servicios/recibo_luz";
 	
+	}
+	
+	@RequestMapping(value = "/reporte_recibo_luz", method = RequestMethod.GET)
+	public String reporte_estado_cuenta(HttpServletRequest request) {
+
+		return "reportes/reporte_recibo_luz";
+
 	}
 	
 	@RequestMapping(value = "/grabar-luz-original.json", method = RequestMethod.POST, produces="application/json")
@@ -339,4 +364,59 @@ public class ReciboLuzController {
 		return resultado;
 	}
 
+	
+	@RequestMapping(value = "/recibosLuz", method = RequestMethod.GET)
+    public void reporterecibosLuzPdf(
+    		@RequestParam(value = "fechaInicial", defaultValue = "") String fechaInicial,
+    		HttpServletRequest request, HttpServletResponse response) throws IOException {
+        
+        
+		//String rutaJRXML = this.getClass().getClassLoader().getResource("/reportes/Reporte_Operaciones_Bancarias.jrxml").getPath();
+		//String rutaJASPER = this.getClass().getClassLoader().getResource("/reportes/Reporte_Operaciones_Bancarias.jasper").getPath();
+		
+		String ruta = System.getProperty("ruta_ireport") != null ? System.getProperty("ruta_ireport") : ""; 
+		
+		String rutaJRXML = ruta + "Reporte_Recibos_Luz.jrxml";
+		String rutaJASPER = ruta + "Reporte_Recibos_Luz.jasper";
+		
+		log.info("Ruta JRXML : " + rutaJRXML);
+		log.info("Ruta JASPER : " + rutaJASPER);
+		
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("ReportTitle", "Reporte de Recibos de Luz de los Asociados");
+		parameters.put("Author", "SIGAMM");
+		
+		Connection con = null;
+		
+		try {
+			JasperCompileManager.compileReportToFile(rutaJRXML);
+			JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(rutaJASPER);
+			/*CONEXION JNDI*/
+			/*INICIO*/
+			Context initialContext = new InitialContext();
+			DataSource datasource = (DataSource)initialContext.lookup(Constantes.SigammDS);
+			con = datasource.getConnection();
+			/*FIN*/
+			JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, con);
+			if (jasperPrint != null) {
+				byte[] pdfReport = JasperExportManager.exportReportToPdf(jasperPrint);
+				response.reset();
+				response.setContentType("application/pdf");
+				response.setHeader("Cache-Control", "no-store");
+				response.setHeader("Cache-Control", "private");
+				response.setHeader("Pragma", "no-store");
+				response.setContentLength(pdfReport.length);
+				response.getOutputStream().write(pdfReport);
+				response.getOutputStream().flush();
+				response.getOutputStream().close();
+			}
+		} catch (JRException e) {
+			LoggerCustom.errorApp(this, "", e);
+		} catch (NamingException e) {
+			LoggerCustom.errorApp(this, "", e);
+		} catch (SQLException e) {
+			LoggerCustom.errorApp(this, "", e);
+		}
+ 
+    }
 }

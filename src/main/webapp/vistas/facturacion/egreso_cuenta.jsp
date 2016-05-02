@@ -221,8 +221,7 @@ function cargarOperacionesBancarias(){
 			index: 'monto',
 			sortable:false,
 			width: 100,
-			align: 'center',
-			formatter: 'number'
+			align: 'right'
 		},{
 			name : 'fecha',
 			index: 'fecha',
@@ -456,7 +455,7 @@ function openNewWindowForJasperWithCharts(){
 			</button>
 			<button type="button" class="btn btn-primary">
 				<!-- img src="recursos/images/icons/excel_16x16.png" alt="Exportar a Excel" />&nbsp;<a href="/sigamm/reporteOpebanExcel" style="color:white">Exportar</a> -->
-				<img src="recursos/images/icons/excel_16x16.png" alt="Exportar a Excel" />&nbsp;<a href="" onclick="openNewWindowForJasperWithCharts();" style="color:white">Reporte Operaciones Bancarias</a>
+				<img src="recursos/images/icons/reports.png" alt="Exportar a Excel" />&nbsp;<a href="" onclick="openNewWindowForJasperWithCharts();" style="color:white">Reporte Operaciones Bancarias</a>
 			</button>
 		</td>
 	</tr>

@@ -64,7 +64,7 @@ ORDER BY OPERACION, b.FECHA]]>
 			<staticText>
 				<reportElement style="Title" x="0" y="0" width="553" height="64" uuid="88532a83-488d-43d9-bb2f-181f0d0b77e0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[REPORTE OPERACIONES BANCARIAS]]></text>
+				<text><![CDATA[REPORTE DE OPERACIONES BANCARIAS]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -148,7 +148,7 @@ ORDER BY OPERACION, b.FECHA]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{VOUCHER}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="402" y="0" width="43" height="13" uuid="4feed783-22f7-461a-b31d-1beaadc2dac7"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>

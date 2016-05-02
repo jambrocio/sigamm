@@ -70,6 +70,13 @@ public class ReciboAguaController {
 
 	}
 
+	@RequestMapping(value = "/reporte_recibo_agua", method = RequestMethod.GET)
+	public String reporte_estado_cuenta(HttpServletRequest request) {
+
+		return "reportes/reporte_recibo_agua";
+
+	}
+	
 	@RequestMapping(value = "/reporte-recibo-agua.json", method = RequestMethod.POST, produces = "application/json")
 	public @ResponseBody
 	ResponseListBean<ReciboAgua> reporteReciboAgua(

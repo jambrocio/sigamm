@@ -3,7 +3,7 @@ package pe.com.sigamm.modelo;
 public class OperacionesBancarias {
 	int id;
 	String operacion;
-	double monto;
+	String monto;
 	String fecha;
 	String hora;
 	String responsable;
@@ -25,10 +25,10 @@ public class OperacionesBancarias {
 	public void setOperacion(String operacion) {
 		this.operacion = operacion;
 	}
-	public double getMonto() {
+	public String getMonto() {
 		return monto;
 	}
-	public void setMonto(double monto) {
+	public void setMonto(String monto) {
 		this.monto = monto;
 	}
 	public String getFecha() {
@@ -79,5 +79,5 @@ public class OperacionesBancarias {
 	public void setEstado(int estado) {
 		this.estado = estado;
 	}
-
+	
 }
