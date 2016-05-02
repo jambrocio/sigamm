@@ -61,7 +61,7 @@ public class EstadoCuentaController {
 		log.info("Ruta JASPER : " + rutaJASPER);
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("ReportTitle", "Reporte de Operaciones Bancarias");
+		parameters.put("ReportTitle", "Reporte de Operaciones Bancarias JORGE");
 		parameters.put("Author", "SIGAMM");
 		
 		Connection con = null;
