@@ -67,13 +67,16 @@ $(function() {
         }
     });  
 	
+	$("#fechainicial").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });    
+    });
+	
 });
-
-function reporte(){
-	var fechaInicial = $("#fechainicial").val();
-	//Reporte se muestra en la misma hoja
-	window.location = "/sigamm/reportarEgresoExcel?fechaInicial="+fechaInicial;
-}
 
 function openNewWindowForJasperWithCharts(){
 	var fechaInicial = $("#fechainicial").val();
