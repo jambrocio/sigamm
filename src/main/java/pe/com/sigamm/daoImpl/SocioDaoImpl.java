@@ -285,7 +285,7 @@ public class SocioDaoImpl implements SocioDao {
 			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
 			jdbcCall.withCatalogName("PKG_SOCIO");
 			jdbcCall.withProcedureName("SP_BUSCAR_SOCIO_PUESTO").declareParameters(
-					new SqlParameter("vi_codigo_socio", 			Types.INTEGER),
+					new SqlParameter("vi_numero_puesto", 			Types.VARCHAR),
 					new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(Socio.class)));
 			
 			MapSqlParameterSource parametros = new MapSqlParameterSource();
