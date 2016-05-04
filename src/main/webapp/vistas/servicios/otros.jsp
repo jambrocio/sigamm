@@ -828,7 +828,7 @@ function calculoTotal(){
 						<tr>
 							<td colspan="7" align="left">
 								<button type="button" class="btn btn-primary" onclick="guardar()">
-									<img src="recursos/images/icons/guardar_16x16.png" alt="Buscar" />&nbsp;Guardar
+									<img src="recursos/images/icons/guardar_16x16.png" alt="Guardar" />&nbsp;Guardar
 								</button>
 							</td>
 						</tr>

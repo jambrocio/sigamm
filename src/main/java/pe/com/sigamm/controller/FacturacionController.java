@@ -1,11 +1,28 @@
 package pe.com.sigamm.controller;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import pe.com.sigamm.bean.AnularFacturacion;
 import pe.com.sigamm.bean.CamposObligatorios;
 import pe.com.sigamm.bean.ListaServiciosOtros;
 import pe.com.sigamm.bean.ReporteEgreso;
@@ -38,6 +56,7 @@ import pe.com.sigamm.modelo.ServicioOtrosCabecera;
 import pe.com.sigamm.modelo.ServicioOtrosDetalle;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.Constantes;
+import pe.com.sigamm.util.LoggerCustom;
 import pe.com.sigamm.util.OperadoresUtil;
 import pe.com.sigamm.util.Util;
 
@@ -435,4 +454,61 @@ public class FacturacionController {
 		return response;
 	}
 	
+	@RequestMapping(value = "/iFacturacionDiario", method = RequestMethod.GET)
+    public void reporterecibosLuzPdf(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        
+        String ruta = System.getProperty("ruta_ireport") != null ? System.getProperty("ruta_ireport") : ""; 
+		
+		String rutaJRXML = ruta + "reporte_facturacion_diario.jrxml";
+		String rutaJASPER = ruta + "reporte_facturacion_diario.jasper";
+		
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("ReportTitle", "Reporte de Facturación Diario");
+		parameters.put("Author", "SIGAMM");
+		//parameters.put("FECHA", fechaInicial.trim());
+		
+		Connection con = null;
+		
+		try {
+			JasperCompileManager.compileReportToFile(rutaJRXML);
+			JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(rutaJASPER);
+			/*CONEXION JNDI*/
+			/*INICIO*/
+			Context initialContext = new InitialContext();
+			DataSource datasource = (DataSource)initialContext.lookup(Constantes.SigammDS);
+			con = datasource.getConnection();
+			/*FIN*/
+			JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, con);
+			if (jasperPrint != null) {
+				byte[] pdfReport = JasperExportManager.exportReportToPdf(jasperPrint);
+				response.reset();
+				response.setContentType("application/pdf");
+				response.setHeader("Cache-Control", "no-store");
+				response.setHeader("Cache-Control", "private");
+				response.setHeader("Pragma", "no-store");
+				response.setContentLength(pdfReport.length);
+				response.getOutputStream().write(pdfReport);
+				response.getOutputStream().flush();
+				response.getOutputStream().close();
+			}
+		} catch (JRException e) {
+			LoggerCustom.errorApp(this, "", e);
+		} catch (NamingException e) {
+			LoggerCustom.errorApp(this, "", e);
+		} catch (SQLException e) {
+			LoggerCustom.errorApp(this, "", e);
+		}
+ 
+    }
+	
+	@RequestMapping(value = "/anular-facturacion.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String anularFacturacion(AnularFacturacion anular){
+		
+		Retorno retorno = facturacionBus.anularFacturacion(anular);
+		
+		String resultado = "{\"indicador\":\"" + retorno.getIndicador() + "\",\"mensaje\":\"" + retorno.getMensaje() + "\"}";
+		
+		return resultado;
+		
+	}
 }

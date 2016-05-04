@@ -519,7 +519,7 @@ function buscarSocio(){
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 			</button>&nbsp;&nbsp;
 			<button type="button" class="btn btn-primary" onclick="nuevoSocio()">
-				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
+				<img src="recursos/images/icons/nuevo_16x16.png" alt="Nuevo" />&nbsp;Nuevo
 			</button>
 			<button type="button" class="btn btn-primary">
 				<img src="recursos/images/icons/excel_16x16.png" alt="Exportar a Excel" />&nbsp;<a href="/sigamm/reporteSociosExcel" style="color:white">Exportar</a>

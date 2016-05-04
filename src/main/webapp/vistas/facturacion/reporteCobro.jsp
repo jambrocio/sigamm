@@ -77,7 +77,7 @@ $(document).ready(function(){
         }
     });
 	
-	cargarPuestos();
+	cargarFacturacion();
 	montoTotalDiario();
 });
 
@@ -89,90 +89,6 @@ function colorEtiquetas(){
 	$("#lblpuesto-img").hide();
 	$("#lblgiroComercial-img").hide();
 	
-}
-
-function nuevoUsuario(){
-	
-	$('#puesto_modal').modal({
-		backdrop: 'static',
-		keyboard: false
-	});
-	
-	$("#tituloRegistro").html("Nuevo Puesto");
-	
-	colorEtiquetas();
-	
-	$("#codigoPuesto").val(0);
-	$("#codigoUsuario").val(0);
-	$("#codigoGiro").val(0);
-	
-	$("#dniBuscar").val("");
-	$("#puesto").val("");
-	$("#giroComercial").val("");
-	
-	$("#dni").val("");
-	$("#userid").val("");
-	$("#apePaterno").val("");
-	$("#apeMaterno").val("");
-	$("#nombres").val("");
-	$("#telefono").val("");
-	
-}
-
-function guardar(){
-	
-	var ruta = obtenerContexto();
-			
-	jsonObj = [];
-	var parametros = new Object();
-	parametros.codigoUsuario = $("#codigoUsuario").val();
-	parametros.codigoGiro = $("#codigoGiro").val();
-	parametros.nroPuesto = $("#puesto").val();
-	parametros.codigoPuesto = $("#codigoPuesto").val();
-		
-	$.ajax({
-		type: "POST",
-	    async:false,
-	    url: "grabar-puesto.json",
-	    cache : false,
-	    data: parametros,
-	    success: function(result){
-	            
-	        if(result.camposObligatorios.length == 0){
-                	
-            	$('#puesto_modal').modal('hide');
-            	
-	            $.gritter.add({
-					// (string | mandatory) the heading of the notification
-					title: 'Mensaje',
-					// (string | mandatory) the text inside the notification
-					text: result.mensaje,
-					// (string | optional) the image to display on the left
-					image: "/" + ruta + "/recursos/images/confirm.png",
-					// (bool | optional) if you want it to fade out on its own or just sit there
-					sticky: false,
-					// (int | optional) the time you want it to be alive for before fading out
-					time: ''
-				});
-	            
-	            cargarPuestos();
-	            
-			}else{
-                	
-            	colorEtiquetas();
-            	fila = "";
-            	$.each(result.camposObligatorios, function(id, obj){
-                        
-                	$("#" + obj.nombreCampo).css("color", "red");
-                    $("#" + obj.nombreCampo + "-img").show();
-                    $("#" + obj.nombreCampo + "-img").attr("data-content", obj.descripcion);
-                        
-				});
-                	
-			}
-                
-		}
-	});
 }
 
 function buscarUsuario(){
@@ -200,81 +116,6 @@ function buscarUsuario(){
         	$("#codigoUsuario").val(result.codigoUsuario);
         }
     });
-}
-
-function editarPuesto(codigoPuesto, nroPuesto, codigoUsuario, codigoGiro, dni, nombreGiro){
-	console.log("Editar Puesto - [codigoPuesto] : " + codigoPuesto + ", [nroPuesto] : " + nroPuesto + ", [codigoUsuario] : " + codigoUsuario + ", [codigoGiro] : " + codigoGiro + ", [nombreGiro] : " + nombreGiro);
-	
-	$('#puesto_modal').modal({
-		backdrop: 'static',
-		keyboard: false
-	});
-	
-	$("#tituloRegistro").html("Modificar Puesto");
-	
-	colorEtiquetas();
-	
-	$("#codigoPuesto").val(codigoPuesto);
-	$("#codigoUsuario").val(codigoUsuario);
-	$("#codigoGiro").val(codigoGiro);
-	
-	$("#dniBuscar").val(dni);
-	$("#puesto").val(nroPuesto);
-	$("#giroComercial").val(nombreGiro);
-	
-	buscarUsuario();
-	cargarPuestos();
-	
-}
-
-function eliminarPuesto(codigoPuesto, nombre, nroPuesto){
-	
-	//console.log("Eliminar Puesto - [codigoPuesto] : " + codigoPuesto);
-	//cargarPuestos();
-	var ruta = obtenerContexto();
-	mensaje = "Desea eliminar el puesto " + nroPuesto + "\n del usuario " + replaceAll(nombre, "#", " ") + " ?"; 
-	
-	$("#mensajeEliminar").html(mensaje);
-	
-	$('#alerta_modal').modal({
-		backdrop: 'static',
-		keyboard: false
-	}).one('click', '#aceptar', function() {
-        
-		jsonObj = [];
-		var parametros = new Object();
-		parametros.codigoPuesto = codigoPuesto;
-			
-		$.ajax({
-			type: "POST",
-		    async:false,
-		    url: "eliminar-puesto.json",
-		    cache : false,
-		    data: parametros,
-		    success: function(result){
-		            
-		        $('#alerta_modal').modal('hide');
-	            	
-	            $.gritter.add({
-					// (string | mandatory) the heading of the notification
-					title: 'Mensaje',
-					// (string | mandatory) the text inside the notification
-					text: result.mensaje,
-					// (string | optional) the image to display on the left
-					image: "/" + ruta + "/recursos/images/confirm.png",
-					// (bool | optional) if you want it to fade out on its own or just sit there
-					sticky: false,
-					// (int | optional) the time you want it to be alive for before fading out
-					time: ''
-				});
-	            
-	            cargarPuestos();
-		            
-			}
-		});
-		
-    });
-
 }
 
 function limpiarTablaFacturacion(){
@@ -407,11 +248,56 @@ function calculoTotal(){
 	
 }
 
-function eliminarFactura(codigoFacturacionCab){
+function grabarAnulacionFacturacion(){
 	
 	var ruta = obtenerContexto();
+	
+	jsonObj = [];
+	var parametros = new Object();
+	parametros.codigoFacturacionCab = $("#codigoFacturacionCab").val();
+	parametros.observacion = $("#observacion").val();
+		
+	$.ajax({
+		type: "POST",
+	    async:false,
+	    url: "anular-facturacion.json",
+	    cache : false,
+	    data: parametros,
+	    success: function(result){
+	            
+	        imagen = "";
+	        if(result.indicador == "00"){
+            	$('#anular_facturacion_modal').modal('hide');
+            	imagen = "ok";
+	        }else{
+	        	imagen = "advertencia";
+	        }
+	        	
+            $.gritter.add({
+				// (string | mandatory) the heading of the notification
+				title: 'Mensaje',
+				// (string | mandatory) the text inside the notification
+				text: result.mensaje,
+				// (string | optional) the image to display on the left
+				image: "/" + ruta + "/recursos/images/" + imagen + ".png",
+				// (bool | optional) if you want it to fade out on its own or just sit there
+				sticky: false,
+				// (int | optional) the time you want it to be alive for before fading out
+				time: ''
+			});
+	            
+            cargarFacturacion();
+	            
+		}
+	});
+	
+}
+
+function anularFactura(codigoFacturacionCab){
+	
 	mensaje = "Desea Anular la factura con codigo : " + codigoFacturacionCab + " ?"; 
 	
+	$("#codigoFacturacionCab").val(0);
 	$("#mensajeEliminar").html(mensaje);
 	
 	
@@ -420,41 +306,22 @@ function eliminarFactura(codigoFacturacionCab){
 		keyboard: false
 	}).one('click', '#aceptar', function() {
 		
-		//este pendiente la eliminacion de la facturacion
+		$('#alerta_modal').modal('hide');
 		
-        /*
-		jsonObj = [];
-		var parametros = new Object();
-		parametros.codigoServicioOtros = codigoServicioOtros;
-			
-		$.ajax({
-			type: "POST",
-		    async:false,
-		    url: "eliminar-servicio-otros.json",
-		    cache : false,
-		    data: parametros,
-		    success: function(result){
-		            
-		        $('#alerta_modal').modal('hide');
-	            	
-	            $.gritter.add({
-					title: 'Mensaje',
-					text: result.mensaje,
-					image: "/" + ruta + "/recursos/images/confirm.png",
-					sticky: false,
-					time: ''
-				});
-	            
-	            //cargarPuestos();
-		            
-			}
+		$('#anular_facturacion_modal').modal({
+			backdrop: 'static',
+			keyboard: false
 		});
-		*/
+		
+		$("#mensajeAnularFacturacion").html("Código de Facturación : " + codigoFacturacionCab);
+		
+		$("#codigoFacturacionCab").val(codigoFacturacionCab);
+		
     });
 	
 }
 
-function cargarPuestos(){
+function cargarFacturacion(){
 	
 	var ruta = obtenerContexto();
 	var formatterBotones = function(cellVal,options,rowObject)
@@ -470,9 +337,9 @@ function cargarPuestos(){
 			
 			opciones += "&nbsp;&nbsp;";
 			
-			opciones += "<a href=javascript:eliminarFactura(";
+			opciones += "<a href=javascript:anularFactura(";
 			opciones += rowObject.codigoFacturacionCab + ") >";
-			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Anular Factura'/>";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/tacho_24x24.png' border='0' title='Anular Factura'/>";
 			opciones += "</a>";
 			
 			opciones += "</center>";
@@ -605,21 +472,6 @@ function cargarPuestos(){
 	}).trigger('reloadGrid');
 }
 
-function buscarPuesto(){
-	
-	var parametros=new Object();
-	parametros.dni = $("#dniBuscara").val();
-
-	$("#grilla").jqGrid('setGridParam',
-	{
-		url : 'reporte-facturacion.json',
-		datatype : "json",
-		postData:parametros,
-		page:1
-	}).trigger('reloadGrid');
-		
-}
-
 function montoTotalDiario(){
 	
 	$.ajax({
@@ -636,12 +488,18 @@ function montoTotalDiario(){
     });
 }
 
+function mostrarIreport(){
+	var url  = "/sigamm/iFacturacionDiario";
+	window.open(url,"_blank", "menubar=no,location=0,height=500,width=800");
+}
+
 </script>
 </head>
 <body id="body">
-<input type="hidden" id="codigoPuesto" />
 <input type="hidden" id="codigoUsuario" />
 <input type="hidden" id="codigoGiro" />
+<input type="hidden" id="codigoFacturacionCab" />
+
 <table border="0" width="100%">
 	<tr>
 		<td colspan="6">&nbsp;</td>
@@ -651,12 +509,20 @@ function montoTotalDiario(){
 		<td width="10">:</td>
 		<td width="200"><input type="text" id="dniBuscara" class="form-control" maxlength="8" /></td>
 		<td>&nbsp;&nbsp;
-			<button type="button" class="btn btn-primary" onclick="buscarPuesto()">
+			<button type="button" class="btn btn-primary">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 			</button>&nbsp;&nbsp;
-			<button type="button" class="btn btn-primary" class="boton btnNuevo">
-				<a href="<c:url value="/cobro"/>">&nbsp;Nuevo</a>
+			
+			<a href="<c:url value="/cobro"/>">
+				<button type="button" class="btn btn-primary">
+					<img src="recursos/images/icons/nuevo_16x16.png" alt="Nuevo" />&nbsp;Nuevo
+				</button>&nbsp;&nbsp;
+			</a>
+			
+			<button type="button" class="btn btn-primary" onclick="mostrarIreport()">
+				<img src="recursos/images/icons/pdf_16x16.png" alt="Reporte Facturación Diario" />&nbsp;Generar PDF
 			</button>
+			
 		</td>
 		<td width="80">&nbsp;</td>
 		<td width="80">&nbsp;</td>
@@ -679,134 +545,6 @@ function montoTotalDiario(){
 		<td align="right"><b><span id="totalFacturacion"></span></b></td>
 	</tr>
 </table>	
-
-<div class="modal fade" id="puesto_modal" role="dialog" data-keyboard="false" data-backdrop="static">
-	<div class="modal-dialog">
-		
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header modal-header-primary">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title"><span id="tituloRegistro" /></h4>
-			</div>
-			<div class="modal-body">
-				
-					<table border="0" style="width: 500px;">
-						<tr>
-							<td colspan="7" align="right">&nbsp;</td>
-						</tr>
-						<tr>
-							<td colspan="7" align="left">
-								<button type="button" class="btn btn-primary" onclick="guardar(1)">
-									<img src="recursos/images/icons/guardar_16x16.png" alt="Buscar" />&nbsp;Guardar
-								</button>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="7" align="right">&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lbldni"><b>DNI</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="dniBuscar" class="form-control" maxlength="8" /></td>
-							<td valign="top">&nbsp;&nbsp;
-								<button type="button" class="btn btn-primary" onclick="buscarUsuario()">
-									<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
-								</button>
-							</td>
-						</tr>
-						<tr>
-							<td colspan="7"><hr /></td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lblusuario"><b>Usuario</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="userid" class="form-control" maxlength="20" disabled="disabled"/></td>
-							<td valign="top">&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lbldni"><b>DNI</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="dni" class="form-control" maxlength="8" disabled="disabled"/></td>
-							<td valign="top">&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lblapepat"><b>Apellido Paterno</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="apePaterno" class="form-control" maxlength="30" disabled="disabled"/></td>
-							<td valign="top">&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lblapemat"><b>Apellido Materno</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="apeMaterno" class="form-control" maxlength="30" disabled="disabled"/></td>
-							<td valign="top">&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lblnombres"><b>Nombres</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="nombres" class="form-control" maxlength="40" disabled="disabled"/></td>
-							<td valign="top">&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lbltelefono"><b>Telefono</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="telefono" class="form-control" maxlength="9" disabled="disabled"/></td>
-							<td valign="top">&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lbltelefono"><b>Giro Comercial (*)</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="giroComercial" class="form-control" /></td>
-							<td valign="top"><img id="lblgiroComercial-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lbltelefono"><b>Puesto (*)</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="puesto" class="form-control" maxlength="4" /></td>
-							<td valign="top"><img id="lblpuesto-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td colspan="6"><b>(*) Campos Obligatorios</b></td>
-						</tr>
-					</table>
-
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-			</div>
-		</div>
-		  
-	</div>
-</div> 
  
 <div class="modal fade" id="alerta_modal" role="dialog" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog">
@@ -828,6 +566,44 @@ function montoTotalDiario(){
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" id="aceptar">Si</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+			</div>
+		</div>
+		  
+	</div>
+</div>
+
+<div class="modal fade" id="anular_facturacion_modal" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Anular Factura</h4>
+			</div>
+			<div class="modal-body">
+					
+				<table border="0">
+					<tr>
+						<td colspan="3"><b><span id="mensajeAnularFacturacion" /></b></td>
+					</tr>
+					<tr>
+						<td colspan="3">&nbsp;</td>
+					</tr>
+					<tr>
+						<td valign="top"><b>Observación</b></td>
+						<td valign="top"><b>:</b></td>
+						<td>
+							<textarea rows="4" cols="50" id="observacion" class="form-control" maxlength="500" style="text-transform: uppercase;"></textarea>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" onclick="grabarAnulacionFacturacion()">
+					<img src="recursos/images/icons/guardar_16x16.png" alt="Guardar" />&nbsp;Guardar
+				</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
 			</div>
 		</div>
 		  
