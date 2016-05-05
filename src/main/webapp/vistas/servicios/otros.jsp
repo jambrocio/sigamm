@@ -780,6 +780,12 @@ function calculoTotal(){
 	
 	$("#totales").html(formatearImporte(total));
 }
+
+function mostrarIreport(){
+	var url  = "/sigamm/iOtrosServicios";
+	window.open(url,"_blank", "menubar=no,location=0,height=500,width=800");
+}
+
 </script>
 </head>
 <body id="body">
@@ -796,6 +802,9 @@ function calculoTotal(){
 			</button>&nbsp;&nbsp;
 			<button type="button" class="btn btn-primary" onclick="nuevoOtroServicio()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
+			</button>
+			<button type="button" class="btn btn-primary" onclick="mostrarIreport()">
+				<img src="recursos/images/icons/pdf_16x16.png" alt="Reporte Otros Servicios" />&nbsp;Generar PDF
 			</button>
 		</td>
 	</tr>

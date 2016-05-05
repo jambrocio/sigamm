@@ -459,12 +459,12 @@ public class FacturacionController {
         
         String ruta = System.getProperty("ruta_ireport") != null ? System.getProperty("ruta_ireport") : ""; 
 		
-		String rutaJRXML = ruta + "reporte_facturacion_diario.jrxml";
-		String rutaJASPER = ruta + "reporte_facturacion_diario.jasper";
+		String rutaJRXML = ruta + "reporte_facturacion_diario" + ".jrxml";
+		String rutaJASPER = ruta + "reporte_facturacion_diario" + ".jasper";
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("ReportTitle", "Reporte de Facturación Diario");
-		parameters.put("Author", "SIGAMM");
+		parameters.put("ReportTitle", Constantes.IREPORT_TITULO_FACTURACION_DIARIO);
+		parameters.put("Author", Constantes.IREPORT_AUTOR);
 		//parameters.put("FECHA", fechaInicial.trim());
 		
 		Connection con = null;
@@ -511,4 +511,51 @@ public class FacturacionController {
 		return resultado;
 		
 	}
+	
+	@RequestMapping(value = "/iOtrosServicios", method = RequestMethod.GET)
+    public void reporteOtrosServicios(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        
+        String ruta = System.getProperty("ruta_ireport") != null ? System.getProperty("ruta_ireport") : ""; 
+		
+		String rutaJRXML = ruta + "Reporte_Otros_Servicios" + ".jrxml";
+		String rutaJASPER = ruta + "Reporte_Otros_Servicios" + ".jasper";
+		
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("ReportTitle", 	Constantes.IREPORT_TITULO_SERVICIOS_OTROS);
+		parameters.put("Author", 		Constantes.IREPORT_AUTOR);
+		parameters.put("SUBREPORT_DIR", ruta);
+		
+		Connection con = null;
+		
+		try {
+			JasperCompileManager.compileReportToFile(rutaJRXML);
+			JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(rutaJASPER);
+			/*CONEXION JNDI*/
+			/*INICIO*/
+			Context initialContext = new InitialContext();
+			DataSource datasource = (DataSource)initialContext.lookup(Constantes.SigammDS);
+			con = datasource.getConnection();
+			/*FIN*/
+			JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, con);
+			if (jasperPrint != null) {
+				byte[] pdfReport = JasperExportManager.exportReportToPdf(jasperPrint);
+				response.reset();
+				response.setContentType("application/pdf");
+				response.setHeader("Cache-Control", "no-store");
+				response.setHeader("Cache-Control", "private");
+				response.setHeader("Pragma", "no-store");
+				response.setContentLength(pdfReport.length);
+				response.getOutputStream().write(pdfReport);
+				response.getOutputStream().flush();
+				response.getOutputStream().close();
+			}
+		} catch (JRException e) {
+			LoggerCustom.errorApp(this, "", e);
+		} catch (NamingException e) {
+			LoggerCustom.errorApp(this, "", e);
+		} catch (SQLException e) {
+			LoggerCustom.errorApp(this, "", e);
+		}
+ 
+    }
 }

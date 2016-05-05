@@ -70,5 +70,13 @@ public class Constantes {
 	public static final String RUTA_FOTOS_LINUX		= "/media/local/FOTOS_PERSONAL/";
 	
 	public static final String SigammDS = "java:jboss/datasources/SigammDS";
-		
+	
+	//--- ETIQUETAS IREPORT
+	public static final String IREPORT_AUTOR							= "SIGAMM";
+	public static final String IREPORT_TITULO_SERVICIOS_OTROS			= "Reporte Otros Servicios";
+	public static final String IREPORT_TITULO_FACTURACION_DIARIO		= "Reporte de Facturación Diario";
+	
+	
+	
+	
 }
