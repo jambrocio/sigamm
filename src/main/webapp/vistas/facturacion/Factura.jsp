@@ -24,7 +24,7 @@ body,h1,h2,h3,h4,h5,h6 {
 	<div class="container">
 		<div class="col-xs-6" id="logo">
 			<h1>
-				<a href=" "><img alt="" src="logo.png" /> Logo aquí </a>
+				<a href=" "><img alt="" src="../recursos/images/logo.png" /> Logo aquí </a>
 			</h1>
 		</div>
 		<div class="col-xs-6 text-right" id="Titulo">
@@ -38,9 +38,9 @@ body,h1,h2,h3,h4,h5,h6 {
 			<div class="col-xs-5">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h4>
-							De: <a href="#">Su Nombre</a>
-						</h4>
+						<h4 align="center">ASOCIACION DE COMERCIANTES DEL MERCADO MODELO DE HUARAL</h4>
+						<h5 align="center">Fundado el 13 de Noviembre de 1996</h5>
+						<h5 align="center">R.U.C. 20530606334</h5>
 					</div>
 					<div class="panel-body">Dirección detalles más detalles</div>
 				</div>
@@ -48,9 +48,9 @@ body,h1,h2,h3,h4,h5,h6 {
 			<div class="col-xs-5 col-xs-offset-2 text-right">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h4>
-							Para : <a href="#">Nombre del Cliente</a>
-						</h4>
+						<h4 align="center">ASOCIACION DE COMERCIANTES DEL MERCADO MODELO DE HUARAL</h4>
+						<h5 align="center">Fundado el 13 de Noviembre de 1996</h5>
+						<h5 align="center">R.U.C. 20530606334</h5>
 					</div>
 					<div class="panel-body">Dirección detalles más detalles</div>
 				</div>
