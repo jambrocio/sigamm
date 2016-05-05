@@ -35,6 +35,7 @@
 
 <link rel="stylesheet" href="recursos/css/redmond/jquery.ui.all.css" type="text/css" />
 <link rel="stylesheet" href="recursos/css/estilos.css" type="text/css" />
+<link rel="stylesheet" href="recursos/css/estilos_impresion.css" type="text/css" media="print"/>
 <link rel="stylesheet" href="recursos/css/bootstrap.css" type="text/css" />
 <link rel="stylesheet" href="recursos/css/jquery.gritter.css" type="text/css" />
 <link rel="stylesheet" href="recursos/css/jquery.autocomplete.css" type="text/css" />
@@ -151,7 +152,7 @@ a:hover, a:visited, a:link, a:active
 </head>
 <body>
 <c:url value="/j_spring_security_logout" var="logoutUrl" />
-	<div>
+	<div id="cabecera">
 		<div>
 			<h1>
 				<table border="0" width="100%">

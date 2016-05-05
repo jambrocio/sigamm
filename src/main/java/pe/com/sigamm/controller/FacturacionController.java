@@ -88,6 +88,13 @@ public class FacturacionController {
 	
 	}
 	
+	@RequestMapping(value = "/Factura", method=RequestMethod.GET)
+	public String reporteFactura(HttpServletRequest request) {
+		
+		return "facturacion/Factura";
+	
+	}
+	
 	@RequestMapping(value = "/egreso", method=RequestMethod.GET)
 	public String reporteEgresos(HttpServletRequest request) {
 		
