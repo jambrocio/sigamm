@@ -368,6 +368,7 @@ public class ReciboLuzController {
 	@RequestMapping(value = "/recibosLuz", method = RequestMethod.GET)
     public void reporterecibosLuzPdf(
     		@RequestParam(value = "fechaInicial", defaultValue = "") String fechaInicial,
+    		@RequestParam(value = "estado", defaultValue = "T") String estado,
     		HttpServletRequest request, HttpServletResponse response) throws IOException {
         
         
@@ -382,10 +383,19 @@ public class ReciboLuzController {
 		log.info("Ruta JRXML : " + rutaJRXML);
 		log.info("Ruta JASPER : " + rutaJASPER);
 		
+		if (estado.equals("T") ){
+			estado = "%";
+		} else if (estado.equals("E") ){
+			estado = "0%";
+		} else if (estado.equals("P") ){
+			estado = "1%";
+		}
+		
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("ReportTitle", "Reporte de Recibos de Luz de los Asociados");
 		parameters.put("Author", "SIGAMM");
 		parameters.put("FECHA", fechaInicial.trim());
+		parameters.put("ESTADO", estado.trim());
 		
 		Connection con = null;
 		
