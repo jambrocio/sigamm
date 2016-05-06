@@ -1,5 +1,17 @@
 @CHARSET "ISO-8859-1";
 #cabecera {visibility:hidden}
+<<<<<<< HEAD
 #logo {visibility:hidden;
 		height:0px;}
 #rodape {visibility:hidden}
+=======
+#logo {visibility:hidden}
+#rodape {visibility:hidden}
+#noMostrar {visibility:hidden}
+#tablaFacturacionDetalle {border: 0;}
+#tablaFacturacionDetalle2 {border: 0;}
+#tablaFacturacionDetalle tr {border-top: 0; border-bottom: 0; border-left: 0; border-right: 0;}
+#tablaFacturacionDetalle2 tr {border-top: 0; border-bottom: 0; border-left: 0; border-right: 0;}
+#tablaFacturacionDetalle tr td {border: 0; border-top: 0; border-bottom: 0; border-left: 0; border-right: 0;}
+#tablaFacturacionDetalle2 tr td {border: 0; border-top: 0; border-bottom: 0; border-left: 0; border-right: 0;}
+>>>>>>> origin/master
