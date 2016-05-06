@@ -24,7 +24,8 @@ body,h1,h2,h3,h4,h5,h6 {
 	<div class="container">
 		<div class="col-xs-6" id="logo">
 			<h1>
-				<a href=" "><img alt="" src="../recursos/images/logo.png" /> Logo aquí </a>
+				<a href=" "><img alt="" src="../recursos/images/logo.png" /> Logo aquí </a><br>
+				Pruebas
 			</h1>
 		</div>
 		<div class="col-xs-6 text-right" id="Titulo">
@@ -34,7 +35,7 @@ body,h1,h2,h3,h4,h5,h6 {
 			</h1>
 		</div>
 		<hr />
-		<div class="row">
+		<div class="row" id="logo">
 			<div class="col-xs-5">
 				<div class="panel panel-default">
 					<div class="panel-heading">

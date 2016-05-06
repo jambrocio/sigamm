@@ -466,13 +466,13 @@ public class FacturacionController {
         
         String ruta = System.getProperty("ruta_ireport") != null ? System.getProperty("ruta_ireport") : ""; 
 		
-		String rutaJRXML = ruta + "reporte_facturacion_diario" + ".jrxml";
-		String rutaJASPER = ruta + "reporte_facturacion_diario" + ".jasper";
+		String rutaJRXML = ruta + "Reporte_Facturacion" + ".jrxml";
+		String rutaJASPER = ruta + "Reporte_Facturacion" + ".jasper";
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("ReportTitle", Constantes.IREPORT_TITULO_FACTURACION_DIARIO);
 		parameters.put("Author", Constantes.IREPORT_AUTOR);
-		//parameters.put("FECHA", fechaInicial.trim());
+		parameters.put("SUBREPORT_DIR", ruta);
 		
 		Connection con = null;
 		
@@ -565,4 +565,5 @@ public class FacturacionController {
 		}
  
     }
+	
 }
