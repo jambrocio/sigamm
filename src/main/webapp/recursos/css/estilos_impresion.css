@@ -1,4 +1,5 @@
 @CHARSET "ISO-8859-1";
 #cabecera {visibility:hidden}
-#logo {visibility:hidden}
+#logo {visibility:hidden;
+		height:0px;}
 #rodape {visibility:hidden}
