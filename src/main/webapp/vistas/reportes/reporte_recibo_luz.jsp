@@ -83,7 +83,8 @@ function cargarEstados(){
 	var optionEstados = "<option value=0>SELECCIONAR</option>";
 	optionEstados += "<option value=T>TODOS</option>";
 	optionEstados += "<option value=E>PENDIENTE</option>";
-	optionEstados += "<option value=P>PAGADO</option>";
+	optionEstados += "<option value=P>PAGADO</option>"
+	optionEstados += "<option value=S>SUSPENDIDO</option>";
 			
 	$("#estados").html(optionEstados);
 	

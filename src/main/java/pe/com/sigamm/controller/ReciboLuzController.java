@@ -374,7 +374,7 @@ public class ReciboLuzController {
         
 		//String rutaJRXML = this.getClass().getClassLoader().getResource("/reportes/Reporte_Operaciones_Bancarias.jrxml").getPath();
 		//String rutaJASPER = this.getClass().getClassLoader().getResource("/reportes/Reporte_Operaciones_Bancarias.jasper").getPath();
-		
+		String suspendido = "%";
 		String ruta = System.getProperty("ruta_ireport") != null ? System.getProperty("ruta_ireport") : ""; 
 		
 		String rutaJRXML = ruta + "Reporte_Recibos_Luz.jrxml";
@@ -385,10 +385,16 @@ public class ReciboLuzController {
 		
 		if (estado.equals("T") ){
 			estado = "%";
+			suspendido = "%"; 
 		} else if (estado.equals("E") ){
 			estado = "0%";
+			suspendido = "0%";
 		} else if (estado.equals("P") ){
 			estado = "1%";
+			suspendido = "0%";
+		} else if (estado.equals("S") ){
+			estado = "0%";
+			suspendido = "1%";
 		}
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();
@@ -396,6 +402,7 @@ public class ReciboLuzController {
 		parameters.put("Author", "SIGAMM");
 		parameters.put("FECHA", fechaInicial.trim());
 		parameters.put("ESTADO", estado.trim());
+		parameters.put("SUSPENDIDO", suspendido.trim());
 		
 		Connection con = null;
 		
