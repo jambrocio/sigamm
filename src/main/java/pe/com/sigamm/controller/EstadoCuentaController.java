@@ -52,19 +52,6 @@ public class EstadoCuentaController {
 	@RequestMapping(value = "/operacionesBancarias", method = RequestMethod.GET)
     public void reporteOperacionesBancariasPdf(HttpServletRequest request, HttpServletResponse response) throws IOException {
         
-<<<<<<< HEAD
-        try {
-        	log.info(getClass());
-        	//System.setProperty("java.awt.headless", "true");
-        	//String ruta =  getClass().getResource("reportes/Reporte_Operaciones_Bancarias.jrxml").getPath();
-            JasperReport report = JasperCompileManager.compileReport("D://Proyectos//MMH//reportes//Reporte_Operaciones_Bancarias.jrxml");
-            JasperPrint print = JasperFillManager.fillReport(report, new HashMap(), coneccionSQL());
-            JasperViewer.viewReport(print, false);
-        } catch (JRException jRException) {
-            System.out.println(jRException.getMessage());
-        }
-        return ("operacionesBancarias");
-=======
         
 		//String rutaJRXML = this.getClass().getClassLoader().getResource("/reportes/Reporte_Operaciones_Bancarias.jrxml").getPath();
 		//String rutaJASPER = this.getClass().getClassLoader().getResource("/reportes/Reporte_Operaciones_Bancarias.jasper").getPath();
@@ -112,7 +99,6 @@ public class EstadoCuentaController {
 		} catch (SQLException e) {
 			LoggerCustom.errorApp(this, "", e);
 		}
->>>>>>> origin/master
  
     }
 	
