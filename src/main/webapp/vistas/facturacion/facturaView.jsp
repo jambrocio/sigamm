@@ -45,13 +45,13 @@ body,h1,h2,h3,h4,h5,h6 {
 		<div class="row">
 			<div class="col-xs-6">
 				<div class="panel panel-default">
-					<div class="panel-heading">
+					<div class="panel-heading" style="height: 110px">
 						<font align="center" size="14px">ASOCIACION DE COMERCIANTES DEL MERCADO MODELO DE HUARAL</font>
 						<font align="center" size="12px">Fundado el 13 de Noviembre de 1996</font>
 						<font align="center" size="12px">R.U.C. 20530606334</font>
 						<font align="center" size="14px">RECIBO PROVISIONAL Nro. 41796</font>
 					</div>
-					<div class="panel-body">
+					<div class="panel-body" style="height: 110px">
 						<font align="left" size="10px"><b>FECHA:</b> 30/09/2015</font>
 						<font align="left" size="10px"><b>ASOCIADO:</b> PEREZ CALDERON DE BENITO</font>
 						<font align="left" size="10px"><b>SECTOR:</b> 4</font>
@@ -106,13 +106,13 @@ body,h1,h2,h3,h4,h5,h6 {
 			</div>
 			<div class="col-xs-6 col-xs-offset-0 text-right">
 				<div class="panel panel-default">
-					<div class="panel-heading">
+					<div class="panel-heading" style="height: 110px">
 						<font align="center" size="14px">ASOCIACION DE COMERCIANTES DEL MERCADO MODELO DE HUARAL</font>
 						<font align="center" size="12px">Fundado el 13 de Noviembre de 1996</font>
 						<font align="center" size="12px">R.U.C. 20530606334</font>
 						<font align="center" size="14px">RECIBO PROVISIONAL Nro. 41796</font>
 					</div>
-					<div class="panel-body">
+					<div class="panel-body" style="height: 110px">
 						<font align="left" size="10px"><b>FECHA:</b> 30/09/2015</font>
 						<font align="left" size="10px"><b>ASOCIADO:</b> PEREZ CALDERON DE BENITO</font>
 						<font align="left" size="10px"><b>SECTOR:</b> 4</font>
