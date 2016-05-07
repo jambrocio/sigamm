@@ -277,13 +277,14 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				celda26.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				table13.addCell(celda26);
 				
-				Double total = 	reporte.getListaReciboLuzSocio().get(aw).getCargoEnergia() +
+				/*Double total = 	reporte.getListaReciboLuzSocio().get(aw).getCargoEnergia() +
 								reporte.getListaReciboLuzSocio().get(aw).getIgvCargo() +
 								reporte.getListaReciboLuzSocio().get(aw).getAlumbradoPublico() +
 								reporte.getListaReciboLuzSocio().get(aw).getServicioMantenimiento() + 
 								reporte.getListaReciboLuzSocio().get(aw).getDeudaAnterior() +
 								reporte.getListaReciboLuzSocio().get(aw).getReconexion() + 
-								reporte.getListaReciboLuzSocio().get(aw).getCableadoPrincipal();
+								reporte.getListaReciboLuzSocio().get(aw).getCableadoPrincipal();*/
+				Double total = reporte.getListaReciboLuzSocio().get(aw).getTotal();
 				String valor5 = UtilPDF.round(total, 1) + "";
 				//String valor5 = UtilPDF.Redondear(total, 2) + "";		
 			
