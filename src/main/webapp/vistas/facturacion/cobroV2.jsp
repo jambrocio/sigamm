@@ -69,10 +69,10 @@
 	    margin: auto;
 	}
 	
-	@import url(http://fonts.googleapis.com/css?family=Courier+New);
-
-	body,h1,h2,h3,h4,h5,h6 {
-		font-family: 'Bree Serif', serif;
+	@media print {
+    	body {
+        	width: 960px !important;
+    	}
 	}
 </style>
 <script>
@@ -245,14 +245,14 @@ function guardar(){
 				dataTabla1 = dataTabla;
 				dataTabla1 += "<tr>";
 		    	dataTabla1 += "<td>&nbsp;</td>";
-		    	dataTabla1 += "<td class='tamanioPrinter10' id='noMostrar'><b>TOTAL</b></td>";
+		    	dataTabla1 += "<td class='tamanioPrinter10'><b>TOTAL</b></td>";
 		    	dataTabla1 += "<td align='right' class='tamanioPrinter10'><b>S/. <span id='totalImpresion'/></b></td>";
 		    	dataTabla1 += "</tr>";
 		    	
 		    	dataTabla2 = dataTabla;
 		    	dataTabla2 += "<tr>";
 		    	dataTabla2 += "<td>&nbsp;</td>";
-		    	dataTabla2 += "<td class='tamanioPrinter10' id='noMostrar'><b>TOTAL</b></td>";
+		    	dataTabla2 += "<td class='tamanioPrinter10'><b>TOTAL</b></td>";
 		    	dataTabla2 += "<td align='right' class='tamanioPrinter10'><b>S/. <span id='totalImpresion2'/></b></td>";
 		    	dataTabla2 += "</tr>";
 		    			    	
@@ -662,28 +662,28 @@ function imprimir(){
 										<td colspan="3">&nbsp;</td>
 									</tr>
 									<tr>
-										<td width="100px" class="tamanioPrinter10" id="noMostrar"><b>FECHA</b></td>
-										<td class="tamanioPrinter10" id="noMostrar"><b>:</b></td>
+										<td width="100px" class="tamanioPrinter10"><b>FECHA</b></td>
+										<td class="tamanioPrinter10"><b>:</b></td>
 										<td class="tamanioPrinter10"><span id="printFecha"/></td>
 									</tr>
 									<tr>
-										<td class="tamanioPrinter10" id="noMostrar"><b>ASOCIADO</b></td>
-										<td class="tamanioPrinter10" id="noMostrar"><b>:</b></td>
+										<td class="tamanioPrinter10"><b>ASOCIADO</b></td>
+										<td class="tamanioPrinter10"><b>:</b></td>
 										<td class="tamanioPrinter10"><span id="printAsociado"/></td>
 									</tr>
 									<tr>
-										<td class="tamanioPrinter10" id="noMostrar"><b>SECTOR</b></td>
-										<td class="tamanioPrinter10" id="noMostrar"><b>:</b></td>
+										<td class="tamanioPrinter10"><b>SECTOR</b></td>
+										<td class="tamanioPrinter10"><b>:</b></td>
 										<td class="tamanioPrinter10"><span id="printSector"/></td>
 									</tr>
 									<tr>
-										<td class="tamanioPrinter10" id="noMostrar"><b>PUESTO</b></td>
-										<td class="tamanioPrinter10" id="noMostrar"><b>:</b></td>
+										<td class="tamanioPrinter10"><b>PUESTO</b></td>
+										<td class="tamanioPrinter10"><b>:</b></td>
 										<td class="tamanioPrinter10"><span id="printPuesto"/></td>
 									</tr>
 									<tr>
-										<td class="tamanioPrinter10" id="noMostrar"><b>GIRO</b></td>
-										<td class="tamanioPrinter10" id="noMostrar"><b>:</b></td>
+										<td class="tamanioPrinter10"><b>GIRO</b></td>
+										<td class="tamanioPrinter10"><b>:</b></td>
 										<td class="tamanioPrinter10"><span id="printGiro"/></td>
 									</tr>
 									<tr>
@@ -693,9 +693,9 @@ function imprimir(){
 										<td colspan="3">
 											<table border="1" width="100%" cellspacing="5" cellpadding="5" class="tabla" id="tablaFacturacionDetalle">
 												<tr>
-													<td width="80px" align="center" class="tamanioPrinter10" id="noMostrar"><b>CANT.</b></td>
-													<td align="center" class="tamanioPrinter10" id="noMostrar"><b>DESCRIPCION</b></td>
-													<td width="100px" align="center" class="tamanioPrinter10" id="noMostrar"><b>IMPORTE</b></td>
+													<td width="80px" align="center" class="tamanioPrinter10"><b>CANT.</b></td>
+													<td align="center" class="tamanioPrinter10"><b>DESCRIPCION</b></td>
+													<td width="100px" align="center" class="tamanioPrinter10"><b>IMPORTE</b></td>
 												</tr>
 											</table>
 										</td>
@@ -704,7 +704,7 @@ function imprimir(){
 										<td colspan="3">&nbsp;</td>
 									</tr>
 									<tr>
-										<td colspan="3" class="tamanioPrinter10"><b><p id="noMostrar">SON : </p><span id="totalLetras" /></b></td>
+										<td colspan="3" class="tamanioPrinter10"><b>SON : <span id="totalLetras" /></b></td>
 									</tr>
 								</table>
 								</div>
@@ -725,28 +725,28 @@ function imprimir(){
 										<td colspan="3">&nbsp;</td>
 									</tr>
 									<tr>
-										<td width="100px" class="tamanioPrinter10" id="noMostrar"><b>FECHA</b></td>
-										<td class="tamanioPrinter10" id="noMostrar"><b>:</b></td>
+										<td width="100px" class="tamanioPrinter10"><b>FECHA</b></td>
+										<td class="tamanioPrinter10"><b>:</b></td>
 										<td class="tamanioPrinter10"><span id="printFecha2"/></td>
 									</tr>
 									<tr>
-										<td class="tamanioPrinter10" id="noMostrar"><b>ASOCIADO</b></td>
-										<td class="tamanioPrinter10" id="noMostrar"><b>:</b></td>
+										<td class="tamanioPrinter10"><b>ASOCIADO</b></td>
+										<td class="tamanioPrinter10"><b>:</b></td>
 										<td class="tamanioPrinter10"><span id="printAsociado2"/></td>
 									</tr>
 									<tr>
-										<td class="tamanioPrinter10" id="noMostrar"><b>SECTOR</b></td>
-										<td class="tamanioPrinter10" id="noMostrar"><b>:</b></td>
+										<td class="tamanioPrinter10"><b>SECTOR</b></td>
+										<td class="tamanioPrinter10"><b>:</b></td>
 										<td class="tamanioPrinter10"><span id="printSector2"/></td>
 									</tr>
 									<tr>
-										<td class="tamanioPrinter10" id="noMostrar"><b>PUESTO</b></td>
-										<td class="tamanioPrinter10" id="noMostrar"><b>:</b></td>
+										<td class="tamanioPrinter10"><b>PUESTO</b></td>
+										<td class="tamanioPrinter10"><b>:</b></td>
 										<td class="tamanioPrinter10"><span id="printPuesto2"/></td>
 									</tr>
 									<tr>
-										<td class="tamanioPrinter10" id="noMostrar"><b>GIRO</b></td>
-										<td class="tamanioPrinter10" id="noMostrar"><b>:</b></td>
+										<td class="tamanioPrinter10"><b>GIRO</b></td>
+										<td class="tamanioPrinter10"><b>:</b></td>
 										<td class="tamanioPrinter10"><span id="printGiro2"/></td>
 									</tr>
 									<tr>
@@ -756,9 +756,9 @@ function imprimir(){
 										<td colspan="3">
 											<table border="1" width="100%" cellspacing="5" cellpadding="5" class="tabla" id="tablaFacturacionDetalle2">
 												<tr>
-													<td width="80px" align="center" class="tamanioPrinter10" id="noMostrar"><b>CANT.</b></td>
-													<td align="center" class="tamanioPrinter10" id="noMostrar"><b>DESCRIPCION</b></td>
-													<td width="100px" align="center" class="tamanioPrinter10" id="noMostrar"><b>IMPORTE</b></td>
+													<td width="80px" align="center" class="tamanioPrinter10"><b>CANT.</b></td>
+													<td align="center" class="tamanioPrinter10"><b>DESCRIPCION</b></td>
+													<td width="100px" align="center" class="tamanioPrinter10"><b>IMPORTE</b></td>
 												</tr>
 											</table>
 										</td>
@@ -767,7 +767,7 @@ function imprimir(){
 										<td colspan="3">&nbsp;</td>
 									</tr>
 									<tr>
-										<td colspan="3" class="tamanioPrinter10"><b><p id="noMostrar">SON : </p><span id="totalLetras2" /></b></td>
+										<td colspan="3" class="tamanioPrinter10"><b>SON : <span id="totalLetras2" /></b></td>
 									</tr>
 								</table>
 							</td>

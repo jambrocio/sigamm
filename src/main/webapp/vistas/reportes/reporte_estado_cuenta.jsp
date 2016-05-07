@@ -85,10 +85,11 @@ $(function() {
  
 });
 
-function reporte(){
-	var fechaInicial = $("#fechainicial").val();
-	var fechaFinal = $("#fechafinal").val();
-	//window.open("/sigamm/reportarEgresoExcel?fechaInicial="+fechaInicial+"&fechaFinal="+fechaFinal, 'Descarga', 'width=100px,height=50px,toolbar=no', '1');
+function openNewWindowForJasperWithCharts(){
+	var numeroPuesto = $("#numeropuesto").val();
+	var url  = "/sigamm/recibosEstadoCuenta?nroPuesto="+numeroPuesto;
+	var strWindowFeatures = "menubar=no,location=no,width=800,height=500";
+	window.open(url,"_blank", "location=0,height=500,width=800");
 }
 
 </script>
@@ -118,7 +119,7 @@ function reporte(){
 								</td>
 								<td width="30px">&nbsp;</td>
 							</tr>
-							<tr>
+							<!-- tr>
 								<td width="30px">&nbsp;</td>
 								<td>
 									<div class="input-group">
@@ -137,11 +138,11 @@ function reporte(){
 								    </div>
 								</td>
 								<td width="30px">&nbsp;</td>
-							</tr>
+							</tr-->
 							<tr>
 								<td>&nbsp;</td>
 								<td align="right">
-									<button type="button" class="btn btn-primary" onclick="reporte(1)">Aceptar</button>
+									<button type="button" class="btn btn-primary" onclick="openNewWindowForJasperWithCharts()">Aceptar</button>
 								</td>
 								<td width="30px">&nbsp;</td>
 							</tr>

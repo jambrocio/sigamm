@@ -575,7 +575,7 @@ function resetear(codigo, userid){
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 			</button>&nbsp;&nbsp;
 			<button type="button" class="btn btn-primary" onclick="nuevoUsuario()">
-				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
+				<img src="recursos/images/icons/nuevo_16x16.png" alt="Nuevo" />&nbsp;Nuevo
 			</button>
 		</td>
 	</tr>

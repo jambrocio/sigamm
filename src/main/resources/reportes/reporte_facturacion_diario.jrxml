@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_facturacion_diario" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="258b3793-352f-420b-9fca-79858e3f7744">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="218"/>
+	<property name="ireport.y" value="103"/>
+	<subDataset name="Table Dataset 1" uuid="4580a0b5-93b9-4b54-bfcf-d5f04a365eda"/>
+	<queryString>
+		<![CDATA[SELECT codigo_facturacion_cab, dni, nro_puesto, apellido_paterno, apellido_materno, nombres, fecha_creacion, SUM(monto) AS monto, codigo_facturacion_cab AS codigo_fact_cab_alt FROM(
+              SELECT c.codigo_facturacion_cab, s.dni, s.nro_puesto, s.apellido_paterno, s.apellido_materno, s.nombres, TO_CHAR(c.fecha_creacion, 'DD/MM/YYYY') AS fecha_creacion,
+              SUM(d.monto) AS monto
+              FROM sis_facturacion_cab c
+              LEFT JOIN sis_facturacion_det d ON c.codigo_facturacion_cab = d.codigo_facturacion_cab
+              LEFT JOIN sis_deuda_socio ds ON d.codigo_deuda_socio = ds.codigo_deuda_socio
+              LEFT JOIN sis_socio s ON ds.codigo_socio = s.codigo_socio
+              LEFT JOIN sis_servicio_detalle sd ON ds.codigo_servicio_detalle = sd.codigo_servicio_detalle
+              WHERE TO_CHAR(c.fecha_creacion, 'DD/MM/YYYY')= TO_CHAR(SYSDATE, 'DD/MM/YYYY')
+              AND c.estado = 1
+              AND s.estado = 1
+              GROUP BY c.codigo_facturacion_cab, s.dni, s.nro_puesto, s.apellido_paterno, s.apellido_materno, s.nombres, c.fecha_creacion
+              UNION
+              SELECT c.codigo_facturacion_cab, s.dni, s.nro_puesto, s.apellido_paterno, s.apellido_materno, s.nombres, TO_CHAR(c.fecha_creacion, 'DD/MM/YYYY') AS fecha_creacion,
+              SUM(d.monto) AS monto
+              FROM sis_facturacion_cab c
+              LEFT JOIN sis_facturacion_det d ON c.codigo_facturacion_cab = d.codigo_facturacion_cab
+              LEFT JOIN sis_socio s ON c.codigo_socio = s.codigo_socio
+              LEFT JOIN sis_servicio_detalle sd ON d.codigo_servicio = sd.codigo_servicio
+              WHERE TO_CHAR(c.fecha_creacion, 'DD/MM/YYYY')= TO_CHAR(SYSDATE, 'DD/MM/YYYY')
+              AND c.estado = 1
+              AND s.estado = 1
+              AND d.codigo_deuda_socio = 0
+              GROUP BY c.codigo_facturacion_cab, s.dni, s.nro_puesto, s.apellido_paterno, s.apellido_materno, s.nombres, c.fecha_creacion
+          )
+          GROUP BY codigo_facturacion_cab, dni, nro_puesto, apellido_paterno, apellido_materno, nombres, fecha_creacion
+          ORDER BY fecha_creacion]]>
+	</queryString>
+	<field name="CODIGO_FACTURACION_CAB" class="java.math.BigDecimal"/>
+	<field name="DNI" class="java.lang.String"/>
+	<field name="NRO_PUESTO" class="java.lang.String"/>
+	<field name="APELLIDO_PATERNO" class="java.lang.String"/>
+	<field name="APELLIDO_MATERNO" class="java.lang.String"/>
+	<field name="NOMBRES" class="java.lang.String"/>
+	<field name="FECHA_CREACION" class="java.lang.String"/>
+	<field name="MONTO" class="java.math.BigDecimal"/>
+	<field name="CODIGO_FACT_CAB_ALT" class="java.math.BigDecimal"/>
+	<variable name="MONTO_1" class="java.lang.Integer" resetType="Column" calculation="Count">
+		<variableExpression><![CDATA[$F{MONTO}]]></variableExpression>
+	</variable>
+	<variable name="MONTO_2" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{MONTO}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="5" y="55" width="267" height="20" uuid="0c6dc059-a716-4dd9-802c-2d0b1c5e0ac6"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE FACTURACION DIARIO]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="41" splitType="Stretch">
+			<staticText>
+				<reportElement x="5" y="6" width="64" height="20" uuid="dea80f2a-dba0-4093-8a80-65b4271c27b8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PUESTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="72" y="6" width="71" height="20" uuid="67e66ca8-2f7a-4cc2-be6c-fec15ff21aa0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DNI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="147" y="6" width="100" height="20" uuid="9b796327-b22c-4112-b4bc-30f351835791"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[APELLIDO PATERNO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="251" y="6" width="100" height="20" uuid="363ac7bf-544e-4bbf-b278-99665c2def4d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[APELLIDO MATERNO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="354" y="6" width="100" height="20" uuid="b3fefbc2-b8ea-4988-b491-3cfeba1145cd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="458" y="6" width="87" height="20" uuid="dbcb62a3-9d58-4d99-9a3a-1867efd41fba"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MONTO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="7" y="28" width="537" height="1" uuid="dc784791-20ca-44eb-bf72-9c213fcb7191"/>
+			</line>
+			<line>
+				<reportElement x="6" y="2" width="537" height="1" uuid="1afdc46c-f93b-4b29-bfb9-c92b7be49a33"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement x="5" y="3" width="64" height="20" uuid="1949f379-30c8-44e0-a972-acabbda9a461"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{NRO_PUESTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="72" y="3" width="71" height="20" uuid="cbf92ac4-efde-40b3-93e0-70ab3a870cd1"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{DNI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="147" y="3" width="100" height="20" uuid="7a216b35-7584-4b47-bd01-28158dd7ed9c"/>
+				<textFieldExpression><![CDATA[$F{APELLIDO_PATERNO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="251" y="3" width="100" height="20" uuid="2e9a2e8c-6b10-4d6b-88e1-a47c5ba46441"/>
+				<textFieldExpression><![CDATA[$F{APELLIDO_MATERNO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="354" y="3" width="100" height="20" uuid="8313e8b2-1c6e-4f75-99b0-4844f2501fe8"/>
+				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="458" y="3" width="87" height="20" uuid="a7e16875-559c-475d-8a05-458df369eb8a"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{MONTO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="30" splitType="Stretch">
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="456" y="4" width="87" height="20" uuid="994fc835-508e-4fa0-8e05-ab8555aa4239"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{MONTO_2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="405" y="4" width="49" height="20" uuid="7828a3c4-a812-4d49-8a25-b83e8f9cb7e9"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL : ]]></text>
+			</staticText>
+			<line>
+				<reportElement x="6" y="4" width="537" height="1" uuid="223e6435-f501-43df-bd01-3c7fc14540d4"/>
+			</line>
+			<line>
+				<reportElement x="6" y="26" width="537" height="1" uuid="1204d3c9-1746-4e7c-a17c-85a0222f0b9a"/>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement x="448" y="3" width="53" height="20" uuid="025ac09e-a625-484e-b7e7-1aa9c88aef25"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="522" y="3" width="30" height="20" uuid="30c3587e-b621-4732-9dcb-a82cb3a9de0c"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="7" y="2" width="100" height="20" uuid="b747bd62-be44-440d-83db-32b28b31b6da"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="504" y="3" width="15" height="20" uuid="c0a5ca50-aee2-422e-a97e-7913946fe0ed"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[/]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

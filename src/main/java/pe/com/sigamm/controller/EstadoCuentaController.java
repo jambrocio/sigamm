@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.naming.Context;
@@ -27,7 +29,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import pe.com.sigamm.bean.CamposObligatorios;
+import pe.com.sigamm.bean.ReporteSocio;
+import pe.com.sigamm.bus.SocioBus;
+import pe.com.sigamm.modelo.Socio;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.Constantes;
 import pe.com.sigamm.util.LoggerCustom;
@@ -38,6 +45,9 @@ public class EstadoCuentaController {
 	private static final Logger log = Logger.getLogger(ReciboAguaController.class);
 	public String fechaIni = "01/07/2015";
 	public String fechaFin = "01/07/2015";
+	
+	@Autowired
+	private SocioBus socioBus;
 	
 	@Autowired
 	private DatosSession datosSession;
@@ -51,10 +61,13 @@ public class EstadoCuentaController {
 	
 	@RequestMapping(value = "/operacionesBancarias", method = RequestMethod.GET)
     public void reporteOperacionesBancariasPdf(HttpServletRequest request, HttpServletResponse response) throws IOException {
+<<<<<<< HEAD
         
         
 		//String rutaJRXML = this.getClass().getClassLoader().getResource("/reportes/Reporte_Operaciones_Bancarias.jrxml").getPath();
 		//String rutaJASPER = this.getClass().getClassLoader().getResource("/reportes/Reporte_Operaciones_Bancarias.jasper").getPath();
+=======
+>>>>>>> origin/master
 		
 		String ruta = System.getProperty("ruta_ireport") != null ? System.getProperty("ruta_ireport") : ""; 
 		
@@ -102,4 +115,60 @@ public class EstadoCuentaController {
  
     }
 	
+	
+	@RequestMapping(value = "/recibosEstadoCuenta", method = RequestMethod.GET)
+    public void reporterecibosAguaPdf(Socio socio,
+    		HttpServletRequest request, HttpServletResponse response) throws IOException {
+        
+        	
+		String ruta = System.getProperty("ruta_ireport") != null ? System.getProperty("ruta_ireport") : ""; 
+		
+		String rutaJRXML = ruta + "Reporte_Estado_Cuenta.jrxml";
+		String rutaJASPER = ruta + "Reporte_Estado_Cuenta.jasper";
+		
+		log.info("Ruta JRXML : " + rutaJRXML);
+		log.info("Ruta JASPER : " + rutaJASPER);
+		
+		
+		Socio soc = socioBus.buscarSocioPuesto(socio);
+		
+		
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("ReportTitle", "Reporte de Recibos de Agua de los Asociados");
+		parameters.put("Author", "SIGAMM");
+		parameters.put("CODIGO_SOCIO", soc.getCodigoSocio());
+		
+		Connection con = null;
+		
+		try {
+			JasperCompileManager.compileReportToFile(rutaJRXML);
+			JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(rutaJASPER);
+			/*CONEXION JNDI*/
+			/*INICIO*/
+			Context initialContext = new InitialContext();
+			DataSource datasource = (DataSource)initialContext.lookup(Constantes.SigammDS);
+			con = datasource.getConnection();
+			/*FIN*/
+			JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, con);
+			if (jasperPrint != null) {
+				byte[] pdfReport = JasperExportManager.exportReportToPdf(jasperPrint);
+				response.reset();
+				response.setContentType("application/pdf");
+				response.setHeader("Cache-Control", "no-store");
+				response.setHeader("Cache-Control", "private");
+				response.setHeader("Pragma", "no-store");
+				response.setContentLength(pdfReport.length);
+				response.getOutputStream().write(pdfReport);
+				response.getOutputStream().flush();
+				response.getOutputStream().close();
+			}
+		} catch (JRException e) {
+			LoggerCustom.errorApp(this, "", e);
+		} catch (NamingException e) {
+			LoggerCustom.errorApp(this, "", e);
+		} catch (SQLException e) {
+			LoggerCustom.errorApp(this, "", e);
+		}
+ 
+    }
 }

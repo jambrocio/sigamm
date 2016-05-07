@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
+import pe.com.sigamm.bean.AnularFacturacion;
 import pe.com.sigamm.bean.ListaServiciosOtros;
 import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ReporteFacturacion;
@@ -928,6 +929,47 @@ public class FacturacionDaoImpl implements FacturacionDao {
 		}
 		
 		return  reporte;
+	}
+
+	@Override
+	public Retorno anularFacturacion(AnularFacturacion anular) {
+		
+		Retorno retorno = new Retorno();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_ANULAR_FACTURACION").declareParameters(
+				new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
+				new SqlParameter("vi_codigo_facturacion_cab", 	Types.INTEGER),
+				new SqlParameter("vi_observacion", 				Types.VARCHAR),
+				
+				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
+				new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
+				
+            
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_usuario", 			datosSession.getCodigoUsuario());
+			parametros.addValue("vi_codigo_facturacion_cab", 	anular.getCodigoFacturacionCab());
+			parametros.addValue("vi_observacion", 				anular.getObservacion());
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
 	}
 
 }

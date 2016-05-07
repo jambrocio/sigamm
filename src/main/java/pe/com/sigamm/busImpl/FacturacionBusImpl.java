@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import pe.com.sigamm.bean.AnularFacturacion;
 import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ReporteFacturacion;
 import pe.com.sigamm.bean.ReporteFacturacionDetalle;
@@ -211,6 +212,12 @@ public class FacturacionBusImpl implements FacturacionBus {
 	public ReporteFacturacionDetalle reporteFacturacionDetalle(int codigoFacturacionCab) {
 		
 		return facturacionDao.reporteFacturacionDetalle(codigoFacturacionCab);
+	}
+
+	@Override
+	public Retorno anularFacturacion(AnularFacturacion anular) {
+		
+		return facturacionDao.anularFacturacion(anular);
 	}
 	
 }

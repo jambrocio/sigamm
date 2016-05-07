@@ -28,7 +28,7 @@ $(document).ready(function()
     //initialize();
     //plotPoint(coords.lat,coords.lng,'Mall of America','<span class="gBubble"><b>Mall of America</b><br>60 East Brodway<br>Bloomington, MN 55425</span>');
    
-    //cargarRegistros();   
+    cargarEstados();   
 });
 
 $(function($){
@@ -37,7 +37,7 @@ $(function($){
         prevText: '<Ant',
         nextText: 'Sig>',
         currentText: 'Hoy',
-        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNames: ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'],
         monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
         dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
         dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
@@ -67,17 +67,33 @@ $(function() {
         }
     });  
 	
+	$("#fechainicial").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });    
+    });
+	
 });
 
-function reporte(){
-	var fechaInicial = $("#fechainicial").val();
-	//Reporte se muestra en la misma hoja
-	window.location = "/sigamm/reportarEgresoExcel?fechaInicial="+fechaInicial;
+function cargarEstados(){
+	
+	var optionEstados = "<option value=0>SELECCIONAR</option>";
+	optionEstados += "<option value=T>TODOS</option>";
+	optionEstados += "<option value=E>PENDIENTE</option>";
+	optionEstados += "<option value=P>PAGADO</option>"
+	optionEstados += "<option value=S>SUSPENDIDO</option>";
+			
+	$("#estados").html(optionEstados);
+	
 }
 
 function openNewWindowForJasperWithCharts(){
 	var fechaInicial = $("#fechainicial").val();
-	var url  = "/sigamm/recibosLuz?fechaInicial="+fechaInicial;
+	var estado = $("#estados").val();
+	var url  = "/sigamm/recibosLuz?fechaInicial="+fechaInicial+"&estado="+estado;
 	var strWindowFeatures = "menubar=no,location=no,width=800,height=500";
 	window.open(url,"_blank", "location=0,height=500,width=800");
 }
@@ -105,6 +121,16 @@ function openNewWindowForJasperWithCharts(){
 									<div class="input-group">
 								      <div class="input-group-addon"><img src="recursos/images/icons/calendar_16x16.png" border="0" /></div>
 								      <input class="form-control" type="text" id="fechainicial" placeholder="Ingrese el periodo del recibo">
+								    </div>
+								</td>
+								<td width="30px">&nbsp;</td>
+							</tr>
+							<tr>
+								<td width="30px">&nbsp;</td>
+								<td>
+									<div class="input-group">
+								      <div class="input-group-addon"><img src="recursos/images/icons/calendar_16x16.png" border="0" /></div>
+								      <select id="estados" class="form-control"></select>								      
 								    </div>
 								</td>
 								<td width="30px">&nbsp;</td>

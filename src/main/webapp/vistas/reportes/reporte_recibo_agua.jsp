@@ -28,7 +28,7 @@ $(document).ready(function()
     //initialize();
     //plotPoint(coords.lat,coords.lng,'Mall of America','<span class="gBubble"><b>Mall of America</b><br>60 East Brodway<br>Bloomington, MN 55425</span>');
    
-    //cargarRegistros();   
+	cargarEstados();   
 });
 
 $(function($){
@@ -37,7 +37,7 @@ $(function($){
         prevText: '<Ant',
         nextText: 'Sig>',
         currentText: 'Hoy',
-        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNames: ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'],
         monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
         dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
         dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
@@ -54,45 +54,49 @@ $(function($){
 
 $(function() {
     
-	$("#fechainicial").datepicker(
-    {   
+	$("#fechainicial").datepicker({
+        dateFormat: 'MM yy',
         changeMonth: true,
         changeYear: true,
-        numberOfMonths: 1,
-        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo',
-            'Junio', 'Julio', 'Agosto', 'Septiembre',
-            'Octubre', 'Noviembre', 'Diciembre'],
-        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr',
-            'May', 'Jun', 'Jul', 'Ago',
-            'Sep', 'Oct', 'Nov', 'Dic'] 
+        showButtonPanel: false,
+		regional: 'es',
+        onClose: function(dateText, inst) {  
+            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
+            $(this).val($.datepicker.formatDate('MM yy', new Date(year, month, 1)));
+        }
     });  
-
-	$("#fechafinal").datepicker(
-    {   
-        changeMonth: true,
-        changeYear: true,
-        numberOfMonths: 1,
-        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo',
-            'Junio', 'Julio', 'Agosto', 'Septiembre',
-            'Octubre', 'Noviembre', 'Diciembre'],
-        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr',
-            'May', 'Jun', 'Jul', 'Ago',
-            'Sep', 'Oct', 'Nov', 'Dic'] 
-    }); 
 	
- 
+	$("#fechainicial").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });    
+    });
+	
 });
 
-function reporte(){
-	var fechaInicial = $("#fechainicial").val();
-	var fechaFinal = $("#fechafinal").val();
-	//window.open("/sigamm/reportarEgresoExcel?fechaInicial="+fechaInicial+"&fechaFinal="+fechaFinal, 'Descarga', 'width=100px,height=50px,toolbar=no', '1');
-	//Reporte se muestra en la misma hoja
-	window.location = "/sigamm/reportarEgresoExcel?fechaInicial="+fechaInicial+"&fechaFinal="+fechaFinal;
+function cargarEstados(){
+	
+	var optionEstados = "<option value=0>SELECCIONAR</option>";
+	optionEstados += "<option value=T>TODOS</option>";
+	optionEstados += "<option value=E>PENDIENTE</option>";
+	optionEstados += "<option value=P>PAGADO</option>";
+	optionEstados += "<option value=S>SUSPENDIDO</option>";
+	
+	$("#estados").html(optionEstados);
+	
 }
 
+function openNewWindowForJasperWithCharts(){
+	var fechaInicial = $("#fechainicial").val();
+	var estado = $("#estados").val();
+	var url  = "/sigamm/recibosAgua?fechaInicial="+fechaInicial+"&estado="+estado;
+	var strWindowFeatures = "menubar=no,location=no,width=800,height=500";
+	window.open(url,"_blank", "location=0,height=500,width=800");
+}
 </script>
 </head>
 <body id="body">
@@ -115,7 +119,7 @@ function reporte(){
 								<td>
 									<div class="input-group">
 								      <div class="input-group-addon"><img src="recursos/images/icons/calendar_16x16.png" border="0" /></div>
-								      <input class="form-control" type="text" id="fechainicial" placeholder="Ingrese la fecha inicial">
+								      <input class="form-control" type="text" id="fechainicial" placeholder="Ingrese el periodo del recibo">
 								    </div>
 								</td>
 								<td width="30px">&nbsp;</td>
@@ -125,7 +129,7 @@ function reporte(){
 								<td>
 									<div class="input-group">
 								      <div class="input-group-addon"><img src="recursos/images/icons/calendar_16x16.png" border="0" /></div>
-								      <input class="form-control" type="text" id="fechafinal" placeholder="Ingrese la fecha final">
+								      <select id="estados" class="form-control"></select>								      
 								    </div>
 								</td>
 								<td width="30px">&nbsp;</td>
@@ -133,10 +137,7 @@ function reporte(){
 							<tr>
 								<td>&nbsp;</td>
 								<td align="right">
-									<button type="button" class="btn btn-primary" onclick="reporte(1)">Aceptar</button>
-									<!-- button type="button" class="btn btn-primary">
-										<img src="recursos/images/icons/excel_16x16.png" alt="Exportar a Excel" />&nbsp;<a href="/sigamm/reportarEgresoExcel" target="_blank">Exportar</a>
-									</button-->
+									<button type="button" class="btn btn-primary" onclick="openNewWindowForJasperWithCharts()">Aceptar</button>
 								</td>
 								<td width="30px">&nbsp;</td>
 							</tr>

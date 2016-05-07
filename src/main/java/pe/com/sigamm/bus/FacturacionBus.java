@@ -2,6 +2,7 @@ package pe.com.sigamm.bus;
 
 import java.util.List;
 
+import pe.com.sigamm.bean.AnularFacturacion;
 import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ReporteFacturacion;
 import pe.com.sigamm.bean.ReporteFacturacionDetalle;
@@ -66,5 +67,7 @@ public interface FacturacionBus {
 	public List<FacturacionDetalle> buscarFacturacionDetalle(FacturacionCabecera facturacion);
 	
 	public ReporteFacturacionDetalle reporteFacturacionDetalle(int codigoFacturacionCab);
+
+	public Retorno anularFacturacion(AnularFacturacion anular);
 	
 }
