@@ -46,30 +46,19 @@ body,h1,h2,h3,h4,h5,h6 {
 			<div class="col-xs-6">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h4 align="center">ASOCIACION DE COMERCIANTES DEL MERCADO
-							MODELO DE HUARAL</h4>
-						<h5 align="center">Fundado el 13 de Noviembre de 1996</h5>
-						<h5 align="center">R.U.C. 20530606334</h5>
-						<h4 align="center">RECIBO PROVISIONAL Nro. 41796</h4>
+						<font align="center" size="14px">ASOCIACION DE COMERCIANTES DEL MERCADO MODELO DE HUARAL</font>
+						<font align="center" size="12px">Fundado el 13 de Noviembre de 1996</font>
+						<font align="center" size="12px">R.U.C. 20530606334</font>
+						<font align="center" size="14px">RECIBO PROVISIONAL Nro. 41796</font>
 					</div>
 					<div class="panel-body">
-						<h5 align="left">
-							<b>FECHA:</b> 30/09/2015
-						</h5>
-						<h5 align="left">
-							<b>ASOCIADO:</b> PEREZ CALDERON DE BENITO
-						</h5>
-						<h5 align="left">
-							<b>SECTOR:</b> 4
-						</h5>
-						<h5 align="left">
-							<b>PUESTO:</b> 72
-						</h5>
-						<h5 align="left">
-							<b>GIRO:</b> ABARROTES
-						</h5>
+						<font align="left" size="10px"><b>FECHA:</b> 30/09/2015</font>
+						<font align="left" size="10px"><b>ASOCIADO:</b> PEREZ CALDERON DE BENITO</font>
+						<font align="left" size="10px"><b>SECTOR:</b> 4</font>
+						<font align="left" size="10px"><b>PUESTO:</b> 72</font>
+						<font align="left" size="10px"><b>GIRO:</b> ABARROTES</font>
 						<!-- / fin de sección de datos del Cliente  -->
-						<table class="table table-bordered">
+						<table class="table table-bordered" border="1" cellpadding="0" cellspacing="0">
 							<thead>
 								<tr>
 									<th>
@@ -118,41 +107,24 @@ body,h1,h2,h3,h4,h5,h6 {
 			<div class="col-xs-6 col-xs-offset-0 text-right">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h4 align="center">ASOCIACION DE COMERCIANTES DEL MERCADO
-							MODELO DE HUARAL</h4>
-						<h5 align="center">Fundado el 13 de Noviembre de 1996</h5>
-						<h5 align="center">R.U.C. 20530606334</h5>
-						<h4 align="center">RECIBO PROVISIONAL Nro. 41796</h4>
+						<font align="center" size="14px">ASOCIACION DE COMERCIANTES DEL MERCADO MODELO DE HUARAL</font>
+						<font align="center" size="12px">Fundado el 13 de Noviembre de 1996</font>
+						<font align="center" size="12px">R.U.C. 20530606334</font>
+						<font align="center" size="14px">RECIBO PROVISIONAL Nro. 41796</font>
 					</div>
 					<div class="panel-body">
-						<h5 align="left">
-							<b>FECHA:</b> 30/09/2015
-						</h5>
-						<h5 align="left">
-							<b>ASOCIADO:</b> PEREZ CALDERON DE BENITO
-						</h5>
-						<h5 align="left">
-							<b>SECTOR:</b> 4
-						</h5>
-						<h5 align="left">
-							<b>PUESTO:</b> 72
-						</h5>
-						<h5 align="left">
-							<b>GIRO:</b> ABARROTES
-						</h5>
+						<font align="left" size="10px"><b>FECHA:</b> 30/09/2015</font>
+						<font align="left" size="10px"><b>ASOCIADO:</b> PEREZ CALDERON DE BENITO</font>
+						<font align="left" size="10px"><b>SECTOR:</b> 4</font>
+						<font align="left" size="10px"><b>PUESTO:</b> 72</font>
+						<font align="left" size="10px"><b>GIRO:</b> ABARROTES</font>
 						<!-- / fin de sección de datos del Cliente  -->
-						<table class="table table-bordered">
+						<table class="table table-bordered" border="1" cellpadding="0" cellspacing="0">
 							<thead>
 								<tr>
-									<th>
-										<h4>CANT.</h4>
-									</th>
-									<th>
-										<h4>DESCRIPCION</h4>
-									</th>
-									<th>
-										<h4>IMPORTE</h4>
-									</th>
+									<th><font align="center" size="10px">CANT.</font></th>
+									<th><font align="center" size="10px">DESCRIPCION</font></th>
+									<th><font align="center" size="10px">IMPORTE</font></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -179,10 +151,8 @@ body,h1,h2,h3,h4,h5,h6 {
 							</tbody>
 						</table>
 						<div class="panel panel-info">
-							<div class="panel-heading">
-								<h4>SON:</h4>
-							</div>
-							<div class="panel-body">Un Sol con cero centimos</div>
+							<div class="panel-heading"><font align="right" size="12px"><b>SON:</b></font></div>
+							<div class="panel-body"><font align="left" size="12px">Un Sol con cero centimos</font></div>
 						</div>
 					</div>
 				</div>

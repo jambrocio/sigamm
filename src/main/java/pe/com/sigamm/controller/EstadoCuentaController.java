@@ -61,13 +61,9 @@ public class EstadoCuentaController {
 	
 	@RequestMapping(value = "/operacionesBancarias", method = RequestMethod.GET)
     public void reporteOperacionesBancariasPdf(HttpServletRequest request, HttpServletResponse response) throws IOException {
-<<<<<<< HEAD
-        
-        
+
 		//String rutaJRXML = this.getClass().getClassLoader().getResource("/reportes/Reporte_Operaciones_Bancarias.jrxml").getPath();
 		//String rutaJASPER = this.getClass().getClassLoader().getResource("/reportes/Reporte_Operaciones_Bancarias.jasper").getPath();
-=======
->>>>>>> origin/master
 		
 		String ruta = System.getProperty("ruta_ireport") != null ? System.getProperty("ruta_ireport") : ""; 
 		
