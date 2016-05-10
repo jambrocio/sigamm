@@ -15,7 +15,7 @@
 			<td>&nbsp;</td>
 			<td align="right">
 				<button type="button" class="btn btn-primary"
-					onclick="window.open('vistas/facturacion/facturaView.jsp','nuevaVentana','width=600, height=400')">Imprimir Factura</button>
+					onclick="window.open('vistas/facturacion/facturaView.jsp','nuevaVentana','width=800, height=600')">Imprimir Factura</button>
 			</td>
 			<td width="30px">&nbsp;</td>
 		</tr>

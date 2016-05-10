@@ -6,8 +6,34 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" href="recursos/css/estilos_impresion.css"	type="text/css" media="print" />
 <title></title>
 <style>
+
+	#mdialTamanio{
+      width: 800px !important;
+    }
+    
+	tamanio18 {
+		font-family: courier new; 
+		font-size: 18px;
+	}
+	
+	tamanio16 {
+		font-family: courier new; 
+		font-size: 16px;
+	}
+	
+	tamanio14 {
+		font-family: courier new; 
+		font-size: 14px;
+	}
+
+	tamanio12 {
+		font-family: courier new; 
+		font-size: 12px;
+	}
+	
     .gBubble
     {
         color:black;
@@ -51,7 +77,7 @@
 	}
 </style>
 <script>
-$(document).ready(function(){	
+$(document).ready(function(){		
 	
 	$.ajax({
         type: "POST",
@@ -80,6 +106,8 @@ $(document).ready(function(){
 	cargarFacturacion();
 	montoTotalDiario();
 });
+
+
 
 function colorEtiquetas(){
 	
@@ -196,7 +224,6 @@ function visualizar(codigoFacturacionCab){
 		    	dataTabla += "<td>&nbsp;</td>";
 		    	dataTabla += "<td style='display:none;'></td>";
 		    	dataTabla += "</tr>";
-		    	
 		    	//console.log("Linea : " + i);
 			}
 			
@@ -230,21 +257,145 @@ function visualizar(codigoFacturacionCab){
 	
 }
 
+
+function imprimir(codigoFacturacionCab){
+	$("#correlativo1").html(codigoFacturacionCab);
+	$("#correlativo2").html(codigoFacturacionCab);
+	limpiarTablaFacturacion();
+	
+	var ruta = obtenerContexto();
+	var parametros = new Object();
+	parametros.codigoFacturacionCab = codigoFacturacionCab;
+	
+	$.ajax({
+        type: "POST",
+        async:false,
+        url: "buscar-facturacionCabecera.json",
+        cache : false,
+        data: parametros,
+        success: function(result){
+        	$("#printFecha1").html(result.fechaCreacion);
+        	$("#printAsociado1").html(result.nombresFull);
+        	$("#printSector1").html(result.nombreSector);
+        	$("#printPuesto1").html(result.nroPuesto);
+        	$("#printGiro1").html(result.nombreGiro);
+        	$("#printFecha2").html(result.fechaCreacion);
+        	$("#printAsociado2").html(result.nombresFull);
+        	$("#printSector2").html(result.nombreSector);
+        	$("#printPuesto2").html(result.nroPuesto);
+        	$("#printGiro2").html(result.nombreGiro);        		
+        }
+    });
+	
+	$.ajax({
+        type: "POST",
+        async:false,
+        url: "buscar-facturacionDetalle.json",
+        cache : false,
+        data: parametros,
+        success: function(result){
+            
+        	dataTabla = "";
+        	dataTabla1 = "";
+        	dataTabla2 = "";
+        	$("#tablaFacturacionDetalle1").val("");
+        	$("#tablaFacturacionDetalle2").val("");
+        	cantidadLineas = 1;
+        	$.each(result, function(keyM, serv) {
+        		
+        		var nombreDetalle = serv.nombreDetalle;
+        		var monto = parseFloat(serv.monto);
+        		var fecPeriodo = serv.fecPeriodo;
+        		
+        		dataTabla += "<tr>" +
+		           	"<td align='center'></td>" + 
+  		           	"<td align='left'><font class='tamanio12'><b>" + nombreDetalle + "</b></font><br><font class='tamanio12'>" + fecPeriodo + "</font></td>" +
+  		           	"<td align='right'><font class='tamanio12'>S/. " + formatearImporte(monto) + "</font></td>" +
+  		          	"<td align='right' style='display:none;'>" + monto + "</td>" +
+  				"</tr>";
+  				
+  				cantidadLineas = cantidadLineas + 1;
+  				
+        	});
+        	
+        	var j = 7 - cantidadLineas; 
+			for (i=0; i < j; i++) { 
+				 
+				dataTabla += "<tr>";
+		    	dataTabla += "<td>&nbsp;</td>";
+		    	dataTabla += "<td>&nbsp;</td>";
+		    	dataTabla += "<td>&nbsp;</td>";
+		    	dataTabla += "<td style='display:none;'></td>";
+		    	dataTabla += "</tr>";
+		    	
+		    	//console.log("Linea : " + i);
+			}
+			
+			dataTabla1 = dataTabla;
+			dataTabla1 += "<tr>";
+	    	dataTabla1 += "<td>&nbsp;</td>";
+	    	dataTabla1 += "<td><font class='tamanio12'><b>TOTAL</b></font></td>";
+	    	dataTabla1 += "<td align='right'><font class='tamanio12'><b>S/. <span id='totalImpresion1'/></b></font></td>";
+	    	dataTabla1 += "<td style='display:none;'></td>";
+	    	dataTabla1 += "</tr>";
+	    	
+	    	dataTabla2 = dataTabla;
+	    	dataTabla2 += "<tr>";
+	    	dataTabla2 += "<td>&nbsp;</td>";
+	    	dataTabla2 += "<td><font class='tamanio12'><b>TOTAL</b></font></td>";
+	    	dataTabla2 += "<td align='right'><font class='tamanio12'><b>S/. <span id='totalImpresion2'/></b></font></td>";
+	    	dataTabla2 += "<td style='display:none;'></td>";
+	    	dataTabla2 += "</tr>";
+	    			    	
+			$('#tablaFacturacionDetalle1 tbody tr:last').after(dataTabla1);
+			$('#tablaFacturacionDetalle2 tbody tr:last').after(dataTabla2);
+			
+        	calculoTotal();
+        	
+        }
+    });
+	
+	$('#visualizacion_modal_1').modal({
+		backdrop: 'static',
+		keyboard: false
+	});
+	
+}
+
+
 function calculoTotal(){
 	
 	var total = 0;
+	var total1 = 0;
+	var total2 = 0;
     $("#tablaFacturacionDetalle tbody tr").each(function (item) {
         var this_row = $(this);
-        //var monto = $.trim(this_row.find('td:eq(3)').html());
         var monto = $.trim(this_row.find('td:eq(3)').html());
 		if(monto != "" && monto != "IMPORTE OCULTO"){
-			//console.log("[" + monto + "]");
 			total = parseFloat(total) + parseFloat(monto);
 		}
     });
-	
+    $("#tablaFacturacionDetalle1 tbody tr").each(function (item) {
+        var this_row = $(this);
+        var monto = $.trim(this_row.find('td:eq(3)').html());
+		if(monto != "" && monto != "IMPORTE OCULTO"){
+			total1 = parseFloat(total1) + parseFloat(monto);
+		}
+    });
+    $("#tablaFacturacionDetalle2 tbody tr").each(function (item) {
+        var this_row = $(this);
+        var monto = $.trim(this_row.find('td:eq(3)').html());
+		if(monto != "" && monto != "IMPORTE OCULTO"){
+			total2 = parseFloat(total2) + parseFloat(monto);
+		}
+    });
+    
     $("#totalImpresion").html(total.toFixed(2));
+    $("#totalImpresion1").html(total1.toFixed(2));
+    $("#totalImpresion2").html(total2.toFixed(2));
 	$("#totalLetras").html(NumeroALetras(total));
+	$("#totalLetras1").html(NumeroALetras(total1));
+	$("#totalLetras2").html(NumeroALetras(total2));
 	
 }
 
@@ -333,6 +484,13 @@ function cargarFacturacion(){
 			opciones += "<a href=javascript:visualizar(";
 			opciones += rowObject.codigoFacturacionCab + ") >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Ver Comprobante'/>";
+			opciones += "</a>";
+			
+			opciones += "&nbsp;&nbsp;";
+			
+			opciones += "<a href=javascript:imprimir(";
+			opciones += rowObject.codigoFacturacionCab + ") >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/impresion_24x24.png' border='0' title='Imprimir Comprobante'/>";
 			opciones += "</a>";
 			
 			opciones += "&nbsp;&nbsp;";
@@ -491,6 +649,17 @@ function montoTotalDiario(){
 function mostrarIreport(){
 	var url  = "/sigamm/iFacturacionDiario";
 	window.open(url,"_blank", "menubar=no,location=0,height=500,width=800");
+}
+
+
+function imprime(){
+	$("div#datosImprimir").printArea();
+}
+
+function cerrar(){
+	$('#visualizacion_modal_1').modal('hide');
+	location.reload();
+	
 }
 
 </script>
@@ -700,5 +869,96 @@ function mostrarIreport(){
 	</div>
 </div>
 
+
+<div class="modal fade" id="visualizacion_modal_1" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">	
+		<!-- Modal content-->
+	<div class="modal-content" id="mdialTamanio">
+		<div class="col-xs-6" id="logo">
+			<h1>
+				<a href="#"><img alt="" src="recursos/images/logo.png"/>ACMMH</a>
+			</h1>
+		</div>
+		<div class="col-xs-6 text-right" id="nroFactura">
+			<h1>FACTURA</h1>
+			<h1>&nbsp;</h1>
+		</div>
+		<hr id="linea"/>
+		<div class="row" id="datosImprimir">
+			<div class="col-xs-6">
+				<div class="panel panel-default">
+					<div class="panel-heading" align="center">
+						<font class="tamanio18"><b>ASOCIACION DE COMERCIANTES DEL MERCADO MODELO DE HUARAL</b></font><br>
+						<font class="tamanio16">Fundado el 13 de Noviembre de 1996</font><br/>
+						<font class="tamanio16">R.U.C. 20530606334</font><br/>
+					</div>
+					<div class="panel-body">
+						<font class="tamanio16"><p align="center"><b>RECIBO PROVISIONAL Nro.&nbsp;<span id="correlativo1" /></b></p></font><br/>
+						<font class="tamanio14"><b>FECHA:</b>&nbsp;<span id="printFecha1"/></font><br>
+						<font class="tamanio14"><b>ASOCIADO:</b>&nbsp;<span id="printAsociado1"/></font><br>
+						<font class="tamanio14"><b>SECTOR:</b>&nbsp;<span id="printSector1"/></font><br>
+						<font class="tamanio14"><b>PUESTO:</b>&nbsp;<span id="printPuesto1"/></font><br>
+						<font class="tamanio14"><b>GIRO:</b>&nbsp;<span id="printGiro1"/></font><br>
+						<!-- / fin de secciÃ³n de datos del Cliente  -->
+						<table border="1" cellpadding="0" cellspacing="0" width="330px;" class="tamanio14" id= "tablaFacturacionDetalle1">
+							<tr>
+								<th><b>CANT</b></th>
+								<th><b>DESCRIPCION</b></th>
+								<th><b>TOTAL</b></th>
+							</tr>
+						</table>
+						<div class="panel panel-info">
+							<div class="panel-heading" align="left">
+								<font class="tamanio14">SON : <span id="totalLetras1" /></font>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- ********************************************************************** -->
+			<div class="col-xs-6">
+				<div class="panel panel-default">
+					<div class="panel-heading" align="center">
+						<font class="tamanio18"><b>ASOCIACION DE COMERCIANTES DEL MERCADO MODELO DE HUARAL</b></font><br>
+						<font class="tamanio16">Fundado el 13 de Noviembre de 1996</font><br>
+						<font class="tamanio16">R.U.C. 20530606334</font><br>
+					</div>
+					<div class="panel-body">
+						<font class="tamanio16"><p align="center"><b>RECIBO PROVISIONAL Nro.&nbsp;<span id="correlativo2" /></b></p></font><br>
+						<font class="tamanio14"><b>FECHA:</b>&nbsp;<span id="printFecha2"/></font><br>
+						<font class="tamanio14"><b>ASOCIADO:</b>&nbsp;<span id="printAsociado2"/></font><br>
+						<font class="tamanio14"><b>SECTOR:</b>&nbsp;<span id="printSector2"/></font><br>
+						<font class="tamanio14"><b>PUESTO:</b>&nbsp;<span id="printPuesto2"/></font><br>
+						<font class="tamanio14"><b>GIRO:</b>&nbsp;<span id="printGiro2"/></font><br>
+						<!-- / fin de secciÃ³n de datos del Cliente  -->
+						<table border="1" cellpadding="0" cellspacing="0" width="330px;" class="tamanio14" id= "tablaFacturacionDetalle2">
+							<tr>
+								<th><b>CANT</b></th>
+								<th><b>DESCRIPCION</b></th>
+								<th><b>TOTAL</b></th>
+							</tr>
+						</table>
+						<div class="panel panel-info">
+							<div class="panel-heading" align="left">
+								<font class="tamanio16">SON : <span id="totalLetras2" /></font>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<div class="modal-footer" id="botonImprime">
+			<button type="button" id="btnImprimir" class="btn btn-primary" onclick="imprime();">
+				<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;Imprimir
+			</button>
+			<button type="button" class="btn btn-default" onclick="cerrar();">
+				<img src="recursos/images/icons/boxclosed_16x16.png" alt="Cerrar" />&nbsp;Cerrar
+			</button>
+		</div>
+	</div> <!-- Fin del Container -->
+		  
+	</div>
+</div>
 </body>
 </html>

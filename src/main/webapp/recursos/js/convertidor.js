@@ -142,8 +142,8 @@ function NumeroALetras(num){
     enteros: Math.floor(num),
     centavos: (((Math.round(num * 100)) - (Math.floor(num) * 100))),
     letrasCentavos: "",
-    letrasMonedaPlural: "SOLES",
-    letrasMonedaSingular: "SOL"
+    letrasMonedaPlural: "NUEVOS SOLES",
+    letrasMonedaSingular: "NUEVO SOL"
   };
 
   if (data.centavos > 0)

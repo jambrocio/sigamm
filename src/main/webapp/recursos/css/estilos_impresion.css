@@ -1,12 +1,22 @@
 @CHARSET "ISO-8859-1";
+@page{margin: 0;}
 #cabecera {visibility:hidden}
 #logo {visibility:hidden;
 		height:0px;}
+#linea {visibility:hidden}
+#nroFactura {visibility:hidden;
+			 height:0px;}
+#botonImprime {visibility:hidden;
+			 height:0px;}
+			 
 #rodape {visibility:hidden}
 #noMostrar {visibility:hidden}
 #tablaFacturacionDetalle {border: 0;}
+#tablaFacturacionDetalle1 {border: 0;}
 #tablaFacturacionDetalle2 {border: 0;}
 #tablaFacturacionDetalle tr {border-top: 0; border-bottom: 0; border-left: 0; border-right: 0;}
+#tablaFacturacionDetalle1 tr {border-top: 0; border-bottom: 0; border-left: 0; border-right: 0;}
 #tablaFacturacionDetalle2 tr {border-top: 0; border-bottom: 0; border-left: 0; border-right: 0;}
 #tablaFacturacionDetalle tr td {border: 0; border-top: 0; border-bottom: 0; border-left: 0; border-right: 0;}
+#tablaFacturacionDetalle1 tr td {border: 0; border-top: 0; border-bottom: 0; border-left: 0; border-right: 0;}
 #tablaFacturacionDetalle2 tr td {border: 0; border-top: 0; border-bottom: 0; border-left: 0; border-right: 0;}

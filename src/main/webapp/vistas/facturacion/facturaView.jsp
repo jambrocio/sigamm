@@ -14,14 +14,34 @@
 /*@import url(http://fonts.googleapis.com/css?family=Bree+Serif);*/
 @import url(http://fonts.googleapis.com/css?family=Courier+New);
 
-body,h1,h2,h3,h4,h5,h6 {
+body,h1,h2,h3,h4,h5,h6,div {
 	/*font-family: 'Bree Serif', serif;*/
 	font-family: 'Courier new';
 }
 
-/* Estilo de impresión */
-/*#contenido {float:right; margin:10px auto; width:500px;}*/
+tamanio18 {
+	font-family: courier new; 
+	font-size: 18px;
+}
+
+tamanio16 {
+	font-family: courier new; 
+	font-size: 16px;
+}
+
+tamanio14 {
+	font-family: courier new; 
+	font-size: 14px;
+}
 </style>
+<script>
+	$(document).ready(function() 
+	{	
+		alert(request.getParameter("codigo"));
+		$("#codigo").val(request.getParameter("codigo")); 
+		
+	});
+</script>
 
 <title>Insert title here</title>
 
@@ -31,45 +51,39 @@ body,h1,h2,h3,h4,h5,h6 {
 	<div class="container">
 		<div class="col-xs-6" id="logo">
 			<h1>
-				<a href=" "><img alt="" src="recursos/images/advertencia.png" />
+				<a href="#"><img alt="" src="../../recursos/images/logo.png" />
 					Logo aqui </a>
 			</h1>
 		</div>
-		<div class="col-xs-6 text-right" id="logo">
+		<div class="col-xs-6 text-right" id="nroFactura">
 			<h1>FACTURA</h1>
 			<h1>
 				<small>Factura #001</small>
 			</h1>
 		</div>
-		<hr />
+		<hr id="linea"/>
 		<div class="row">
 			<div class="col-xs-6">
 				<div class="panel panel-default">
-					<div class="panel-heading" style="height: 110px">
-						<font align="center" size="14px">ASOCIACION DE COMERCIANTES DEL MERCADO MODELO DE HUARAL</font>
-						<font align="center" size="12px">Fundado el 13 de Noviembre de 1996</font>
-						<font align="center" size="12px">R.U.C. 20530606334</font>
-						<font align="center" size="14px">RECIBO PROVISIONAL Nro. 41796</font>
+					<div class="panel-heading" align="center">
+						<font class="tamanio18"><b>ASOCIACION DE COMERCIANTES DEL MERCADO MODELO DE HUARAL</b></font><br>
+						<font class="tamanio16">Fundado el 13 de Noviembre de 1996</font><br>
+						<font class="tamanio16">R.U.C. 20530606334</font><br>
 					</div>
-					<div class="panel-body" style="height: 110px">
-						<font align="left" size="10px"><b>FECHA:</b> 30/09/2015</font>
-						<font align="left" size="10px"><b>ASOCIADO:</b> PEREZ CALDERON DE BENITO</font>
-						<font align="left" size="10px"><b>SECTOR:</b> 4</font>
-						<font align="left" size="10px"><b>PUESTO:</b> 72</font>
-						<font align="left" size="10px"><b>GIRO:</b> ABARROTES</font>
+					<div class="panel-body">
+						<font class="tamanio16"><p align="center"><b>RECIBO PROVISIONAL Nro.&nbsp;<span id="codigo"></span> </b></p></font><br>
+						<font class="tamanio14"><b>FECHA:</b> 30/09/2015</font><br>
+						<font class="tamanio14"><b>ASOCIADO:</b> PEREZ CALDERON DE BENITO</font><br>
+						<font class="tamanio14"><b>SECTOR:</b> 4</font><br>
+						<font class="tamanio14"><b>PUESTO:</b> 72</font><br>
+						<font class="tamanio14"><b>GIRO:</b> ABARROTES</font><br>
 						<!-- / fin de sección de datos del Cliente  -->
-						<table class="table table-bordered" border="1" cellpadding="0" cellspacing="0">
+						<table border="1" cellpadding="0" cellspacing="0" width="310px;" class="tamanio14">
 							<thead>
 								<tr>
-									<th>
-										<h4>CANT.</h4>
-									</th>
-									<th>
-										<h4>DESCRIPCION</h4>
-									</th>
-									<th>
-										<h4>IMPORTE</h4>
-									</th>
+									<th><b>CANT</b></th>
+									<th><b>DESCRIPCION</b></th>
+									<th><b>TOTAL</b></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -81,7 +95,7 @@ body,h1,h2,h3,h4,h5,h6 {
 								<tr>
 									<td>&nbsp;</td>
 									<td>MES DE SETIEMBRE - 2015</td>
-									<td class="text-right">S/. 1.00</td>
+									<td class="text-right">1.00</td>
 								</tr>
 								<tr>
 									<td>&nbsp;</td>
@@ -96,35 +110,35 @@ body,h1,h2,h3,h4,h5,h6 {
 							</tbody>
 						</table>
 						<div class="panel panel-info">
-							<div class="panel-heading">
-								<h4>SON:</h4>
+							<div class="panel-heading" align="left">
+								<font class="tamanio16">SON: Un Sol con cero centimos</font>
 							</div>
-							<div class="panel-body">Un Sol con cero centimos</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="col-xs-6 col-xs-offset-0 text-right">
+			<!-- ********************************************************************** -->
+			<div class="col-xs-6">
 				<div class="panel panel-default">
-					<div class="panel-heading" style="height: 110px">
-						<font align="center" size="14px">ASOCIACION DE COMERCIANTES DEL MERCADO MODELO DE HUARAL</font>
-						<font align="center" size="12px">Fundado el 13 de Noviembre de 1996</font>
-						<font align="center" size="12px">R.U.C. 20530606334</font>
-						<font align="center" size="14px">RECIBO PROVISIONAL Nro. 41796</font>
+					<div class="panel-heading" align="center">
+						<font class="tamanio18"><b>ASOCIACION DE COMERCIANTES DEL MERCADO MODELO DE HUARAL</b></font><br>
+						<font class="tamanio16">Fundado el 13 de Noviembre de 1996</font><br>
+						<font class="tamanio16">R.U.C. 20530606334</font><br>
 					</div>
-					<div class="panel-body" style="height: 110px">
-						<font align="left" size="10px"><b>FECHA:</b> 30/09/2015</font>
-						<font align="left" size="10px"><b>ASOCIADO:</b> PEREZ CALDERON DE BENITO</font>
-						<font align="left" size="10px"><b>SECTOR:</b> 4</font>
-						<font align="left" size="10px"><b>PUESTO:</b> 72</font>
-						<font align="left" size="10px"><b>GIRO:</b> ABARROTES</font>
+					<div class="panel-body">
+						<font class="tamanio16"><p align="center"><b>RECIBO PROVISIONAL Nro. 41796</b></p></font><br>
+						<font class="tamanio14"><b>FECHA:</b> 30/09/2015</font><br>
+						<font class="tamanio14"><b>ASOCIADO:</b> PEREZ CALDERON DE BENITO</font><br>
+						<font class="tamanio14"><b>SECTOR:</b> 4</font><br>
+						<font class="tamanio14"><b>PUESTO:</b> 72</font><br>
+						<font class="tamanio14"><b>GIRO:</b> ABARROTES</font><br>
 						<!-- / fin de sección de datos del Cliente  -->
-						<table class="table table-bordered" border="1" cellpadding="0" cellspacing="0">
+						<table border="1" cellpadding="0" cellspacing="0" width="310px;" class="tamanio14">
 							<thead>
 								<tr>
-									<th><font align="center" size="10px">CANT.</font></th>
-									<th><font align="center" size="10px">DESCRIPCION</font></th>
-									<th><font align="center" size="10px">IMPORTE</font></th>
+									<th><b>CANT</b></th>
+									<th><b>DESCRIPCION</b></th>
+									<th><b>TOTAL</b></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -136,7 +150,7 @@ body,h1,h2,h3,h4,h5,h6 {
 								<tr>
 									<td>&nbsp;</td>
 									<td>MES DE SETIEMBRE - 2015</td>
-									<td class="text-right">S/. 1.00</td>
+									<td class="text-right">1.00</td>
 								</tr>
 								<tr>
 									<td>&nbsp;</td>
@@ -151,14 +165,16 @@ body,h1,h2,h3,h4,h5,h6 {
 							</tbody>
 						</table>
 						<div class="panel panel-info">
-							<div class="panel-heading"><font align="right" size="12px"><b>SON:</b></font></div>
-							<div class="panel-body"><font align="left" size="12px">Un Sol con cero centimos</font></div>
+							<div class="panel-heading" align="left">
+								<font class="tamanio16">SON: Un Sol con cero centimos</font>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+			
 		</div>
-	</div>
+	</div> <!-- Fin del Container -->
 
 </body>
 </html>
