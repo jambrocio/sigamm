@@ -316,13 +316,6 @@ function cargarReciboLuzOriginal(){
 			
 			opciones += "&nbsp;&nbsp;";
 			
-			opciones += "<a href=javascript:eliminarReciboLuzOriginal(";
-			opciones += rowObject.codigoReciboLuzOriginal + ",'" + rowObject.periodo.replace(' ','_') + "') >";
-			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Recibo Luz'/>";
-			opciones += "</a>";
-			
-			opciones += "&nbsp;&nbsp;";
-			
 			opciones += "<a href=javascript:generarReciboLuzSocio(";
 			opciones += rowObject.codigoReciboLuzOriginal + ") >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/reciboLuz_24x24.png' border='0' title='Generar Recibo Luz Socio'/>";
@@ -346,6 +339,13 @@ function cargarReciboLuzOriginal(){
 			
 			opciones += "<a href=/sigamm/generarImpresionLuzPDF?codigoRecibo="+rowObject.codigoReciboLuzOriginal+"&periodo="+rowObject.periodo.replace(' ','_')+" target='_blank'>";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Generar Impresión de todos los Recibo de Luz de los Socios'/>";
+			opciones += "</a>";
+
+			opciones += "&nbsp;&nbsp;";
+			
+			opciones += "<a href=javascript:eliminarReciboLuzOriginal(";
+			opciones += rowObject.codigoReciboLuzOriginal + ",'" + rowObject.periodo.replace(' ','_') + "') >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Recibo Luz'/>";
 			opciones += "</a>";
 			
 			opciones += "</center>";

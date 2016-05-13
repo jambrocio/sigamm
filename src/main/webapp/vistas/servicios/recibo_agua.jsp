@@ -257,14 +257,7 @@ function cargarReciboAgua(){
 			opciones += "<a href=javascript:editarReciboAgua(";
 			opciones += rowObject.codigoRecibo + ",'" + rowObject.periodo.replace(' ','_') + "','" + rowObject.lecturaInicial + "','" + rowObject.lecturaFinal + "','" + rowObject.monto + "','" + rowObject.fechaCorte.replace(/\s/g,"_") + "','" + rowObject.fechaVencimiento.replace(/\s/g,"_") + "','" + replaceAll(rowObject.observaciones," ","_") + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Agua'/>";
-			opciones += "</a>";
-			
-			opciones += "&nbsp;&nbsp;";
-			
-			opciones += "<a href=javascript:eliminarReciboAgua(";
-			opciones += rowObject.codigoRecibo + ",'" + rowObject.periodo.replace(' ','_') + "') >";
-			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Recibo Agua'/>";
-			opciones += "</a>";
+			opciones += "</a>";			
 			
 			opciones += "&nbsp;&nbsp;";
 			
@@ -287,18 +280,25 @@ function cargarReciboAgua(){
 				opciones += "</a>";
 			}			
 				
-				opciones += "&nbsp;&nbsp;";
+			opciones += "&nbsp;&nbsp;";
 				
 				/*opciones += "<a href=javascript:generarImpresionPDF(";
 				opciones += rowObject.codigoRecibo + ") >";
 				opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Generar Impresión de todos los Recibo de Agua de los Socios'/>";
 				opciones += "</a>";*/
 				
-				opciones += "<a href=/sigamm/generarImpresionAguaPDF?codigoRecibo="+rowObject.codigoRecibo+"&periodo="+rowObject.periodo.replace(' ','_')+" target='_blank'>";
-				opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Generar Impresión de todos los Recibo de Agua de los Socios'/>";
-				opciones += "</a>";
-				
-				opciones += "</center>";
+			opciones += "<a href=/sigamm/generarImpresionAguaPDF?codigoRecibo="+rowObject.codigoRecibo+"&periodo="+rowObject.periodo.replace(' ','_')+" target='_blank'>";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Generar Impresión de todos los Recibo de Agua de los Socios'/>";
+			opciones += "</a>";
+			
+			opciones += "&nbsp;&nbsp;";
+			
+			opciones += "<a href=javascript:eliminarReciboAgua(";
+			opciones += rowObject.codigoRecibo + ",'" + rowObject.periodo.replace(' ','_') + "') >";
+			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Recibo Agua'/>";
+			opciones += "</a>";
+			
+			opciones += "</center>";
 			
 		return opciones;
 				
@@ -474,9 +474,9 @@ function eliminarReciboAgua(codigoRecibo, periodo){
 	var ruta = obtenerContexto();
 	mensaje = "Desea eliminar el recibo de agua cuyo periodo es " + periodo.replace('_',' ') + "... ?"; 
 	
-	$("#mensajeEliminar").html(mensaje);
+	$("#mensajeEliminarAgua").html(mensaje);
 	
-	$('#alerta_modal').modal({
+	$('#alerta_modal_elimina_agua').modal({
 		backdrop: 'static',
 		keyboard: false
 	}).one('click', '#aceptar', function() {
@@ -493,7 +493,7 @@ function eliminarReciboAgua(codigoRecibo, periodo){
 		    data: parametros,
 		    success: function(result){
 		            
-		        $('#alerta_modal').modal('hide');
+		        $('#alerta_modal_elimina_agua').modal('hide');
 	            	
 	            $.gritter.add({
 					// (string | mandatory) the heading of the notification
@@ -516,6 +516,7 @@ function eliminarReciboAgua(codigoRecibo, periodo){
     });
 	
 }
+
 
 function generarReciboAguaSocio(codigoRecibo){
 	console.log("Generar Recibo Agua Socios - [codigoReciboAgua] : " + codigoRecibo);
@@ -1659,6 +1660,32 @@ function exportarAguaSocio(){
 				<table border="0">
 					<tr>
 						<td><img src="recursos/images/icons/exclamation_32x32.png" border="0" />&nbsp;<b><span id="mensajeEditar" /></b></td>
+					</tr>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" id="aceptar">Si</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+			</div>
+		</div>
+		  
+	</div>
+</div>
+
+<div class="modal fade" id="alerta_modal_elimina_agua" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Eliminar Recibo Agua</h4>
+			</div>
+			<div class="modal-body">
+					
+				<table border="0">
+					<tr>
+						<td><img src="recursos/images/icons/exclamation_32x32.png" border="0" />&nbsp;<b><span id="mensajeEliminarAgua" /></b></td>
 					</tr>
 				</table>
 			</div>
