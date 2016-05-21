@@ -25,7 +25,7 @@
     {
         color:black;
         font-family: Calibri;
-		font-size: 10px;    
+		font-size: 8px;    
     }
     
     .modal-header-primary {
@@ -704,12 +704,12 @@ function imprimir(){
 										<td colspan="3">&nbsp;</td>
 									</tr>
 									<tr>
-										<td colspan="3" class="tamanioPrinter10"><b><p id="noMostrar">SON : </p><span id="totalLetras" /></b></td>
+										<td colspan="3" class="tamanioPrinter10"><b>SON : <span id="totalLetras" /></b></td>
 									</tr>
 								</table>
 								</div>
 							</td>
-							<td width="4%" align="center"><div style="height:600px;width:0;border:0;border-left:3px;border-style:double;border-color:#000000" /></td>
+							<td width="4%" align="center"><div style="height:550px;width:0;border:0;border-left:3px;border-style:double;border-color:#000000" /></td>
 							<td width="48%" valign="top">
 								<table border="0" width="100%">
 									<tr>
@@ -767,7 +767,7 @@ function imprimir(){
 										<td colspan="3">&nbsp;</td>
 									</tr>
 									<tr>
-										<td colspan="3" class="tamanioPrinter10"><b><p id="noMostrar">SON : </p><span id="totalLetras2" /></b></td>
+										<td colspan="3" class="tamanioPrinter10"><b>SON : <span id="totalLetras2" /></b></td>
 									</tr>
 								</table>
 							</td>
