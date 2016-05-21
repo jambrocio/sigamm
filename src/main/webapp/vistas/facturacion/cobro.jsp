@@ -213,6 +213,25 @@ function guardar(){
 			        var monto = $.trim(this_row.find('td:eq(4)').html());
 			        var codPuesto = $.trim(this_row.find('td:eq(5)').html());
 			        
+			        desConcepto = replaceAll(desConcepto, "ENERO", "ENE");
+			        desConcepto = replaceAll(desConcepto, "FEBRERO", "FEB");
+			        desConcepto = replaceAll(desConcepto, "MARZO", "MAR");
+			        desConcepto = replaceAll(desConcepto, "ABRIL", "ABR");
+			        desConcepto = replaceAll(desConcepto, "MAYO", "MAY");
+			        desConcepto = replaceAll(desConcepto, "JUNIO", "JUN");
+			        desConcepto = replaceAll(desConcepto, "JULIO", "JUL");
+			        desConcepto = replaceAll(desConcepto, "AGOSTO", "AGO");
+			        desConcepto = replaceAll(desConcepto, "SETIEMBRE", "SET");
+			        desConcepto = replaceAll(desConcepto, "OCTUBRE", "OCT");
+			        desConcepto = replaceAll(desConcepto, "NOVIEMBRE", "NOV");
+			        desConcepto = replaceAll(desConcepto, "DICIEMBRE", "DIC");
+			        /*
+			        desConcepto = replaceAll(desConcepto, "SEMANA 1", "S1");
+			        desConcepto = replaceAll(desConcepto, "SEMANA 2", "S2");
+			        desConcepto = replaceAll(desConcepto, "SEMANA 3", "S3");
+			        desConcepto = replaceAll(desConcepto, "SEMANA 4", "S4");
+			        desConcepto = replaceAll(desConcepto, "SEMANA 5", "S5");
+			        */
 			        if(monto != "Monto" || codPuesto != "Cod.Puesto" || codDeuda != "Cod.Concepto"){
 			        	
 			        	var importe = monto * 1;
@@ -296,13 +315,13 @@ function buscarPuesto(){
         	$("#printAsociado").html(result.apellidoPaterno + " " + result.apellidoMaterno + ", " + result.nombres);
         	$("#printPuesto").html(result.nroPuesto);
         	$("#printGiro").html(result.nombreGiro);
-        	$("#printSector").html(result.nombreSector);
+        	$("#printSector").html(pad(result.nombreSector, 2));
         	$("#printFecha").html(fecha);
         	
         	$("#printAsociado2").html(result.apellidoPaterno + " " + result.apellidoMaterno + ", " + result.nombres);
         	$("#printPuesto2").html(result.nroPuesto);
         	$("#printGiro2").html(result.nombreGiro);
-        	$("#printSector2").html(result.nombreSector);
+        	$("#printSector2").html(pad(result.nombreSector, 2));
         	$("#printFecha2").html(fecha);
         	
         	cargarServicios();
