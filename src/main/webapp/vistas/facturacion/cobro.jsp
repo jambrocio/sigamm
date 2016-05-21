@@ -18,7 +18,7 @@
     {
         color:black;
         font-family: Calibri;
-		font-size: 12px;    
+		font-size: 10px;    
     }
     
     .tamanioPrinter10
@@ -646,8 +646,8 @@ function imprimir(){
 				<div id="myPrintArea">
 					<table border="0" width="100%">
 						<tr>
-							<td width="48%" valign="top">
-								<div class="marca-de-agua"> 
+							<td width="49.5%" valign="top">
+								<div> 
 								<table border="0" width="100%" >
 									<tr>
 										<td colspan="3" align="center" class="tamanioPrinter12"><b>ASOCIACIÓN DE COMERCIANTES DEL MERCADO MODELO<BR>DE HUARAL<BR>Fundado el 13 de Noviembre de 1996<BR>R.U.C. 20530606334</b></td>
@@ -693,9 +693,9 @@ function imprimir(){
 										<td colspan="3">
 											<table border="1" width="100%" cellspacing="5" cellpadding="5" class="tabla" id="tablaFacturacionDetalle">
 												<tr>
-													<td width="80px" align="center" class="tamanioPrinter10" id="noMostrar"><b>CANT.</b></td>
+													<td width="40px" align="center" class="tamanioPrinter10" id="noMostrar"><b>CANT.</b></td>
 													<td align="center" class="tamanioPrinter10" id="noMostrar"><b>DESCRIPCION</b></td>
-													<td width="100px" align="center" class="tamanioPrinter10" id="noMostrar"><b>IMPORTE</b></td>
+													<td width="90px" align="center" class="tamanioPrinter10" id="noMostrar"><b>IMPORTE</b></td>
 												</tr>
 											</table>
 										</td>
@@ -709,8 +709,8 @@ function imprimir(){
 								</table>
 								</div>
 							</td>
-							<td width="4%" align="center"><div style="height:550px;width:0;border:0;border-left:3px;border-style:double;border-color:#000000" /></td>
-							<td width="48%" valign="top">
+							<td width="1%" align="center"><div style="height:550px;width:0;border:0;border-left:1px;border-style:double;border-color:#000000" /></td>
+							<td width="49.5%" valign="top">
 								<table border="0" width="100%">
 									<tr>
 										<td colspan="3" align="center" class="tamanioPrinter12"><b>ASOCIACIÓN DE COMERCIANTES DEL MERCADO MODELO<BR>DE HUARAL<BR>Fundado el 13 de Noviembre de 1996<BR>R.U.C. 20530606334</b></td>
@@ -756,9 +756,9 @@ function imprimir(){
 										<td colspan="3">
 											<table border="1" width="100%" cellspacing="5" cellpadding="5" class="tabla" id="tablaFacturacionDetalle2">
 												<tr>
-													<td width="80px" align="center" class="tamanioPrinter10" id="noMostrar"><b>CANT.</b></td>
+													<td width="40px" align="center" class="tamanioPrinter10" id="noMostrar"><b>CANT.</b></td>
 													<td align="center" class="tamanioPrinter10" id="noMostrar"><b>DESCRIPCION</b></td>
-													<td width="100px" align="center" class="tamanioPrinter10" id="noMostrar"><b>IMPORTE</b></td>
+													<td width="90px" align="center" class="tamanioPrinter10" id="noMostrar"><b>IMPORTE</b></td>
 												</tr>
 											</table>
 										</td>
