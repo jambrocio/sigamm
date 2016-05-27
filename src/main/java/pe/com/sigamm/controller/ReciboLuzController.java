@@ -372,8 +372,6 @@ public class ReciboLuzController {
     		HttpServletRequest request, HttpServletResponse response) throws IOException {
         
         
-		//String rutaJRXML = this.getClass().getClassLoader().getResource("/reportes/Reporte_Operaciones_Bancarias.jrxml").getPath();
-		//String rutaJASPER = this.getClass().getClassLoader().getResource("/reportes/Reporte_Operaciones_Bancarias.jasper").getPath();
 		String suspendido = "%";
 		String ruta = System.getProperty("ruta_ireport") != null ? System.getProperty("ruta_ireport") : ""; 
 		
@@ -403,6 +401,59 @@ public class ReciboLuzController {
 		parameters.put("FECHA", fechaInicial.trim());
 		parameters.put("ESTADO", estado.trim());
 		parameters.put("SUSPENDIDO", suspendido.trim());
+		
+		Connection con = null;
+		
+		try {
+			JasperCompileManager.compileReportToFile(rutaJRXML);
+			JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(rutaJASPER);
+			/*CONEXION JNDI*/
+			/*INICIO*/
+			Context initialContext = new InitialContext();
+			DataSource datasource = (DataSource)initialContext.lookup(Constantes.SigammDS);
+			con = datasource.getConnection();
+			/*FIN*/
+			JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, con);
+			if (jasperPrint != null) {
+				byte[] pdfReport = JasperExportManager.exportReportToPdf(jasperPrint);
+				response.reset();
+				response.setContentType("application/pdf");
+				response.setHeader("Cache-Control", "no-store");
+				response.setHeader("Cache-Control", "private");
+				response.setHeader("Pragma", "no-store");
+				response.setContentLength(pdfReport.length);
+				response.getOutputStream().write(pdfReport);
+				response.getOutputStream().flush();
+				response.getOutputStream().close();
+			}
+		} catch (JRException e) {
+			LoggerCustom.errorApp(this, "", e);
+		} catch (NamingException e) {
+			LoggerCustom.errorApp(this, "", e);
+		} catch (SQLException e) {
+			LoggerCustom.errorApp(this, "", e);
+		}
+ 
+    }
+	
+	
+	@RequestMapping(value = "/recibosLuzUltimo", method = RequestMethod.GET)
+    public void reporterecibosLuzUltimoPdf(
+    		HttpServletRequest request, HttpServletResponse response) throws IOException {
+        
+        String ruta = System.getProperty("ruta_ireport") != null ? System.getProperty("ruta_ireport") : ""; 
+		
+		String rutaJRXML = ruta + "Reporte_Recibos_Luz_Medicion.jrxml";
+		String rutaJASPER = ruta + "Reporte_Recibos_Luz_Medicion.jasper";
+		
+		log.info("Ruta JRXML : " + rutaJRXML);
+		log.info("Ruta JASPER : " + rutaJASPER);
+		
+		
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("ReportTitle", "Reporte de Recibos de Luz de los Asociados");
+		parameters.put("Author", "SIGAMM");
+		parameters.put("FECHA0", "PERIODO ANTERIOR");
 		
 		Connection con = null;
 		

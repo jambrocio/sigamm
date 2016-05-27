@@ -173,7 +173,7 @@ function cargarOperacionesBancarias(){
 		var opciones = "<center>";
 			
 			opciones += "<a href=javascript:editarOpeban(";
-			opciones += rowObject.id + ",'" + rowObject.tipoOperacion + "'," + rowObject.monto + ",'" + rowObject.fecha + "','" + rowObject.hora + "','" + rowObject.responsable.replace(/\s/g,"_") + "','" + rowObject.voucher + "','" + rowObject.numeroCuenta + "'," + rowObject.estado + ",'" + rowObject.observaciones.replace(/\s/g,"_") +"') >";
+			opciones += rowObject.id + ",'" + rowObject.operacion + "'," + rowObject.monto + ",'" + rowObject.fecha + "','" + rowObject.hora + "','" + rowObject.responsable.replace(/\s/g,"_") + "','" + rowObject.voucher + "','" + rowObject.numeroCuenta + "'," + rowObject.estado + ",'" + rowObject.observaciones.replace(/\s/g,"_") +"') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Operaciones Bancarias'/>";
 			opciones += "</a>";
 			
@@ -275,11 +275,11 @@ function cargarOperacionesBancarias(){
 				$("#grilla").setCell(rowId, 'estado', 'ANULADO', { 'color':'red','font-weight':'bold' });
 			}
 
-			if (item.tipoOperacion == 'D'){
+			if (item.operacion == 'D'){
 				$("#grilla").setCell(rowId, 'tipoOperacion', 'DEPOSITO', { 'color':'blue','font-weight':'bold' });
-			} else if (item.tipoOperacion == 'R') {
+			} else if (item.operacion == 'R') {
 				$("#grilla").setCell(rowId, 'tipoOperacion', 'RETIRO', { 'color':'red','font-weight':'bold' });
-			} else if (item.tipoOperacion == 'I') {
+			} else if (item.operacion == 'I') {
 				$("#grilla").setCell(rowId, 'tipoOperacion', 'INTERES', { 'color':'green','font-weight':'bold' });
 			}
 		}

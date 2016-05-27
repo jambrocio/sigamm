@@ -69,9 +69,6 @@ $(document).ready(function(){
 	
 	$("#contraba").hide();
 	$("#correlativo").val('0');
-	/*$("#consumoMesSocio").val('0');
-	$("#consumoMesSocioTrabado").val('0');
-	$("#totalSocio").text('0');*/
 	$('#suspendido').val('0');
 	
 	limpiar();
@@ -1444,6 +1441,11 @@ function botonEnter()
 	return true;
 }
 
+function openNewWindowForJasperWithCharts(){
+	var url  = "/sigamm/recibosLuzUltimo";
+	var strWindowFeatures = "menubar=no,location=no,width=800,height=500";
+	window.open(url,"_blank", "location=0,height=500,width=800");
+}
 </script>
 </head>
 <body id="body">
@@ -1468,6 +1470,9 @@ function botonEnter()
 			</button>&nbsp;&nbsp;
 			<button class="btn btn-primary" data-toggle="modal" data-target="#luz_original_modal" onclick="nuevoRecibos()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
+			</button>
+			<button class="btn btn-primary"onclick="openNewWindowForJasperWithCharts()">
+				<img src="recursos/images/icons/print_16x16.png" alt="Nuevo" />&nbsp;Ultimo Reporte con Medidas
 			</button>
 		</td>
 	</tr>
