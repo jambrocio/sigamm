@@ -6,6 +6,7 @@ public class LuzOriginal {
 	String periodo;
 	String fecVencimiento;
 	String fecEmision;
+	String fecCorte;
 	double costoWats;
 	int estado;
 	double repoManCnx;
@@ -91,6 +92,12 @@ public class LuzOriginal {
 	}
 	public void setFecEmision(String fecEmision) {
 		this.fecEmision = fecEmision;
+	}
+	public String getFecCorte() {
+		return fecCorte;
+	}
+	public void setFecCorte(String fecCorte) {
+		this.fecCorte = fecCorte;
 	}
 	public double getCostoWats() {
 		return costoWats;
@@ -458,4 +465,5 @@ public class LuzOriginal {
 	public void setEstadoAbierto(int estadoAbierto) {
 		this.estadoAbierto = estadoAbierto;
 	}
+	
 }

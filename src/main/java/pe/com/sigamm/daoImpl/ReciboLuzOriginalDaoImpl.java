@@ -53,6 +53,7 @@ public class ReciboLuzOriginalDaoImpl implements ReciboLuzOriginalDao {
 					new SqlParameter("p_MANTENIMIENTO",			Types.NUMERIC),
 					new SqlParameter("p_FEC_PERIODO", 			Types.VARCHAR),
 					new SqlParameter("p_TOTALMESACT",			Types.NUMERIC),
+					new SqlParameter("p_FECCORTE",				Types.VARCHAR),
 					new SqlOutParameter("vo_codigo_recibo", 		Types.INTEGER),
 					new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
 					new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));	
@@ -68,6 +69,7 @@ public class ReciboLuzOriginalDaoImpl implements ReciboLuzOriginalDao {
 			parametros.addValue("p_MANTENIMIENTO",				luzoriginal.getMantenimiento());			
 			parametros.addValue("p_FEC_PERIODO", 				luzoriginal.getPeriodo());
 			parametros.addValue("p_TOTALMESACT",				luzoriginal.getTotalMesAct());
+			parametros.addValue("p_FECCORTE",					luzoriginal.getFecCorte());
 			Map<String,Object> result = jdbcCall.execute(parametros); 
 			
 			int codigoRecibo = (Integer) result.get("vo_codigo_recibo");

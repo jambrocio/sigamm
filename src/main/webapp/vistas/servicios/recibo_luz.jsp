@@ -196,7 +196,20 @@ $(function() {
                     'Sep', 'Oct', 'Nov', 'Dic'] 
             });  
 	
-
+	$("#fecCorte").datepicker(
+            {   
+                changeMonth: true,
+                changeYear: true,
+                numberOfMonths: 1,
+                dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo',
+                    'Junio', 'Julio', 'Agosto', 'Septiembre',
+                    'Octubre', 'Noviembre', 'Diciembre'],
+                monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr',
+                    'May', 'Jun', 'Jul', 'Ago',
+                    'Sep', 'Oct', 'Nov', 'Dic'] 
+            }); 
+	
 });
 /*$(document).ready(function() {
 
@@ -223,6 +236,7 @@ function nuevoRecibos(){
 	$("#periodo").val('');
 	$("#fecVencimiento").val('');
 	$("#fecEmision").val('');
+	$("#fecCorte").val('');
 	$("#costoWats").val(0);
 	$("#alumbradoPublico").val(0);
 	$("#mantenimiento").val(0);
@@ -251,6 +265,7 @@ function guardar(){
 	parametros.totalMesAct = $("#totalmesactual").val();
 	parametros.deudaAnterior = $("#deudaanterior").val();
 	parametros.cableadoPrincipal = $("#cableadoPrincipal").val();
+	parametros.fecCorte = $("#fecCorte").val();
 
 	$.ajax({
 		type: "POST",
@@ -307,7 +322,7 @@ function cargarReciboLuzOriginal(){
 		var opciones = "<center>";
 			
 			opciones += "<a href=javascript:editarReciboLuzOriginal(";
-			opciones += rowObject.codigoReciboLuzOriginal + ",'" + rowObject.periodo.replace(' ','_') + "','" + rowObject.fecVencimiento.replace(' ','_') + "','" + rowObject.fecEmision.replace(/\s/g,"_") + "','" + rowObject.costoWats + "','" + rowObject.alumbradoPublico + "','" + rowObject.mantenimiento + "','" + rowObject.totalMesAct +"','" + rowObject.deudaAnterior +"','" + rowObject.cableadoPrincipal +"') >";
+			opciones += rowObject.codigoReciboLuzOriginal + ",'" + rowObject.periodo.replace(' ','_') + "','" + rowObject.fecVencimiento.replace(' ','_') + "','" + rowObject.fecEmision.replace(/\s/g,"_") + "','" + rowObject.costoWats + "','" + rowObject.alumbradoPublico + "','" + rowObject.mantenimiento + "','" + rowObject.totalMesAct +"','" + rowObject.deudaAnterior +"','" + rowObject.cableadoPrincipal +"','" + rowObject.fecCorte.replace(/\s/g,"_") + "')>";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Luz'/>";
 			opciones += "</a>";
 			
@@ -358,7 +373,7 @@ function cargarReciboLuzOriginal(){
 		mtype: 'POST',
 		height: 'auto',
 		width: 'auto',
-		colNames : ['Periodo', 'FechaEmision', 'FechaVencimiento','Total Mes Actual','Total Mes Anterior','Total', 'Opciones'],
+		colNames : ['Periodo', 'Fecha Emision', 'Fecha Vencimiento','Fecha Corte','Total Mes Actual','Total Mes Anterior','Total', 'Opciones'],
 		colModel : [{
 			name : 'periodo',
 			index: 'periodo',
@@ -375,7 +390,13 @@ function cargarReciboLuzOriginal(){
 			name : 'fecVencimiento',
 			index: 'fecVencimiento',
 			sortable:false,
-			width: 150,
+			width: 100,
+			align: 'center'
+		},{
+			name : 'fecCorte',
+			index: 'fecCorte',
+			sortable:false,
+			width: 100,
 			align: 'center'
 		},{
 			name : 'totalMesAct',
@@ -480,7 +501,7 @@ function eliminarReciboLuzOriginal(codigoReciboLuzOriginal, periodo){
 }
 
 
-function editarReciboLuzOriginal(codigoReciboLuzOriginal, periodo, fecVencimiento, fecEmision, costoWats, alumbradoPublico, mantenimiento, totalMesAct, deudaAnterior, cableadoPrincipal ){
+function editarReciboLuzOriginal(codigoReciboLuzOriginal, periodo, fecVencimiento, fecEmision, costoWats, alumbradoPublico, mantenimiento, totalMesAct, deudaAnterior, cableadoPrincipal, fecCorte ){
 	console.log("Editar Recibo Luz - [codigoRecibo] : " + codigoRecibo );
 	
 	$('#luz_original_modal').modal({
@@ -502,7 +523,7 @@ function editarReciboLuzOriginal(codigoReciboLuzOriginal, periodo, fecVencimient
 	$("#totalmesactual").val(totalMesAct);
 	$("#deudaanterior").val(deudaAnterior);
 	$("#cableadoPrincipal").val(cableadoPrincipal);
-	
+	$("#fecCorte").val(fecCorte.replace(/\_/g," "));
 }
 
 
@@ -1524,14 +1545,16 @@ function openNewWindowForJasperWithCharts(){
 				<tr>
 					<td><label><font size="2"><b>Cableado Línea Principal:</b></font></label></td>
 					<td><input type='text' id='cableadoPrincipal' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="7"/></td>
-					<td colspan="3">&nbsp;</td>
+					<td>&nbsp;</td>
+					<td><label><font size="2"><b>Fecha de Corte:</b></font></label></td>
+					<td><input type='text' id='fecCorte' class='text ui-widget-content ui-corner-all' size="10" tabindex="8"/>(dia/mes/año)</td>
 				</tr>
 				<tr>
 					<td><label><font size="2"><b>Total Mes Actual:</b></font></label></td>
-					<td><input type='text' id='totalmesactual' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="8"/></td>
+					<td><input type='text' id='totalmesactual' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="9"/></td>
 					<td>&nbsp;</td>
 					<td><label><font size="2"><b>Total Mes Anterior:</b></font></label></td>	
-					<td><input type='text' id='deudaanterior' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="9"/></td>
+					<td><input type='text' id='deudaanterior' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="10"/></td>
 				</tr>
 			</table>
 
@@ -1702,11 +1725,10 @@ function openNewWindowForJasperWithCharts(){
 						<table border="0" width="100%">
 							<tr>
 								<td width="40%"><b>Cargo por Energía :</b></td>
-								<!-- td><input type='text' id='cargoEnergiaSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;" disabled="disabled"/></td -->
 								<td><input type='text' id='cargoEnergiaSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
 							</tr>
 							<tr>
-								<td><b>IGV :</b></td>
+								<td><b>Cargo por Impuesto :</b></td>
 								<td><input type='text' id='igvSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
 							</tr>
 							<tr>

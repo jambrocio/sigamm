@@ -208,7 +208,7 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				
 				PdfPTable table16 = new PdfPTable(2);
 				table16.setWidthPercentage(100);
-				Paragraph p32 = new Paragraph("IGV CARGO", fuente);
+				Paragraph p32 = new Paragraph("CARGO POR IMPUESTO", fuente);
 				PdfPCell celda32 = new PdfPCell(p32);
 				table16.addCell(celda32);
 				Paragraph p33 = new Paragraph(UtilPDF.round(reporte.getListaReciboLuzSocio().get(aw).getIgvCargo(), 2) + "", fuente);
