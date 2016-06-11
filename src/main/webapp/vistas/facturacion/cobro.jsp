@@ -562,7 +562,7 @@ function imprimir(){
 										<td colspan="4" align="center" class="tamanioPrinter12"><b><span id="noMostrar">RECIBO PROVISIONAL N° </span><span id="correlativo" /></b></td>
 									</tr>
 									<tr>
-										<td colspan="4" height="40">&nbsp;</td>
+										<td colspan="4" style="height: 35px; ">&nbsp;</td>
 									</tr>
 									<tr>
 										<td class="tamanioPrinter10" id="noMostrar" style="width: 35px; "><b>Asociado (a):</b></td>
@@ -575,11 +575,11 @@ function imprimir(){
 										<td colspan="3" valign="top">
 											<table border="1" width="100%" cellpadding="0" cellspacing="0" id="tablaDatos">
 												<tr>
-													<td class="tamanioPrinter10" width="100px"><span id="printPuesto"/></td>
+													<td class="tamanioPrinter10" width="70px"><span id="printPuesto"/></td>
 													<td class="tamanioPrinter10" id="noMostrar" style="width: 35px; "><b>Sector:</b></td>
-													<td class="tamanioPrinter10" width="100px"><span id="printSector"/></td>
+													<td class="tamanioPrinter10" width="70px"><span id="printSector"/></td>
 													<td class="tamanioPrinter10" id="noMostrar" style="width: 35px; "><b>Giro:</b></td>
-													<td class="tamanioPrinter10" width="100px"><span id="printGiro"/></td>
+													<td class="tamanioPrinter10" width="200px"><span id="printGiro"/></td>
 												</tr>
 											</table>
 										</td>
