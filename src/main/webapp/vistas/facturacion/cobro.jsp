@@ -547,7 +547,7 @@ function imprimir(){
 			<div class="modal-body">
 					
 				<div id="myPrintArea">
-					<table border="0" width="100%">
+					<table border="0" style="width: 400px; ">
 						<tr>
 							<td valign="top">
 								<div> 
@@ -583,9 +583,6 @@ function imprimir(){
 												</tr>
 											</table>
 										</td>
-									</tr>
-									<tr>
-										<td colspan="4">&nbsp;</td>
 									</tr>
 									<tr>
 										<td colspan="4">
