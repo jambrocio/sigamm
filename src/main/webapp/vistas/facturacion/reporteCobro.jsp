@@ -11,7 +11,7 @@
 <style>
 
 	#mdialTamanio{
-      width: 800px !important;
+      width: 550px !important;
     }
     
 	tamanio18 {
@@ -260,7 +260,7 @@ function visualizar(codigoFacturacionCab){
 
 function imprimir(codigoFacturacionCab){
 	$("#correlativo1").html(codigoFacturacionCab);
-	$("#correlativo2").html(codigoFacturacionCab);
+	
 	limpiarTablaFacturacion();
 	
 	var ruta = obtenerContexto();
@@ -278,12 +278,7 @@ function imprimir(codigoFacturacionCab){
         	$("#printAsociado1").html(result.nombresFull);
         	$("#printSector1").html(result.nombreSector);
         	$("#printPuesto1").html(result.nroPuesto);
-        	$("#printGiro1").html(result.nombreGiro);
-        	$("#printFecha2").html(result.fechaCreacion);
-        	$("#printAsociado2").html(result.nombresFull);
-        	$("#printSector2").html(result.nombreSector);
-        	$("#printPuesto2").html(result.nroPuesto);
-        	$("#printGiro2").html(result.nombreGiro);        		
+        	$("#printGiro1").html(result.nombreGiro);        		
         }
     });
 	
@@ -299,7 +294,6 @@ function imprimir(codigoFacturacionCab){
         	dataTabla1 = "";
         	dataTabla2 = "";
         	$("#tablaFacturacionDetalle1").val("");
-        	$("#tablaFacturacionDetalle2").val("");
         	cantidadLineas = 1;
         	$.each(result, function(keyM, serv) {
         		
@@ -348,7 +342,6 @@ function imprimir(codigoFacturacionCab){
 	    	dataTabla2 += "</tr>";
 	    			    	
 			$('#tablaFacturacionDetalle1 tbody tr:last').after(dataTabla1);
-			$('#tablaFacturacionDetalle2 tbody tr:last').after(dataTabla2);
 			
         	calculoTotal();
         	
@@ -382,20 +375,11 @@ function calculoTotal(){
 			total1 = parseFloat(total1) + parseFloat(monto);
 		}
     });
-    $("#tablaFacturacionDetalle2 tbody tr").each(function (item) {
-        var this_row = $(this);
-        var monto = $.trim(this_row.find('td:eq(3)').html());
-		if(monto != "" && monto != "IMPORTE OCULTO"){
-			total2 = parseFloat(total2) + parseFloat(monto);
-		}
-    });
     
     $("#totalImpresion").html(total.toFixed(2));
     $("#totalImpresion1").html(total1.toFixed(2));
-    $("#totalImpresion2").html(total2.toFixed(2));
-	$("#totalLetras").html(NumeroALetras(total));
+    $("#totalLetras").html(NumeroALetras(total));
 	$("#totalLetras1").html(NumeroALetras(total1));
-	$("#totalLetras2").html(NumeroALetras(total2));
 	
 }
 
@@ -874,31 +858,41 @@ function cerrar(){
 	<div class="modal-dialog">	
 		<!-- Modal content-->
 	<div class="modal-content" id="mdialTamanio">
-		<div class="col-xs-6" id="logo">
-			<h1>
-				<a href="#"><img alt="" src="recursos/images/logo.png"/>ACMMH</a>
-			</h1>
-		</div>
-		<div class="col-xs-6 text-right" id="nroFactura">
-			<h1>FACTURA</h1>
-			<h1>&nbsp;</h1>
-		</div>
-		<hr id="linea"/>
 		<div class="row" id="datosImprimir">
-			<div class="col-xs-6">
+			<div class="col-xs-12">
 				<div class="panel panel-default">
-					<div class="panel-heading" align="center">
+					<div class="panel-heading" align="center" id="noMostrar">
 						<font class="tamanio18"><b>ASOCIACION DE COMERCIANTES DEL MERCADO MODELO DE HUARAL</b></font><br>
 						<font class="tamanio16">Fundado el 13 de Noviembre de 1996</font><br/>
 						<font class="tamanio16">R.U.C. 20530606334</font><br/>
 					</div>
 					<div class="panel-body">
 						<font class="tamanio16"><p align="center"><b>RECIBO PROVISIONAL Nro.&nbsp;<span id="correlativo1" /></b></p></font><br/>
-						<font class="tamanio14"><b>FECHA:</b>&nbsp;<span id="printFecha1"/></font><br>
-						<font class="tamanio14"><b>ASOCIADO:</b>&nbsp;<span id="printAsociado1"/></font><br>
-						<font class="tamanio14"><b>SECTOR:</b>&nbsp;<span id="printSector1"/></font><br>
-						<font class="tamanio14"><b>PUESTO:</b>&nbsp;<span id="printPuesto1"/></font><br>
-						<font class="tamanio14"><b>GIRO:</b>&nbsp;<span id="printGiro1"/></font><br>
+						<font class="tamanio14">
+							<table border="1" cellspacing="0" cellpadding="0">
+								<tr>
+									<td style="width: 110px; "><b>Asociado (a):</b></td>
+									<td style="width: 300px; "><span id="printAsociado1"/></td>
+									<td style="width: 15px; "><b>Fecha:</b></td>
+									<td><span id="printFecha1"/></td>
+								</tr>
+								<tr>
+									<td style="width: 110px; "><b>Nº de Puesto:</b></td>
+									<td colspan="3">
+										<table border="1" cellpadding="0" cellspacing="0">
+											<tr>
+												<td style="width: 50px; "><span id="printPuesto1"/></td>
+												<td style="width: 35px; "><b>Sector:</b></td>
+												<td style="width: 50px; "><span id="printSector1"/></td>
+												<td style="width: 35px; "><b>Giro:</b></td>
+												<td><span id="printGiro1"/></td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</font>
+						
 						<!-- / fin de secciÃ³n de datos del Cliente  -->
 						<table border="1" cellpadding="0" cellspacing="0" width="330px;" class="tamanio14" id= "tablaFacturacionDetalle1">
 							<tr>
@@ -909,38 +903,7 @@ function cerrar(){
 						</table>
 						<div class="panel panel-info">
 							<div class="panel-heading" align="left">
-								<font class="tamanio14">SON : <span id="totalLetras1" /></font>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- ********************************************************************** -->
-			<div class="col-xs-6">
-				<div class="panel panel-default">
-					<div class="panel-heading" align="center">
-						<font class="tamanio18"><b>ASOCIACION DE COMERCIANTES DEL MERCADO MODELO DE HUARAL</b></font><br>
-						<font class="tamanio16">Fundado el 13 de Noviembre de 1996</font><br>
-						<font class="tamanio16">R.U.C. 20530606334</font><br>
-					</div>
-					<div class="panel-body">
-						<font class="tamanio16"><p align="center"><b>RECIBO PROVISIONAL Nro.&nbsp;<span id="correlativo2" /></b></p></font><br>
-						<font class="tamanio14"><b>FECHA:</b>&nbsp;<span id="printFecha2"/></font><br>
-						<font class="tamanio14"><b>ASOCIADO:</b>&nbsp;<span id="printAsociado2"/></font><br>
-						<font class="tamanio14"><b>SECTOR:</b>&nbsp;<span id="printSector2"/></font><br>
-						<font class="tamanio14"><b>PUESTO:</b>&nbsp;<span id="printPuesto2"/></font><br>
-						<font class="tamanio14"><b>GIRO:</b>&nbsp;<span id="printGiro2"/></font><br>
-						<!-- / fin de secciÃ³n de datos del Cliente  -->
-						<table border="1" cellpadding="0" cellspacing="0" width="330px;" class="tamanio14" id= "tablaFacturacionDetalle2">
-							<tr>
-								<th><b>CANT</b></th>
-								<th><b>DESCRIPCION</b></th>
-								<th><b>TOTAL</b></th>
-							</tr>
-						</table>
-						<div class="panel panel-info">
-							<div class="panel-heading" align="left">
-								<font class="tamanio16">SON : <span id="totalLetras2" /></font>
+								<font class="tamanio14">Son : <span id="totalLetras1" /></font>
 							</div>
 						</div>
 					</div>

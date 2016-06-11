@@ -547,7 +547,7 @@ function imprimir(){
 			<div class="modal-body">
 					
 				<div id="myPrintArea">
-					<table border="0" style="width: 500px; ">
+					<table border="0" style="width: 500px; " cellpadding="0" cellspacing="0">
 						<tr>
 							<td valign="top">
 								<div> 
