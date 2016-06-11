@@ -25,7 +25,7 @@
     {
         color:black;
         font-family: Calibri;
-		font-size: 8px;    
+		font-size: 6px;    
     }
     
     .modal-header-primary {
@@ -57,7 +57,7 @@
 	}
 	
 	.modal-dialog {
-  		width: 900px;
+  		width: 600px;
 	}
 	
 	.marca-de-agua {
@@ -562,23 +562,23 @@ function imprimir(){
 										<td colspan="4" align="center" class="tamanioPrinter12"><b><span id="noMostrar">RECIBO PROVISIONAL N° </span><span id="correlativo" /></b></td>
 									</tr>
 									<tr>
-										<td colspan="4">&nbsp;</td>
+										<td colspan="4" height="40">&nbsp;</td>
 									</tr>
 									<tr>
-										<td class="tamanioPrinter10" id="noMostrar" width="80px"><b>Asociado (a):</b></td>
+										<td class="tamanioPrinter10" id="noMostrar" style="width: 35px; "><b>Asociado (a):</b></td>
 										<td class="tamanioPrinter10" width="300px"><span id="printAsociado"/></td>
-										<td width="100px" class="tamanioPrinter10" id="noMostrar"><b>Fecha:</b></td>
+										<td class="tamanioPrinter10" id="noMostrar" style="width: 15px; "><b>Fecha:</b></td>
 										<td class="tamanioPrinter10"><span id="printFecha"/></td>
 									</tr>
 									<tr>
-										<td class="tamanioPrinter10" id="noMostrar" width="80px"><b>Nº de Puesto:</b></td>
+										<td class="tamanioPrinter10" id="noMostrar" style="width: 35px; "><b>Nº de Puesto:</b></td>
 										<td colspan="3" valign="top">
 											<table border="1" width="100%" cellpadding="0" cellspacing="0" id="tablaDatos">
 												<tr>
 													<td class="tamanioPrinter10" width="100px"><span id="printPuesto"/></td>
-													<td class="tamanioPrinter10" id="noMostrar" width="80px"><b>Sector:</b></td>
+													<td class="tamanioPrinter10" id="noMostrar" style="width: 35px; "><b>Sector:</b></td>
 													<td class="tamanioPrinter10" width="100px"><span id="printSector"/></td>
-													<td class="tamanioPrinter10" id="noMostrar" width="80px"><b>Giro:</b></td>
+													<td class="tamanioPrinter10" id="noMostrar" style="width: 35px; "><b>Giro:</b></td>
 													<td class="tamanioPrinter10" width="100px"><span id="printGiro"/></td>
 												</tr>
 											</table>
