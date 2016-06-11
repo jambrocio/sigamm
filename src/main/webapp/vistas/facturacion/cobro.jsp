@@ -139,11 +139,7 @@ function guardar(){
         var monto = $.trim(this_row.find('td:eq(4)').html());
         var codPuesto = $.trim(this_row.find('td:eq(5)').html());
         var codServicio = $.trim(this_row.find('td:eq(7)').html());
-        /*
-        var desConcepto = $.trim(this_row.find('td:eq(2)').html());
-        var monto = $.trim(this_row.find('td:eq(3)').html());
-        var codPuesto = $.trim(this_row.find('td:eq(4)').html());
-		*/
+        
         if(monto != "Monto" || codPuesto != "Cod.Puesto" || codDeuda != "Cod.Concepto"){
 	        objetos = {};
 	        objetos.codigoDeudaSocio = codDeuda;
@@ -192,9 +188,6 @@ function guardar(){
 				limpiarTablaFacturacion();
 				
 				$("#correlativo").html(result.idFacturacion);
-				//$('#tablaFacturacionDetalle tbody tr:last').after("<tr><td>&nbsp;</td><td><b>" + $("#servicio option:selected").html() + "</b></td><td>&nbsp;</td>");
-				$("#correlativo2").html(result.idFacturacion);
-				//$('#tablaFacturacionDetalle2 tbody tr:last').after("<tr><td>&nbsp;</td><td><b>" + $("#servicio option:selected").html() + "</b></td><td>&nbsp;</td>");
 				
 				dataTabla = "";
 				cantidadLineas = 1;
@@ -202,13 +195,7 @@ function guardar(){
 			        var this_row = $(this);
 			        var numero = $.trim(this_row.find('td:eq(0)').html());
 			        var codDeuda = $.trim(this_row.find('td:eq(1)').html());
-			        /*
-			        var desConcepto = $.trim(this_row.find('td:eq(2)').html());
-			        var monto = $.trim(this_row.find('td:eq(3)').html());
-			        var codPuesto = $.trim(this_row.find('td:eq(4)').html());
-					*/
-					
-					var tipoConcepto = $.trim(this_row.find('td:eq(2)').html());
+			        var tipoConcepto = $.trim(this_row.find('td:eq(2)').html());
 					var desConcepto = $.trim(this_row.find('td:eq(3)').html());
 			        var monto = $.trim(this_row.find('td:eq(4)').html());
 			        var codPuesto = $.trim(this_row.find('td:eq(5)').html());
@@ -225,13 +212,7 @@ function guardar(){
 			        desConcepto = replaceAll(desConcepto, "OCTUBRE", "OCT");
 			        desConcepto = replaceAll(desConcepto, "NOVIEMBRE", "NOV");
 			        desConcepto = replaceAll(desConcepto, "DICIEMBRE", "DIC");
-			        /*
-			        desConcepto = replaceAll(desConcepto, "SEMANA 1", "S1");
-			        desConcepto = replaceAll(desConcepto, "SEMANA 2", "S2");
-			        desConcepto = replaceAll(desConcepto, "SEMANA 3", "S3");
-			        desConcepto = replaceAll(desConcepto, "SEMANA 4", "S4");
-			        desConcepto = replaceAll(desConcepto, "SEMANA 5", "S5");
-			        */
+			        
 			        if(monto != "Monto" || codPuesto != "Cod.Puesto" || codDeuda != "Cod.Concepto"){
 			        	
 			        	var importe = monto * 1;
@@ -267,16 +248,8 @@ function guardar(){
 		    	dataTabla1 += "<td class='tamanioPrinter10' id='noMostrar'><b>TOTAL</b></td>";
 		    	dataTabla1 += "<td align='right' class='tamanioPrinter10'><b>S/. <span id='totalImpresion'/></b></td>";
 		    	dataTabla1 += "</tr>";
-		    	
-		    	dataTabla2 = dataTabla;
-		    	dataTabla2 += "<tr>";
-		    	dataTabla2 += "<td>&nbsp;</td>";
-		    	dataTabla2 += "<td class='tamanioPrinter10' id='noMostrar'><b>TOTAL</b></td>";
-		    	dataTabla2 += "<td align='right' class='tamanioPrinter10'><b>S/. <span id='totalImpresion2'/></b></td>";
-		    	dataTabla2 += "</tr>";
 		    			    	
 				$('#tablaFacturacionDetalle tbody tr:last').after(dataTabla1);
-				$('#tablaFacturacionDetalle2 tbody tr:last').after(dataTabla2);
 				
 				calculoTotal();
 				
@@ -317,12 +290,6 @@ function buscarPuesto(){
         	$("#printGiro").html(result.nombreGiro);
         	$("#printSector").html(pad(result.nombreSector, 2));
         	$("#printFecha").html(fecha);
-        	
-        	$("#printAsociado2").html(result.apellidoPaterno + " " + result.apellidoMaterno + ", " + result.nombres);
-        	$("#printPuesto2").html(result.nroPuesto);
-        	$("#printGiro2").html(result.nombreGiro);
-        	$("#printSector2").html(pad(result.nombreSector, 2));
-        	$("#printFecha2").html(fecha);
         	
         	cargarServicios();
         	
@@ -376,18 +343,6 @@ function limpiarTablaFacturacion(){
  		
  	}
 	
-	var tabla2 = document.getElementById("tablaFacturacionDetalle2");
-	var filasTabla2 = tabla2.rows.length;
-	
-	for(var i = 0; i < filasTabla2; i++) {
-		
-		if(i > 0){
- 			
- 			tabla2.deleteRow(1);
- 			
- 		}
- 		
- 	}
 }
 
 function limpiarTablaDeudas(){
@@ -423,10 +378,8 @@ function limpiarTablaResultado(){
 	
 	$("#totalesLetras").html("");
 	$("#totalLetras").html("");
-	$("#totalLetras2").html("");
 	$("#totales").html("");
 	$("#totalImpresion").html("");
-	$("#totalImpresion2").html("");
 	
 }
 
@@ -464,74 +417,7 @@ function buscarDeudasSocio(){
         }
     });
 	
-	//alert("Saludos cordiales");
 }
-
-function agregarConcepto(){
-	/*	
-	var ruta = obtenerContexto();
-	codigoConcepto = $("#codigoConcepto").val();
-	descripcionConcepto = $("#concepto").val();
-	codigoPuesto = $("#codigoPuesto").val();
-	monto = $("#monto").val();
-	
-	if(codigoPuesto == 0){
-		
-		colorEtiquetas();
-		
-		$("#lblpuesto").css("color", "red");
-        $("#lblpuesto-img").show();
-        $("#lblpuesto-img").attr("data-content", "Seleccione un Puesto.");
-        
-	}else if(codigoConcepto == 0){
-		
-		colorEtiquetas();
-		
-		$("#lblconcepto").css("color", "red");
-        $("#lblconcepto-img").show();
-        $("#lblconcepto-img").attr("data-content", "Seleccione un Concepto.");
-        
-	}else if(monto == ""){
-		
-		colorEtiquetas();
-		
-        $("#lblmonto").css("color", "red");
-        $("#lblmonto-img").show();
-        $("#lblmonto-img").attr("data-content", "Ingrese un monto valido.");
-        
-	}else{
-		if(validarSiNumero(monto)){
-			
-			colorEtiquetas();
-			
-			$('#tabla_resultado tbody tr:last').after(
-				"<tr>" +
-	            "<td align='right'>1</td>" + 
-	            "<td align='center' style='display:none;'>" + codigoConcepto + "</td>" +
-				"<td align='left'>" + descripcionConcepto + "</td>" +
-				"<td align='right'>" + monto + "</td>" +
-				"<td align='center' style='display:none;'>" + codigoPuesto + "</td>" +
-				"<td align='center'>" +
-				"<button type='button' class='boton btnEliminar' onclick='eliminarFila(this);'>" +
-					"<img src='/"+ruta+"/recursos/images/icons/eliminar_16x16.png' alt='Eliminar' />" +
-				"</button></td>" +
-				"</tr>");
-			
-		}else{
-			
-			colorEtiquetas();
-			
-			$("#lblmonto").css("color", "red");
-            $("#lblmonto-img").show();
-            $("#lblmonto-img").attr("data-content", "Ingrese un monto valido.");
-            
-		}
-	}
-	
-	calculoTotal();
-	*/
-}
-
 
 function calculoTotal(){
 	
@@ -548,10 +434,8 @@ function calculoTotal(){
 	
 	$("#totalesLetras").html(NumeroALetras(total));
 	$("#totalLetras").html(NumeroALetras(total));
-	$("#totalLetras2").html(NumeroALetras(total));
 	$("#totales").html(total.toFixed(2));
 	$("#totalImpresion").html(total.toFixed(2));
-	$("#totalImpresion2").html(total.toFixed(2));
 }
 
 function eliminarFila(t){
@@ -665,51 +549,46 @@ function imprimir(){
 				<div id="myPrintArea">
 					<table border="0" width="100%">
 						<tr>
-							<td width="49.5%" valign="top">
+							<td valign="top">
 								<div> 
 								<table border="0" width="100%" >
 									<tr>
-										<td colspan="3" align="center" class="tamanioPrinter12"><b>ASOCIACIÓN DE COMERCIANTES DEL MERCADO MODELO<BR>DE HUARAL<BR>Fundado el 13 de Noviembre de 1996<BR>R.U.C. 20530606334</b></td>
+										<td colspan="4" align="center" class="tamanioPrinter12" id="noMostrar"><b>ASOCIACIÓN DE COMERCIANTES DEL MERCADO MODELO<BR>DE HUARAL<BR>Fundado el 13 de Noviembre de 1996<BR>R.U.C. 20530606334</b></td>
 									</tr>
 									<tr>
-										<td colspan="3">&nbsp;</td>
+										<td colspan="4">&nbsp;</td>
 									</tr>
 									<tr>
-										<td colspan="3" align="center" class="tamanioPrinter12"><b>RECIBO PROVISIONAL N° <span id="correlativo" /></b></td>
+										<td colspan="4" align="center" class="tamanioPrinter12"><b><span id="noMostrar">RECIBO PROVISIONAL N° </span><span id="correlativo" /></b></td>
 									</tr>
 									<tr>
-										<td colspan="3">&nbsp;</td>
+										<td colspan="4">&nbsp;</td>
 									</tr>
 									<tr>
-										<td width="100px" class="tamanioPrinter10" id="noMostrar"><b>FECHA</b></td>
-										<td class="tamanioPrinter10" id="noMostrar"><b>:</b></td>
+										<td class="tamanioPrinter10" id="noMostrar" width="80px"><b>Asociado (a):</b></td>
+										<td class="tamanioPrinter10" width="300px"><span id="printAsociado"/></td>
+										<td width="100px" class="tamanioPrinter10" id="noMostrar"><b>Fecha:</b></td>
 										<td class="tamanioPrinter10"><span id="printFecha"/></td>
 									</tr>
 									<tr>
-										<td class="tamanioPrinter10" id="noMostrar"><b>ASOCIADO</b></td>
-										<td class="tamanioPrinter10" id="noMostrar"><b>:</b></td>
-										<td class="tamanioPrinter10"><span id="printAsociado"/></td>
+										<td class="tamanioPrinter10" id="noMostrar" width="80px"><b>Nº de Puesto:</b></td>
+										<td colspan="3" valign="top">
+											<table border="1" width="100%" cellpadding="0" cellspacing="0" id="tablaDatos">
+												<tr>
+													<td class="tamanioPrinter10" width="100px"><span id="printPuesto"/></td>
+													<td class="tamanioPrinter10" id="noMostrar" width="80px"><b>Sector:</b></td>
+													<td class="tamanioPrinter10" width="100px"><span id="printSector"/></td>
+													<td class="tamanioPrinter10" id="noMostrar" width="80px"><b>Giro:</b></td>
+													<td class="tamanioPrinter10" width="100px"><span id="printGiro"/></td>
+												</tr>
+											</table>
+										</td>
 									</tr>
 									<tr>
-										<td class="tamanioPrinter10" id="noMostrar"><b>SECTOR</b></td>
-										<td class="tamanioPrinter10" id="noMostrar"><b>:</b></td>
-										<td class="tamanioPrinter10"><span id="printSector"/></td>
+										<td colspan="4">&nbsp;</td>
 									</tr>
 									<tr>
-										<td class="tamanioPrinter10" id="noMostrar"><b>PUESTO</b></td>
-										<td class="tamanioPrinter10" id="noMostrar"><b>:</b></td>
-										<td class="tamanioPrinter10"><span id="printPuesto"/></td>
-									</tr>
-									<tr>
-										<td class="tamanioPrinter10" id="noMostrar"><b>GIRO</b></td>
-										<td class="tamanioPrinter10" id="noMostrar"><b>:</b></td>
-										<td class="tamanioPrinter10"><span id="printGiro"/></td>
-									</tr>
-									<tr>
-										<td colspan="3">&nbsp;</td>
-									</tr>
-									<tr>
-										<td colspan="3">
+										<td colspan="4">
 											<table border="1" width="100%" cellspacing="5" cellpadding="5" class="tabla" id="tablaFacturacionDetalle">
 												<tr>
 													<td width="40px" align="center" class="tamanioPrinter10" id="noMostrar"><b>CANT.</b></td>
@@ -720,75 +599,13 @@ function imprimir(){
 										</td>
 									</tr>
 									<tr>
-										<td colspan="3">&nbsp;</td>
+										<td colspan="4">&nbsp;</td>
 									</tr>
 									<tr>
-										<td colspan="3" class="tamanioPrinter10"><b>SON : <span id="totalLetras" /></b></td>
+										<td colspan="4" class="tamanioPrinter10"><b><span id="noMostrar">Son: </span><span id="totalLetras" /></b></td>
 									</tr>
 								</table>
 								</div>
-							</td>
-							<td width="1%" align="center"><div style="height:550px;width:0;border:0;border-left:1px;border-style:double;border-color:#000000" /></td>
-							<td width="49.5%" valign="top">
-								<table border="0" width="100%">
-									<tr>
-										<td colspan="3" align="center" class="tamanioPrinter12"><b>ASOCIACIÓN DE COMERCIANTES DEL MERCADO MODELO<BR>DE HUARAL<BR>Fundado el 13 de Noviembre de 1996<BR>R.U.C. 20530606334</b></td>
-									</tr>
-									<tr>
-										<td colspan="3">&nbsp;</td>
-									</tr>
-									<tr>
-										<td colspan="3" align="center" class="tamanioPrinter12"><b>RECIBO PROVISIONAL N° <span id="correlativo2" /></b></td>
-									</tr>
-									<tr>
-										<td colspan="3">&nbsp;</td>
-									</tr>
-									<tr>
-										<td width="100px" class="tamanioPrinter10" id="noMostrar"><b>FECHA</b></td>
-										<td class="tamanioPrinter10" id="noMostrar"><b>:</b></td>
-										<td class="tamanioPrinter10"><span id="printFecha2"/></td>
-									</tr>
-									<tr>
-										<td class="tamanioPrinter10" id="noMostrar"><b>ASOCIADO</b></td>
-										<td class="tamanioPrinter10" id="noMostrar"><b>:</b></td>
-										<td class="tamanioPrinter10"><span id="printAsociado2"/></td>
-									</tr>
-									<tr>
-										<td class="tamanioPrinter10" id="noMostrar"><b>SECTOR</b></td>
-										<td class="tamanioPrinter10" id="noMostrar"><b>:</b></td>
-										<td class="tamanioPrinter10"><span id="printSector2"/></td>
-									</tr>
-									<tr>
-										<td class="tamanioPrinter10" id="noMostrar"><b>PUESTO</b></td>
-										<td class="tamanioPrinter10" id="noMostrar"><b>:</b></td>
-										<td class="tamanioPrinter10"><span id="printPuesto2"/></td>
-									</tr>
-									<tr>
-										<td class="tamanioPrinter10" id="noMostrar"><b>GIRO</b></td>
-										<td class="tamanioPrinter10" id="noMostrar"><b>:</b></td>
-										<td class="tamanioPrinter10"><span id="printGiro2"/></td>
-									</tr>
-									<tr>
-										<td colspan="3">&nbsp;</td>
-									</tr>
-									<tr>
-										<td colspan="3">
-											<table border="1" width="100%" cellspacing="5" cellpadding="5" class="tabla" id="tablaFacturacionDetalle2">
-												<tr>
-													<td width="40px" align="center" class="tamanioPrinter10" id="noMostrar"><b>CANT.</b></td>
-													<td align="center" class="tamanioPrinter10" id="noMostrar"><b>DESCRIPCION</b></td>
-													<td width="90px" align="center" class="tamanioPrinter10" id="noMostrar"><b>IMPORTE</b></td>
-												</tr>
-											</table>
-										</td>
-									</tr>
-									<tr>
-										<td colspan="3">&nbsp;</td>
-									</tr>
-									<tr>
-										<td colspan="3" class="tamanioPrinter10"><b>SON : <span id="totalLetras2" /></b></td>
-									</tr>
-								</table>
 							</td>
 						</tr>
 					</table>
