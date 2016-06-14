@@ -41,6 +41,12 @@ tamanio14 {
 		$("#codigo").val(request.getParameter("codigo")); 
 		
 	});
+	
+	function openNewWindowForJasperWithCharts(){
+		var url  = "/sigamm/imprimeFacturaView";
+		var strWindowFeatures = "menubar=no,location=no,width=800,height=500";
+		window.open(url,"_blank", "location=0,height=500,width=800");
+	}
 </script>
 
 <title>Insert title here</title>
@@ -175,6 +181,8 @@ tamanio14 {
 			
 		</div>
 	</div> <!-- Fin del Container -->
-
+	<button type="button" class="btn btn-primary">
+		<img src="recursos/images/icons/reports.png" alt="Imprimir a la impresora" />&nbsp;<a href="" onclick="openNewWindowForJasperWithCharts();" style="color:white">Imprime ya...</a>
+	</button>
 </body>
 </html>

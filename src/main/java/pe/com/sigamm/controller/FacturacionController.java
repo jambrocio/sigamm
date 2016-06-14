@@ -21,8 +21,10 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -565,5 +567,72 @@ public class FacturacionController {
 		}
  
     }
+	
+	
+	
+	/*
+	 * PRUEBAS DE IMPRESION
+	 */
+	
+	@RequestMapping(value = "/imprimeFacturaView", method = RequestMethod.GET)
+    public void reporteOperacionesBancariasPdf(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		//String rutaJRXML = this.getClass().getClassLoader().getResource("/reportes/Reporte_Operaciones_Bancarias.jrxml").getPath();
+		//String rutaJASPER = this.getClass().getClassLoader().getResource("/reportes/Reporte_Operaciones_Bancarias.jasper").getPath();
+		
+		String ruta = System.getProperty("ruta_ireport") != null ? System.getProperty("ruta_ireport") : ""; 
+		
+		String rutaJRXML = ruta + "Recibo_Ingreso.jrxml";
+		String rutaJASPER = ruta + "Recibo_Ingreso.jasper";
+		
+		log.info("Ruta JRXML : " + rutaJRXML);
+		log.info("Ruta JASPER : " + rutaJASPER);
+		
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("P_IMPRIME", "0");
+		
+		Connection con = null;
+		
+		try {
+			JasperCompileManager.compileReportToFile(rutaJRXML);
+			JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(rutaJASPER);
+			/*CONEXION JNDI*/
+			/*INICIO*/
+			Context initialContext = new InitialContext();
+			DataSource datasource = (DataSource)initialContext.lookup(Constantes.SigammDS);
+			con = datasource.getConnection();
+			/*FIN*/
+			JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, con);
+			
+			// TRUE: muestra la ventana de dialogo "preferencias de impresion"
+			JasperPrintManager.printReport(jasperPrint, true);
+			
+			
+			JasperViewer visor=new JasperViewer(jasperPrint,false); 
+			visor.setVisible(true); 
+			
+			if (jasperPrint != null) {
+				byte[] pdfReport = JasperExportManager.exportReportToPdf(jasperPrint);
+				response.reset();
+				response.setContentType("application/pdf");
+				response.setHeader("Cache-Control", "no-store");
+				response.setHeader("Cache-Control", "private");
+				response.setHeader("Pragma", "no-store");
+				response.setContentLength(pdfReport.length);
+				response.getOutputStream().write(pdfReport);
+				response.getOutputStream().flush();
+				response.getOutputStream().close();
+			}
+		} catch (JRException e) {
+			LoggerCustom.errorApp(this, "", e);
+		} catch (NamingException e) {
+			LoggerCustom.errorApp(this, "", e);
+		} catch (SQLException e) {
+			LoggerCustom.errorApp(this, "", e);
+		}
+ 
+    }
+	
+	
 	
 }
