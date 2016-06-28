@@ -21,7 +21,7 @@ import pe.com.sigamm.modelo.ServicioOtrosDetalle;
 
 public interface FacturacionDao {
 
-	public Retorno grabarFacturacionCabecera(FacturacionCabecera facturacion);
+	public Retorno grabarFacturacionCabecera(FacturacionCabecera facturacion, String serie, String secuencia);
 	
 	public Retorno grabarFacturacionDetalle(FacturacionDetalle facturacion, int codigoFacturacion);
 

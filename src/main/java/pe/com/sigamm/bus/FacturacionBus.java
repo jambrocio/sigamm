@@ -20,7 +20,7 @@ import pe.com.sigamm.modelo.ServicioOtrosDetalle;
 
 public interface FacturacionBus {
 
-	public Retorno grabarFacturacion(FacturacionCabecera facturacion, List<FacturacionDetalle> lista);
+	public Retorno grabarFacturacion(FacturacionCabecera facturacion, List<FacturacionDetalle> lista, String serie, String secuencia);
 	
 	public String opcionesConceptos(Concepto concepto);
 	

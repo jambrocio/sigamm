@@ -38,9 +38,9 @@ public class FacturacionBusImpl implements FacturacionBus {
 	private FacturacionDao facturacionDao;
 	
 	@Override
-	public Retorno grabarFacturacion(FacturacionCabecera facturacion, List<FacturacionDetalle> lista) {
+	public Retorno grabarFacturacion(FacturacionCabecera facturacion, List<FacturacionDetalle> lista, String serie, String secuencia) {
 		
-		Retorno retornoCabecera = facturacionDao.grabarFacturacionCabecera(facturacion);
+		Retorno retornoCabecera = facturacionDao.grabarFacturacionCabecera(facturacion, serie, secuencia);
 		if(retornoCabecera.getIndicador().equals("00")){
 			
 			for(FacturacionDetalle detalle : lista){

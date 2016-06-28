@@ -18,14 +18,14 @@
     {
         color:black;
         font-family: Calibri;
-		font-size: 10px;    
+		font-size: 12px;    
     }
     
     .tamanioPrinter10
     {
         color:black;
         font-family: Calibri;
-		font-size: 6px;    
+		font-size: 12px;    
     }
     
     .modal-header-primary {
@@ -86,8 +86,10 @@ $(document).ready(function(){
 function colorEtiquetas(){
 	
 	$("#lblservicio").css("color", "black");
+	$("#lblcomprobante").css("color", "black");
 	
 	$("#lblservicio-img").hide();
+	$("#lblcomprobante-img").hide();
 	
 }
 
@@ -107,6 +109,7 @@ function nuevoCobro(){
 	$("#apeMaterno").val("");
 	$("#nombres").val("");
 	$("#telefono").val("");
+	$("#comprobante").val("");
 	
 	limpiarTablaDeudas();
 	limpiarTablaResultado();
@@ -118,6 +121,7 @@ function nuevoCobro(){
 	$("#servicio").attr("disabled", false);
 	$("#btnGuardar").attr("disabled", false);
 	
+	$("#codigoFacturacion").val(0);
 }
 
 function guardar(){
@@ -127,9 +131,12 @@ function guardar(){
 	jsonObj = [];
 	var parametros = new Object();
 	parametros.codigoUsuario = $("#codigoUsuario").val();
-	parametros.serie = "0001";
-	parametros.secuencia = "00002";
+	//parametros.serie = "0001";
+	//parametros.secuencia = "00002";
 	parametros.codigoSocio = $("#codigoSocio").val();
+	
+	parametros.serie = $("#comprobante").val();
+	parametros.secuencia = $("#comprobante").val();
 	
     $("#tabla_resultado tbody tr").each(function (item) {
         var this_row = $(this);
@@ -160,101 +167,127 @@ function guardar(){
 	    data: parametros,
 	    success: function(result){
 	        
+	    	colorEtiquetas();
 	    	//alert("idFacturacion : " + result.idFacturacion + "\nLenCamposObligatorios : " + result.camposObligatorios.length);
+	    	if(result.camposObligatorios.length == 0){
+		    	$.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Mensaje',
+					// (string | mandatory) the text inside the notification
+					text: result.mensaje,
+					// (string | optional) the image to display on the left
+					image: "/" + ruta + "/recursos/images/confirm.png",
+					// (bool | optional) if you want it to fade out on its own or just sit there
+					sticky: false,
+					// (int | optional) the time you want it to be alive for before fading out
+					time: ''
+				});
 	    	
-	    	$.gritter.add({
-				// (string | mandatory) the heading of the notification
-				title: 'Mensaje',
-				// (string | mandatory) the text inside the notification
-				text: result.mensaje,
-				// (string | optional) the image to display on the left
-				image: "/" + ruta + "/recursos/images/confirm.png",
-				// (bool | optional) if you want it to fade out on its own or just sit there
-				sticky: false,
-				// (int | optional) the time you want it to be alive for before fading out
-				time: ''
-			});
-	    	
-	    	if(result.idFacturacion > 0){
-		    	
-	    		$("#btnBuscar").attr("disabled", true);
-				$("#btnAgregar").attr("disabled", true);		    	
-				$(".btnEliminar").attr("disabled", true);
-				$("#puestoBuscar").attr("disabled", true);
-				$("#btnGuardar").attr("disabled", true);
-				$("#btnVisualizacion").show();
-				$("#servicio").attr("disabled", true);
-				
-				limpiarTablaFacturacion();
-				
-				$("#correlativo").html(result.idFacturacion);
-				
-				dataTabla = "";
-				cantidadLineas = 1;
-				$("#tabla_resultado tbody tr").each(function (item) {
-			        var this_row = $(this);
-			        var numero = $.trim(this_row.find('td:eq(0)').html());
-			        var codDeuda = $.trim(this_row.find('td:eq(1)').html());
-			        var tipoConcepto = $.trim(this_row.find('td:eq(2)').html());
-					var desConcepto = $.trim(this_row.find('td:eq(3)').html());
-			        var monto = $.trim(this_row.find('td:eq(4)').html());
-			        var codPuesto = $.trim(this_row.find('td:eq(5)').html());
-			        
-			        desConcepto = replaceAll(desConcepto, "ENERO", "ENE");
-			        desConcepto = replaceAll(desConcepto, "FEBRERO", "FEB");
-			        desConcepto = replaceAll(desConcepto, "MARZO", "MAR");
-			        desConcepto = replaceAll(desConcepto, "ABRIL", "ABR");
-			        desConcepto = replaceAll(desConcepto, "MAYO", "MAY");
-			        desConcepto = replaceAll(desConcepto, "JUNIO", "JUN");
-			        desConcepto = replaceAll(desConcepto, "JULIO", "JUL");
-			        desConcepto = replaceAll(desConcepto, "AGOSTO", "AGO");
-			        desConcepto = replaceAll(desConcepto, "SETIEMBRE", "SET");
-			        desConcepto = replaceAll(desConcepto, "OCTUBRE", "OCT");
-			        desConcepto = replaceAll(desConcepto, "NOVIEMBRE", "NOV");
-			        desConcepto = replaceAll(desConcepto, "DICIEMBRE", "DIC");
-			        
-			        if(monto != "Monto" || codPuesto != "Cod.Puesto" || codDeuda != "Cod.Concepto"){
-			        	
-			        	var importe = monto * 1;
-			        	
-				    	dataTabla += "<tr>";
+		    	if(result.idFacturacion > 0){
+			    	
+		    		$("#btnBuscar").attr("disabled", true);
+					$("#btnAgregar").attr("disabled", true);		    	
+					$(".btnEliminar").attr("disabled", true);
+					$("#puestoBuscar").attr("disabled", true);
+					$("#btnGuardar").attr("disabled", true);
+					$("#btnVisualizacion").show();
+					$("#servicio").attr("disabled", true);
+					
+					limpiarTablaFacturacion();
+					
+					$("#correlativo").html(result.comprobante);
+					$("#codigoFacturacion").val(result.idFacturacion);
+					
+					dataTabla = "";
+					cantidadLineas = 1;
+					$("#tabla_resultado tbody tr").each(function (item) {
+				        var this_row = $(this);
+				        var numero = $.trim(this_row.find('td:eq(0)').html());
+				        var codDeuda = $.trim(this_row.find('td:eq(1)').html());
+				        var tipoConcepto = $.trim(this_row.find('td:eq(2)').html());
+						var desConcepto = $.trim(this_row.find('td:eq(3)').html());
+				        var monto = $.trim(this_row.find('td:eq(4)').html());
+				        var codPuesto = $.trim(this_row.find('td:eq(5)').html());
+				        
+				        desConcepto = replaceAll(desConcepto, "ENERO", "ENE");
+				        desConcepto = replaceAll(desConcepto, "FEBRERO", "FEB");
+				        desConcepto = replaceAll(desConcepto, "MARZO", "MAR");
+				        desConcepto = replaceAll(desConcepto, "ABRIL", "ABR");
+				        desConcepto = replaceAll(desConcepto, "MAYO", "MAY");
+				        desConcepto = replaceAll(desConcepto, "JUNIO", "JUN");
+				        desConcepto = replaceAll(desConcepto, "JULIO", "JUL");
+				        desConcepto = replaceAll(desConcepto, "AGOSTO", "AGO");
+				        desConcepto = replaceAll(desConcepto, "SETIEMBRE", "SET");
+				        desConcepto = replaceAll(desConcepto, "OCTUBRE", "OCT");
+				        desConcepto = replaceAll(desConcepto, "NOVIEMBRE", "NOV");
+				        desConcepto = replaceAll(desConcepto, "DICIEMBRE", "DIC");
+				        
+				        if(monto != "Monto" || codPuesto != "Cod.Puesto" || codDeuda != "Cod.Concepto"){
+				        	
+				        	var importe = monto * 1;
+				        	
+					    	dataTabla += "<tr>";
+					    	dataTabla += "<td>&nbsp;</td>";
+					    	dataTabla += "<td class='tamanioPrinter10'><b>" + tipoConcepto + "</b><br>" + desConcepto + "</td>";
+					    	dataTabla += "<td align='right' class='tamanioPrinter10'>S/. " + formatearImporte(importe) + "</td>";
+					    	dataTabla += "</tr>";
+					    	
+				        }
+				        cantidadLineas = cantidadLineas + 1;
+				        
+				    });
+					
+					//console.log("Cantidad de Lineas : " + cantidadLineas);
+					
+					var j = 8 - cantidadLineas; 
+					for (i=0 ;i < j; i++) { 
+						 
+						dataTabla += "<tr>";
 				    	dataTabla += "<td>&nbsp;</td>";
-				    	dataTabla += "<td class='tamanioPrinter10'><b>" + tipoConcepto + "</b><br>" + desConcepto + "</td>";
-				    	dataTabla += "<td align='right' class='tamanioPrinter10'>S/. " + formatearImporte(importe) + "</td>";
+				    	dataTabla += "<td>&nbsp;</td>";
+				    	dataTabla += "<td>&nbsp;</td>";
 				    	dataTabla += "</tr>";
 				    	
-			        }
-			        cantidadLineas = cantidadLineas + 1;
-			        
-			    });
-				
-				//console.log("Cantidad de Lineas : " + cantidadLineas);
-				
-				var j = 8 - cantidadLineas; 
-				for (i=0 ;i < j; i++) { 
-					 
-					dataTabla += "<tr>";
-			    	dataTabla += "<td>&nbsp;</td>";
-			    	dataTabla += "<td>&nbsp;</td>";
-			    	dataTabla += "<td>&nbsp;</td>";
-			    	dataTabla += "</tr>";
-			    	
-			    	//console.log("Linea : " + i);
-				}
-				
-				dataTabla1 = dataTabla;
-				dataTabla1 += "<tr>";
-		    	dataTabla1 += "<td>&nbsp;</td>";
-		    	dataTabla1 += "<td class='tamanioPrinter10' id='noMostrar'><b>TOTAL</b></td>";
-		    	dataTabla1 += "<td align='right' class='tamanioPrinter10'><b>S/. <span id='totalImpresion'/></b></td>";
-		    	dataTabla1 += "</tr>";
-		    			    	
-				$('#tablaFacturacionDetalle tbody tr:last').after(dataTabla1);
-				
-				calculoTotal();
-				
-		    }
-	    	
+				    	//console.log("Linea : " + i);
+					}
+					
+					dataTabla1 = dataTabla;
+					dataTabla1 += "<tr>";
+			    	dataTabla1 += "<td>&nbsp;</td>";
+			    	dataTabla1 += "<td class='tamanioPrinter10' id='noMostrar'><b>TOTAL</b></td>";
+			    	dataTabla1 += "<td align='right' class='tamanioPrinter10'><b>S/. <span id='totalImpresion'/></b></td>";
+			    	dataTabla1 += "</tr>";
+			    			    	
+					$('#tablaFacturacionDetalle tbody tr:last').after(dataTabla1);
+					
+					calculoTotal();
+					
+			    }
+	    	}else{
+	    		
+	    		colorEtiquetas();
+            	fila = "";
+            	$.each(result.camposObligatorios, function(id, obj){
+                    //alert("id : " + id +  "\nnombreCampo : " + obj.nombreCampo + "\nDescripcion : " + obj.descripcion);
+                    /*
+                    fila += "<tr>";
+                    fila += "<td valign='top'>" + obj.nombreCampo + "</td>"
+                    fila += "<td>" + ":" + "</td>"
+                    fila += "<td>" + obj.descripcion + "</td>"
+                    fila += "</tr>";
+                    fila += "<tr><td colspan=3>";
+                    fila += "<hr align=center size=2 width=100% />";
+                    fila += "</td></tr>";
+                    */
+                    //$("#" + obj.nombreCampo + "-img").popover({ placement : 'top', trigger: "hover" });
+                  	//$('[data-toggle="popover"]').popover({ placement : 'top', trigger: "hover" });
+                    $("#" + obj.nombreCampo).css("color", "red");
+                    $("#" + obj.nombreCampo + "-img").show();
+                    $("#" + obj.nombreCampo + "-img").attr("data-content", obj.descripcion);
+                    
+                });
+            	
+	    	}
 		}
 	});
 }
@@ -532,9 +565,19 @@ function imprimir(){
 	$("div#myPrintArea").printArea();
 	
 }
+
+function openNewWindowForJasperWithCharts(){
+	
+	var url  = "/sigamm/imprimirFactura?codigoFacturacion=" + $("#codigoFacturacion").val();
+	var strWindowFeatures = "menubar=no,location=no,width=800,height=500";
+	window.open(url,"_blank", "location=0,height=500,width=800");
+	
+}
+
 </script>
 </head>
 <body id="body">
+<input type="hidden" id="codigoFacturacion" />
 <div class="modal fade" id="visualizacion_modal" role="dialog" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog">
 		
@@ -565,15 +608,15 @@ function imprimir(){
 										<td colspan="4" style="height: 35px; ">&nbsp;</td>
 									</tr>
 									<tr>
-										<td class="tamanioPrinter10" id="noMostrar" style="width: 35px; "><b>Asociado (a):</b></td>
+										<td class="tamanioPrinter10" id="noMostrar" ><b>Asociado (a):</b></td>
 										<td class="tamanioPrinter10" width="300px"><span id="printAsociado"/></td>
-										<td class="tamanioPrinter10" id="noMostrar" style="width: 15px; "><b>Fecha:</b></td>
+										<td class="tamanioPrinter10" id="noMostrar" ><b>Fecha:</b></td>
 										<td class="tamanioPrinter10"><span id="printFecha"/></td>
 									</tr>
 									<tr>
-										<td class="tamanioPrinter10" id="noMostrar" style="width: 35px; "><b>Nº de Puesto:</b></td>
+										<td class="tamanioPrinter10" id="noMostrar" ><b>Nº de Puesto:</b></td>
 										<td colspan="3" valign="top">
-											<table border="1" width="100%" cellpadding="0" cellspacing="0" id="tablaDatos">
+											<table border="0" width="100%" cellpadding="0" cellspacing="0" id="tablaDatos">
 												<tr>
 													<td class="tamanioPrinter10" width="70px"><span id="printPuesto"/></td>
 													<td class="tamanioPrinter10" id="noMostrar" style="width: 35px; "><b>Sector:</b></td>
@@ -610,9 +653,22 @@ function imprimir(){
 				
 			</div>
 			<div class="modal-footer">
+				<!-- 
 				<button type="button" id="btnImprimir" class="btn btn-primary" onclick="imprimir();">
 					<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;Imprimir
 				</button>
+				 -->
+				
+				<a href="javascript:openNewWindowForJasperWithCharts();">
+					<button type="button" class="btn btn-primary">
+						<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;Imprimir
+					</button>&nbsp;&nbsp;
+				</a>
+				<!-- 
+				<button type="button" class="btn btn-primary">
+					<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;<a href="" onclick="openNewWindowForJasperWithCharts();" style="color:white">Imprimir</a>
+				</button>
+				 -->
 			</div>
 		</div>
 		  
@@ -727,6 +783,16 @@ function imprimir(){
 		<td width="5px">&nbsp;</td>
 		<td><select id="servicio" class="form-control" onchange=buscarDeudasSocio();></select></td>
 		<td valign="top"><img id="lblservicio-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+		<td colspan="2">&nbsp;</td>
+	</tr>
+	<tr>
+		<td width="10px">&nbsp;</td>
+		<td><span id="lbltelefono"><b>N° Comprobante</b></span></td>
+		<td width="5px">&nbsp;</td>
+		<td><b>:</b></td>
+		<td width="5px">&nbsp;</td>
+		<td><input type="text" id="comprobante" class="form-control" maxlength="10" /></td>
+		<td valign="top"><img id="lblcomprobante-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 		<td colspan="2">&nbsp;</td>
 	</tr>
 	<tr>

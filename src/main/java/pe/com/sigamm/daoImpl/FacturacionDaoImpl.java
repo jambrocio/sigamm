@@ -50,7 +50,7 @@ public class FacturacionDaoImpl implements FacturacionDao {
 	private DatosSession datosSession;
 	
 	@Override
-	public Retorno grabarFacturacionCabecera(FacturacionCabecera facturacion) {
+	public Retorno grabarFacturacionCabecera(FacturacionCabecera facturacion, String serie, String secuencia) {
 		
 		Retorno retorno = new Retorno();
 		try{
@@ -70,8 +70,8 @@ public class FacturacionDaoImpl implements FacturacionDao {
             
 			MapSqlParameterSource parametros = new MapSqlParameterSource();
 			parametros.addValue("vi_codigo_usuario", 			facturacion.getCodigoUsuario());
-			parametros.addValue("vi_serie", 					facturacion.getSerie());
-			parametros.addValue("vi_secuencia", 				facturacion.getSecuencia());
+			parametros.addValue("vi_serie", 					serie);
+			parametros.addValue("vi_secuencia", 				secuencia);
 			parametros.addValue("vi_codigo_usuario_registro", 	datosSession.getCodigoUsuario());
 			parametros.addValue("vi_codigo_socio",				facturacion.getCodigoSocio());
 			

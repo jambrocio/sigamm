@@ -16,7 +16,7 @@ import pe.com.sigamm.session.DatosSession;
 @Controller
 public class OtrosServiciosController {
 	
-private static final Logger log = Logger.getLogger(OtrosServiciosController.class);
+	private static final Logger log = Logger.getLogger(OtrosServiciosController.class);
 	
 	@Autowired
 	private OtrosServiciosBus otrosServiciosBus;
@@ -28,6 +28,13 @@ private static final Logger log = Logger.getLogger(OtrosServiciosController.clas
 	public String reporteVisitas(HttpServletRequest request) {
 		
 		return "servicios/otros";
+	
+	}
+	
+	@RequestMapping(value = "/reporte_otros_servicios", method=RequestMethod.GET)
+	public String reporteOtrosServicios(HttpServletRequest request) {
+		
+		return "reportes/reporte_otros_servicios";
 	
 	}
 	

@@ -35,6 +35,10 @@ public class Constantes {
 	public static final String RUC_OBLIGATORIO			    = "Número de RUC es obligatorio.";
 	public static final String RAZON_SOCIAL_OBLIGATORIO     = "Descripción de la RAZON SOCIAL es obligatoria.";
 	
+	public static final String COMPROBANTE_OBLIGATORIO		= "El numero de comprobante es obligatorio.";
+	public static final String SERIE_OBLIGATORIO			= "El numero de serie debe de tener 3 digitos.";
+	public static final String SECUENCIA_OBLIGATORIO		= "El numero de secuencia debe de tener 6 digitos.";
+	public static final String SIN_CONCEPTOS_OBLIGATORIO	= "Debe de agregar conceptos para poder grabar.";
 	
 	public static final String ETIQUETA_USUARIO			= "lblusuario";
 	public static final String ETIQUETA_DNI				= "lbldni";
@@ -50,6 +54,7 @@ public class Constantes {
 	public static final String ETIQUETA_GIRO_COMERCIAL	= "lblgiroComercial";
 	public static final String ETIQUETA_PUESTO			= "lblpuesto";
 	public static final String ETIQUETA_PADRON			= "lblpadron";
+	public static final String ETIQUETA_COMPROBANTE		= "lblcomprobante";
 
 	//--- ETIQUETAS RECIBO AGUA
 	public static final String ETIQUETA_PERIODO			  = "lblperiodo";
