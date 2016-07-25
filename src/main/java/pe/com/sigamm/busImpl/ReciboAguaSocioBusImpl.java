@@ -378,9 +378,10 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 		Document doc = new Document();
 		PdfWriter docWriter = null;
 		String path = UtilPDF.RUTA_PDF + UtilPDF.getDatePDF() + ".pdf";
-		ReporteReciboAguaSocio reporte = reciboAguaSocioDao.generacionPdfVigilancia(periodo);
 		
 		try {
+			
+			ReporteReciboAguaSocio reporte = reciboAguaSocioDao.generacionPdfVigilancia(periodo);
 			
 			docWriter = PdfWriter.getInstance(doc, new FileOutputStream(path));
 

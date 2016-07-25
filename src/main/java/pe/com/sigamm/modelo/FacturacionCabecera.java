@@ -15,6 +15,7 @@ public class FacturacionCabecera {
 	String nroPuesto;
 	String nombreGiro;
 	String nombreSector;
+	String comprobante;
 	
 	public int getCodigoFacturacionCab() {
 		return codigoFacturacionCab;
@@ -88,5 +89,11 @@ public class FacturacionCabecera {
 	public void setNombreSector(String nombreSector) {
 		this.nombreSector = nombreSector;
 	}
-				
+	public String getComprobante() {
+		return comprobante;
+	}
+	public void setComprobante(String comprobante) {
+		this.comprobante = comprobante;
+	}
+					
 }

@@ -184,7 +184,7 @@ function visualizar(codigoFacturacionCab){
         	$("#printSector").html(result.nombreSector);
         	$("#printPuesto").html(result.nroPuesto);
         	$("#printGiro").html(result.nombreGiro);
-        		
+        	$("#correlativo").html(result.comprobante);
         }
     });
 	
@@ -465,24 +465,26 @@ function cargarFacturacion(){
 		nombre = replaceAll(nombreFull, " ", "#");
 		var opciones = "<center>";
 			
-			opciones += "<a href=javascript:visualizar(";
-			opciones += rowObject.codigoFacturacionCab + ") >";
-			opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Ver Comprobante'/>";
-			opciones += "</a>";
-			
-			opciones += "&nbsp;&nbsp;";
-			
-			opciones += "<a href=javascript:imprimir(";
-			opciones += rowObject.codigoFacturacionCab + ") >";
-			opciones += "<img src='/"+ruta+"/recursos/images/icons/impresion_24x24.png' border='0' title='Imprimir Comprobante'/>";
-			opciones += "</a>";
-			
-			opciones += "&nbsp;&nbsp;";
-			
-			opciones += "<a href=javascript:anularFactura(";
-			opciones += rowObject.codigoFacturacionCab + ") >";
-			opciones += "<img src='/"+ruta+"/recursos/images/icons/tacho_24x24.png' border='0' title='Anular Factura'/>";
-			opciones += "</a>";
+			if(rowObject.estado == 1){
+				opciones += "<a href=javascript:visualizar(";
+				opciones += rowObject.codigoFacturacionCab + ") >";
+				opciones += "<img src='/"+ruta+"/recursos/images/icons/print_24x24.png' border='0' title='Ver Comprobante'/>";
+				opciones += "</a>";
+				
+				opciones += "&nbsp;&nbsp;";
+				/*
+				opciones += "<a href=javascript:imprimir(";
+				opciones += rowObject.codigoFacturacionCab + ") >";
+				opciones += "<img src='/"+ruta+"/recursos/images/icons/impresion_24x24.png' border='0' title='Imprimir Comprobante'/>";
+				opciones += "</a>";
+				
+				opciones += "&nbsp;&nbsp;";
+				*/
+				opciones += "<a href=javascript:anularFactura(";
+				opciones += rowObject.codigoFacturacionCab + ") >";
+				opciones += "<img src='/"+ruta+"/recursos/images/icons/tacho_24x24.png' border='0' title='Anular Factura'/>";
+				opciones += "</a>";
+			}
 			
 			opciones += "</center>";
 			
@@ -497,7 +499,7 @@ function cargarFacturacion(){
 		mtype: 'POST',
 		height: 'auto',
 		width: 'auto',
-		colNames : ['Código', 'Puesto', 'DNI', 'Ap.Paterno', 'Ap.Materno', 'Nombres', 'Fecha', 'Monto', 'Opciones'],
+		colNames : ['Código', 'Puesto', 'DNI', 'Ap.Paterno', 'Ap.Materno', 'Nombres', 'Nro.Comprobante', 'Fecha', 'Monto', 'Opciones'],
 		colModel : [{
 			name : 'codigoFactCabAlt',
 			index: 'codigoFactCabAlt',
@@ -535,6 +537,12 @@ function cargarFacturacion(){
 			width: 150,
 			align: 'left'
 		},{
+			name : 'comprobante',
+			index: 'comprobante',
+			sortable:false,
+			width: 200,
+			align: 'center'
+		},{
 			name : 'fechaCreacion',
 			index: 'fechaCreacion',
 			sortable:false,
@@ -564,6 +572,22 @@ function cargarFacturacion(){
 		sortorder : "codigoFacturacionCab",				
 		caption : "Facturación",			
 		
+		afterInsertRow: function(rowId, data, item){
+			//alert(rowId + ' - ' + data + ' - ' + item.total);
+			if (item.estado == 2){
+				$("#grilla").setCell(rowId, 'codigoFactCabAlt', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grilla").setCell(rowId, 'nroPuesto', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grilla").setCell(rowId, 'dni', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grilla").setCell(rowId, 'apellidoPaterno', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grilla").setCell(rowId, 'apellidoMaterno', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grilla").setCell(rowId, 'nombres', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grilla").setCell(rowId, 'comprobante', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grilla").setCell(rowId, 'fechaCreacion', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grilla").setCell(rowId, 'monto', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+			}
+
+		},
+	
 		multiselect: false,
 		subGrid: true,
 		subGridRowExpanded: function(subgrid_id, row_id) {

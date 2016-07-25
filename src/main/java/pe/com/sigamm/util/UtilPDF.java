@@ -19,8 +19,8 @@ public class UtilPDF {
 	public static final String LEYENDA_RECIBO_AGUA = "RECIBO DE AGUA N°: ";
 	public static final String LEYENDA_RECIBO_LUZ = "RECIBO DE LUZ N°: ";
 	public static final String LEYENDA_RECIBO_VIGILANCIA = "RECIBO DE VIGILANCIA N°: "; 
-	public static final String RUTA_PDF = "/usr/share/jboss-eap-6.1/reportes/";
-	//public static final String RUTA_PDF = "C:\\tools\\jboss-eap-6.1\\standalone\\reportes/";
+	//public static final String RUTA_PDF = "/usr/share/jboss-eap-6.1/reportes/";
+	public static final String RUTA_PDF = "C:\\tools\\jboss-eap-6.1\\standalone\\reportes/";
 
 	public static void addEmptyLine(Paragraph paragraph, int number) {
 		for (int i = 0; i < number; i++) {

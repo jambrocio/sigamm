@@ -13,6 +13,8 @@ public class VistaFacturacion {
 	int codigoFacturacionCab;
 	String fechaCreacion;
 	int codigoFactCabAlt;
+	String comprobante;
+	int estado;
 	
 	public String getDni() {
 		return dni;
@@ -80,5 +82,17 @@ public class VistaFacturacion {
 	public void setCodigoFactCabAlt(int codigoFactCabAlt) {
 		this.codigoFactCabAlt = codigoFactCabAlt;
 	}
-						
+	public String getComprobante() {
+		return comprobante;
+	}
+	public void setComprobante(String comprobante) {
+		this.comprobante = comprobante;
+	}
+	public int getEstado() {
+		return estado;
+	}
+	public void setEstado(int estado) {
+		this.estado = estado;
+	}
+								
 }

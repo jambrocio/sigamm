@@ -138,6 +138,7 @@ function guardar(){
 	parametros.serie = $("#comprobante").val();
 	parametros.secuencia = $("#comprobante").val();
 	
+	cantidadItems = 0;
     $("#tabla_resultado tbody tr").each(function (item) {
         var this_row = $(this);
         var numero = $.trim(this_row.find('td:eq(0)').html());
@@ -153,143 +154,159 @@ function guardar(){
 	        objetos.monto = monto;
 	        objetos.codigoServicio = codServicio;
 	        jsonObj.push(objetos);
+	        
+	        cantidadItems = cantidadItems + 1;        
         }
         
     });
     
-    parametros.facturacionDetalle = JSON.stringify(jsonObj);
-	
-	$.ajax({
-		type: "POST",
-	    async:false,
-	    url: "grabar-facturacion.json",
-	    cache : false,
-	    data: parametros,
-	    success: function(result){
-	        
-	    	colorEtiquetas();
-	    	//alert("idFacturacion : " + result.idFacturacion + "\nLenCamposObligatorios : " + result.camposObligatorios.length);
-	    	if(result.camposObligatorios.length == 0){
-		    	$.gritter.add({
-					// (string | mandatory) the heading of the notification
-					title: 'Mensaje',
-					// (string | mandatory) the text inside the notification
-					text: result.mensaje,
-					// (string | optional) the image to display on the left
-					image: "/" + ruta + "/recursos/images/confirm.png",
-					// (bool | optional) if you want it to fade out on its own or just sit there
-					sticky: false,
-					// (int | optional) the time you want it to be alive for before fading out
-					time: ''
-				});
-	    	
-		    	if(result.idFacturacion > 0){
-			    	
-		    		$("#btnBuscar").attr("disabled", true);
-					$("#btnAgregar").attr("disabled", true);		    	
-					$(".btnEliminar").attr("disabled", true);
-					$("#puestoBuscar").attr("disabled", true);
-					$("#btnGuardar").attr("disabled", true);
-					$("#btnVisualizacion").show();
-					$("#servicio").attr("disabled", true);
-					
-					limpiarTablaFacturacion();
-					
-					$("#correlativo").html(result.comprobante);
-					$("#codigoFacturacion").val(result.idFacturacion);
-					
-					dataTabla = "";
-					cantidadLineas = 1;
-					$("#tabla_resultado tbody tr").each(function (item) {
-				        var this_row = $(this);
-				        var numero = $.trim(this_row.find('td:eq(0)').html());
-				        var codDeuda = $.trim(this_row.find('td:eq(1)').html());
-				        var tipoConcepto = $.trim(this_row.find('td:eq(2)').html());
-						var desConcepto = $.trim(this_row.find('td:eq(3)').html());
-				        var monto = $.trim(this_row.find('td:eq(4)').html());
-				        var codPuesto = $.trim(this_row.find('td:eq(5)').html());
-				        
-				        desConcepto = replaceAll(desConcepto, "ENERO", "ENE");
-				        desConcepto = replaceAll(desConcepto, "FEBRERO", "FEB");
-				        desConcepto = replaceAll(desConcepto, "MARZO", "MAR");
-				        desConcepto = replaceAll(desConcepto, "ABRIL", "ABR");
-				        desConcepto = replaceAll(desConcepto, "MAYO", "MAY");
-				        desConcepto = replaceAll(desConcepto, "JUNIO", "JUN");
-				        desConcepto = replaceAll(desConcepto, "JULIO", "JUL");
-				        desConcepto = replaceAll(desConcepto, "AGOSTO", "AGO");
-				        desConcepto = replaceAll(desConcepto, "SETIEMBRE", "SET");
-				        desConcepto = replaceAll(desConcepto, "OCTUBRE", "OCT");
-				        desConcepto = replaceAll(desConcepto, "NOVIEMBRE", "NOV");
-				        desConcepto = replaceAll(desConcepto, "DICIEMBRE", "DIC");
-				        
-				        if(monto != "Monto" || codPuesto != "Cod.Puesto" || codDeuda != "Cod.Concepto"){
-				        	
-				        	var importe = monto * 1;
-				        	
-					    	dataTabla += "<tr>";
-					    	dataTabla += "<td>&nbsp;</td>";
-					    	dataTabla += "<td class='tamanioPrinter10'><b>" + tipoConcepto + "</b><br>" + desConcepto + "</td>";
-					    	dataTabla += "<td align='right' class='tamanioPrinter10'>S/. " + formatearImporte(importe) + "</td>";
-					    	dataTabla += "</tr>";
-					    	
-				        }
-				        cantidadLineas = cantidadLineas + 1;
-				        
-				    });
-					
-					//console.log("Cantidad de Lineas : " + cantidadLineas);
-					
-					var j = 8 - cantidadLineas; 
-					for (i=0 ;i < j; i++) { 
-						 
-						dataTabla += "<tr>";
-				    	dataTabla += "<td>&nbsp;</td>";
-				    	dataTabla += "<td>&nbsp;</td>";
-				    	dataTabla += "<td>&nbsp;</td>";
-				    	dataTabla += "</tr>";
-				    	
-				    	//console.log("Linea : " + i);
-					}
-					
-					dataTabla1 = dataTabla;
-					dataTabla1 += "<tr>";
-			    	dataTabla1 += "<td>&nbsp;</td>";
-			    	dataTabla1 += "<td class='tamanioPrinter10' id='noMostrar'><b>TOTAL</b></td>";
-			    	dataTabla1 += "<td align='right' class='tamanioPrinter10'><b>S/. <span id='totalImpresion'/></b></td>";
-			    	dataTabla1 += "</tr>";
-			    			    	
-					$('#tablaFacturacionDetalle tbody tr:last').after(dataTabla1);
-					
-					calculoTotal();
-					
-			    }
-	    	}else{
-	    		
-	    		colorEtiquetas();
-            	fila = "";
-            	$.each(result.camposObligatorios, function(id, obj){
-                    //alert("id : " + id +  "\nnombreCampo : " + obj.nombreCampo + "\nDescripcion : " + obj.descripcion);
-                    /*
-                    fila += "<tr>";
-                    fila += "<td valign='top'>" + obj.nombreCampo + "</td>"
-                    fila += "<td>" + ":" + "</td>"
-                    fila += "<td>" + obj.descripcion + "</td>"
-                    fila += "</tr>";
-                    fila += "<tr><td colspan=3>";
-                    fila += "<hr align=center size=2 width=100% />";
-                    fila += "</td></tr>";
-                    */
-                    //$("#" + obj.nombreCampo + "-img").popover({ placement : 'top', trigger: "hover" });
-                  	//$('[data-toggle="popover"]').popover({ placement : 'top', trigger: "hover" });
-                    $("#" + obj.nombreCampo).css("color", "red");
-                    $("#" + obj.nombreCampo + "-img").show();
-                    $("#" + obj.nombreCampo + "-img").attr("data-content", obj.descripcion);
-                    
-                });
-            	
-	    	}
-		}
-	});
+    //console.log("Cantidad de Items : " + cantidadItems);
+    if(cantidadItems > 5){
+    	
+    	$.gritter.add({
+			// (string | mandatory) the heading of the notification
+			title: 'Mensaje',
+			// (string | mandatory) the text inside the notification
+			text: "Solo se permite agregar 5 items.",
+			// (string | optional) the image to display on the left
+			image: "/" + ruta + "/recursos/images/advertencia.png",
+			// (bool | optional) if you want it to fade out on its own or just sit there
+			sticky: false,
+			// (int | optional) the time you want it to be alive for before fading out
+			time: ''
+		});
+    	
+    }else{
+    	
+    	parametros.facturacionDetalle = JSON.stringify(jsonObj);
+    	
+    	$.ajax({
+    		type: "POST",
+    	    async:false,
+    	    url: "grabar-facturacion.json",
+    	    cache : false,
+    	    data: parametros,
+    	    success: function(result){
+    	        
+    	    	colorEtiquetas();
+    	    	//alert("idFacturacion : " + result.idFacturacion + "\nLenCamposObligatorios : " + result.camposObligatorios.length);
+    	    	if(result.camposObligatorios.length == 0){
+    	    		
+    	    		if(result.idFacturacion > 0){
+    	    			rutaImagen = "/" + ruta + "/recursos/images/confirm.png";
+    	    		}else{
+    	    			rutaImagen = "/" + ruta + "/recursos/images/advertencia.png";
+    	    		}
+    	    		
+    		    	$.gritter.add({
+    					// (string | mandatory) the heading of the notification
+    					title: 'Mensaje',
+    					// (string | mandatory) the text inside the notification
+    					text: result.mensaje,
+    					// (string | optional) the image to display on the left
+    					image: rutaImagen,
+    					// (bool | optional) if you want it to fade out on its own or just sit there
+    					sticky: false,
+    					// (int | optional) the time you want it to be alive for before fading out
+    					time: ''
+    				});
+    	    	
+    		    	if(result.idFacturacion > 0){
+    			    	
+    		    		$("#btnBuscar").attr("disabled", true);
+    					$("#btnAgregar").attr("disabled", true);		    	
+    					$(".btnEliminar").attr("disabled", true);
+    					$("#puestoBuscar").attr("disabled", true);
+    					$("#btnGuardar").attr("disabled", true);
+    					$("#btnVisualizacion").show();
+    					$("#servicio").attr("disabled", true);
+    					
+    					limpiarTablaFacturacion();
+    					
+    					$("#correlativo").html(result.comprobante);
+    					$("#codigoFacturacion").val(result.idFacturacion);
+    					
+    					dataTabla = "";
+    					cantidadLineas = 1;
+    					$("#tabla_resultado tbody tr").each(function (item) {
+    				        var this_row = $(this);
+    				        var numero = $.trim(this_row.find('td:eq(0)').html());
+    				        var codDeuda = $.trim(this_row.find('td:eq(1)').html());
+    				        var tipoConcepto = $.trim(this_row.find('td:eq(2)').html());
+    						var desConcepto = $.trim(this_row.find('td:eq(3)').html());
+    				        var monto = $.trim(this_row.find('td:eq(4)').html());
+    				        var codPuesto = $.trim(this_row.find('td:eq(5)').html());
+    				        
+    				        desConcepto = replaceAll(desConcepto, "ENERO", "ENE");
+    				        desConcepto = replaceAll(desConcepto, "FEBRERO", "FEB");
+    				        desConcepto = replaceAll(desConcepto, "MARZO", "MAR");
+    				        desConcepto = replaceAll(desConcepto, "ABRIL", "ABR");
+    				        desConcepto = replaceAll(desConcepto, "MAYO", "MAY");
+    				        desConcepto = replaceAll(desConcepto, "JUNIO", "JUN");
+    				        desConcepto = replaceAll(desConcepto, "JULIO", "JUL");
+    				        desConcepto = replaceAll(desConcepto, "AGOSTO", "AGO");
+    				        desConcepto = replaceAll(desConcepto, "SETIEMBRE", "SET");
+    				        desConcepto = replaceAll(desConcepto, "OCTUBRE", "OCT");
+    				        desConcepto = replaceAll(desConcepto, "NOVIEMBRE", "NOV");
+    				        desConcepto = replaceAll(desConcepto, "DICIEMBRE", "DIC");
+    				        
+    				        if(monto != "Monto" || codPuesto != "Cod.Puesto" || codDeuda != "Cod.Concepto"){
+    				        	
+    				        	var importe = monto * 1;
+    				        	
+    					    	dataTabla += "<tr>";
+    					    	dataTabla += "<td>&nbsp;</td>";
+    					    	dataTabla += "<td class='tamanioPrinter10'><b>" + tipoConcepto + "</b><br>" + desConcepto + "</td>";
+    					    	dataTabla += "<td align='right' class='tamanioPrinter10'>S/. " + formatearImporte(importe) + "</td>";
+    					    	dataTabla += "</tr>";
+    					    	
+    				        }
+    				        cantidadLineas = cantidadLineas + 1;
+    				        
+    				    });
+    					
+    					//console.log("Cantidad de Lineas : " + cantidadLineas);
+    					
+    					var j = 8 - cantidadLineas; 
+    					for (i=0 ;i < j; i++) { 
+    						 
+    						dataTabla += "<tr>";
+    				    	dataTabla += "<td>&nbsp;</td>";
+    				    	dataTabla += "<td>&nbsp;</td>";
+    				    	dataTabla += "<td>&nbsp;</td>";
+    				    	dataTabla += "</tr>";
+    				    	
+    					}
+    					
+    					dataTabla1 = dataTabla;
+    					dataTabla1 += "<tr>";
+    			    	dataTabla1 += "<td>&nbsp;</td>";
+    			    	dataTabla1 += "<td class='tamanioPrinter10' id='noMostrar'><b>TOTAL</b></td>";
+    			    	dataTabla1 += "<td align='right' class='tamanioPrinter10'><b>S/. <span id='totalImpresion'/></b></td>";
+    			    	dataTabla1 += "</tr>";
+    			    			    	
+    					$('#tablaFacturacionDetalle tbody tr:last').after(dataTabla1);
+    					
+    					calculoTotal();
+    					
+    			    }
+    	    	}else{
+    	    		
+    	    		colorEtiquetas();
+                	fila = "";
+                	$.each(result.camposObligatorios, function(id, obj){
+                        $("#" + obj.nombreCampo).css("color", "red");
+                        $("#" + obj.nombreCampo + "-img").show();
+                        $("#" + obj.nombreCampo + "-img").attr("data-content", obj.descripcion);
+                        
+                    });
+                	
+    	    	}
+    		}
+    	});
+    	
+    }
+    
 }
 
 function buscarPuesto(){
