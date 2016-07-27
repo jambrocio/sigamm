@@ -7,6 +7,7 @@ public class LuzOriginal {
 	String fecVencimiento;
 	String fecEmision;
 	String fecCorte;
+	String observaciones;
 	double costoWats;
 	int estado;
 	double repoManCnx;
@@ -98,6 +99,12 @@ public class LuzOriginal {
 	}
 	public void setFecCorte(String fecCorte) {
 		this.fecCorte = fecCorte;
+	}
+	public String getObservaciones() {
+		return observaciones;
+	}
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
 	}
 	public double getCostoWats() {
 		return costoWats;

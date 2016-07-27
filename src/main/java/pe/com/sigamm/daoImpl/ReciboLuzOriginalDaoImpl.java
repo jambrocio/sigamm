@@ -1,9 +1,6 @@
 package pe.com.sigamm.daoImpl;
 
-import java.io.Console;
 import java.sql.Types;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +51,7 @@ public class ReciboLuzOriginalDaoImpl implements ReciboLuzOriginalDao {
 					new SqlParameter("p_FEC_PERIODO", 			Types.VARCHAR),
 					new SqlParameter("p_TOTALMESACT",			Types.NUMERIC),
 					new SqlParameter("p_FECCORTE",				Types.VARCHAR),
+					new SqlParameter("p_OBSERVACIONES",			Types.VARCHAR),
 					new SqlOutParameter("vo_codigo_recibo", 		Types.INTEGER),
 					new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
 					new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));	
@@ -70,6 +68,7 @@ public class ReciboLuzOriginalDaoImpl implements ReciboLuzOriginalDao {
 			parametros.addValue("p_FEC_PERIODO", 				luzoriginal.getPeriodo());
 			parametros.addValue("p_TOTALMESACT",				luzoriginal.getTotalMesAct());
 			parametros.addValue("p_FECCORTE",					luzoriginal.getFecCorte());
+			parametros.addValue("p_OBSERVACIONES",				luzoriginal.getObservaciones());
 			Map<String,Object> result = jdbcCall.execute(parametros); 
 			
 			int codigoRecibo = (Integer) result.get("vo_codigo_recibo");

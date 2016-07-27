@@ -64,7 +64,6 @@
 <script>
 var intentos = 0;
 $(document).ready(function(){	
-	
 	cargarReciboLuzOriginal();
 	
 	$("#contraba").hide();
@@ -246,6 +245,7 @@ function nuevoRecibos(){
 	$("#codigoRecibo").val(0);
 	$("#cableadoPrincipal").val(0);
 	$("#total").val(0);
+	$("#observaciones").val('');
 }
 
 function guardar(){
@@ -266,6 +266,7 @@ function guardar(){
 	parametros.deudaAnterior = $("#deudaanterior").val();
 	parametros.cableadoPrincipal = $("#cableadoPrincipal").val();
 	parametros.fecCorte = $("#fecCorte").val();
+	parametros.observaciones = $("#observaciones").val();
 
 	$.ajax({
 		type: "POST",
@@ -322,7 +323,7 @@ function cargarReciboLuzOriginal(){
 		var opciones = "<center>";
 			
 			opciones += "<a href=javascript:editarReciboLuzOriginal(";
-			opciones += rowObject.codigoReciboLuzOriginal + ",'" + rowObject.periodo.replace(' ','_') + "','" + rowObject.fecVencimiento.replace(' ','_') + "','" + rowObject.fecEmision.replace(/\s/g,"_") + "','" + rowObject.costoWats + "','" + rowObject.alumbradoPublico + "','" + rowObject.mantenimiento + "','" + rowObject.totalMesAct +"','" + rowObject.deudaAnterior +"','" + rowObject.cableadoPrincipal +"','" + rowObject.fecCorte.replace(/\s/g,"_") + "')>";
+			opciones += rowObject.codigoReciboLuzOriginal + ",'" + rowObject.periodo.replace(' ','_') + "','" + rowObject.fecVencimiento.replace(' ','_') + "','" + rowObject.fecEmision.replace(/\s/g,"_") + "','" + rowObject.costoWats + "','" + rowObject.alumbradoPublico + "','" + rowObject.mantenimiento + "','" + rowObject.totalMesAct +"','" + rowObject.deudaAnterior +"','" + rowObject.cableadoPrincipal +"','" + rowObject.fecCorte.replace(/\s/g,"_") + "','" + rowObject.observaciones.replace(' ','_') + "')>";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Luz'/>";
 			opciones += "</a>";
 			
@@ -501,7 +502,7 @@ function eliminarReciboLuzOriginal(codigoReciboLuzOriginal, periodo){
 }
 
 
-function editarReciboLuzOriginal(codigoReciboLuzOriginal, periodo, fecVencimiento, fecEmision, costoWats, alumbradoPublico, mantenimiento, totalMesAct, deudaAnterior, cableadoPrincipal, fecCorte ){
+function editarReciboLuzOriginal(codigoReciboLuzOriginal, periodo, fecVencimiento, fecEmision, costoWats, alumbradoPublico, mantenimiento, totalMesAct, deudaAnterior, cableadoPrincipal, fecCorte, observaciones ){
 	console.log("Editar Recibo Luz - [codigoRecibo] : " + codigoRecibo );
 	
 	$('#luz_original_modal').modal({
@@ -524,6 +525,7 @@ function editarReciboLuzOriginal(codigoReciboLuzOriginal, periodo, fecVencimient
 	$("#deudaanterior").val(deudaAnterior);
 	$("#cableadoPrincipal").val(cableadoPrincipal);
 	$("#fecCorte").val(fecCorte.replace(/\_/g," "));
+	$("#observaciones").val(observaciones.replace('_',' '));
 }
 
 
@@ -1543,11 +1545,11 @@ function openNewWindowForJasperWithCharts(){
 					<td><input type='text' id='mantenimiento' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="6"/></td>
 				</tr>
 				<tr>
-					<td><label><font size="2"><b>Cableado Línea Principal:</b></font></label></td>
+					<td><label><font size="2"><b>Otros:</b></font></label></td>
 					<td><input type='text' id='cableadoPrincipal' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="7"/></td>
 					<td>&nbsp;</td>
-					<td><label><font size="2"><b>Fecha de Corte:</b></font></label></td>
-					<td><input type='text' id='fecCorte' class='text ui-widget-content ui-corner-all' size="10" tabindex="8"/>(dia/mes/año)</td>
+					<td><label><font size="2"><b>Observacion:</b></font></label></td>
+					<td><input type='text' id='observaciones' class='text ui-widget-content ui-corner-all' size="10" tabindex="8"/></td>
 				</tr>
 				<tr>
 					<td><label><font size="2"><b>Total Mes Actual:</b></font></label></td>
@@ -1555,6 +1557,11 @@ function openNewWindowForJasperWithCharts(){
 					<td>&nbsp;</td>
 					<td><label><font size="2"><b>Total Mes Anterior:</b></font></label></td>	
 					<td><input type='text' id='deudaanterior' class='text ui-widget-content ui-corner-all' size="10" value="0" tabindex="10"/></td>
+				</tr>
+				<tr>
+					<td><label><font size="2"><b>Fecha de Corte:</b></font></label></td>
+					<td><input type='text' id='fecCorte' class='text ui-widget-content ui-corner-all' size="10" tabindex="11"/>(dia/mes/año)</td>
+					<td colspan="3">&nbsp;</td>
 				</tr>
 			</table>
 
@@ -1748,7 +1755,7 @@ function openNewWindowForJasperWithCharts(){
 								<td><input type='text' id='reconexionSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
 							</tr>
 							<tr>
-								<td><b>Cableado Principal :</b></td>
+								<td><b>Otros :</b></td>
 								<td><input type='text' id='cableadoPrincipalSocio' size='10' class='text ui-widget-content ui-corner-all' onblur="operaciones('R');" style="text-align: center;"/></td>
 							</tr>
 							<tr>

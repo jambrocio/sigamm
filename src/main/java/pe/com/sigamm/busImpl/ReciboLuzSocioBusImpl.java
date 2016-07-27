@@ -258,7 +258,7 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				
 				PdfPTable table12 = new PdfPTable(2);
 				table12.setWidthPercentage(100);
-				Paragraph p24 = new Paragraph("CABLEADO PRINCIPAL", fuente);
+				Paragraph p24 = new Paragraph("OTROS", fuente);
 				PdfPCell celda24 = new PdfPCell(p24);
 				table12.addCell(celda24);
 				Paragraph p25 = new Paragraph(UtilPDF.round(reporte.getListaReciboLuzSocio().get(aw).getCableadoPrincipal(), 2) + "", fuente);
