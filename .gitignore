@@ -65,3 +65,4 @@ src/main/resources/spring/application-config.xml
 src/main/resources/spring/application-config.xml
 
 *.xml
+target/classes/pe/com/sigamm/controller/ReciboLuzController.class

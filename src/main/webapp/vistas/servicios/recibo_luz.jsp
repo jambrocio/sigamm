@@ -323,7 +323,7 @@ function cargarReciboLuzOriginal(){
 		var opciones = "<center>";
 			
 			opciones += "<a href=javascript:editarReciboLuzOriginal(";
-			opciones += rowObject.codigoReciboLuzOriginal + ",'" + rowObject.periodo.replace(' ','_') + "','" + rowObject.fecVencimiento.replace(' ','_') + "','" + rowObject.fecEmision.replace(/\s/g,"_") + "','" + rowObject.costoWats + "','" + rowObject.alumbradoPublico + "','" + rowObject.mantenimiento + "','" + rowObject.totalMesAct +"','" + rowObject.deudaAnterior +"','" + rowObject.cableadoPrincipal +"','" + rowObject.fecCorte.replace(/\s/g,"_") + "','" + rowObject.observaciones.replace(' ','_') + "')>";
+			opciones += rowObject.codigoReciboLuzOriginal + ",'" + replaceAll(rowObject.periodo,' ','_') + "','" + replaceAll(rowObject.fecVencimiento,' ','_') + "','" + rowObject.fecEmision.replace(/\s/g,"_") + "','" + rowObject.costoWats + "','" + rowObject.alumbradoPublico + "','" + rowObject.mantenimiento + "','" + rowObject.totalMesAct +"','" + rowObject.deudaAnterior +"','" + rowObject.cableadoPrincipal +"','" + rowObject.fecCorte.replace(/\s/g,"_") + "','" + replaceAll(rowObject.observaciones, ' ','_') + "')>";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Recibo Luz'/>";
 			opciones += "</a>";
 			
@@ -515,7 +515,7 @@ function editarReciboLuzOriginal(codigoReciboLuzOriginal, periodo, fecVencimient
 	colorEtiquetas();
 	
 	$("#codigoRecibo").val(codigoReciboLuzOriginal);
-	$("#periodo").val(periodo.replace('_',' '));
+	$("#periodo").val(replaceAll(periodo,'_',' '));
 	$("#fecVencimiento").val(fecVencimiento.replace(/\_/g," "));
 	$("#fecEmision").val(fecEmision.replace(/\_/g," "));
 	$("#costoWats").val(costoWats);
@@ -525,7 +525,7 @@ function editarReciboLuzOriginal(codigoReciboLuzOriginal, periodo, fecVencimient
 	$("#deudaanterior").val(deudaAnterior);
 	$("#cableadoPrincipal").val(cableadoPrincipal);
 	$("#fecCorte").val(fecCorte.replace(/\_/g," "));
-	$("#observaciones").val(observaciones.replace('_',' '));
+	$("#observaciones").val(replaceAll(observaciones,'_',' '));
 }
 
 
