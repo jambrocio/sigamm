@@ -377,7 +377,17 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 		
 		Document doc = new Document();
 		PdfWriter docWriter = null;
-		String path = UtilPDF.RUTA_PDF + UtilPDF.getDatePDF() + ".pdf";
+		
+		String sSistemaOperativo = System.getProperty("os.name");
+		System.out.println(sSistemaOperativo);
+		
+		String path = "";
+		
+		if(!sSistemaOperativo.toUpperCase().contains("WINDOW")){
+			path = UtilPDF.RUTA_PDF + UtilPDF.getDatePDF() + ".pdf";
+		}else{
+			path = UtilPDF.RUTA_PDF_WINDOWS + UtilPDF.getDatePDF() + ".pdf";
+		}
 		
 		try {
 			
