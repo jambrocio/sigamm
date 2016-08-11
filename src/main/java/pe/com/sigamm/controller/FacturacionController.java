@@ -39,8 +39,10 @@ import pe.com.sigamm.bean.ListaServiciosOtros;
 import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ReporteFacturacion;
 import pe.com.sigamm.bean.ReporteFacturacionDetalle;
+import pe.com.sigamm.bean.ReporteServicios;
 import pe.com.sigamm.bean.ReporteServiciosOtros;
 import pe.com.sigamm.bean.ResponseListBean;
+import pe.com.sigamm.bean.ServiciosDetalle;
 import pe.com.sigamm.bean.VistaFacturacion;
 import pe.com.sigamm.bean.VistaFacturacionDetalle;
 import pe.com.sigamm.bus.FacturacionBus;
@@ -59,6 +61,7 @@ import pe.com.sigamm.util.Constantes;
 import pe.com.sigamm.util.LoggerCustom;
 import pe.com.sigamm.util.OperadoresUtil;
 import pe.com.sigamm.util.Util;
+import pe.com.sigamm.util.Validar;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -99,6 +102,13 @@ public class FacturacionController {
 	public String reporteEgresos(HttpServletRequest request) {
 		
 		return "facturacion/egreso";
+	
+	}
+	
+	@RequestMapping(value = "/reporteServicios", method=RequestMethod.GET)
+	public String reporteServicios(HttpServletRequest request) {
+		
+		return "facturacion/reporteServicios";
 	
 	}
 	
@@ -736,4 +746,75 @@ public class FacturacionController {
  
     }
 	
+	@RequestMapping(value = "/reporte-servicios.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody ResponseListBean<ServiciosDetalle> reporteServicios(
+			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
+			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
+			@RequestParam(value = "codigoServicioDetalle", defaultValue = "0") Integer codigoServicioDetalle,
+			@RequestParam(value = "exportar", defaultValue = "0") Integer exportar){
+		
+		ResponseListBean<ServiciosDetalle> response = new ResponseListBean<ServiciosDetalle>();
+		
+		ReporteServicios reporte = facturacionBus.reporteServicios(pagina, registros, codigoServicioDetalle, exportar);
+		
+		Integer totalServicios = reporte.getTotalRegistros(); 
+		
+		response.setPage(pagina);
+		response.setRecords(totalServicios);
+		
+		//total de paginas a mostrar
+		response.setTotal(OperadoresUtil.obtenerCociente(totalServicios, registros));
+				
+		response.setRows(reporte.getListaServicios());
+		
+		return response;
+	}
+	
+	@RequestMapping(value = "/grabar-servicio.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String grabarServicio(ServiciosDetalle servicio){
+		
+		Gson gson = new Gson();
+		List<CamposObligatorios> camposObligatorios = new ArrayList<CamposObligatorios>();
+		
+		int lnombre = servicio.getNombreDetalle().trim().length();
+		int limporte = servicio.getImporte().trim().length();
+		
+		if(lnombre == 0)
+			camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_SERVICIO_NOMBRE, Constantes.NOMBRE_SERVICIO_OBLIGATORIO));
+		
+		if(limporte == 0){
+			camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_SERVICIO_IMPORTE, Constantes.IMPORTE_SERVICIO_OBLIGATORIO));
+		}else{
+			
+			if(!Validar.esDecimal(servicio.getImporte())){
+				camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_SERVICIO_IMPORTE, Constantes.IMPORTE_SERVICIO_OBLIGATORIO));
+			}
+		}
+		
+		String listaObligatorios = gson.toJson(camposObligatorios);
+		String resultado = "";
+		if(camposObligatorios.size() > 0){
+			
+			resultado = "{\"codigoRetorno\":\"" + "02" + "\",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + "Error" + "\"}";
+			
+		}else{
+			
+			Retorno retorno = facturacionBus.grabarServicios(servicio);
+			resultado = "{\"codigoRetorno\":\"" + retorno.getIndicador() + "\",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + retorno.getMensaje() + "\"}";
+			
+		}
+		
+		return resultado;
+		
+	}
+	
+	@RequestMapping(value = "/eliminar-servicio.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String eliminarServicio(ServiciosDetalle servicio){
+		
+		Retorno retorno = facturacionBus.eliminarServicios(servicio);
+		String resultado = "{\"codigoRetorno\":\"" + retorno.getIndicador() + "\",\"mensaje\":\"" + retorno.getMensaje() + "\"}";
+			
+		return resultado;
+		
+	}
 }

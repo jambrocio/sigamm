@@ -6,7 +6,9 @@ import pe.com.sigamm.bean.AnularFacturacion;
 import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ReporteFacturacion;
 import pe.com.sigamm.bean.ReporteFacturacionDetalle;
+import pe.com.sigamm.bean.ReporteServicios;
 import pe.com.sigamm.bean.ReporteServiciosOtros;
+import pe.com.sigamm.bean.ServiciosDetalle;
 import pe.com.sigamm.modelo.Concepto;
 import pe.com.sigamm.modelo.DeudaSocio;
 import pe.com.sigamm.modelo.Egreso;
@@ -69,5 +71,11 @@ public interface FacturacionBus {
 	public ReporteFacturacionDetalle reporteFacturacionDetalle(int codigoFacturacionCab);
 
 	public Retorno anularFacturacion(AnularFacturacion anular);
+
+	public ReporteServicios reporteServicios(int pagina, int registros, int codigoServicioDetalle, int exportar);
+	
+	public Retorno grabarServicios(ServiciosDetalle servicios);
+
+	public Retorno eliminarServicios(ServiciosDetalle servicios);
 	
 }

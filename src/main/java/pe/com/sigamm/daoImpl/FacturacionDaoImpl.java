@@ -21,7 +21,9 @@ import pe.com.sigamm.bean.ListaServiciosOtros;
 import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ReporteFacturacion;
 import pe.com.sigamm.bean.ReporteFacturacionDetalle;
+import pe.com.sigamm.bean.ReporteServicios;
 import pe.com.sigamm.bean.ReporteServiciosOtros;
+import pe.com.sigamm.bean.ServiciosDetalle;
 import pe.com.sigamm.bean.VistaFacturacion;
 import pe.com.sigamm.bean.VistaFacturacionDetalle;
 import pe.com.sigamm.dao.FacturacionDao;
@@ -970,6 +972,132 @@ public class FacturacionDaoImpl implements FacturacionDao {
 		}
 		
 		return retorno;
+	}
+
+	@Override
+	public ReporteServicios reporteServicios(int pagina, int registros, int codigoServicioDetalle, int exportar) {
+		
+		ReporteServicios reporte = new ReporteServicios();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_REPORTE_SERVICIOS").declareParameters(
+					new SqlParameter("vi_pagina", 					Types.INTEGER),
+					new SqlParameter("vi_registros", 				Types.INTEGER),
+					new SqlParameter("vi_codigo_concepto", 			Types.INTEGER),
+					new SqlParameter("vi_exportar", 				Types.INTEGER),
+					
+					new SqlOutParameter("vo_total_registros", 		Types.INTEGER),
+					new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(ServiciosDetalle.class)));
+			
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_pagina", 			pagina);
+			parametros.addValue("vi_registros", 		registros);
+			parametros.addValue("vi_codigo_concepto", 	codigoServicioDetalle);
+			parametros.addValue("vi_exportar", 			exportar);
+			
+			Map<String,Object> results = jdbcCall.execute(parametros);
+			int totalRegistros = (Integer) results.get("vo_total_registros");
+			List<ServiciosDetalle> lista = (List<ServiciosDetalle>) results.get("vo_result");
+			
+			reporte.setTotalRegistros(totalRegistros);
+			reporte.setListaServicios(lista);
+			
+		}catch(Exception e){
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return  reporte;
+		
+	}
+
+	@Override
+	public Retorno grabarServicios(ServiciosDetalle servicios) {
+		
+		Retorno retorno = new Retorno();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_GRABAR_SERVICIO").declareParameters(
+				new SqlParameter("vi_codigo_servicio", 			Types.INTEGER),
+				new SqlParameter("vi_codigo_servicio_detalle", 	Types.INTEGER),
+				new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
+				new SqlParameter("vi_nombre_detalle", 			Types.VARCHAR),
+				new SqlParameter("vi_importe",					Types.VARCHAR),
+				
+				new SqlOutParameter("vo_codigo", 				Types.INTEGER),
+				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
+				new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
+				
+            
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_servicio", 			servicios.getCodigoServicio());
+			parametros.addValue("vi_codigo_servicio_detalle", 	servicios.getCodigoServicioDetalle());
+			parametros.addValue("vi_codigo_usuario", 			datosSession.getCodigoUsuario());
+			parametros.addValue("vi_nombre_detalle", 			servicios.getNombreDetalle());
+			parametros.addValue("vi_importe",					servicios.getImporte());
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			int codigoPuesto = (Integer) result.get("vo_codigo");
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(codigoPuesto);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
+	}
+
+	@Override
+	public Retorno eliminarServicios(ServiciosDetalle servicios) {
+		
+		Retorno retorno = new Retorno();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_ELIMINAR_SERVICIO").declareParameters(
+				new SqlParameter("vi_codigo_servicio", 			Types.INTEGER),
+				new SqlParameter("vi_codigo_servicio_detalle", 	Types.INTEGER),
+				new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
+				
+				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
+				new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
+				
+            
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_servicio", 			servicios.getCodigoServicio());
+			parametros.addValue("vi_codigo_servicio_detalle", 	servicios.getCodigoServicioDetalle());
+			parametros.addValue("vi_codigo_usuario", 			datosSession.getCodigoUsuario());
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
+		
 	}
 
 }

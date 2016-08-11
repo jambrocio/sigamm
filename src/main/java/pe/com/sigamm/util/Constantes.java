@@ -81,7 +81,10 @@ public class Constantes {
 	public static final String IREPORT_TITULO_SERVICIOS_OTROS			= "Reporte Otros Servicios";
 	public static final String IREPORT_TITULO_FACTURACION_DIARIO		= "Reporte de Facturación Diario";
 	
+	//--- ETIQUETAS SERVICIOS
+	public static final String ETIQUETA_SERVICIO_NOMBRE		= "lblnombre";
+	public static final String ETIQUETA_SERVICIO_IMPORTE	= "lblimporte";
 	
-	
-	
+	public static final String NOMBRE_SERVICIO_OBLIGATORIO		= "El nombre del servicio es obligatorio.";
+	public static final String IMPORTE_SERVICIO_OBLIGATORIO		= "El importe del servicio es obligatorio.";
 }

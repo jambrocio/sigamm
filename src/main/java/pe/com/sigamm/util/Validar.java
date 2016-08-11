@@ -34,4 +34,13 @@ public class Validar {
     		return false;
     	}
     }
+    
+    public static boolean esDecimal(String cad){
+    	try{
+    		Double.parseDouble(cad);
+    		return true;
+    	}catch(NumberFormatException nfe){
+    		return false;
+    	}
+    }
 }

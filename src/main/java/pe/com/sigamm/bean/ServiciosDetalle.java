@@ -12,6 +12,7 @@ public class ServiciosDetalle {
 	int ordenDetalle;
 	int seleccionado;
 	int flag_otros;
+	int usuario;
 	
 	public int getCodigoServicio() {
 		return codigoServicio;
@@ -73,5 +74,11 @@ public class ServiciosDetalle {
 	public void setFlag_otros(int flag_otros) {
 		this.flag_otros = flag_otros;
 	}
-			
+	public int getUsuario() {
+		return usuario;
+	}
+	public void setUsuario(int usuario) {
+		this.usuario = usuario;
+	}
+				
 }

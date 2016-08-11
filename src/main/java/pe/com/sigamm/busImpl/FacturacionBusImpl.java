@@ -11,7 +11,9 @@ import pe.com.sigamm.bean.AnularFacturacion;
 import pe.com.sigamm.bean.ReporteEgreso;
 import pe.com.sigamm.bean.ReporteFacturacion;
 import pe.com.sigamm.bean.ReporteFacturacionDetalle;
+import pe.com.sigamm.bean.ReporteServicios;
 import pe.com.sigamm.bean.ReporteServiciosOtros;
+import pe.com.sigamm.bean.ServiciosDetalle;
 import pe.com.sigamm.bus.FacturacionBus;
 import pe.com.sigamm.dao.FacturacionDao;
 import pe.com.sigamm.modelo.Banio;
@@ -218,6 +220,24 @@ public class FacturacionBusImpl implements FacturacionBus {
 	public Retorno anularFacturacion(AnularFacturacion anular) {
 		
 		return facturacionDao.anularFacturacion(anular);
+	}
+
+	@Override
+	public ReporteServicios reporteServicios(int pagina, int registros, int codigoServicioDetalle, int exportar) {
+		
+		return facturacionDao.reporteServicios(pagina, registros, codigoServicioDetalle, exportar);
+	}
+
+	@Override
+	public Retorno grabarServicios(ServiciosDetalle servicios) {
+		
+		return facturacionDao.grabarServicios(servicios);
+	}
+
+	@Override
+	public Retorno eliminarServicios(ServiciosDetalle servicios) {
+		
+		return facturacionDao.eliminarServicios(servicios);
 	}
 	
 }
