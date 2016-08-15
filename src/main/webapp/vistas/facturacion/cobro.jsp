@@ -524,7 +524,7 @@ function agregarDeuda(){
         
         if(importe != "Importe"){
 	        
-        	//console.log("codigoDeuda : " + codigoDeuda + "\nCheck : " + check + "\nConcepto : " + concepto + "\nImporte : " + importe);
+        	console.log("codigoDeuda : " + codigoDeuda + "\nCheck : " + check + "\nConcepto : " + concepto + "\nImporte : " + importe);
         	
         	//Verifica si esta checked
         	if($("#chk_" + codigoDeuda).is(':checked')) {  
@@ -533,11 +533,12 @@ function agregarDeuda(){
         		$("#tabla_resultado tbody tr").each(function (itemResultado) {
         	        var this_row_resultado = $(this);
         	        var codigoDeudaResultado = $.trim(this_row_resultado.find('td:eq(1)').html());
+        	        var conceptoResultado = $.trim(this_row_resultado.find('td:eq(2)').html());
         	        
         	        if(codigoDeuda == codigoDeudaResultado){
-        	        	
-        	        	existe = existe + 1;
-        	        	
+        	        	if(concepto == conceptoResultado){
+        	        		existe = existe + 1;	
+        	        	}        	        	
         	        }
             	});
         		
