@@ -524,7 +524,7 @@ function agregarDeuda(){
         
         if(importe != "Importe"){
 	        
-        	console.log("codigoDeuda : " + codigoDeuda + "\nCheck : " + check + "\nConcepto : " + concepto + "\nImporte : " + importe);
+        	//console.log("codigoDeuda : " + codigoDeuda + "\nCheck : " + check + "\nConcepto : " + concepto + "\nImporte : " + importe);
         	
         	//Verifica si esta checked
         	if($("#chk_" + codigoDeuda).is(':checked')) {  
