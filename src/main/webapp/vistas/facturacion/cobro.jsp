@@ -334,6 +334,7 @@ function buscarPuesto(){
         	$("#telefono").val(result.telefono);
         	$("#codigoSocio").val(result.codigoSocio);
         	$("#puesto").val(result.nroPuesto);
+        	$("#comprobante").val(result.numeroComprobante);
         	
         	$("#printAsociado").html(result.apellidoPaterno + " " + result.apellidoMaterno + ", " + result.nombres);
         	$("#printPuesto").html(result.nroPuesto);
@@ -809,7 +810,7 @@ function openNewWindowForJasperWithCharts(){
 		<td width="5px">&nbsp;</td>
 		<td><b>:</b></td>
 		<td width="5px">&nbsp;</td>
-		<td><input type="text" id="comprobante" class="form-control" maxlength="10" /></td>
+		<td><input type="text" id="comprobante" class="form-control" maxlength="11" /></td>
 		<td valign="top"><img id="lblcomprobante-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 		<td colspan="2">&nbsp;</td>
 	</tr>

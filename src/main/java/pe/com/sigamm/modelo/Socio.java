@@ -19,6 +19,7 @@ public class Socio {
 	String correo;
 	String listaDetalle;
 	String nombreSector;
+	String numeroComprobante;
 	
 	public int getCodigoSocio() {
 		return codigoSocio;
@@ -122,5 +123,11 @@ public class Socio {
 	public void setNombreSector(String nombreSector) {
 		this.nombreSector = nombreSector;
 	}
-						
+	public String getNumeroComprobante() {
+		return numeroComprobante;
+	}
+	public void setNumeroComprobante(String numeroComprobante) {
+		this.numeroComprobante = numeroComprobante;
+	}
+							
 }

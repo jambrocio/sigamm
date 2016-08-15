@@ -144,7 +144,7 @@ public class FacturacionController {
 			camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_COMPROBANTE, Constantes.COMPROBANTE_OBLIGATORIO));
 		}else{
 			
-			if(lsecuencia != 6){
+			if(lsecuencia != 7){
 				camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_COMPROBANTE, Constantes.SECUENCIA_OBLIGATORIO));
 			}
 		}
