@@ -1107,13 +1107,13 @@ function operaciones(){
 		if ( isNaN(consumomessocio) ) consumomessocio = 0;
 		if ( isNaN(alcantarilladosocio) ) alcantarilladosocio = 0;
 		//alert("ConsumoMesSocio: " + consumomessocio + "\nAlcantarilladoSocio: " + alcantarilladosocio + "\nDeudaAnterior: "+deudaanteriorsocio+"\nMantenimiento: "+mantenimientosocio);
-		total = consumomessocio + alcantarilladosocio + mantenimientosocio + deudaanteriorsocio;
+		total = consumomessocio + alcantarilladosocio + mantenimientosocio; //+ deudaanteriorsocio;
 
 	} else {
 		if ( isNaN(consumomessociotrabado) ) consumomessociotrabado = 0;
 		if ( isNaN(alcantarillado) ) alcantarillado = 0;
 		//alert("ConsumoMesSocio: " + consumomessociotrabado + "\nAlcantarilladoSocio: " + alcantarilladosocio + "\nDeudaAnterior: "+deudaanteriorsocio+"\nMantenimiento: "+mantenimientosocio);		
-		total = consumomessociotrabado + alcantarilladosocio + mantenimientosocio + deudaanteriorsocio;
+		total = consumomessociotrabado + alcantarilladosocio + mantenimientosocio; //+ deudaanteriorsocio;
 		
 	}
 	//alert("TOTAL [" + total + "]");
