@@ -7,6 +7,7 @@ public class FacturacionDetalle {
 	String monto;
 	int codigoFacturacioncab;
 	int codigoServicio;
+	int codigoServicioDetalle;
 	
 	String fecPeriodo;
 	String nombreDetalle;
@@ -41,6 +42,12 @@ public class FacturacionDetalle {
 	public void setCodigoServicio(int codigoServicio) {
 		this.codigoServicio = codigoServicio;
 	}
+	public int getCodigoServicioDetalle() {
+		return codigoServicioDetalle;
+	}
+	public void setCodigoServicioDetalle(int codigoServicioDetalle) {
+		this.codigoServicioDetalle = codigoServicioDetalle;
+	}
 	public String getFecPeriodo() {
 		return fecPeriodo;
 	}
@@ -53,5 +60,5 @@ public class FacturacionDetalle {
 	public void setNombreDetalle(String nombreDetalle) {
 		this.nombreDetalle = nombreDetalle;
 	}
-			
+				
 }

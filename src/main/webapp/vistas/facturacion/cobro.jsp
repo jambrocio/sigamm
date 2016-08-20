@@ -147,12 +147,14 @@ function guardar(){
         var monto = $.trim(this_row.find('td:eq(4)').html());
         var codPuesto = $.trim(this_row.find('td:eq(5)').html());
         var codServicio = $.trim(this_row.find('td:eq(7)').html());
+        var codServicioDetalle = $.trim(this_row.find('td:eq(8)').html());
         
         if(monto != "Monto" || codPuesto != "Cod.Puesto" || codDeuda != "Cod.Concepto"){
 	        objetos = {};
 	        objetos.codigoDeudaSocio = codDeuda;
 	        objetos.monto = monto;
 	        objetos.codigoServicio = codServicio;
+	        objetos.codigoServicioDetalle = codServicioDetalle;
 	        jsonObj.push(objetos);
 	        
 	        cantidadItems = cantidadItems + 1;        
@@ -459,6 +461,7 @@ function buscarDeudasSocio(){
         	            "<td align='left'>" + serv.fecPeriodo + "</td>" +
         				"<td align='right'>" + serv.importe + "</td>" +
         				"<td style='display:none;'>" + $("#servicio").val() + "</td>" +
+        				"<td style='display:none;'>" + serv.codigoServicioDetalle + "</td>" +
         				"</tr>");
         		        		
         		//console.log("Periodo : " + serv.fecPeriodo + "\nImporte : " + serv.importe);
@@ -522,6 +525,7 @@ function agregarDeuda(){
         var concepto = $.trim(this_row.find('td:eq(2)').html());
         var importe = $.trim(this_row.find('td:eq(3)').html());
         var codigoServicio = $.trim(this_row.find('td:eq(4)').html());
+        var codigoServicioDetalle = $.trim(this_row.find('td:eq(5)').html());
         
         if(importe != "Importe"){
 	        
@@ -557,6 +561,7 @@ function agregarDeuda(){
 	        					"<img src='/"+ruta+"/recursos/images/icons/eliminar_16x16.png' alt='Eliminar' />" +
 	        				"</button></td>" +
 	        				"<td align='center' style='display:none;'>" + codigoServicio + "</td>" +
+	        				"<td align='center' style='display:none;'>" + codigoServicioDetalle + "</td>" +
 	        				"</tr>");
         		}
         		
@@ -838,7 +843,8 @@ function openNewWindowForJasperWithCharts(){
 								<td align="center" class="tablaCabecera" width="20px">&nbsp;</td>
 								<td align="center" class="tablaCabecera">Desc.Concepto</td>
 								<td align="center" class="tablaCabecera" width="100px">Importe</td>
-								<td align="center" class="tablaCabecera" width="20px" style="display:none;">&nbsp;</td>
+								<td align="center" class="tablaCabecera" width="20px" style="display:none;">Cod.Servicio</td>
+								<td align="center" class="tablaCabecera" width="20px" style="display:none;">Cod.Servicio Detalle</td>
 							</tr>
 						</table>
 					</td>
@@ -854,6 +860,7 @@ function openNewWindowForJasperWithCharts(){
 								<td align="center" class="tablaCabecera" style="display:none;">Cod.Puesto</td>
 								<td align="center" class="tablaCabecera">Accion</td>
 								<td align="center" class="tablaCabecera" style="display:none;">Cod.Servicio</td>
+								<td align="center" class="tablaCabecera" style="display:none;">Cod.Servicio Detalle</td>
 							</tr>
 							<tfoot>
 							<tr>

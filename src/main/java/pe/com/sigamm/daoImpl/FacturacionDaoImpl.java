@@ -111,6 +111,7 @@ public class FacturacionDaoImpl implements FacturacionDao {
 				new SqlParameter("vi_codigo_deuda_socio", 		Types.INTEGER),
 				new SqlParameter("vi_monto", 					Types.VARCHAR),
 				new SqlParameter("vi_codigo_servicio", 			Types.INTEGER),
+				new SqlParameter("vi_codigo_servicio_detalle", 	Types.INTEGER),
 				
 				new SqlOutParameter("vo_facturacion_detalle", 	Types.INTEGER),
 				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
@@ -122,6 +123,7 @@ public class FacturacionDaoImpl implements FacturacionDao {
 			parametros.addValue("vi_codigo_deuda_socio", 		facturacion.getCodigoDeudaSocio());
 			parametros.addValue("vi_monto", 					facturacion.getMonto());
 			parametros.addValue("vi_codigo_servicio", 			facturacion.getCodigoServicio());
+			parametros.addValue("vi_codigo_servicio_detalle", 	facturacion.getCodigoServicioDetalle());
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
 			
