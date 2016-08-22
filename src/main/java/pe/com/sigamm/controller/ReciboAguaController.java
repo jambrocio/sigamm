@@ -373,8 +373,7 @@ public class ReciboAguaController {
 
 		ResponseListBean<Puesto> response = new ResponseListBean<Puesto>();
 
-		ReportePuesto reporte = puestoBus.reportePuestoAgua(pagina, registros,
-				nroPuesto, codigoRecibo);
+		ReportePuesto reporte = puestoBus.reportePuestoAgua(pagina, registros, nroPuesto, codigoRecibo);
 
 		Integer totalReciboPuestoLuz = reporte.getTotalRegistros();
 
@@ -382,8 +381,7 @@ public class ReciboAguaController {
 		response.setRecords(totalReciboPuestoLuz);
 
 		// total de paginas a mostrar
-		response.setTotal(OperadoresUtil.obtenerCociente(totalReciboPuestoLuz,
-				registros));
+		response.setTotal(OperadoresUtil.obtenerCociente(totalReciboPuestoLuz, registros));
 
 		response.setRows(reporte.getListaPuesto());
 

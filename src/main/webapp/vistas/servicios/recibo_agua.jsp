@@ -262,7 +262,7 @@ function cargarReciboAgua(){
 			opciones += "&nbsp;&nbsp;";
 			
 			opciones += "<a href=javascript:generarReciboAguaSocio(";
-			opciones += rowObject.codigoRecibo + ") >";
+			opciones += rowObject.codigoRecibo + ",'" + rowObject.periodo.replace(' ','_') + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/water_24x24.png' border='0' title='Generar Recibo Agua para cada Socio'/>";
 			opciones += "</a>";			
 			
@@ -518,10 +518,11 @@ function eliminarReciboAgua(codigoRecibo, periodo){
 }
 
 
-function generarReciboAguaSocio(codigoRecibo){
+function generarReciboAguaSocio(codigoRecibo, periodo){
 	console.log("Generar Recibo Agua Socios - [codigoReciboAgua] : " + codigoRecibo);
 	
-	$("#nroRecibo").text(codigoRecibo);	
+	$("#nroRecibo").text(codigoRecibo);
+	$("#periodoReciboAgua").text(periodo.replace('_',' '));
 	
 	$('#recibos_agua_socios_modal').modal({
 		backdrop: 'static',
@@ -533,6 +534,7 @@ function generarReciboAguaSocio(codigoRecibo){
 	colorEtiquetas();
 	
 	$("#codigoReciboAgua").val(codigoRecibo);
+	
 	
 	cargarReciboAguaSocio(codigoRecibo);
 }
@@ -582,10 +584,10 @@ function cargarReciboAguaSocio1(codigoRecibo){
 			if (rowObject.reciboAguaCreado != 0) {
 				opciones += "&nbsp;&nbsp;";
 				
-				opciones += "<a href=javascript:pagarReciboAguaXSocio('";
-				opciones += rowObject.codigoReciboAgua + "','" + rowObject.nroPuesto + "'," + rowObject.codigoSocio + ") >";
+				opciones += ""; //"<a href=javascript:pagarReciboAguaXSocio('";
+				opciones += ""; //rowObject.codigoReciboAgua + "','" + rowObject.nroPuesto + "'," + rowObject.codigoSocio + ") >";
 				opciones += "<img src='/"+ruta+"/recursos/images/icons/money_activo_24x24.png' border='0' title='PAGAR Recibo de Agua por Socio'/>";
-				opciones += "</a>";
+				opciones += ""; //"</a>";
 				
 				opciones += "&nbsp;&nbsp;";
 				
@@ -733,7 +735,8 @@ function editarReciboAguaXSocio(original, puesto){
 		            	$("#reciboAguaCreado").val(val.reciboAguaCreado);            	          	
 		            	$("#codigoServicioDetalle").val(val.codigoServicioDetalle);
 		            	$("#alcantarilladoSocio").val(val.alcantarillado);
-		            	$("#totalSocio").text(val.total);
+		            	$("#totalSocio").text(val.total + val.deudaAnterior);
+		            	//$("#totalSocio").text(val.total);
 		            	$("#correlativo").val(val.correlativo);
 		            	$("#mantenimientoSocio").val(val.servicioMantenimiento);
 		            	$("#deudaAnteriorSocio").val(val.deudaAnterior);
@@ -1095,7 +1098,7 @@ function operaciones(){
 	var consumomessocio = 0;
 	var consumomessociotrabado = 0;
 	var alcantarillado = 0;
-	var mantenimiento = 0;
+	var mantenimientosocio = 0;
 	var deudaanteriorsocio = 0;
 	var total = 0;
 	consumomessocio = parseFloat($('#consumoMesSocio').val());
@@ -1117,7 +1120,8 @@ function operaciones(){
 		
 	}
 	//alert("TOTAL [" + total + "]");
-	$('#totalSocio').text(redondear_dos_decimal(total));	
+	//$('#totalSocio').text(redondear_dos_decimal(total));
+	$('#totalSocio').text(redondear_dos_decimal(total + deudaanteriorsocio));
 }
 
 function redondear_dos_decimal(valor) {
@@ -1316,6 +1320,7 @@ function exportarAguaSocio(){
 <input type="hidden" id="codigorecibo" />
 <input type="hidden" id="nropuesto" />
 <input type="hidden" id="codigoReciboAgua" />
+<input type="hidden" id="periodo" />
 <input type="hidden" id="codigoSocio" />
 <input type="hidden" id="codigoServicioDetalle" />
 <input type="hidden" id="correlativo" />
@@ -1476,7 +1481,7 @@ function exportarAguaSocio(){
 		
 			<table border="0" width="400px" cellpadding="0" cellspacing="0">
 				<tr>
-					<td colspan="5" style="color:red"><b>&nbsp;RECIBO DE AGUA ORIGINAL NRO. <span id="nroRecibo"></span></b></td>
+					<td colspan="5" style="color:red"><b>&nbsp;RECIBO DE AGUA ORIGINAL <span id="periodoReciboAgua"></span> - [<span id="nroRecibo"></span>]</b></td>
 				</tr>
 				<tr>
 					<td><b>RECIBO AGUA SOCIOS<b/></td>
