@@ -119,6 +119,9 @@
 		<put-attribute name="contenido" value="/vistas/servicios/otros.jsp" />
 		<put-attribute name="titulo" value="Otros Servicios" />
 	</definition>
-	
+	<definition name="servicios/proceso" extends="main">
+		<put-attribute name="contenido" value="/vistas/servicios/proceso.jsp" />
+		<put-attribute name="titulo" value="Procesos Internos" />
+	</definition>	
 	
 </tiles-definitions>
