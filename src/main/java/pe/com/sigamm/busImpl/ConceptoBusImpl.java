@@ -10,6 +10,8 @@ import com.google.gson.Gson;
 import pe.com.sigamm.bean.ReporteConcepto;
 import pe.com.sigamm.bus.ConceptoBus;
 import pe.com.sigamm.dao.ConceptoDao;
+import pe.com.sigamm.modelo.Concepto;
+import pe.com.sigamm.modelo.Retorno;
 
 @Service
 public class ConceptoBusImpl implements ConceptoBus {
@@ -25,6 +27,13 @@ public class ConceptoBusImpl implements ConceptoBus {
 
 		return conceptoDao.reporteConcepto(pagina, registros, codigoConcepto);
 		
+	}
+
+	@Override
+	public Retorno grabarConcepto(Concepto concepto) {
+		
+		Retorno retornoEgreso = conceptoDao.grabarConcepto(concepto);
+		return retornoEgreso;
 	}
 
 	

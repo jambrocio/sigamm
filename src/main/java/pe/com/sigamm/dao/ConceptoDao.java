@@ -14,4 +14,5 @@ public interface ConceptoDao {
 
 	public ReporteConcepto reporteConcepto(int pagina, int registros, int codigoConcepto);
 	
+	public Retorno grabarConcepto(Concepto concepto);
 }

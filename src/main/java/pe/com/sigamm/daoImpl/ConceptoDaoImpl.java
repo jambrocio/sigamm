@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import pe.com.sigamm.bean.ReporteConcepto;
 import pe.com.sigamm.dao.ConceptoDao;
 import pe.com.sigamm.modelo.Concepto;
+import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.LoggerCustom;
 
@@ -31,23 +32,6 @@ public class ConceptoDaoImpl implements ConceptoDao {
 	@Autowired
 	private DatosSession datosSession;
 	
-
-	/*@Override
-	public List<Cuenta> opcionesCuentas(Cuenta cuenta) {
-		jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
-		jdbcCall.withCatalogName("PKG_EGRESO");
-		jdbcCall.withProcedureName("SP_LISTAR_CUENTAS").declareParameters(
-				//new SqlParameter("vi_rubro", 	Types.VARCHAR),				
-				new SqlOutParameter("vo_result", OracleTypes.CURSOR,new BeanPropertyRowMapper(Cuenta.class)));
-		
-		MapSqlParameterSource parametros = new MapSqlParameterSource();
-		//parametros.addValue("vi_rubro", "");
-		
-		Map<String,Object> results = jdbcCall.execute(parametros);
-		List<Cuenta> lista = (List<Cuenta>) results.get("vo_result");
-		return  lista;
-	}*/
-
 
 	@Override
 	public ReporteConcepto reporteConcepto(int pagina, int registros, int codigoConcepto) {
@@ -79,6 +63,51 @@ public class ConceptoDaoImpl implements ConceptoDao {
 		}
 		
 		return  reporte;
+	}
+
+
+	@Override
+	public Retorno grabarConcepto(Concepto concepto) {
+
+		Retorno retorno = new Retorno();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_CONCEPTO");
+			jdbcCall.withProcedureName("SP_GRABAR_CONCEPTOS").declareParameters(
+					
+				new SqlParameter("vi_codigo_concepto", 			Types.INTEGER),
+				new SqlParameter("vi_nombre_concepto", 			Types.VARCHAR),
+				new SqlParameter("vi_rubro",   					Types.VARCHAR),
+				
+				new SqlOutParameter("vo_codigo_concepto", 		Types.INTEGER),
+				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
+				new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
+            
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_concepto", 			concepto.getCodigoConcepto());
+			parametros.addValue("vi_nombre_concepto", 			concepto.getNombreConcepto());
+			parametros.addValue("vi_rubro", 					concepto.getRubro());
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			int codigoConcepto = (Integer) result.get("vo_codigo_concepto");
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(codigoConcepto);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
+		
 	}
 
 	

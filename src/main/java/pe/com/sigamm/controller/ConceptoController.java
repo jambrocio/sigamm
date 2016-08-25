@@ -1,5 +1,8 @@
 package pe.com.sigamm.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -10,10 +13,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
+
+import pe.com.sigamm.bean.CamposObligatorios;
 import pe.com.sigamm.bean.ReporteConcepto;
 import pe.com.sigamm.bean.ResponseListBean;
 import pe.com.sigamm.bus.ConceptoBus;
 import pe.com.sigamm.modelo.Concepto;
+import pe.com.sigamm.modelo.OperacionesBancarias;
+import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.OperadoresUtil;
 
@@ -56,5 +64,30 @@ public class ConceptoController {
 		response.setRows(reporteConcepto.getListaConcepto());
 		
 		return response;
+	}
+	
+	@RequestMapping(value = "/grabar-concepto.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String grabarConcepto(Concepto concepto){
+		Gson gson = new Gson();
+		List<CamposObligatorios> camposObligatorios = new ArrayList<CamposObligatorios>();
+				
+		int codigo = 0;
+		String mensaje = "";
+		String listaObligatorios = gson.toJson(camposObligatorios);
+		
+		if(camposObligatorios.size() > 0){
+			
+			codigo = 0;
+			
+		}else{
+			
+			Retorno retorno = conceptoBus.grabarConcepto(concepto);
+			codigo = retorno.getCodigo();
+			mensaje = retorno.getMensaje();
+		}
+	 
+		String resultado = "{\"idUsuario\":" + codigo + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + mensaje + "\"}";
+		
+		return resultado;
 	}
 }

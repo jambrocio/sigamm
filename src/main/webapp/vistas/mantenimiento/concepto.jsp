@@ -44,7 +44,6 @@ function colorEtiquetas(){
 	
 }
 
-
 function cargarConceptos(){
 	
 	var ruta = obtenerContexto();
@@ -55,21 +54,16 @@ function cargarConceptos(){
 		var opciones = "<center>";
 			
 			opciones += "<a href=javascript:editarConcepto(";
-			opciones += rowObject.codigoPuesto + ",'";
-			opciones += rowObject.nroPuesto + "',";
-			opciones += rowObject.codigoUsuario  + ",";
-			opciones += rowObject.codigoGiro + ",'";
-			opciones += rowObject.dni + "','";
-			opciones += nombreGiro + "') >";
+			opciones += rowObject.codigoConcepto + ",'";
+			opciones += rowObject.nombreConcepto.replace(/\s/g,"_") + "','";
+			opciones += rowObject.rubro + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Conceptos'/>";
 			opciones += "</a>";
 			
 			opciones += "&nbsp;&nbsp;";
 			
 			opciones += "<a href=javascript:eliminarConcepto(";
-			opciones += rowObject.codigoPuesto + ",'";
-			opciones += nombre + "','";
-			opciones += rowObject.nroPuesto + "') >";
+			opciones += rowObject.codigoConcepto + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Conceptos'/>";
 			opciones += "</a>";
 			
@@ -86,30 +80,31 @@ function cargarConceptos(){
 		mtype: 'POST',
 		height: 'auto',
 		width: 'auto',
-		colNames : ['CODIGO', 'DESCRIPCION', 'ESTADO', 'CONCEPTO', 'OPCIONES'],
-		colModel : [{
+		//colNames : ['CODIGO', 'DESCRIPCION', 'ESTADO', 'CONCEPTO', 'OPCIONES'],
+		colNames : ['DESCRIPCION', 'ESTADO', 'CONCEPTO', 'OPCIONES'],
+		colModel : [/*{
 			name : 'codigoConcepto',
 			index: 'codigoConcepto',
 			sortable:false,
 			width: 90,
 			align: 'center'
-		},{
+		},*/{
 			name : 'nombreConcepto',
 			index: 'nombreConcepto',
 			sortable:false,
-			width: 100,
+			width: 150,
 			align: 'left'
 		},{
 			name : 'estado',
 			index: 'estado',
 			sortable:false,
-			width: 100,
-			align: 'left'
+			width: 50,
+			align: 'center'
 		},{
-			name : 'concepto',
-			index: 'concepto',
+			name : 'rubro',
+			index: 'rubro',
 			sortable:false,
-			width: 150,
+			width: 100,
 			align: 'center'
 		},{					
 			name:'codigoConcepto',
@@ -121,19 +116,123 @@ function cargarConceptos(){
 		}],								
 		rowNum : 20,
 		pager : '#pgrilla',
-		sortname : 'codigoConcepto',
+		sortname : 'nombreConcepto',
 		autowidth: true,
 		rownumbers: true,
 		viewrecords : true,
-		sortorder : "codigoConcepto",
-		caption : "Conceptos"
+		sortorder : "nombreConcepto",
+		caption : "Conceptos / Categorías",
+		afterInsertRow: function(rowId, data, item){
+			//alert(rowId + ' - ' + data + ' - ' + item.estado);
+			if ( (item.estado == 1) ) 
+				$("#grilla").setCell(rowId, 'estado', 'ACTIVO', '');
+			else
+				$("#grilla").setCell(rowId, 'estado', 'INACTIVO', '');
+			
+			if ( (item.rubro == "C") )
+				$("#grilla").setCell(rowId, 'rubro', 'CATEGORÍA EGRESO', '');
+			else if ( (item.rubro == "E") )
+				$("#grilla").setCell(rowId, 'rubro', 'TIPO DOCUMENTO', '');
+		}
 
 	}).trigger('reloadGrid');
+}
+
+function colorEtiquetas(){
+	
+	$("#lblnombreConcepto").css("color", "black");
+	$("#lblrubro").css("color", "black");
+	
+	$("#lblnombreConcepto-img").hide();
+	$("#lblrubro-img").hide();
+	
+}
+
+function cargarNuevo(){
+	
+	$("#tituloRegistro").html("Nuevo Concepto / Categoría");
+	
+	colorEtiquetas();
+	
+	$("#nombreConcepto").val('');
+	$("#rubro").val('');
+}
+
+
+function guardar(){
+	var ruta = obtenerContexto();
+	jsonObj = [];
+	var parametros = new Object();
+	parametros.codigoConcepto = $("#codigoConcepto").val();
+	parametros.nombreConcepto = $("#nombreConcepto").val();
+	parametros.rubro = $("#rubro").val();
+
+	
+	$.ajax({
+		type: "POST",
+	    async:false,
+	    url: "grabar-concepto.json",
+	    cache : false,
+	    data: parametros,
+	    success: function(result){
+	            
+	        if(result.camposObligatorios.length == 0){
+                	
+            	$('#concepto_modal').modal('hide');
+            	
+	            $.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Mensaje',
+					// (string | mandatory) the text inside the notification
+					text: result.mensaje,
+					// (string | optional) the image to display on the left
+					image: "/" + ruta + "/recursos/images/confirm.png",
+					// (bool | optional) if you want it to fade out on its own or just sit there
+					sticky: false,
+					// (int | optional) the time you want it to be alive for before fading out
+					time: ''
+				});
+	            
+	            cargarConceptos();
+	            
+			}else{
+                	
+            	colorEtiquetas();
+            	fila = "";
+            	$.each(result.camposObligatorios, function(id, obj){
+                        
+                	$("#" + obj.nombreCampo).css("color", "red");
+                    $("#" + obj.nombreCampo + "-img").show();
+                    $("#" + obj.nombreCampo + "-img").attr("data-content", obj.descripcion);
+                        
+				});
+                	
+			}
+                
+		}
+	});	
+}
+
+
+function editarConcepto(codigoConcepto, nombreConcepto, rubro){
+
+	$('#concepto_modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	});
+	
+	$("#tituloRegistro").html("Modificar Concepto / Categoría");
+	colorEtiquetas();
+	
+	$("#codigoConcepto").val(parseInt(codigoConcepto));
+	$("#nombreConcepto").val(nombreConcepto.replace(/\_/g," "));
+	$('#rubro option[value="' +rubro+ '"]').attr("selected", "selected");
 }
 
 </script>
 </head>
 <body id="body">
+<input type="hidden" id="codigoConcepto" />
 <table border="0" width="100%">
 	<tr>
 		<td colspan="4">&nbsp;</td>
@@ -143,11 +242,11 @@ function cargarConceptos(){
 		<td width="10">:</td>
 		<td width="200"><input type="text" id="descripcionBuscara" class="form-control" maxlength="8" /></td>
 		<td>&nbsp;&nbsp;
-			<button type="button" class="btn btn-primary" onclick="buscarPuesto()">
+			<button type="button" class="btn btn-primary" onclick="buscar()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 			</button>&nbsp;&nbsp;
-			<button type="button" class="btn btn-primary" onclick="nuevoUsuario()">
-				<img src="recursos/images/icons/nuevo_16x16.png" alt="Nuevo" />&nbsp;Nuevo
+			<button class="btn btn-primary" data-toggle="modal" data-target="#concepto_modal" onclick="cargarNuevo()">
+				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
 			</button>
 		</td>
 	</tr>
@@ -189,91 +288,27 @@ function cargarConceptos(){
 						</tr>
 						<tr>
 							<td width="10px">&nbsp;</td>
-							<td><span id="lbldni"><b>DNI</b></span></td>
+							<td><span id="lblnombreConcepto"><b>Nombre Concepto (*)</b></span></td>
 							<td width="5px">&nbsp;</td>
 							<td><b>:</b></td>
 							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="dniBuscar" class="form-control" maxlength="8" /></td>
-							<td valign="top">&nbsp;&nbsp;
-								<button type="button" class="btn btn-primary" onclick="buscarUsuario()">
-									<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
-								</button>
+							<td><input type="text" id="nombreConcepto" class="form-control" maxlength="200" style="text-transform: uppercase;"/></td>
+							<td valign="top">&nbsp;</td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td><span id="lblrubro"><b>Rubro (*)</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td>
+								<select id="rubro" class="form-control">
+									<option value=0 selected="selected">SELECCIONAR</option>
+									<option value='C'>CATEGORÍA EGRESO</option>
+									<option value='E'>TIPO DOCUMENTO</option>
+								</select>
 							</td>
-						</tr>
-						<tr>
-							<td colspan="7"><hr /></td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lblusuario"><b>Usuario</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="userid" class="form-control" maxlength="20" disabled="disabled"/></td>
 							<td valign="top">&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lbldni"><b>DNI</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="dni" class="form-control" maxlength="8" disabled="disabled"/></td>
-							<td valign="top">&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lblapepat"><b>Apellido Paterno</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="apePaterno" class="form-control" maxlength="30" disabled="disabled"/></td>
-							<td valign="top">&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lblapemat"><b>Apellido Materno</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="apeMaterno" class="form-control" maxlength="30" disabled="disabled"/></td>
-							<td valign="top">&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lblnombres"><b>Nombres</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="nombres" class="form-control" maxlength="40" disabled="disabled"/></td>
-							<td valign="top">&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lbltelefono"><b>Telefono</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="telefono" class="form-control" maxlength="9" disabled="disabled"/></td>
-							<td valign="top">&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lbltelefono"><b>Giro Comercial (*)</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="giroComercial" class="form-control" /></td>
-							<td valign="top"><img id="lblgiroComercial-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lbltelefono"><b>Puesto (*)</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="puesto" class="form-control" maxlength="4" /></td>
-							<td valign="top"><img id="lblpuesto-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 						</tr>
 						<tr>
 							<td width="10px">&nbsp;</td>
