@@ -32,13 +32,13 @@ public class ProcesoController {
 		return "servicios/proceso";
 
 	}
-
+	/*
 	@RequestMapping(value = "/listar-socios.json", method = RequestMethod.POST, produces="application/json")
 	public @ResponseBody List<Socio> listarSocios(){
 		
 		return socioBus.listaSocios();
 	}
-	
+	*/
 	/*@RequestMapping(value = "/reporte-conceptos.json", method = RequestMethod.POST, produces="application/json")
 	public @ResponseBody ResponseListBean<Concepto> reporteConceptos(
 			@RequestParam(value = "page", defaultValue = "1") Integer pagina,

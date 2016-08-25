@@ -530,16 +530,18 @@ public class FacturacionDaoImpl implements FacturacionDao {
 					new SqlParameter("vi_dni", 						Types.VARCHAR),
 					new SqlParameter("vi_nombre",					Types.VARCHAR),
 					new SqlParameter("vi_exportar", 				Types.INTEGER),
+					new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
 					
 					new SqlOutParameter("vo_total_registros", 		Types.INTEGER),
 					new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(VistaFacturacion.class)));
 			
 			MapSqlParameterSource parametros = new MapSqlParameterSource();
-			parametros.addValue("vi_pagina", 		pagina);
-			parametros.addValue("vi_registros", 	registros);
-			parametros.addValue("vi_dni", 			dni);
-			parametros.addValue("vi_nombre", 		nombre);
-			parametros.addValue("vi_exportar", 		exportar);
+			parametros.addValue("vi_pagina", 			pagina);
+			parametros.addValue("vi_registros", 		registros);
+			parametros.addValue("vi_dni", 				dni);
+			parametros.addValue("vi_nombre", 			nombre);
+			parametros.addValue("vi_exportar", 			exportar);
+			parametros.addValue("vi_codigo_usuario", 	datosSession.getCodigoUsuario());
 			
 			Map<String,Object> results = jdbcCall.execute(parametros);
 			int totalRegistros = (Integer) results.get("vo_total_registros");
@@ -564,9 +566,13 @@ public class FacturacionDaoImpl implements FacturacionDao {
 			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
 			jdbcCall.withCatalogName("PKG_FACTURACION");
 			jdbcCall.withProcedureName("SP_MONTO_TOTAL_DIARIO").declareParameters(
+				new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
 				new SqlOutParameter("vo_monto_total", 	Types.VARCHAR));
 			
-			Map<String,Object> result = jdbcCall.execute(); 
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_usuario", 	datosSession.getCodigoUsuario());
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
 			
 			importe = (String) result.get("vo_monto_total");
 			

@@ -245,7 +245,8 @@ function buscaraRuc(){
 	
 	jsonObj = [];
 	var parametros = new Object();
-	parametros.codigoEmpresa = $("#codigoEmpresa").val();
+	//parametros.codigoEmpresa = $("#codigoEmpresa").val();
+	parametros.codigoEmpresa = 0;
 	parametros.ruc = $("#ruc").val();
 	parametros.rucNuevo = $("#ruc").val();
 	

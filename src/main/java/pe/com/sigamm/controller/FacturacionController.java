@@ -526,6 +526,7 @@ public class FacturacionController {
 		parameters.put("ReportTitle", Constantes.IREPORT_TITULO_FACTURACION_DIARIO);
 		parameters.put("Author", Constantes.IREPORT_AUTOR);
 		parameters.put("SUBREPORT_DIR", ruta);
+		parameters.put("P_CODIGO_USUARIO", datosSession.getCodigoUsuario());
 		
 		Connection con = null;
 		
