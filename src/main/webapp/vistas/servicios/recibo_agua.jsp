@@ -735,8 +735,10 @@ function editarReciboAguaXSocio(original, puesto){
 		            	$("#reciboAguaCreado").val(val.reciboAguaCreado);            	          	
 		            	$("#codigoServicioDetalle").val(val.codigoServicioDetalle);
 		            	$("#alcantarilladoSocio").val(val.alcantarillado);
-		            	$("#totalSocio").text(val.total + val.deudaAnterior);
-		            	//$("#totalSocio").text(val.total);
+		            	
+		            	$("#totalSocio").text(val.total + val.deudaAnterior); //OJO, Verificar este tema
+		            	//$("#totalSocioGrabar").text(val.total);
+		            	
 		            	$("#correlativo").val(val.correlativo);
 		            	$("#mantenimientoSocio").val(val.servicioMantenimiento);
 		            	$("#deudaAnteriorSocio").val(val.deudaAnterior);
@@ -1163,7 +1165,7 @@ function guardarRecibo(){
 	parametros.alcantarillado = parseFloat($("#alcantarilladoSocio").val());
 	parametros.servicioMantenimiento = parseFloat($("#mantenimientoSocio").val());
 	parametros.reconexion = 0;
-	parametros.total = $("#totalSocio").text();
+	parametros.total = parseFloat($("#totalSocio").text()) - parseFloat($("#deudaAnteriorSocio").val());
 	parametros.correlativo = $("#correlativo").val();
 	parametros.suspendido =  $("#suspendido").val();
 		
@@ -1326,6 +1328,7 @@ function exportarAguaSocio(){
 <input type="hidden" id="correlativo" />
 <input type="hidden" id="reciboAguaCreado" />
 <input type="hidden" id="suspendido" />
+<input type="hidden" id="totalSocioGrabar" />
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td colspan="4">&nbsp;</td>
