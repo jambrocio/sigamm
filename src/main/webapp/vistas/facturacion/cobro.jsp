@@ -598,6 +598,15 @@ function openNewWindowForJasperWithCharts(){
 	
 }
 
+
+function openNewWindowForJasperWithChartsOthers(){
+	
+	var url  = "/sigamm/imprimirFacturaOthers?codigoFacturacion=" + $("#codigoFacturacion").val();
+	var strWindowFeatures = "menubar=no,location=no,width=800,height=500";
+	window.open(url,"_blank", "location=0,height=500,width=800");
+	
+}
+
 </script>
 </head>
 <body id="body">
@@ -686,6 +695,13 @@ function openNewWindowForJasperWithCharts(){
 				<a href="javascript:openNewWindowForJasperWithCharts();">
 					<button type="button" class="btn btn-primary">
 						<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;Imprimir
+					</button>&nbsp;&nbsp;
+				</a>
+				
+				
+				<a href="javascript:openNewWindowForJasperWithChartsOthers();">
+					<button type="button" class="btn btn-primary">
+						<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;Imprimir Others
 					</button>&nbsp;&nbsp;
 				</a>
 				<!-- 

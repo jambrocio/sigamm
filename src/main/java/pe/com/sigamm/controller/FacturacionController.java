@@ -746,6 +746,20 @@ public class FacturacionController {
 		}
  
     }
+
+	
+	@RequestMapping(value = "/imprimirFacturaOthers", method = RequestMethod.POST, produces="application/json")
+    public @ResponseBody String imprimirFacturaOthersPdf(HttpServletRequest request, HttpServletResponse response, 
+    		@RequestParam(value = "codigoFacturacion", defaultValue = "0") int codigoFacturacion) throws IOException {
+
+		String resultado = "";
+		int codigo = Integer.parseInt(request.getParameter("codigoFacturacion"));
+		
+		resultado = "{\"codigoRetorno\":\"" + "00" + "\",\"camposObligatorios\":" + codigo + ",\"mensaje\":\"" + "Error" + "\"}";
+
+		return resultado;
+	}
+	
 	
 	@RequestMapping(value = "/reporte-servicios.json", method = RequestMethod.POST, produces="application/json")
 	public @ResponseBody ResponseListBean<ServiciosDetalle> reporteServicios(
