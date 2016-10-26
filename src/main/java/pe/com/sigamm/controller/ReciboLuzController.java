@@ -453,7 +453,7 @@ public class ReciboLuzController {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("ReportTitle", "Reporte de Recibos de Luz de los Asociados");
 		parameters.put("Author", "SIGAMM");
-		parameters.put("FECHA0", "PERIODO ANTERIOR");
+		parameters.put("FECHA", "PERIODO ANTERIOR");
 		
 		Connection con = null;
 		
