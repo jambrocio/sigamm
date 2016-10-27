@@ -5,6 +5,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js" type="text/javascript"></script>
+
 <style type="text/css">
 	.texto {
 		background-color:rgb(189,252,152);
@@ -62,6 +65,30 @@
 </style>
 
 <script>
+$( document ).ready(function() {
+	$('#register').submit(function(e) {
+		e.preventDefault();
+	}).validate({
+		debug: false,
+		rules: {
+			"fecVencimiento": { required: true },
+			/*"surname": { required: true },
+			"surname2": { required: true },
+			"email": { required: true, email: true },
+			"cpostal": { required: true, number:true, minlength: 5, maxlength: 5 }*/
+		},
+		messages: {
+			"fecVencimiento": { required: "Ingrese la fecha de vencimiento del recibo de luz.", maxlength: "Debe cumplir el formato [dd/mm/yyyy].", minlength: "Debe cumplir el formato [dd/mm/yyyy]." }
+			/*"surname": { required: "Apellido obligatorio." },
+			"surname2": { required: "Apellido obligatorio." },
+			"email": { required: "Introduce tu correo.", email: "" },
+			"cpostal": { required: "Introduce tu código postal.", number: "Introduce un código postal válido.", maxlength: "Debe contener 5 dígitos.", minlength: "Debe contener 5 dígitos." }*/
+		}
+	});
+});
+
+
+
 var intentos = 0;
 $(document).ready(function(){	
 	cargarReciboLuzOriginal();
@@ -138,7 +165,9 @@ $(function($){
         yearSuffix: ''
     };
     $.datepicker.setDefaults($.datepicker.regional['es']);
+    
 });
+
 
 
 $(function() {
@@ -209,6 +238,32 @@ $(function() {
                     'Sep', 'Oct', 'Nov', 'Dic'] 
             }); 
 	
+        
+	$("#periodo1").datepicker({
+        //dateFormat: 'mm-yy',
+        dateFormat: 'MM yy',
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+		regional: 'es',
+        onClose: function(dateText, inst) {  
+            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
+            $(this).val($.datepicker.formatDate('MM yy', new Date(year, month, 1)));
+        }
+    });  
+	
+	
+	$("#periodo1").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });    
+    });
+    	
+
 });
 /*$(document).ready(function() {
 
@@ -249,6 +304,22 @@ function nuevoRecibos(){
 }
 
 function guardar(){
+	
+	if ($("#fecVencimiento").val() == "") {
+		alert("Debe ingresar la fecha de vencimiento... [dd/mm/yyyy]");
+		$("#fecVencimiento").focus();
+		return false;
+	}
+	if ($("#fecEmision").val() == "") {
+		alert("Debe ingresar la fecha de emisión... [dd/mm/yyyy]");
+		$("#fecEmision").focus();
+		return false;
+	}
+	if ($("#fecCorte").val() == "") {
+		alert("Debe ingresar la fecha de corte... [dd/mm/yyyy]");
+		$("#fecCorte").focus();
+		return false;
+	}.
 	jsonObj = [];
 	var ruta = obtenerContexto();
 	var parametros = new Object();
@@ -1464,8 +1535,22 @@ function botonEnter()
 	return true;
 }
 
+function medidas(){
+	var ruta = obtenerContexto();
+	
+	$('#alerta_modal_reporte_luz').modal({
+		backdrop: 'static',
+		keyboard: false
+	}).one('click', '#aceptar', function() {
+		openNewWindowForJasperWithCharts();
+	});	
+}
+
+
+
 function openNewWindowForJasperWithCharts(){
-	var url  = "/sigamm/recibosLuzUltimo";
+	var periodo1 = $("#periodo1").val();
+	var url  = "/sigamm/recibosLuzUltimo?periodo1=" + periodo1;
 	var strWindowFeatures = "menubar=no,location=no,width=800,height=500";
 	window.open(url,"_blank", "location=0,height=500,width=800");
 }
@@ -1494,7 +1579,7 @@ function openNewWindowForJasperWithCharts(){
 			<button class="btn btn-primary" data-toggle="modal" data-target="#luz_original_modal" onclick="nuevoRecibos()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
 			</button>
-			<button class="btn btn-primary"onclick="openNewWindowForJasperWithCharts()">
+			<button class="btn btn-primary"onclick="medidas()">
 				<img src="recursos/images/icons/print_16x16.png" alt="Nuevo" />&nbsp;Ultimo Reporte con Medidas
 			</button>
 		</td>
@@ -1885,5 +1970,45 @@ function openNewWindowForJasperWithCharts(){
 		  
 	</div>
 </div>
+
+
+<div class="modal fade" id="alerta_modal_reporte_luz" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width: 800px">
+		<div class="modal-content">
+		
+		<div class="modal-header modal-header-primary">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title">Recibo de Luz Original -  Por Medidas</h4>
+		</div>
+		
+		<div class="modal-body">
+			<table border="0" cellpadding="0" cellspacing="0" width="700px">
+				<tr>
+					<td rowspan="2">
+						<img src="recursos/images/reciboLuz.png" border="0" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+				    	<div class="input-group-addon"><img src="recursos/images/icons/calendar_16x16.png" border="0" /></div>
+				    	<input class="form-control" type="text" id="periodo1" placeholder="Ingrese el periodo del recibo">
+					</td>
+				</tr>
+			</table>
+
+		</div>
+		
+		<div class="modal-footer">
+			<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="openNewWindowForJasperWithCharts()">Aceptar</button>
+			<button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+		</div>
+		
+		</div>
+	</div>
+</div>
+
+
+
+
 </body>
 </html>

@@ -441,6 +441,7 @@ public class ReciboLuzController {
     public void reporterecibosLuzUltimoPdf(
     		HttpServletRequest request, HttpServletResponse response) throws IOException {
         
+		String periodoReciboLuz = request.getParameter("periodo1");
         String ruta = System.getProperty("ruta_ireport") != null ? System.getProperty("ruta_ireport") : ""; 
 		
 		String rutaJRXML = ruta + "Reporte_Recibos_Luz_Medicion.jrxml";
@@ -453,7 +454,8 @@ public class ReciboLuzController {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("ReportTitle", "Reporte de Recibos de Luz de los Asociados");
 		parameters.put("Author", "SIGAMM");
-		parameters.put("FECHA", "PERIODO ANTERIOR");
+		parameters.put("FECHA", periodoReciboLuz);
+		parameters.put("PeriodoReciboLuz", periodoReciboLuz);
 		
 		Connection con = null;
 		
