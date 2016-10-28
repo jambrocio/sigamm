@@ -29,6 +29,7 @@ public class Puesto {
 	int suspendido;
 	String lecturaInicial;
 	String lecturaFinal;
+	int idRecibo;
 	
 	public int getCodigoSocio() {
 		return codigoSocio;
@@ -198,5 +199,11 @@ public class Puesto {
 	public void setLecturaFinal(String lecturaFinal) {
 		this.lecturaFinal = lecturaFinal;
 	}
-
+	public int getIdRecibo() {
+		return idRecibo;
+	}
+	public void setIdRecibo(int idRecibo) {
+		this.idRecibo = idRecibo;
+	}
+	
 }

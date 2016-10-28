@@ -490,4 +490,24 @@ public class ReciboLuzController {
 		}
  
     }
+	
+	
+	@RequestMapping(value = "/eliminar-recibo-luz-socio.json", method = RequestMethod.POST, produces = "application/json")
+	public @ResponseBody
+	String eliminarReciboLuzSocio(ReciboLuzSocio reciboLuzSocio) {
+
+		Gson gson = new Gson();
+
+		/*Retorno retorno = reciboLuzOriginalBus.eliminarReciboLuz(reciboLuzSocio);
+		int codigo = retorno.getCodigo();
+		String mensaje = retorno.getMensaje();
+
+		String resultado = "{\"idUsuario\":" + codigo + ",\"mensaje\":\""
+				+ mensaje + "\"}";
+
+		return resultado;*/
+		return null;
+	}
+
+	
 }

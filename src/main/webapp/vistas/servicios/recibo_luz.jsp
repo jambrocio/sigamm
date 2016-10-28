@@ -5,8 +5,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" type="text/javascript"></script>
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.min.js" type="text/javascript"></script>
 
 <style type="text/css">
 	.texto {
@@ -65,30 +63,6 @@
 </style>
 
 <script>
-$( document ).ready(function() {
-	$('#register').submit(function(e) {
-		e.preventDefault();
-	}).validate({
-		debug: false,
-		rules: {
-			"fecVencimiento": { required: true },
-			/*"surname": { required: true },
-			"surname2": { required: true },
-			"email": { required: true, email: true },
-			"cpostal": { required: true, number:true, minlength: 5, maxlength: 5 }*/
-		},
-		messages: {
-			"fecVencimiento": { required: "Ingrese la fecha de vencimiento del recibo de luz.", maxlength: "Debe cumplir el formato [dd/mm/yyyy].", minlength: "Debe cumplir el formato [dd/mm/yyyy]." }
-			/*"surname": { required: "Apellido obligatorio." },
-			"surname2": { required: "Apellido obligatorio." },
-			"email": { required: "Introduce tu correo.", email: "" },
-			"cpostal": { required: "Introduce tu código postal.", number: "Introduce un código postal válido.", maxlength: "Debe contener 5 dígitos.", minlength: "Debe contener 5 dígitos." }*/
-		}
-	});
-});
-
-
-
 var intentos = 0;
 $(document).ready(function(){	
 	cargarReciboLuzOriginal();
@@ -319,7 +293,8 @@ function guardar(){
 		alert("Debe ingresar la fecha de corte... [dd/mm/yyyy]");
 		$("#fecCorte").focus();
 		return false;
-	}.
+	}
+	
 	jsonObj = [];
 	var ruta = obtenerContexto();
 	var parametros = new Object();
@@ -831,6 +806,7 @@ function cargarDatosReciboLuzSocio(sector, puesto, original){
         	
         	if (estadoAbierto == 0) {
 	        	$.each(result.rows, function(key,val) {
+	        		$("#idRecibo").val(val.idRecibo + 1);
 	            	$("#nombreSocio").text(val.nombreFull);
 	            	$("#puestoSocio").text(val.nroPuesto);
 	            	$("#sectorSocio").text(val.nombreSector);
@@ -1088,6 +1064,55 @@ function pagarReciboLuzXSocio(original, puesto, codigoSocio){
 
 }
 
+
+function eliminarReciboLuzXSocio(codigoReciboOriginal, nroPuesto, codigoSocio){
+	alert("Recibo a Eliminar " + codigoReciboOriginal + " - " + nroPuesto + " - " + codigoSocio);
+	
+	var ruta = obtenerContexto();
+	mensaje = "Desea eliminar el recibo de luz x socio del puesto " + nroPuesto + "... ?"; 
+	
+	$("#mensajeEliminar").html(mensaje);
+	
+	$('#alerta_modal_eliminar').modal({
+		backdrop: 'static',
+		keyboard: false
+	}).one('click', '#aceptar', function() {
+        
+		jsonObj = [];
+		var parametros = new Object();
+		parametros.codigoReciboLuzOriginal = codigoReciboLuzOriginal;
+		
+		$.ajax({
+			type: "POST",
+		    async:false,
+		    url: "eliminar-recibo-luz.json",
+		    cache : false,
+		    data: parametros,
+		    success: function(result){
+		            
+		        $('#alerta_modal_eliminar').modal('hide');
+	            	
+	            $.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Mensaje',
+					// (string | mandatory) the text inside the notification
+					text: result.mensaje,
+					// (string | optional) the image to display on the left
+					image: "/" + ruta + "/recursos/images/confirm.png",
+					// (bool | optional) if you want it to fade out on its own or just sit there
+					sticky: false,
+					// (int | optional) the time you want it to be alive for before fading out
+					time: ''
+				});
+	            
+	            cargarReciboLuzOriginal();
+		            
+			}
+		});
+		
+    });
+	
+}
 
 
 function cerrarReciboLuz(codigo){
@@ -1564,6 +1589,7 @@ function openNewWindowForJasperWithCharts(){
 <input type="hidden" id="codigoReciboLuzSocio" />
 <input type="hidden" id="reciboLuzCreado" />
 <input type="hidden" id="suspendido" />
+
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td colspan="4">&nbsp;</td>
