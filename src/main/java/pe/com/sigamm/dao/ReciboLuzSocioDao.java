@@ -14,4 +14,6 @@ public interface ReciboLuzSocioDao {
 	
 	public Retorno pagarReciboLuzxSocio(ReciboLuzSocio reciboLuzSocio);
 	
+	public Retorno eliminarReciboLuzxSocio(ReciboLuzSocio reciboLuzSocio);
+	
 }

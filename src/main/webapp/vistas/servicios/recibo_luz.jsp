@@ -1066,7 +1066,7 @@ function pagarReciboLuzXSocio(original, puesto, codigoSocio){
 
 
 function eliminarReciboLuzXSocio(codigoReciboOriginal, nroPuesto, codigoSocio){
-	alert("Recibo a Eliminar " + codigoReciboOriginal + " - " + nroPuesto + " - " + codigoSocio);
+	//alert("Recibo a Eliminar " + codigoReciboOriginal + " - " + nroPuesto + " - " + codigoSocio);
 	
 	var ruta = obtenerContexto();
 	mensaje = "Desea eliminar el recibo de luz x socio del puesto " + nroPuesto + "... ?"; 
@@ -1077,15 +1077,17 @@ function eliminarReciboLuzXSocio(codigoReciboOriginal, nroPuesto, codigoSocio){
 		backdrop: 'static',
 		keyboard: false
 	}).one('click', '#aceptar', function() {
-        
+        //alert("Eliminando recibo Luz x Socio");
 		jsonObj = [];
 		var parametros = new Object();
-		parametros.codigoReciboLuzOriginal = codigoReciboLuzOriginal;
+		parametros.codigoRecibo = codigoReciboOriginal;
+		parametros.codigoSocio = codigoSocio;
+		parametros.puestoSocio = nroPuesto;
 		
 		$.ajax({
 			type: "POST",
 		    async:false,
-		    url: "eliminar-recibo-luz.json",
+		    url: "eliminar-recibo-luz-socio.json",
 		    cache : false,
 		    data: parametros,
 		    success: function(result){
@@ -1105,7 +1107,7 @@ function eliminarReciboLuzXSocio(codigoReciboOriginal, nroPuesto, codigoSocio){
 					time: ''
 				});
 	            
-	            cargarReciboLuzOriginal();
+	            cargarReciboLuz(codigoReciboOriginal);
 		            
 			}
 		});

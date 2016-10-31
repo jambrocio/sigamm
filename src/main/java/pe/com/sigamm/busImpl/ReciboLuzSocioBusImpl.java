@@ -383,4 +383,10 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 		
 	}
 
+	@Override
+	public Retorno eliminarReciboLuzSocio(ReciboLuzSocio reciboLuzSocio) {
+
+		return reciboLuzSocioDao.eliminarReciboLuzxSocio(reciboLuzSocio);
+	}
+
 }

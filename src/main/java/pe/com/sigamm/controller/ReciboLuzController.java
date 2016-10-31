@@ -498,15 +498,13 @@ public class ReciboLuzController {
 
 		Gson gson = new Gson();
 
-		/*Retorno retorno = reciboLuzOriginalBus.eliminarReciboLuz(reciboLuzSocio);
+		Retorno retorno = reciboLuzSocioBus.eliminarReciboLuzSocio(reciboLuzSocio);
 		int codigo = retorno.getCodigo();
 		String mensaje = retorno.getMensaje();
 
-		String resultado = "{\"idUsuario\":" + codigo + ",\"mensaje\":\""
-				+ mensaje + "\"}";
+		String resultado = "{\"idUsuario\":" + codigo + ",\"mensaje\":\"" + mensaje + "\"}";
 
-		return resultado;*/
-		return null;
+		return resultado;
 	}
 
 	

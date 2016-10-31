@@ -240,4 +240,47 @@ public class ReciboSocioLuzDaoImpl implements ReciboLuzSocioDao {
 
 	}
 
+	@Override
+	public Retorno eliminarReciboLuzxSocio(ReciboLuzSocio reciboLuzSocio) {
+
+		Retorno retorno = new Retorno();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_RECIBO_LUZ_SOCIO");
+			jdbcCall.withProcedureName("SP_ELIMINAR_LUZ_X_SOCIO").declareParameters(
+				new SqlParameter("vi_codigo_socio", 			Types.INTEGER),
+				new SqlParameter("vi_codigo_recibo", 			Types.INTEGER),
+				new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
+				
+				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
+				new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
+				
+            
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_socio", 				reciboLuzSocio.getCodigoSocio());
+			parametros.addValue("vi_codigo_recibo", 			reciboLuzSocio.getCodigoRecibo());
+			parametros.addValue("vi_codigo_usuario", 			datosSession.getCodigoUsuario());
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
+
+		
+	}
+
 }
