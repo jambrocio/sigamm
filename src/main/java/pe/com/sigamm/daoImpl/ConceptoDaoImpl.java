@@ -85,8 +85,8 @@ public class ConceptoDaoImpl implements ConceptoDao {
             
 			MapSqlParameterSource parametros = new MapSqlParameterSource();
 			parametros.addValue("vi_codigo_concepto", 			concepto.getCodigoConcepto());
-			parametros.addValue("vi_nombre_concepto", 			concepto.getNombreConcepto());
-			parametros.addValue("vi_rubro", 					concepto.getRubro());
+			parametros.addValue("vi_nombre_concepto", 			concepto.getNombreConcepto().toUpperCase());
+			parametros.addValue("vi_rubro", 					concepto.getRubro().toUpperCase());
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
 			

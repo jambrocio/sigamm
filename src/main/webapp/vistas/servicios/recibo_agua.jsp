@@ -1006,6 +1006,7 @@ function cargarDatosReciboAguaSocio(sector, puesto, codigoRecibo){
         	//alert("Resultado : [" + result.rows + "]");
         	limpiarReciboAguaSocio();
         	$.each(result.rows, function(key,val) {
+        		$("#idRecibo").val(val.idRecibo + 1);
             	$("#nombreSocio").text(val.nombreFull);
             	$("#puestoSocio").text(val.nroPuesto);
             	$("#sectorSocio").text(val.nombreSector);

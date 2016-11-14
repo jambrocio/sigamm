@@ -1046,7 +1046,7 @@ function pagarReciboLuzXSocio(original, puesto, codigoSocio){
 						// (string | mandatory) the heading of the notification
 						title: 'Mensaje',
 						// (string | mandatory) the text inside the notification
-						text: 'El Recibo de Agua del puesto ' + puesto + ' se ha PAGADO satisfactoriamente, verifique...',
+						text: 'El Recibo de LUZ del puesto ' + puesto + ' se ha PAGADO satisfactoriamente, verifique...',
 						// (string | optional) the image to display on the left
 						image: "/" + ruta + "/recursos/images/confirm.png",
 						// (bool | optional) if you want it to fade out on its own or just sit there

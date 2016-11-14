@@ -29,7 +29,7 @@
 </style>
 <script>
 $(document).ready(function(){	
-	
+	$('#codigoConcepto').val(0);	
 	cargarConceptos();
 	
 });
