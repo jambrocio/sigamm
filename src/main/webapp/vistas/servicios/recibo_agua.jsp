@@ -317,7 +317,7 @@ function cargarReciboAgua(){
 		width: 'auto',
 		postData: parametros,
 		//colNames : ['Codigo Recibo', 'Periodo', 'Lectura Inicial', 'Lectura Final','Monto','Opciones'],
-		colNames : ['Periodo', 'Lectura Inicial', 'Lectura Final','Monto','Opciones'],
+		colNames : ['Periodo', 'Lectura Inicial', 'Lectura Final', 'Monto','Opciones'],
 		colModel : [/*{
 			name : 'codigoRecibo',
 			index: 'codigoRecibo',
@@ -617,12 +617,12 @@ function cargarReciboAguaSocio1(codigoRecibo){
 		height: 'auto',
 		width: 'auto',
 		postData: valores,
-		colNames : ['Nombre Usuario', 'Puesto', 'Giro','Total', 'Opciones'],
+		colNames : ['Nombre Usuario', 'Puesto', 'Giro','Deuda Anterior', 'Total', 'Opciones'],
 		colModel : [{
 			name : 'nombreFull',
 			index: 'nombreFull',
 			sortable:false,
-			width: 320,
+			width: 290,
 			align: 'left'
 		},{
 			name : 'nroPuesto',
@@ -634,18 +634,24 @@ function cargarReciboAguaSocio1(codigoRecibo){
 			name : 'nombreGiro',
 			index: 'nombreGiro',
 			sortable:false,
-			width: 150,
+			width: 130,
+			align: 'center'
+		},{
+			name : 'deudaAnterior',
+			index: 'deudaAnterior',
+			sortable:false,
+			width: 70,
 			align: 'center'
 		},{
 			name : 'total',
 			index: 'total',
 			sortable:false,
-			width: 80,
+			width: 70,
 			align: 'center'
 		},{					
 			name:'opciones',
 			index:'opciones',
-			width:150,
+			width:140,
 			sortable:false,
 			search: false,
 			formatter:formatterBotones
@@ -664,21 +670,25 @@ function cargarReciboAguaSocio1(codigoRecibo){
 				$("#grillaReciboAgua").setCell(rowId, 'nombreFull', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });				
 				$("#grillaReciboAgua").setCell(rowId, 'nroPuesto', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'nombreGiro', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'deudaAnterior', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'total', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
 			} else if ( (item.reciboAguaCreado == 1) && (item.corteAgua == 1) ) {
 				$("#grillaReciboAgua").setCell(rowId, 'nombreFull', '', { 'background-color':'##FF8000','color':'white','font-weight':'bold' });				
 				$("#grillaReciboAgua").setCell(rowId, 'nroPuesto', '', { 'background-color':'#FF8000','color':'white','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'nombreGiro', '', { 'background-color':'#FF8000','color':'white','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'deudaAnterior', '', { 'background-color':'#FF8000','color':'white','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'total', '', { 'background-color':'#FF8000','color':'white','font-weight':'bold' });				
 			} else if ( (item.reciboAguaCreado == 1) && (item.suspendido == 1) ) {
 				$("#grillaReciboAgua").setCell(rowId, 'nombreFull', '', { 'background-color':'#FFBF00','color':'black','font-weight':'bold' });				
 				$("#grillaReciboAgua").setCell(rowId, 'nroPuesto', '', { 'background-color':'#FFBF00','color':'black','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'nombreGiro', '', { 'background-color':'#FFBF00','color':'black','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'deudaAnterior', '', { 'background-color':'#FFBF00','color':'black','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'total', '', { 'background-color':'#FFBF00','color':'black','font-weight':'bold' });		
 			} else {
 				$("#grillaReciboAgua").setCell(rowId, 'nombreFull', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'nroPuesto', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'nombreGiro', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
+				$("#grillaReciboAgua").setCell(rowId, 'deudaAnterior', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
 				$("#grillaReciboAgua").setCell(rowId, 'total', '', { 'background-color':'#A9F5A9','color':'black','font-weight':'bold' });
 			}
 
