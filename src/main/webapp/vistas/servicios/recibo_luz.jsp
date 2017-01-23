@@ -1308,7 +1308,7 @@ function guardarRecibo(){
 	
 	var ruta = obtenerContexto();
 	
-	alert("PERIODO: " + $("#periodoSocio").val() );
+	alert("PERIODO: " + $("#periodoSocio").text() );
 	
 	var parametros = new Object();
 	parametros.codigoSocio = $("#codigoSocio").val();
@@ -1335,7 +1335,7 @@ function guardarRecibo(){
 	parametros.suspendido =  $("#suspendido").val();
 	parametros.cableadoPrincipal =  $("#cableadoPrincipalSocio").val();
 	parametros.igvCargo =  $("#igvSocio").val();
-	parametros.fecPeriodo = $("periodoSocio").text();
+	parametros.fecPeriodo = $("#periodoSocio").text();
 		
 	$.ajax({
 		type: "POST",
