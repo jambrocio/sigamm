@@ -64,6 +64,7 @@ public class ReciboSocioLuzDaoImpl implements ReciboLuzSocioDao {
 					new SqlParameter("vi_suspendido", 			Types.NUMERIC),
 					new SqlParameter("vi_cableado_principal", 	Types.NUMERIC),
 					new SqlParameter("vi_igv_cargo", 			Types.NUMERIC),
+					new SqlParameter("vi_fec_periodo", 			Types.VARCHAR),
 					
 					new SqlOutParameter("vo_codigo_socio",  		Types.INTEGER),
 					new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
@@ -95,6 +96,7 @@ public class ReciboSocioLuzDaoImpl implements ReciboLuzSocioDao {
 			parametros.addValue("vi_suspendido", 		reciboLuzSocio.getSuspendido());
 			parametros.addValue("vi_cableado_principal",reciboLuzSocio.getCableadoPrincipal());
 			parametros.addValue("vi_igv_cargo", 		reciboLuzSocio.getIgvCargo());
+			parametros.addValue("vi_fec_periodo", 		reciboLuzSocio.getFecPeriodo());
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
 			

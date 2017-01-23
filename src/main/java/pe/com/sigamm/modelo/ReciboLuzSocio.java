@@ -35,6 +35,7 @@ public class ReciboLuzSocio {
 	String nombreGiro;
 	String nombreSector;
 	String fecPeriodo;
+	String periodoSocio;
 	double costoWatts;
 	int estadoAbierto;
 	String fechaVencimiento;
@@ -278,4 +279,11 @@ public class ReciboLuzSocio {
 	public void setSuspendido(int suspendido) {
 		this.suspendido = suspendido;
 	}
+	public String getPeriodoSocio() {
+		return periodoSocio;
+	}
+	public void setPeriodoSocio(String periodoSocio) {
+		this.periodoSocio = periodoSocio;
+	}
+
 }

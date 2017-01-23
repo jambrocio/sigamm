@@ -1308,7 +1308,7 @@ function guardarRecibo(){
 	
 	var ruta = obtenerContexto();
 	
-	//alert("CORRELATIVO: " + $("#codigoReciboLuzSocio").val() );
+	alert("PERIODO: " + $("#periodoSocio").val() );
 	
 	var parametros = new Object();
 	parametros.codigoSocio = $("#codigoSocio").val();
@@ -1335,6 +1335,7 @@ function guardarRecibo(){
 	parametros.suspendido =  $("#suspendido").val();
 	parametros.cableadoPrincipal =  $("#cableadoPrincipalSocio").val();
 	parametros.igvCargo =  $("#igvSocio").val();
+	parametros.fecPeriodo = $("periodoSocio").text();
 		
 	$.ajax({
 		type: "POST",
