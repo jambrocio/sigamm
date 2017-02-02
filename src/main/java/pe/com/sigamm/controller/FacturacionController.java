@@ -1,6 +1,8 @@
 package pe.com.sigamm.controller;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -12,6 +14,17 @@ import java.util.Map;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.print.Doc;
+import javax.print.DocFlavor;
+import javax.print.DocPrintJob;
+import javax.print.PrintException;
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+import javax.print.SimpleDoc;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.Copies;
+import javax.print.attribute.standard.Sides;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
@@ -748,12 +761,37 @@ public class FacturacionController {
     }
 
 	
-	@RequestMapping(value = "/imprimirFacturaOthers", method = RequestMethod.POST, produces="application/json")
+	@RequestMapping(value = "/imprimirFacturaOthers", method = RequestMethod.GET, produces="application/json")
     public @ResponseBody String imprimirFacturaOthersPdf(HttpServletRequest request, HttpServletResponse response, 
     		@RequestParam(value = "codigoFacturacion", defaultValue = "0") int codigoFacturacion) throws IOException {
 
 		String resultado = "";
 		int codigo = Integer.parseInt(request.getParameter("codigoFacturacion"));
+		
+		
+	      DocFlavor docflavor = new DocFlavor.INPUT_STREAM("application/octet-stream");
+	      PrintService printService = PrintServiceLookup.lookupDefaultPrintService();
+	      DocFlavor[] docF = printService.getSupportedDocFlavors();
+	      for (int i = 0; i < docF.length; i++) {
+	          System.out.println(docF[i]);
+	      }
+	      InputStream fis = new FileInputStream("C:\\tools\\3.pdf");
+	      Doc pdfDoc = new SimpleDoc(fis, DocFlavor.INPUT_STREAM.AUTOSENSE, null);
+
+	      DocPrintJob printJob = printService.createPrintJob();
+	      PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
+
+	      aset.add(new Copies(1));
+	      aset.add(Sides.ONE_SIDED);
+	      try {
+			printJob.print(pdfDoc, aset);
+		} catch (PrintException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	      fis.close();
+		
 		
 		resultado = "{\"codigoRetorno\":\"" + "00" + "\",\"camposObligatorios\":" + codigo + ",\"mensaje\":\"" + "Error" + "\"}";
 
