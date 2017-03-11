@@ -80,6 +80,39 @@ $(document).ready(function(){
 	
 	$('[data-toggle="popover"]').popover({ placement : 'right', trigger: "hover" });
 	$("#btnVisualizacion").hide();
+	
+	$.datepicker.regional['es'] = {
+	        closeText: 'Cerrar',
+	        prevText: '<Ant',
+	        nextText: 'Sig>',
+	        currentText: 'Hoy',
+	        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+	        monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+	        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+	        dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+	        dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+	        weekHeader: 'Sm',
+	        dateFormat: 'dd/mm/yy',
+	        firstDay: 1,
+	        isRTL: false,
+	        showMonthAfterYear: false,
+	        yearSuffix: ''
+	};
+	
+	$.datepicker.setDefaults($.datepicker.regional['es']);
+	
+	$("#fechaFacturacion").datepicker({   
+		changeMonth: true,
+		changeYear: false,
+		numberOfMonths: 1,
+		dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+		monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo',
+			'Junio', 'Julio', 'Agosto', 'Septiembre',
+		    'Octubre', 'Noviembre', 'Diciembre'],
+		monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr',
+			'May', 'Jun', 'Jul', 'Ago',
+		    'Sep', 'Oct', 'Nov', 'Dic'] 
+	});  
 		
 });
 
@@ -87,9 +120,11 @@ function colorEtiquetas(){
 	
 	$("#lblservicio").css("color", "black");
 	$("#lblcomprobante").css("color", "black");
+	$("#lblfechafacturacion").css("color", "black");
 	
 	$("#lblservicio-img").hide();
 	$("#lblcomprobante-img").hide();
+	$("#lblfechafacturacion-img").hide();
 	
 }
 
@@ -134,7 +169,7 @@ function guardar(){
 	//parametros.serie = "0001";
 	//parametros.secuencia = "00002";
 	parametros.codigoSocio = $("#codigoSocio").val();
-	
+	parametros.fechaCreacion = $("#fechaFacturacion").val();
 	parametros.serie = $("#comprobante").val();
 	parametros.secuencia = $("#comprobante").val();
 	
@@ -343,6 +378,7 @@ function buscarPuesto(){
         	$("#printGiro").html(result.nombreGiro);
         	$("#printSector").html(pad(result.nombreSector, 2));
         	$("#printFecha").html(fecha);
+        	//$("#printFecha").html($("#fechaFacturacion").val());
         	
         	cargarServicios();
         	
@@ -827,12 +863,22 @@ function openNewWindowForJasperWithChartsOthers(){
 	</tr>
 	<tr>
 		<td width="10px">&nbsp;</td>
-		<td><span id="lbltelefono"><b>N° Comprobante</b></span></td>
+		<td><span id="lblcomprobante"><b>N° Comprobante</b></span></td>
 		<td width="5px">&nbsp;</td>
 		<td><b>:</b></td>
 		<td width="5px">&nbsp;</td>
 		<td><input type="text" id="comprobante" class="form-control" maxlength="11" /></td>
 		<td valign="top"><img id="lblcomprobante-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+		<td colspan="2">&nbsp;</td>
+	</tr>
+	<tr>
+		<td width="10px">&nbsp;</td>
+		<td><span id="lblfechafacturacion"><b>Fecha Facturación</b></span></td>
+		<td width="5px">&nbsp;</td>
+		<td><b>:</b></td>
+		<td width="5px">&nbsp;</td>
+		<td><input type="text" id="fechaFacturacion" class="form-control" maxlength="10" /></td>
+		<td valign="top"><img id="lblfechafacturacion-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 		<td colspan="2">&nbsp;</td>
 	</tr>
 	<tr>

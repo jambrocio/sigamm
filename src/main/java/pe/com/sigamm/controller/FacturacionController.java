@@ -140,9 +140,10 @@ public class FacturacionController {
 			serie = comprobante[0] != null ? comprobante[0] : "";
 			secuencia = comprobante[1] != null ? comprobante[1] : "";
 		}
-		
+		String fechaFacturacion = facturacion.getFechaCreacion() != null ? facturacion.getFechaCreacion() : ""; 
 		int lserie = serie.trim().length();
 		int lsecuencia = secuencia.trim().length();
+		int lfechafacturacion = fechaFacturacion.trim().length(); 
 		
 		if(lserie == 0){
 			camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_COMPROBANTE, Constantes.COMPROBANTE_OBLIGATORIO));
@@ -164,6 +165,10 @@ public class FacturacionController {
 		
 		if(lista.size() == 0){
 			camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_COMPROBANTE, Constantes.SIN_CONCEPTOS_OBLIGATORIO));
+		}
+		
+		if(lfechafacturacion == 0){
+			camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_FECHA_FACTURACION, Constantes.FECHA_FACTURACION_OBLIGATORIO));
 		}
 		
 		String listaObligatorios = gson.toJson(camposObligatorios);

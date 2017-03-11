@@ -64,6 +64,7 @@ public class FacturacionDaoImpl implements FacturacionDao {
 				new SqlParameter("vi_secuencia", 				Types.VARCHAR),
 				new SqlParameter("vi_codigo_usuario_registro", 	Types.INTEGER),
 				new SqlParameter("vi_codigo_socio",				Types.INTEGER),
+				new SqlParameter("vi_fecha_facturacion",		Types.VARCHAR),
 				
 				new SqlOutParameter("vo_facturacion_cabecera", 	Types.INTEGER),
 				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
@@ -76,6 +77,7 @@ public class FacturacionDaoImpl implements FacturacionDao {
 			parametros.addValue("vi_secuencia", 				secuencia);
 			parametros.addValue("vi_codigo_usuario_registro", 	datosSession.getCodigoUsuario());
 			parametros.addValue("vi_codigo_socio",				facturacion.getCodigoSocio());
+			parametros.addValue("vi_fecha_facturacion",			facturacion.getFechaCreacion());
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
 			
