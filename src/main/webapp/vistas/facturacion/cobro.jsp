@@ -145,6 +145,7 @@ function nuevoCobro(){
 	$("#nombres").val("");
 	$("#telefono").val("");
 	$("#comprobante").val("");
+	$("#fechaFacturacion").val("");
 	
 	limpiarTablaDeudas();
 	limpiarTablaResultado();
