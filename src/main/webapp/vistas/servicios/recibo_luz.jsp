@@ -1308,7 +1308,7 @@ function guardarRecibo(){
 	
 	var ruta = obtenerContexto();
 	
-	alert("PERIODO: " + $("#periodoSocio").text() );
+	//alert("PERIODO: " + $("#periodoSocio").text() );
 	
 	var parametros = new Object();
 	parametros.codigoSocio = $("#codigoSocio").val();
