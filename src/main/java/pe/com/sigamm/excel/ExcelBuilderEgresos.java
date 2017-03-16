@@ -18,7 +18,6 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.springframework.web.servlet.view.document.AbstractExcelView;
 
 import pe.com.sigamm.modelo.Egreso;
-import pe.com.sigamm.modelo.Socio;
 
 public class ExcelBuilderEgresos extends AbstractExcelView{
 	
@@ -106,7 +105,7 @@ public class ExcelBuilderEgresos extends AbstractExcelView{
         header.createCell(5).setCellValue("Ruc");
         header.getCell(5).setCellStyle(csCabecera);
         
-        header.createCell(6).setCellValue("Razón Social");
+        header.createCell(6).setCellValue("Razon Social");
         header.getCell(6).setCellStyle(csCabecera);
 
         header.createCell(7).setCellValue("Detalle");

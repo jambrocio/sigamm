@@ -132,7 +132,7 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				PdfPTable table2 = new PdfPTable(2);
 				table2.setWidthPercentage(100);
 				table2.setWidths(new int[] {60,120});
-				Paragraph p4 = new Paragraph("N° DE PUESTO", fuente);
+				Paragraph p4 = new Paragraph("NRO DE PUESTO", fuente);
 				PdfPCell celda4 = new PdfPCell(p4);
 				table2.addCell(celda4);
 				Paragraph p5 = new Paragraph(reporte.getListaReciboLuzSocio().get(aw).getPuestoSocio() + "", fuente);

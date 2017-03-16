@@ -171,7 +171,7 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				PdfPTable table2 = new PdfPTable(2);
 				table2.setWidthPercentage(100);
 				table2.setWidths(new int[] {60,120});
-				Paragraph p4 = new Paragraph("N° DE PUESTO", fuente);
+				Paragraph p4 = new Paragraph("NRO DE PUESTO", fuente);
 				PdfPCell celda4 = new PdfPCell(p4);
 				table2.addCell(celda4);
 				Paragraph p5 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getNroPuesto() + "", fuente);
@@ -455,7 +455,7 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 				PdfPTable table2 = new PdfPTable(2);
 				table2.setWidthPercentage(100);
 				table2.setWidths(new int[] {60,120});
-				Paragraph p4 = new Paragraph("N° DE PUESTO", fuente);
+				Paragraph p4 = new Paragraph("NRO DE PUESTO", fuente);
 				PdfPCell celda4 = new PdfPCell(p4);
 				table2.addCell(celda4);
 				Paragraph p5 = new Paragraph(reporte.getListaReciboAguaSocio().get(aw).getNroPuesto() + "", fuente);
@@ -650,7 +650,7 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
              area.append("                       Fundado el 13 de Noviembre de 1996                    |             Fundado el 13 de Noviembre de 1996   \n");
              area.append("                                 R.U.C. 20530606334                             |                    R.U.C. 20530606334             \n");
              area.append("\n");
-             /*area.append("\u0020\u0020\u0020\u0020RECIBO Nº 202\u0020\u0020\u0020\u0020|\u0020\u0020\u0020\u0020RECIBO Nº 202\u0020\u0020\u0020\u0020\n");
+             /*area.append("\u0020\u0020\u0020\u0020RECIBO Nï¿½ 202\u0020\u0020\u0020\u0020|\u0020\u0020\u0020\u0020RECIBO Nï¿½ 202\u0020\u0020\u0020\u0020\n");
              area.append("\n");
              area.append("\tFECHA:   02/04/2016                      |\tFECHA:   02/04/2016                      \n");
              area.append("\tASOCIADO:AMBROCIO SERNAQUE, CHRISTIAN    |\tASOCIADO:AMBROCIO SERNAQUE, CHRISTIAN    \n");

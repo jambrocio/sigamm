@@ -14,11 +14,11 @@ import com.itextpdf.text.pdf.BarcodeQRCode;
 
 public class UtilPDF {
 
-	public static final String TITULO_RECIBO = "ASOCIACIÓN DE COMERCIANTES DEL MERCADO MODELO DE HUARAL";
+	public static final String TITULO_RECIBO = "ASOCIACION DE COMERCIANTES DEL MERCADO MODELO DE HUARAL";
 	public static final String RUC = "R.U.C 20530606334";
-	public static final String LEYENDA_RECIBO_AGUA = "RECIBO DE AGUA N°: ";
-	public static final String LEYENDA_RECIBO_LUZ = "RECIBO DE LUZ N°: ";
-	public static final String LEYENDA_RECIBO_VIGILANCIA = "RECIBO DE VIGILANCIA N°: "; 
+	public static final String LEYENDA_RECIBO_AGUA = "RECIBO DE AGUA NRO: ";
+	public static final String LEYENDA_RECIBO_LUZ = "RECIBO DE LUZ NRO: ";
+	public static final String LEYENDA_RECIBO_VIGILANCIA = "RECIBO DE VIGILANCIA NRO: "; 
 	public static final String RUTA_PDF = "/usr/share/jboss-eap-6.1/reportes/";
 	public static final String RUTA_PDF_WINDOWS = "C:\\tools\\jboss-eap-6.1\\standalone\\reportes/";
 

@@ -96,7 +96,7 @@ public class ExcelBuilderAguaSocio extends AbstractExcelView{
         header.createCell(2).setCellValue("Nombre Usuario");
         header.getCell(2).setCellStyle(csCabecera);
          
-        header.createCell(3).setCellValue("Número Puesto");
+        header.createCell(3).setCellValue("Numero Puesto");
         header.getCell(3).setCellStyle(csCabecera);
          
         header.createCell(4).setCellValue("Giro Comercial");

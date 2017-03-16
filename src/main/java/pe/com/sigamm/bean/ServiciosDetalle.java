@@ -13,6 +13,7 @@ public class ServiciosDetalle {
 	int seleccionado;
 	int flag_otros;
 	int usuario;
+	int flagImporteVariable;
 	
 	public int getCodigoServicio() {
 		return codigoServicio;
@@ -79,6 +80,12 @@ public class ServiciosDetalle {
 	}
 	public void setUsuario(int usuario) {
 		this.usuario = usuario;
+	}
+	public int getFlagImporteVariable() {
+		return flagImporteVariable;
+	}
+	public void setFlagImporteVariable(int flagImporteVariable) {
+		this.flagImporteVariable = flagImporteVariable;
 	}
 				
 }

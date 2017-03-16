@@ -8,10 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import pe.com.sigamm.modelo.Facturacion;
-import pe.com.sigamm.modelo.Usuario;
-import pe.com.sigamm.util.Constantes;
-
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -24,6 +20,8 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+
+import pe.com.sigamm.modelo.Facturacion;
 
 public class PDFBuilder extends AbstractPdfView{
 	
@@ -73,7 +71,7 @@ public class PDFBuilder extends AbstractPdfView{
         // 1.Resultado
         Paragraph titulo = new Paragraph("Reporte Resultado Elecciones", FontFactory.getFont(
         		"arial",   						// fuente
-                12,                            // tamaño
+                12,                            // tamanio
                 Font.ITALIC,                   // estilo
                 BaseColor.BLACK));
         
@@ -103,9 +101,9 @@ public class PDFBuilder extends AbstractPdfView{
     	//cellNro.setBorder(Rectangle.NO_BORDER);   // removes border
         table.addCell(cellNro);
         
-    	Paragraph candidato = new Paragraph("CANDIDATO N° ", FontFactory.getFont(
+    	Paragraph candidato = new Paragraph("CANDIDATO Nï¿½ ", FontFactory.getFont(
         		"arial",   					// fuente
-                8,                          // tamaño
+                8,                          // tamanio
                 Font.BOLD,                  // estilo
                 BaseColor.BLACK));
         
@@ -143,33 +141,33 @@ public class PDFBuilder extends AbstractPdfView{
         	cellImagen.setBorder(Rectangle.NO_BORDER);   // removes border
             table.addCell(cellImagen);
             
-            Paragraph candidato = new Paragraph("CANDIDATO N° " + usuario.getOrden(), FontFactory.getFont(
+            Paragraph candidato = new Paragraph("CANDIDATO Nro " + usuario.getOrden(), FontFactory.getFont(
             		"arial",   					// fuente
-                    8,                          // tamaño
+                    8,                          // tamanio
                     Font.BOLD,                  // estilo
                     BaseColor.BLACK));
             
             Paragraph nombres = new Paragraph(usuario.getNombres(), FontFactory.getFont(
             		"arial",   					// fuente
-                    8,                          // tamaño
+                    8,                          // tamanio
                     Font.BOLD,                  // estilo
                     BaseColor.BLACK));
                         
             Paragraph cargo = new Paragraph(usuario.getNombreRol(), FontFactory.getFont(
             		"arial",   					// fuente
-                    8,                          // tamaño
+                    8,                          // tamanio
                     Font.NORMAL,                // estilo
                     BaseColor.BLACK));
             
             Paragraph ut = new Paragraph(usuario.getNombreUnidad(), FontFactory.getFont(
             		"arial",   					// fuente
-                    8,                          // tamaño
+                    8,                          // tamanio
                     Font.NORMAL,                // estilo
                     BaseColor.BLACK));
             
             Paragraph votos = new Paragraph("VOTOS : " + usuario.getCantidadVotos(), FontFactory.getFont(
             		"arial",   					// fuente
-                    8,                          // tamaño
+                    8,                          // tamanio
                     Font.BOLD,                // estilo
                     BaseColor.RED));
             

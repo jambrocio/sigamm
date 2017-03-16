@@ -7,6 +7,7 @@ public class DeudaSocio {
 	String importe;
 	String fecPeriodo;
 	int codigoSocio;
+	int flagImporteVariable;
 	
 	public int getCodigoDeudaSocio() {
 		return codigoDeudaSocio;
@@ -37,6 +38,12 @@ public class DeudaSocio {
 	}
 	public void setCodigoSocio(int codigoSocio) {
 		this.codigoSocio = codigoSocio;
+	}
+	public int getFlagImporteVariable() {
+		return flagImporteVariable;
+	}
+	public void setFlagImporteVariable(int flagImporteVariable) {
+		this.flagImporteVariable = flagImporteVariable;
 	}
 	
 }

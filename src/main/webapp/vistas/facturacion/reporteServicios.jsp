@@ -85,7 +85,7 @@ function nuevoServicioDetalle(){
 	$("#codigoServicioDetalle").val(0);
 }
 
-function editarServicioDetalle(codigoServicio, codigoServicioDetalle, nombreServicioDetalle, importe){
+function editarServicioDetalle(codigoServicio, codigoServicioDetalle, nombreServicioDetalle, importe, flagImporteVariable){
 	
 	$('#servicio_modal').modal({
 		backdrop: 'static',
@@ -96,7 +96,15 @@ function editarServicioDetalle(codigoServicio, codigoServicioDetalle, nombreServ
 	
 	$("#codigo").html("<b>" + codigoServicioDetalle + "</b>");
 	$("#nombre").val(replaceAll(nombreServicioDetalle, "#", " "));
-	$("#importe").val(importe);
+	if(flagImporteVariable == 1){
+		$("#importeVariableSi").attr("checked", true);
+		$("#importe").val(0);
+		$("#importe").attr("disabled", true);
+	}else{
+		$("#importeVariableNo").attr("checked", true);
+		$("#importe").val(importe);
+		$("#importe").attr("disabled", false);
+	}
 	
 	$("#codigoServicio").val(codigoServicio);
 	$("#codigoServicioDetalle").val(codigoServicioDetalle);
@@ -178,9 +186,10 @@ function cargarServicios(){
 		codigoServicioDetalle = rowObject.codigoServicioDetalle;
 		nombreDetalle = replaceAll(rowObject.nombreDetalle, " ", "#");
 		importe = rowObject.importe;
+		importeVariable = rowObject.flagImporteVariable;
 		var opciones = "<center>";
 			
-			opciones += "<a href=\"javascript:editarServicioDetalle(" + codigoServicio + ", " + codigoServicioDetalle + ", '" + nombreDetalle + "', " + importe + "); \">";
+			opciones += "<a href=\"javascript:editarServicioDetalle(" + codigoServicio + ", " + codigoServicioDetalle + ", '" + nombreDetalle + "', " + importe + ", " + importeVariable + "); \">";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Servicio'/>";
 			opciones += "</a>";
 			
@@ -253,6 +262,9 @@ function guardar(){
 	parametros.codigoServicioDetalle 	= $("#codigoServicioDetalle").val();
 	parametros.nombreDetalle 			= $("#nombre").val();
 	parametros.importe 					= $("#importe").val();
+	parametros.flagImporteVariable 		= $(":input[name=importeVariable]:checked").val();
+	
+	//console.log("importeVariable : " + $(":input[name=importeVariable]:checked").val());
 	
 	$.ajax({
 		type: "POST",
@@ -308,7 +320,7 @@ function guardar(){
                 
 		}
 	});
-	
+
 }
 
 function mostrarIreport(){
@@ -316,6 +328,16 @@ function mostrarIreport(){
 	window.open(url,"_blank", "menubar=no,location=0,height=500,width=800");
 }
 
+function cambiarImporte(){
+	importeVariable = $(":input[name=importeVariable]:checked").val();
+	if(importeVariable == 1){
+		$("#importe").val(0);
+		$("#importe").attr("disabled", true);
+	}else{
+		$("#importe").val("");
+		$("#importe").attr("disabled", false);
+	}
+}
 
 </script>
 </head>
@@ -389,6 +411,18 @@ function mostrarIreport(){
 							<td width="5px">&nbsp;</td>
 							<td><input type="text" id="nombre" class="form-control" maxlength="150"/></td>
 							<td valign="top"><img id="lblnombre-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td><span id="lblimporteVariable"><b>Importe variable</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td>
+								<input type="radio" name="importeVariable" id="importeVariableSi" value="1" onclick="cambiarImporte();">&nbsp;Si&nbsp;&nbsp;
+  								<input type="radio" name="importeVariable" id="importeVariableNo" value="0" checked="checked" onclick="cambiarImporte();">&nbsp;No
+							</td>
+							<td valign="top"><img id="lblimporteVariable-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 						</tr>
 						<tr>
 							<td width="10px">&nbsp;</td>

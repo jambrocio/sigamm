@@ -112,8 +112,22 @@ $(document).ready(function(){
 		monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr',
 			'May', 'Jun', 'Jul', 'Ago',
 		    'Sep', 'Oct', 'Nov', 'Dic'] 
-	});  
-		
+	});
+	
+	/*
+	$("#importeVariableExtra").keydown(function(event){
+		if(event.shiftKey){
+			event.preventDefault();
+		}
+		if (event.keyCode < 48 || event.keyCode > 57 || event.keyCode == 46 || event.keyCode == 8) {
+			event.preventDefault();
+        }
+	});
+	*/
+	
+	$("#importeVariableExtra").keyup(function (){
+    	this.value = (this.value + '').replace(/[^0-9.]/g, '');
+	});
 });
 
 function colorEtiquetas(){
@@ -475,6 +489,7 @@ function limpiarTablaResultado(){
 
 function buscarDeudasSocio(){
 	
+	var ruta = obtenerContexto();
 	limpiarTablaDeudas();
 	
 	var parametros = new Object();
@@ -491,22 +506,52 @@ function buscarDeudasSocio(){
         	
         	$.each(result, function(keyM, serv) {
         		
-        		$('#tabla_deudas_socio tbody tr:last').after(
-        				"<tr>" +
-        				"<td style='display:none;'>" + serv.codigoDeudaSocio + "</td>" +
-        				"<td align='center'><input type='checkbox' id='chk_" + serv.codigoDeudaSocio + "'></td>" +
-        	            "<td align='left'>" + serv.fecPeriodo + "</td>" +
-        				"<td align='right'>" + serv.importe + "</td>" +
-        				"<td style='display:none;'>" + $("#servicio").val() + "</td>" +
-        				"<td style='display:none;'>" + serv.codigoServicioDetalle + "</td>" +
-        				"</tr>");
-        		        		
+        		if(serv.flagImporteVariable == 1){
+	        		$('#tabla_deudas_socio tbody tr:last').after(
+	        				"<tr>" +
+	        				"<td style='display:none;'>" + serv.codigoDeudaSocio + "</td>" +
+	        				"<td align='center'><input type='checkbox' id='chk_" + serv.codigoDeudaSocio + "'></td>" +
+	        	            "<td align='left'>" + serv.fecPeriodo + "</td>" +
+	        				"<td align='right' id='importeVariable'>" + serv.importe + "</td>" +
+	        				"<td style='display:none;'>" + $("#servicio").val() + "</td>" +
+	        				"<td style='display:none;'>" + serv.codigoServicioDetalle + "</td>" +
+	        				"<td align='center'><img src='/"+ruta+"/recursos/images/icons/plus_24x24.png' border='0' title='Agregar Importe' onclick='mostrarVentanaImporte();' /></td>" +
+	        				"</tr>");
+        		}else{
+        			$('#tabla_deudas_socio tbody tr:last').after(
+	        				"<tr>" +
+	        				"<td style='display:none;'>" + serv.codigoDeudaSocio + "</td>" +
+	        				"<td align='center'><input type='checkbox' id='chk_" + serv.codigoDeudaSocio + "'></td>" +
+	        	            "<td align='left'>" + serv.fecPeriodo + "</td>" +
+	        				"<td align='right'>" + serv.importe + "</td>" +
+	        				"<td style='display:none;'>" + $("#servicio").val() + "</td>" +
+	        				"<td style='display:none;'>" + serv.codigoServicioDetalle + "</td>" +
+	        				"<td align='center'></td>" +
+	        				"</tr>");
+        		}        		
         		//console.log("Periodo : " + serv.fecPeriodo + "\nImporte : " + serv.importe);
         		
         	});
         	
         }
     });
+	
+}
+
+function mostrarVentanaImporte(){
+	
+	$('#importe_modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	});
+}
+
+function agregarImporte(){
+	
+	importeTemp = $("#importeVariableExtra").val();
+	var res = importeTemp.replace(/[^0-9.]/g, '');
+	//console.log("importeTemp : " + importeTemp + " - " + isNaN(importeTemp));
+	$("#importeVariable").html(res);
 	
 }
 
@@ -939,6 +984,58 @@ function openNewWindowForJasperWithChartsOthers(){
 		</td>
 	</tr>
 </table>	
-	
+
+<div class="modal fade" id="importe_modal" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Agregar Importe</h4>
+			</div>
+			<div class="modal-body">
+				
+					<table border="0" style="width: 650px;">
+						<tr>
+							<td colspan="7" align="right">&nbsp;</td>
+						</tr>
+						<tr>
+							<td colspan="7" align="left">
+								<button type="button" class="btn btn-primary" onclick="agregarImporte()">
+									<img src="recursos/images/icons/guardar_16x16.png" alt="Agregar" />&nbsp;Agregar
+								</button>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="7" align="right">&nbsp;</td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td><span id="lblimporteVariableExtra"><b>Importe (*)</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td><input type="text" id="importeVariableExtra" class="form-control" maxlength="5" style="width: 80px"/></td>
+							<td valign="top"><img id="lblimporteVariableExtra-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+						</tr>
+						<tr>
+							<td colspan="7">&nbsp;</td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td colspan="6"><b>(*) Campos Obligatorios</b></td>
+						</tr>
+					</table>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+		  
+	</div>
+</div> 
+
 </body>
 </html>

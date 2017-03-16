@@ -70,7 +70,7 @@ public class PDFBuilderAguaSocio extends AbstractPdfView{
         // 1.Resultado
         Paragraph titulo = new Paragraph("Reporte del Recibo de Agua del Asociado", FontFactory.getFont(
         		"arial",   						// fuente
-                12,                            // tamaño
+                12,                            // tamanio
                 Font.ITALIC,                   // estilo
                 BaseColor.BLACK));
         
@@ -100,9 +100,9 @@ public class PDFBuilderAguaSocio extends AbstractPdfView{
     	//cellNro.setBorder(Rectangle.NO_BORDER);   // removes border
         table.addCell(cellNro);
         
-    	Paragraph candidato = new Paragraph("CANDIDATO N° ", FontFactory.getFont(
+    	Paragraph candidato = new Paragraph("CANDIDATO NRO ", FontFactory.getFont(
         		"arial",   					// fuente
-                8,                          // tamaño
+                8,                          // tamanio
                 Font.BOLD,                  // estilo
                 BaseColor.BLACK));
         
@@ -140,33 +140,33 @@ public class PDFBuilderAguaSocio extends AbstractPdfView{
         	cellImagen.setBorder(Rectangle.NO_BORDER);   // removes border
             table.addCell(cellImagen);
             
-            Paragraph candidato = new Paragraph("CANDIDATO N° " + usuario.getOrden(), FontFactory.getFont(
+            Paragraph candidato = new Paragraph("CANDIDATO NRO " + usuario.getOrden(), FontFactory.getFont(
             		"arial",   					// fuente
-                    8,                          // tamaño
+                    8,                          // tamanio
                     Font.BOLD,                  // estilo
                     BaseColor.BLACK));
             
             Paragraph nombres = new Paragraph(usuario.getNombres(), FontFactory.getFont(
             		"arial",   					// fuente
-                    8,                          // tamaño
+                    8,                          // tamanio
                     Font.BOLD,                  // estilo
                     BaseColor.BLACK));
                         
             Paragraph cargo = new Paragraph(usuario.getNombreRol(), FontFactory.getFont(
             		"arial",   					// fuente
-                    8,                          // tamaño
+                    8,                          // tamanio
                     Font.NORMAL,                // estilo
                     BaseColor.BLACK));
             
             Paragraph ut = new Paragraph(usuario.getNombreUnidad(), FontFactory.getFont(
             		"arial",   					// fuente
-                    8,                          // tamaño
+                    8,                          // tamanio
                     Font.NORMAL,                // estilo
                     BaseColor.BLACK));
             
             Paragraph votos = new Paragraph("VOTOS : " + usuario.getCantidadVotos(), FontFactory.getFont(
             		"arial",   					// fuente
-                    8,                          // tamaño
+                    8,                          // tamanio
                     Font.BOLD,                // estilo
                     BaseColor.RED));
             
