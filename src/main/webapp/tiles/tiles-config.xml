@@ -123,5 +123,9 @@
 		<put-attribute name="contenido" value="/vistas/servicios/proceso.jsp" />
 		<put-attribute name="titulo" value="Procesos Internos" />
 	</definition>	
+	<definition name="servicios/procesamiento" extends="main">
+		<put-attribute name="contenido" value="/vistas/servicios/procesamiento.jsp" />
+		<put-attribute name="titulo" value="Procesos de Vigilancia" />
+	</definition>
 	
 </tiles-definitions>

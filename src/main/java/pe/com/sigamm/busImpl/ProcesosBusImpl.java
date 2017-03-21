@@ -6,11 +6,14 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import pe.com.sigamm.bean.ReporteProcesamiento;
 import pe.com.sigamm.bus.ProcesosBus;
 import pe.com.sigamm.dao.ProcesosDao;
 import pe.com.sigamm.modelo.EleccionesResumen;
 import pe.com.sigamm.modelo.EleccionesUt;
+import pe.com.sigamm.modelo.Procesamiento;
 import pe.com.sigamm.modelo.RegistrosApp;
+import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.modelo.Usuario;
 
 @Service
@@ -53,6 +56,24 @@ public class ProcesosBusImpl implements ProcesosBus {
 	public int cantidadRegistrosEleccionesUt(int codigoEleccion, int codigoUt) {
 		
 		return procesosDao.cantidadRegistrosEleccionesUt(codigoEleccion, codigoUt);
+	}
+
+	@Override
+	public ReporteProcesamiento reporteProcesamiento(int pagina, int registros) {
+		
+		return procesosDao.reporteProcesamiento(pagina, registros);
+	}
+
+	@Override
+	public Retorno procesarCuotaAdministrativa(Procesamiento procesamiento) {
+		
+		return procesosDao.procesarCuotaAdministrativa(procesamiento);
+	}
+
+	@Override
+	public Retorno procesarVigilancia(Procesamiento procesamiento) {
+		
+		return procesosDao.procesarVigilancia(procesamiento);
 	}
 
 }

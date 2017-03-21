@@ -1357,10 +1357,11 @@ function exportarAguaSocio(){
 			<button class="btn btn-primary" data-toggle="modal" data-target="#recibo_modal" onclick="cargarNuevo()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Nuevo" />&nbsp;Nuevo
 			</button>
+			<!-- 
 			<a href="generarImpresionVigilanciaPDF?periodo=201605">
 				<img src='recursos/images/icons/print_24x24.png' border='0' title='Generar Impresión de todos los Recibo de VIGILANCIA de los Socios'/>
 			</a>
-			
+			 -->
 		</td>
 	</tr>
 	<tr>

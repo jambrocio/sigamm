@@ -2,9 +2,12 @@ package pe.com.sigamm.dao;
 
 import java.util.List;
 
+import pe.com.sigamm.bean.ReporteProcesamiento;
 import pe.com.sigamm.modelo.EleccionesResumen;
 import pe.com.sigamm.modelo.EleccionesUt;
+import pe.com.sigamm.modelo.Procesamiento;
 import pe.com.sigamm.modelo.RegistrosApp;
+import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.modelo.Usuario;
 
 public interface ProcesosDao {
@@ -20,5 +23,11 @@ public interface ProcesosDao {
 	public List<EleccionesUt> listaEleccionesXUt(int pagina, int registros, int codigoEleccion, int codigoUt);
 	
 	public int cantidadRegistrosEleccionesUt(int codigoEleccion, int codigoUt);
+	
+	public ReporteProcesamiento reporteProcesamiento(int pagina, int registros);
+	
+	public Retorno procesarCuotaAdministrativa(Procesamiento procesamiento);
+	
+	public Retorno procesarVigilancia(Procesamiento procesamiento);
 	
 }
