@@ -45,7 +45,8 @@
 	  color: #e74c3c;
 	  text-shadow: #2c3e50 2px 2px 1px;
 	  transition: .3s;
-	  background: url('https://dl.dropboxusercontent.com/u/3522/check_off.png') left center no-repeat;
+	  background: url('/sigamm/recursos/images/icons/check_off.png') left center no-repeat;
+	  /*background: url('https://dl.dropboxusercontent.com/u/3522/check_off.png') left center no-repeat;*/
 	}
 	
 	label.check input {
@@ -54,7 +55,8 @@
 	}
 	
 	label.check.c_on {
-	  background: url('https://dl.dropboxusercontent.com/u/3522/check_on.png')  left center no-repeat;
+	  /*background: url('https://dl.dropboxusercontent.com/u/3522/check_on.png')  left center no-repeat;*/
+	  background: url('/sigamm/recursos/images/icons/check_on.png') left center no-repeat;
 	  /*color: #fff;*/
 	  color: #e74c3c;
 	  text-shadow: #34495e 2px 2px 1px;
@@ -640,12 +642,12 @@ function cargarReciboLuzSocio(codigoRecibo){
 			if (rowObject.reciboLuzCreado != 0) {
 				opciones += "&nbsp;&nbsp;";
 				
-				opciones += "<a href=javascript:pagarReciboLuzXSocio('";
+				/*opciones += "<a href=javascript:pagarReciboLuzXSocio('";
 				opciones += rowObject.codigoReciboOriginal + "','" + rowObject.nroPuesto + "'," + rowObject.codigoSocio + ") >";
 				opciones += "<img src='/"+ruta+"/recursos/images/icons/money_activo_24x24.png' border='0' title='PAGAR Recibo de Luz por Socio'/>";
 				opciones += "</a>";
 				
-				opciones += "&nbsp;&nbsp;";
+				opciones += "&nbsp;&nbsp;";*/
 				
 				opciones += "<a href=javascript:eliminarReciboLuzXSocio('";
 				opciones += rowObject.codigoReciboOriginal + "','" + rowObject.nroPuesto + "'," + rowObject.codigoSocio + ") >";

@@ -85,7 +85,8 @@
 	  color: #e74c3c;
 	  text-shadow: #2c3e50 2px 2px 1px;
 	  transition: .3s;
-	  background: url('https://dl.dropboxusercontent.com/u/3522/check_off.png') left center no-repeat;
+	  background: url('/sigamm/recursos/images/icons/check_off.png') left center no-repeat;
+	  /*background: url('https://dl.dropboxusercontent.com/u/3522/check_off.png') left center no-repeat;*/
 	}
 	
 	label.check input {
@@ -94,7 +95,8 @@
 	}
 	
 	label.check.c_on {
-	  background: url('https://dl.dropboxusercontent.com/u/3522/check_on.png')  left center no-repeat;
+	  background: url('/sigamm/recursos/images/icons/check_on.png') left center no-repeat;
+	  /*background: url('https://dl.dropboxusercontent.com/u/3522/check_on.png')  left center no-repeat;*/
 	  /*color: #fff;*/
 	  color: #e74c3c;
 	  text-shadow: #34495e 2px 2px 1px;
@@ -583,12 +585,12 @@ function cargarReciboAguaSocio1(codigoRecibo){
 			if (rowObject.reciboAguaCreado != 0) {
 				opciones += "&nbsp;&nbsp;";
 				
-				opciones += "<a href=javascript:pagarReciboAguaXSocio('";
+				/*opciones += "<a href=javascript:pagarReciboAguaXSocio('";
 				opciones += rowObject.codigoReciboAgua + "','" + rowObject.nroPuesto + "'," + rowObject.codigoSocio + ") >";
 				opciones += "<img src='/"+ruta+"/recursos/images/icons/money_activo_24x24.png' border='0' title='PAGAR Recibo de Agua por Socio'/>";
 				opciones += "</a>";
 				
-				opciones += "&nbsp;&nbsp;";
+				opciones += "&nbsp;&nbsp;";*/
 				
 				opciones += "<a href=javascript:eliminarReciboAguaXSocio('";
 				opciones += rowObject.codigoReciboAgua + "','" + rowObject.nroPuesto + "'," + rowObject.codigoSocio + ") >";
