@@ -826,7 +826,7 @@ function openNewWindowForJasperWithChartsOthers(){
 		<td width="5px">&nbsp;</td>
 		<td width="5px" align="left"><b>:</b></td>
 		<td width="5px">&nbsp;</td>
-		<td width="200px"><input type="text" id="puestoBuscar" class="form-control" maxlength="4" /></td>
+		<td width="200px"><input type="text" id="puestoBuscar" class="form-control" maxlength="5" /></td>
 		<td width="130px" valign="top">&nbsp;&nbsp;
 			<button type="button" id="btnBuscar" class="btn btn-primary" onclick="buscarPuesto()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar

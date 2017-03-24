@@ -275,4 +275,45 @@ public class ProcesosDaoImpl implements ProcesosDao {
 		return retorno;
 	}
 
+	@Override
+	public Retorno grabarProceso(String periodo, String fechaVencimiento) {
+		
+		Retorno retorno = new Retorno();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_PROCESAMIENTO");
+			jdbcCall.withProcedureName("SP_GRABAR_PROCESAMIENTO").declareParameters(
+				new SqlParameter("vi_periodo", 					Types.VARCHAR),
+				new SqlParameter("vi_fecha_vencimiento", 		Types.VARCHAR),
+				new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
+				
+				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
+				new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
+				
+            
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_periodo", 			periodo != null ? periodo.toString().toUpperCase() : "");
+			parametros.addValue("vi_fecha_vencimiento", fechaVencimiento != null ? fechaVencimiento.toString() : "");
+			parametros.addValue("vi_codigo_usuario", 	datosSession.getCodigoUsuario());
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
+	}
+
 }

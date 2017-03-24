@@ -125,6 +125,13 @@ public class FacturacionController {
 	
 	}
 	
+	@RequestMapping(value = "/reporteFacturacion", method=RequestMethod.GET)
+	public String reporteFacturacion(HttpServletRequest request) {
+		
+		return "reportes/reporteFacturacion";
+	
+	}
+	
 	@RequestMapping(value = "/grabar-facturacion.json", method = RequestMethod.POST, produces="application/json")
 	public @ResponseBody String grabarFacturacion(FacturacionCabecera facturacion){
 		
@@ -874,5 +881,29 @@ public class FacturacionController {
 			
 		return resultado;
 		
+	}
+	
+	@RequestMapping(value = "/reporte-facturacion-general.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody ResponseListBean<VistaFacturacion> reporteFacturacionGeneral(
+			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
+			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
+			@RequestParam(value = "puesto", defaultValue = "") String puesto,
+			@RequestParam(value = "nombres", defaultValue = "") String nombres){
+		
+		ResponseListBean<VistaFacturacion> response = new ResponseListBean<VistaFacturacion>();
+		
+		ReporteFacturacion reporte = facturacionBus.reporteFacturacionGeneral(pagina, registros, puesto, nombres, 0);
+		
+		Integer totalSocios = reporte.getTotalRegistros(); 
+		
+		response.setPage(pagina);
+		response.setRecords(totalSocios);
+		
+		//total de paginas a mostrar
+		response.setTotal(OperadoresUtil.obtenerCociente(totalSocios, registros));
+				
+		response.setRows(reporte.getListaFacturacion());
+		
+		return response;
 	}
 }

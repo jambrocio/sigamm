@@ -133,6 +133,7 @@ public class UsuariosDaoImpl implements UsuariosDao {
 				new SqlParameter("vi_usuario_registro",		Types.VARCHAR),
 				new SqlParameter("vi_clave",				Types.VARCHAR),
 				new SqlParameter("vi_dni",					Types.VARCHAR),
+				new SqlParameter("vi_serie",				Types.VARCHAR),
 				
 				new SqlOutParameter("vo_codigo_usuario", 	Types.INTEGER),
 				new SqlOutParameter("vo_indicador", 		Types.VARCHAR),
@@ -155,6 +156,7 @@ public class UsuariosDaoImpl implements UsuariosDao {
 			parametros.addValue("vi_usuario_registro",		datosSession.getUsuario());
 			parametros.addValue("vi_clave",					Seguridad.fn_sEncrypting("PASSWORD", Constantes.CLAVE_DEFAULT));
 			parametros.addValue("vi_dni",					usuario.getDni());
+			parametros.addValue("vi_serie",					usuario.getSerie() != null ? usuario.getSerie().toString() : "");
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
 			

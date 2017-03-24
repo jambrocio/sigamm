@@ -52,6 +52,63 @@
 $(document).ready(function(){		
 	
 	$('[data-toggle="popover"]').popover({ placement : 'right', trigger: "hover" });
+	
+	$.datepicker.regional['es'] = {
+	        closeText: 'Cerrar',
+	        prevText: '<Ant',
+	        nextText: 'Sig>',
+	        currentText: 'Hoy',
+	        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+	        monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+	        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+	        dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+	        dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+	        weekHeader: 'Sm',
+	        dateFormat: 'dd/mm/yy',
+	        firstDay: 1,
+	        isRTL: false,
+	        showMonthAfterYear: false,
+	        yearSuffix: ''
+	};
+	
+	$.datepicker.setDefaults($.datepicker.regional['es']);
+	
+	$("#periodo").datepicker({
+        dateFormat: 'MM yy',
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+		regional: 'es',
+        onClose: function(dateText, inst) {  
+            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
+            $(this).val($.datepicker.formatDate('MM yy', new Date(year, month, 1)));
+        }
+    });  
+	
+	
+	$("#periodo").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });    
+    });
+	
+	$("#fechaVencimiento").datepicker({   
+		changeMonth: true,
+		changeYear: false,
+		numberOfMonths: 1,
+		dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+		monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo',
+			'Junio', 'Julio', 'Agosto', 'Septiembre',
+		    'Octubre', 'Noviembre', 'Diciembre'],
+		monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr',
+			'May', 'Jun', 'Jul', 'Ago',
+		    'Sep', 'Oct', 'Nov', 'Dic'] 
+	});
+	
 	cargarProcesos();
 	
 });
@@ -372,6 +429,84 @@ function procesarVigilancia(periodo, descPeriodo){
     });
 }
 
+function nuevoProceso(){
+	
+	$('#proceso_modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	});
+	
+	$("#periodo").val("");
+	$("#fechaVencimiento").val("");
+	$("#tituloRegistro").html("Nuevo Registro");
+	
+	colorEtiquetas();
+}
+
+function colorEtiquetas(){
+	
+	$("#lblperiodo").css("color", "black");
+	$("#lblfechavencimiento").css("color", "black");
+	
+	$("#lblperiodo-img").hide();
+	$("#lblfechavencimiento-img").hide();
+
+}
+
+function grabarProceso(){
+	
+	var ruta = obtenerContexto();
+	jsonObj = [];
+	var parametros = new Object();
+	parametros.periodo = $("#periodo").val();
+	parametros.fechaVencimiento = $("#fechaVencimiento").val();
+	
+	$.ajax({
+		type: "POST",
+	    async:false,
+	    url: "grabar-proceso.json",
+	    cache : false,
+	    data: parametros,
+	    success: function(result){
+	            
+	        imagen = "";
+	        if(result.camposObligatorios.length == 0){
+		        if(result.indicador == "00"){
+		        	$('#proceso_modal').modal('hide');
+	            	imagen = "ok";
+		        }else{
+		        	imagen = "advertencia";
+		        }
+		        	
+	            $.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Mensaje',
+					// (string | mandatory) the text inside the notification
+					text: result.mensaje,
+					// (string | optional) the image to display on the left
+					image: "/" + ruta + "/recursos/images/" + imagen + ".png",
+					// (bool | optional) if you want it to fade out on its own or just sit there
+					sticky: false,
+					// (int | optional) the time you want it to be alive for before fading out
+					time: ''
+				});
+		            
+	            cargarProcesos();
+	        }else{
+	        	colorEtiquetas();
+            	fila = "";
+            	$.each(result.camposObligatorios, function(id, obj){
+                    $("#" + obj.nombreCampo).css("color", "red");
+                    $("#" + obj.nombreCampo + "-img").show();
+                    $("#" + obj.nombreCampo + "-img").attr("data-content", obj.descripcion);
+                    
+                });
+	        }	            
+	            
+		}
+	});
+	
+}
 </script>
 </head>
 <body id="body">
@@ -381,8 +516,8 @@ function procesarVigilancia(periodo, descPeriodo){
 	</tr>
 	<tr>
 		<td colspan="6">&nbsp;&nbsp;
-			<button type="button" class="btn btn-primary" onclick="nuevoServicioDetalle();">
-				<img src="recursos/images/icons/nuevo_16x16.png" alt="Nuevo Servicio" />&nbsp;Nuevo
+			<button type="button" class="btn btn-primary" onclick="nuevoProceso();">
+				<img src="recursos/images/icons/nuevo_16x16.png" alt="Nuevo Proceso" />&nbsp;Nuevo
 			</button>
 		</td>
 	</tr>
@@ -400,7 +535,7 @@ function procesarVigilancia(periodo, descPeriodo){
 	</tr>
 </table>
 
-<div class="modal fade" id="servicio_modal" role="dialog" data-keyboard="false" data-backdrop="static">
+<div class="modal fade" id="proceso_modal" role="dialog" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog">
 		
 		<!-- Modal content-->
@@ -417,7 +552,7 @@ function procesarVigilancia(periodo, descPeriodo){
 						</tr>
 						<tr>
 							<td colspan="7" align="left">
-								<button type="button" class="btn btn-primary" onclick="guardar()">
+								<button type="button" class="btn btn-primary" onclick="grabarProceso()">
 									<img src="recursos/images/icons/guardar_16x16.png" alt="Guardar" />&nbsp;Guardar
 								</button>
 							</td>
@@ -427,42 +562,22 @@ function procesarVigilancia(periodo, descPeriodo){
 						</tr>
 						<tr>
 							<td width="10px">&nbsp;</td>
-							<td><span id="lblcodigo"><b>Código</b></span></td>
+							<td><span id="lblperiodo"><b>Periodo (*)</b></span></td>
 							<td width="5px">&nbsp;</td>
 							<td><b>:</b></td>
 							<td width="5px">&nbsp;</td>
-							<td><div id="codigo"></td>
-							<td valign="top">&nbsp;</td>
+							<td><input type="text" id="periodo" class="form-control" maxlength="10" readonly="readonly" /></td>
+							<td valign="top"><img id="lblperiodo-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+							
 						</tr>
 						<tr>
 							<td width="10px">&nbsp;</td>
-							<td><span id="lblnombre"><b>Nombre (*)</b></span></td>
+							<td><span id="lblfechavencimiento"><b>Fecha Vencimiento (*)</b></span></td>
 							<td width="5px">&nbsp;</td>
 							<td><b>:</b></td>
 							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="nombre" class="form-control" maxlength="150"/></td>
-							<td valign="top"><img id="lblnombre-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lblimporteVariable"><b>Importe variable</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td>
-								<input type="radio" name="importeVariable" id="importeVariableSi" value="1" onclick="cambiarImporte();">&nbsp;Si&nbsp;&nbsp;
-  								<input type="radio" name="importeVariable" id="importeVariableNo" value="0" checked="checked" onclick="cambiarImporte();">&nbsp;No
-							</td>
-							<td valign="top"><img id="lblimporteVariable-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lblimporte"><b>Importe (*)</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="importe" class="form-control" maxlength="8" style="width: 80px"/></td>
-							<td valign="top"><img id="lblimporte-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+							<td><input type="text" id="fechaVencimiento" class="form-control" maxlength="10" readonly="readonly" /></td>
+							<td valign="top"><img id="lblfechavencimiento-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 						</tr>
 						<tr>
 							<td colspan="7">&nbsp;</td>

@@ -57,7 +57,7 @@ public class Constantes {
 	public static final String ETIQUETA_PADRON			= "lblpadron";
 	public static final String ETIQUETA_COMPROBANTE		= "lblcomprobante";
 	public static final String ETIQUETA_FECHA_FACTURACION	= "lblfechafacturacion";
-
+	
 	//--- ETIQUETAS RECIBO AGUA
 	public static final String ETIQUETA_PERIODO			  = "lblperiodo";
 	public static final String ETIQUETA_LECTURA_INICIAL	  = "lbllecturainicial";

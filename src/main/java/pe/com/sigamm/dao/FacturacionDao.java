@@ -82,5 +82,7 @@ public interface FacturacionDao {
 	public Retorno grabarServicios(ServiciosDetalle servicios);
 	
 	public Retorno eliminarServicios(ServiciosDetalle servicios);
+	
+	public ReporteFacturacion reporteFacturacionGeneral(int pagina, int registros, String puesto, String nombre, int exportar);
 		
 }

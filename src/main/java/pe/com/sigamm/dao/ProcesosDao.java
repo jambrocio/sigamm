@@ -5,6 +5,7 @@ import java.util.List;
 import pe.com.sigamm.bean.ReporteProcesamiento;
 import pe.com.sigamm.modelo.EleccionesResumen;
 import pe.com.sigamm.modelo.EleccionesUt;
+import pe.com.sigamm.modelo.Empresa;
 import pe.com.sigamm.modelo.Procesamiento;
 import pe.com.sigamm.modelo.RegistrosApp;
 import pe.com.sigamm.modelo.Retorno;
@@ -29,5 +30,7 @@ public interface ProcesosDao {
 	public Retorno procesarCuotaAdministrativa(Procesamiento procesamiento);
 	
 	public Retorno procesarVigilancia(Procesamiento procesamiento);
+
+	public Retorno grabarProceso(String periodo, String fechaVencimiento);
 	
 }

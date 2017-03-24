@@ -30,4 +30,6 @@ public interface ProcesosBus {
 	
 	public Retorno procesarVigilancia(Procesamiento procesamiento);
 	
+	public Retorno grabarProceso(String periodo, String fechaVencimiento);
+	
 }

@@ -1,5 +1,9 @@
 package pe.com.sigamm.controller;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -11,15 +15,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import pe.com.sigamm.bean.CamposObligatorios;
 import pe.com.sigamm.bean.ReporteProcesamiento;
 import pe.com.sigamm.bean.ResponseListBean;
 import pe.com.sigamm.bus.ProcesosBus;
 import pe.com.sigamm.modelo.Egreso;
+import pe.com.sigamm.modelo.FacturacionCabecera;
+import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Procesamiento;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.session.DatosSession;
+import pe.com.sigamm.util.Constantes;
 import pe.com.sigamm.util.OperadoresUtil;
+import pe.com.sigamm.util.Util;
 
 @Controller
 public class ProcesoController {
@@ -96,5 +106,40 @@ public class ProcesoController {
 		String resultado = "{\"codigo\":" + codigo + ",\"mensaje\":\"" + mensaje + "\",\"indicador\":\"" + indicador + "\"}";
 		
 		return resultado;
+	}
+	
+	@RequestMapping(value = "/grabar-proceso.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String grabarProceso(
+			@RequestParam(value = "periodo", defaultValue = "") String periodo,
+			@RequestParam(value = "fechaVencimiento", defaultValue = "") String fechaVencimiento){
+		
+		Gson gson = new Gson();
+		List<CamposObligatorios> camposObligatorios = new ArrayList<CamposObligatorios>();
+		
+		int lperiodo = periodo.trim().length();
+		int lfechaVencimiento = fechaVencimiento.trim().length(); 
+		
+		if(lperiodo == 0)
+			camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_PERIODO, Constantes.PERIODO_OBLIGATORIO));
+		
+		if(lfechaVencimiento == 0)
+			camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_FECHA_VENCIMIENTO, Constantes.FECHA_VENCIMIENTO_OBLIGATORIO));
+		
+		String listaObligatorios = gson.toJson(camposObligatorios);
+		String resultado = "";
+		if(camposObligatorios.size() > 0){
+			
+			resultado = "{\"indicador\":\"" + "01" + "\",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + "Error" + "\"}";
+			
+		}else{
+			
+			Retorno retorno = procesosBus.grabarProceso(periodo, fechaVencimiento);
+			
+			resultado = "{\"indicador\":\"" + retorno.getIndicador() + "\",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + retorno.getMensaje() + "\"}";
+			
+		}
+		
+		return resultado;
+		
 	}
 }

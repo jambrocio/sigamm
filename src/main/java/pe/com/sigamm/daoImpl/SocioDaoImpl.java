@@ -286,10 +286,12 @@ public class SocioDaoImpl implements SocioDao {
 			jdbcCall.withCatalogName("PKG_SOCIO");
 			jdbcCall.withProcedureName("SP_BUSCAR_SOCIO_PUESTO").declareParameters(
 					new SqlParameter("vi_numero_puesto", 			Types.VARCHAR),
+					new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
 					new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(Socio.class)));
 			
 			MapSqlParameterSource parametros = new MapSqlParameterSource();
 			parametros.addValue("vi_numero_puesto", 	socio.getNroPuesto());
+			parametros.addValue("vi_codigo_usuario", 	datosSession.getCodigoUsuario());
 			
 			Map<String,Object> results = jdbcCall.execute(parametros);
 			List<Socio> lista = (List<Socio>) results.get("vo_result");

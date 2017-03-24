@@ -105,7 +105,7 @@ function buscarUnidad(){
 		
 }
 
-function editarUsuario(codigoUsuario, userid, dni, apePaterno, apeMaterno, nombres, codigoRol, codigoUnidad, estado, correo, telefono, fecnac){
+function editarUsuario(codigoUsuario, userid, dni, apePaterno, apeMaterno, nombres, codigoRol, codigoUnidad, estado, correo, telefono, serie, fecnac){
 	
 	$('#usuario_modal').modal({
 		backdrop: 'static',
@@ -129,6 +129,7 @@ function editarUsuario(codigoUsuario, userid, dni, apePaterno, apeMaterno, nombr
 	$("#estado").val(estado);
 	$("#correo").val(correo);
 	$("#telefono").val(telefono);
+	$("#serie").val(serie);
 	
 	listarUnidad();
 	$("#unidadTerritoral").val(codigoUnidad);
@@ -189,6 +190,7 @@ function nuevoUsuario(){
 	$("#fecnac").val("");
 	$("#correo").val("");
 	$("#telefono").val("");
+	$("#serie").val("");
 	
 	$("#estado").val("ACTIVO");
 	$("#estado").attr("disabled", true); 
@@ -208,6 +210,8 @@ function cargarUsuarios(){
 		apePaterno = replaceAll(rowObject.apellidoPaterno, " ", "#");
 		apeMaterno = replaceAll(rowObject.apellidoMaterno, " ", "#");
 		nombres = replaceAll(rowObject.nombres, " ", "#");
+		serie = rowObject.serie;
+		serie = replaceAll(serie.trim(), " ", "#");
 		if(rowObject.dni == null || rowObject.dni == ""){
 			dni = "";
 		}else{
@@ -240,6 +244,7 @@ function cargarUsuarios(){
 			opciones += rowObject.estado + "','";
 			opciones += correo + "','";
 			opciones += telefono + "','";
+			opciones += serie  + "','";			
 			opciones += rowObject.fechaNacimiento + "') >";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Usuario'/>";
 			opciones += "</a>";
@@ -265,7 +270,7 @@ function cargarUsuarios(){
 		mtype: 'POST',
 		height: 'auto',
 		width: 'auto',
-		colNames : ['Usuario', 'DNI', 'Ap.Paterno', 'Ap.Materno', 'Nombres', 'Fecha Nacimiento', 'Telefono', 'Correo', 'Unidad', 'Rol', 'Estado', 'Opciones'],
+		colNames : ['Usuario', 'DNI', 'Ap.Paterno', 'Ap.Materno', 'Nombres', 'Fecha Nacimiento', 'Telefono', 'Correo', 'Unidad', 'Rol', 'Serie', 'Estado', 'Opciones'],
 		colModel : [{
 			name : 'userid',
 			index: 'userid',
@@ -325,6 +330,12 @@ function cargarUsuarios(){
 			index: 'nombreRol',
 			sortable:false,
 			width: 200,
+			align: 'center'
+		},{
+			name : 'serie',
+			index: 'serie',
+			sortable:false,
+			width: 100,
 			align: 'center'
 		},{
 			name : 'estado',
@@ -417,6 +428,7 @@ function guardar(tipoRegistro){
 		parametros.telefono = $("#telefono").val();
 		parametros.correo = $("#correo").val();
 		parametros.dni = $("#dni").val();
+		parametros.serie = $("#serie").val();
 		
 		if(parametros.codigoUsuario == 0){
 			mensaje = "Se registro satisfactoriamente el usuario.";
@@ -725,6 +737,15 @@ function resetear(codigo, userid){
 								</select>
 							</td>
 							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td><span id="lblserie"><b>Nro.Serie</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td><input type="text" id="serie" class="form-control" maxlength="4" /></td>
+							<td valign="top"><img id="lblserie-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 						</tr>
 						<tr>
 							<td width="10px">&nbsp;</td>

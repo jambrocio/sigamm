@@ -239,5 +239,11 @@ public class FacturacionBusImpl implements FacturacionBus {
 		
 		return facturacionDao.eliminarServicios(servicios);
 	}
+
+	@Override
+	public ReporteFacturacion reporteFacturacionGeneral(int pagina, int registros, String puesto, String nombre, int exportar) {
+		
+		return facturacionDao.reporteFacturacionGeneral(pagina, registros, puesto, nombre, exportar);
+	}
 	
 }

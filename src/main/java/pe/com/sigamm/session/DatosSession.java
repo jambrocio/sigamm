@@ -19,6 +19,7 @@ public class DatosSession {
 	String clave;
 	int codigoUt;
 	String nombreUt;
+	String serie;
 	
 	public String getUsuario() {
 		return usuario;
@@ -86,5 +87,11 @@ public class DatosSession {
 	public void setNombreUt(String nombreUt) {
 		this.nombreUt = nombreUt;
 	}
-	
+	public String getSerie() {
+		return serie;
+	}
+	public void setSerie(String serie) {
+		this.serie = serie;
+	}
+		
 }

@@ -23,6 +23,7 @@ public class Usuario {
     int existeVoto;
     int cantidadVotos;
     int orden;
+    String serie;
     
 	public int getTipoRegistro() {
 		return tipoRegistro;
@@ -150,5 +151,11 @@ public class Usuario {
 	public void setOrden(int orden) {
 		this.orden = orden;
 	}
-    
+	public String getSerie() {
+		return serie;
+	}
+	public void setSerie(String serie) {
+		this.serie = serie;
+	}
+       
 }

@@ -76,4 +76,10 @@ public class ProcesosBusImpl implements ProcesosBus {
 		return procesosDao.procesarVigilancia(procesamiento);
 	}
 
+	@Override
+	public Retorno grabarProceso(String periodo, String fechaVencimiento) {
+		
+		return procesosDao.grabarProceso(periodo, fechaVencimiento);
+	}
+
 }

@@ -1111,5 +1111,46 @@ public class FacturacionDaoImpl implements FacturacionDao {
 		return retorno;
 		
 	}
+	
+	@Override
+	public ReporteFacturacion reporteFacturacionGeneral(int pagina, int registros, String puesto, String nombre, int exportar) {
+		
+		ReporteFacturacion reporte = new ReporteFacturacion();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_FACTURACION");
+			jdbcCall.withProcedureName("SP_REPORTE_FACTURACION").declareParameters(
+					new SqlParameter("vi_pagina", 					Types.INTEGER),
+					new SqlParameter("vi_registros", 				Types.INTEGER),
+					new SqlParameter("vi_puesto", 					Types.VARCHAR),
+					new SqlParameter("vi_nombres",					Types.VARCHAR),
+					new SqlParameter("vi_exportar", 				Types.INTEGER),
+					new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
+					
+					new SqlOutParameter("vo_total_registros", 		Types.INTEGER),
+					new SqlOutParameter("vo_result", 				OracleTypes.CURSOR,new BeanPropertyRowMapper(VistaFacturacion.class)));
+			
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_pagina", 			pagina);
+			parametros.addValue("vi_registros", 		registros);
+			parametros.addValue("vi_puesto", 			puesto != null ? puesto.toString() : "");
+			parametros.addValue("vi_nombres", 			nombre != null ? nombre.toString().toUpperCase() : "");
+			parametros.addValue("vi_exportar", 			exportar);
+			parametros.addValue("vi_codigo_usuario", 	datosSession.getCodigoUsuario());
+			
+			Map<String,Object> results = jdbcCall.execute(parametros);
+			int totalRegistros = (Integer) results.get("vo_total_registros");
+			List<VistaFacturacion> lista = (List<VistaFacturacion>) results.get("vo_result");
+			
+			reporte.setTotalRegistros(totalRegistros);
+			reporte.setListaFacturacion(lista);
+			
+		}catch(Exception e){
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return  reporte;
+		
+	}
 
 }
