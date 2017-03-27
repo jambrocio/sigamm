@@ -240,6 +240,30 @@ $(function() {
     });
     	
 
+	$("#periodo2").datepicker({
+        //dateFormat: 'mm-yy',
+        dateFormat: 'MM yy',
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+		regional: 'es',
+        onClose: function(dateText, inst) {  
+            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
+            $(this).val($.datepicker.formatDate('MM yy', new Date(year, month + 1, 1)));
+        }
+    });  
+	
+	
+	$("#periodo2").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $("#ui-datepicker-div").position({
+            my: "center top",
+            at: "center bottom",
+            of: $(this)
+        });    
+    });
+	
 });
 /*$(document).ready(function() {
 

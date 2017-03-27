@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -439,11 +440,62 @@ public class ReciboLuzController {
 	
 	@RequestMapping(value = "/recibosLuzUltimo", method = RequestMethod.GET)
     public void reporterecibosLuzUltimoPdf(
-    		HttpServletRequest request, HttpServletResponse response) throws IOException {
-        
+    		HttpServletRequest request, HttpServletResponse response) throws IOException {        
+		
 		String periodoReciboLuz = request.getParameter("periodo1");
+		String periodoReciboLuzActual = "";
+		
         String ruta = System.getProperty("ruta_ireport") != null ? System.getProperty("ruta_ireport") : ""; 
 		
+		Calendar c = Calendar.getInstance();
+		
+		int dia = c.get(Calendar.DATE);
+		int mes = c.get(Calendar.MONTH);
+		int annio = c.get(Calendar.YEAR);
+		
+		switch (mes) {
+			case 0:
+				periodoReciboLuzActual = periodoReciboLuz + " - ENERO " + annio;
+				break;
+			case 1:
+				periodoReciboLuzActual = periodoReciboLuz + " - FEBRERO " + annio;
+				break;
+			case 2:
+				periodoReciboLuzActual = periodoReciboLuz + " - MARZO " + annio;
+				break;
+			case 3:
+				periodoReciboLuzActual = periodoReciboLuz + " - ABRIL " + annio;
+				break;
+			case 4:
+				periodoReciboLuzActual = periodoReciboLuz + " - MAYO " + annio;
+				break;
+			case 5:
+				periodoReciboLuzActual = periodoReciboLuz + " - JUNIO " + annio;
+				break;
+			case 6:
+				periodoReciboLuzActual = periodoReciboLuz + " - JULIO " + annio;
+				break;
+			case 7:
+				periodoReciboLuzActual = periodoReciboLuz + " - AGOSTO " + annio;
+				break;
+			case 8:
+				periodoReciboLuzActual = periodoReciboLuz + " - SETIEMBRE " + annio;
+				break;
+			case 9:
+				periodoReciboLuzActual = periodoReciboLuz + " - OCTUBRE " + annio;
+				break;
+			case 10:
+				periodoReciboLuzActual = periodoReciboLuz + " - NOVIEMBRE " + annio;
+				break;
+			case 11:
+				periodoReciboLuzActual = periodoReciboLuz + " - DICIEMBRE " + annio;
+				break;
+			default:
+				periodoReciboLuzActual = " PERIODO POR DEFECTO ";
+				break;
+		}
+        
+        
 		String rutaJRXML = ruta + "Reporte_Recibos_Luz_Medicion.jrxml";
 		String rutaJASPER = ruta + "Reporte_Recibos_Luz_Medicion.jasper";
 		
@@ -454,7 +506,7 @@ public class ReciboLuzController {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("ReportTitle", "Reporte de Recibos de Luz de los Asociados");
 		parameters.put("Author", "SIGAMM");
-		parameters.put("FECHA", periodoReciboLuz);
+		parameters.put("FECHA", periodoReciboLuzActual);
 		parameters.put("PeriodoReciboLuz", periodoReciboLuz);
 		
 		Connection con = null;
