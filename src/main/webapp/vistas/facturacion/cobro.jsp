@@ -1016,7 +1016,7 @@ function openNewWindowForJasperWithChartsOthers(){
 							<td width="5px">&nbsp;</td>
 							<td><b>:</b></td>
 							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="importeVariableExtra" class="form-control" maxlength="5" style="width: 80px"/></td>
+							<td><input type="text" id="importeVariableExtra" class="form-control" maxlength="8" style="width: 80px"/></td>
 							<td valign="top"><img id="lblimporteVariableExtra-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 						</tr>
 						<tr>
