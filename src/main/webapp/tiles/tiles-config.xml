@@ -65,7 +65,10 @@
 		<put-attribute name="contenido" value="/vistas/reportes/reporte_facturacion.jsp" />
 		<put-attribute name="titulo" value="Reporte de Facturación" />
 	</definition>
-	
+	<definition name="reportes/reporte_balance_contable" extends="main">
+		<put-attribute name="contenido" value="/vistas/reportes/reporte_balance_contable.jsp" />
+		<put-attribute name="titulo" value="Reporte de Balance Contable" />
+	</definition>
 	
 	<!-- MANTENIMIENTO -->
 	<definition name="mantenimiento/usuarios" extends="main">

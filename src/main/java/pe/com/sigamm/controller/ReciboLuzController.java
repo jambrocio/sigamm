@@ -479,7 +479,7 @@ public class ReciboLuzController {
 				periodoReciboLuzActual = periodoReciboLuz + " - AGOSTO " + annio;
 				break;
 			case 8:
-				periodoReciboLuzActual = periodoReciboLuz + " - SETIEMBRE " + annio;
+				periodoReciboLuzActual = periodoReciboLuz + " - SEPTIEMBRE " + annio;
 				break;
 			case 9:
 				periodoReciboLuzActual = periodoReciboLuz + " - OCTUBRE " + annio;

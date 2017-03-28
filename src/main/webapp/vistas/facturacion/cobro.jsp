@@ -297,7 +297,7 @@ function guardar(){
     				        desConcepto = replaceAll(desConcepto, "JUNIO", "JUN");
     				        desConcepto = replaceAll(desConcepto, "JULIO", "JUL");
     				        desConcepto = replaceAll(desConcepto, "AGOSTO", "AGO");
-    				        desConcepto = replaceAll(desConcepto, "SETIEMBRE", "SET");
+    				        desConcepto = replaceAll(desConcepto, "SEPTIEMBRE", "SET");
     				        desConcepto = replaceAll(desConcepto, "OCTUBRE", "OCT");
     				        desConcepto = replaceAll(desConcepto, "NOVIEMBRE", "NOV");
     				        desConcepto = replaceAll(desConcepto, "DICIEMBRE", "DIC");

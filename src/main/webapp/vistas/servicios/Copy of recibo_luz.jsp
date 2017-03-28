@@ -461,7 +461,7 @@ function cargarReciboLuzOriginal(){
 			var anio = item.periodo.substring(0,4);
 			var mes1 = item.periodo.substring(4,6);
 			var periodo = null;
-			var months = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO','JULIO', 'AGOSTO', 'SETIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+			var months = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO','JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
 			for(var j=0;j<months.length;j++){
 				if (mes1==j+1)
 					periodo=months[j] + ' ' + anio;

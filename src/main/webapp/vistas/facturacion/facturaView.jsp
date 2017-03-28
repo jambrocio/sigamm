@@ -100,7 +100,7 @@ tamanio14 {
 								</tr>
 								<tr>
 									<td>&nbsp;</td>
-									<td>MES DE SETIEMBRE - 2015</td>
+									<td>MES DE SEPTIEMBRE - 2015</td>
 									<td class="text-right">1.00</td>
 								</tr>
 								<tr>
@@ -155,7 +155,7 @@ tamanio14 {
 								</tr>
 								<tr>
 									<td>&nbsp;</td>
-									<td>MES DE SETIEMBRE - 2015</td>
+									<td>MES DE SEPTIEMBRE - 2015</td>
 									<td class="text-right">1.00</td>
 								</tr>
 								<tr>
