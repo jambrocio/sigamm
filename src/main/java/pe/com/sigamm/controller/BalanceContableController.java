@@ -27,7 +27,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
+
+import pe.com.sigamm.bus.BalanceContableBus;
+import pe.com.sigamm.modelo.BalanceContable;
+import pe.com.sigamm.modelo.ReciboLuzSocio;
+import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.Constantes;
 import pe.com.sigamm.util.LoggerCustom;
@@ -39,6 +46,9 @@ public class BalanceContableController {
 	
 	@Autowired
 	private DatosSession datosSession;
+	
+	@Autowired
+	private BalanceContableBus balanceContableBus;
 	
 	@RequestMapping(value = "/reporte_balance_contable", method = RequestMethod.GET)
 	public String reporte_balance_contable(HttpServletRequest request) {
@@ -54,54 +64,79 @@ public class BalanceContableController {
 		
 		String fechaIni = request.getParameter("fechaIni");
 		String fechaFin = request.getParameter("fechaFin");
-				
-		
-        String ruta = System.getProperty("ruta_ireport") != null ? System.getProperty("ruta_ireport") : ""; 
-		       
-        
-		String rutaJRXML = ruta + "Reporte_Balance_Contable.jrxml";
-		String rutaJASPER = ruta + "Reporte_Balance_Contable.jasper";
-		
-		log.info("Ruta JRXML : " + rutaJRXML);
-		log.info("Ruta JASPER : " + rutaJASPER);
-		
-		
-		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("FECHA_INI", fechaIni);
-		parameters.put("FECHA_FIN", fechaFin);
-		
-		Connection con = null;
-		
-		try {
-			JasperCompileManager.compileReportToFile(rutaJRXML);
-			JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(rutaJASPER);
-			/*CONEXION JNDI*/
-			/*INICIO*/
-			Context initialContext = new InitialContext();
-			DataSource datasource = (DataSource)initialContext.lookup(Constantes.SigammDS);
-			con = datasource.getConnection();
-			/*FIN*/
-			JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, con);
-			if (jasperPrint != null) {
-				byte[] pdfReport = JasperExportManager.exportReportToPdf(jasperPrint);
-				response.reset();
-				response.setContentType("application/pdf");
-				response.setHeader("Cache-Control", "no-store");
-				response.setHeader("Cache-Control", "private");
-				response.setHeader("Pragma", "no-store");
-				response.setContentLength(pdfReport.length);
-				response.getOutputStream().write(pdfReport);
-				response.getOutputStream().flush();
-				response.getOutputStream().close();
+		BalanceContable balanceContable = new BalanceContable();
+		balanceContable.setFechaIni(fechaIni);
+		balanceContable.setFechaFin(fechaFin);			
+		Retorno retorno = balanceContableBus.BuscarBalanceContable(balanceContable);
+		int codigo = retorno.getCodigo();
+
+		if (codigo > 0) {
+	        String ruta = System.getProperty("ruta_ireport") != null ? System.getProperty("ruta_ireport") : ""; 
+			       
+	        
+			String rutaJRXML = ruta + "Reporte_Balance_Contable.jrxml";
+			String rutaJASPER = ruta + "Reporte_Balance_Contable.jasper";
+			
+			log.info("Ruta JRXML : " + rutaJRXML);
+			log.info("Ruta JASPER : " + rutaJASPER);
+			
+			
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			parameters.put("FECHA_INI", fechaIni);
+			parameters.put("FECHA_FIN", fechaFin);
+			parameters.put("SUBREPORT_DIR", ruta);
+			
+			Connection con = null;
+			
+			try {
+				JasperCompileManager.compileReportToFile(rutaJRXML);
+				JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(rutaJASPER);
+				/*CONEXION JNDI*/
+				/*INICIO*/
+				Context initialContext = new InitialContext();
+				DataSource datasource = (DataSource)initialContext.lookup(Constantes.SigammDS);
+				con = datasource.getConnection();
+				/*FIN*/
+				JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, con);
+				if (jasperPrint != null) {
+					byte[] pdfReport = JasperExportManager.exportReportToPdf(jasperPrint);
+					response.reset();
+					response.setContentType("application/pdf");
+					response.setHeader("Cache-Control", "no-store");
+					response.setHeader("Cache-Control", "private");
+					response.setHeader("Pragma", "no-store");
+					response.setContentLength(pdfReport.length);
+					response.getOutputStream().write(pdfReport);
+					response.getOutputStream().flush();
+					response.getOutputStream().close();
+				}
+			} catch (JRException e) {
+				LoggerCustom.errorApp(this, "", e);
+			} catch (NamingException e) {
+				LoggerCustom.errorApp(this, "", e);
+			} catch (SQLException e) {
+				LoggerCustom.errorApp(this, "", e);
 			}
-		} catch (JRException e) {
-			LoggerCustom.errorApp(this, "", e);
-		} catch (NamingException e) {
-			LoggerCustom.errorApp(this, "", e);
-		} catch (SQLException e) {
-			LoggerCustom.errorApp(this, "", e);
-		}
  
+		} else {
+			enviarMensaje(codigo);
+		}
+		
     }
+	
+	
+	@RequestMapping(value = "/enviar-mensaje.json", method = RequestMethod.POST, produces = "application/json")
+	public @ResponseBody
+	String enviarMensaje(int valor) {
+
+		Gson gson = new Gson();
+
+		int codigo = valor;
+		String mensaje = "Lo sentimos..., Este reporte no contiene datos...!";
+
+		String resultado = "{\"idUsuario\":" + codigo + ",\"mensaje\":\"" + mensaje + "\"}";
+
+		return resultado;
+	}
 	
 }
