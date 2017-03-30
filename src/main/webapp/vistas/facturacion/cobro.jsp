@@ -144,6 +144,8 @@ function colorEtiquetas(){
 
 function nuevoCobro(){
 	
+	$("#facturacionImprimir").hide();
+	
 	colorEtiquetas();
 	
 	$("#codigoPuesto").val(0);
@@ -265,6 +267,9 @@ function guardar(){
     	    	
     		    	if(result.idFacturacion > 0){
     			    	
+    		    		$("#facturacionImprimir").show(); 
+    		    		$("#idFacturacion").html(result.idFacturacion);
+    		    		
     		    		$("#btnBuscar").attr("disabled", true);
     					$("#btnAgregar").attr("disabled", true);		    	
     					$(".btnEliminar").attr("disabled", true);
@@ -832,7 +837,7 @@ function openNewWindowForJasperWithChartsOthers(){
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 			</button>
 		</td>
-		<td colspan="2">&nbsp;</td>
+		<td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;<span id="facturacionImprimir" style="display:none;"><b>Código : <span id="idFacturacion" /></span></b></td>
 	</tr>
 	<tr>
 		<td colspan="9"><hr /></td>

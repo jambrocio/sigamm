@@ -6,7 +6,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Cambiar Clave de Usuario</title>
-	<link rel="shortcut Icon" href="recursos/images/icons/AYZA-Juntos-32.ico" type="image/x-icon">
+	<link rel="shortcut Icon" href="recursos/images/icons/logo.ico" type="image/x-icon">
 	<script language="javascript" src="recursos/js/jquery-1.8.2.min.js"></script>
 	<script language="javascript" src="recursos/js/jquery-ui-1.10.4.custom.min.js"></script>
 	<link rel="stylesheet" href="recursos/css/redmond/jquery.ui.all.css" type="text/css" />
