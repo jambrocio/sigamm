@@ -52,7 +52,7 @@ a:hover, a:visited, a:link, a:active
 		font-family: 'PT Sans', sans-serif;
 		font-size: 16px;
 	}
-	.jAlertsMessage h2 { font-size: 22px; }
+.jAlertsMessage h2 { font-size: 22px; }
 
 </style>
 <!-- Fin -->
@@ -159,7 +159,17 @@ a:hover, a:visited, a:link, a:active
 				<table border="0" width="100%">
 					<tr>
 						<td>&nbsp;</td>
-						<td align="right" valign="bottom"><p style="font-size:11px; color: #0B739E;"><b><span id="datos" /></b>&nbsp;&nbsp;<img id="usuario-img" src="<c:url value="recursos/images/icons/users_32x32.png"/>" data-toggle="popover" /></p></td>
+						<td align="right" valign="bottom">
+							<p style="font-size:11px; color: #0B739E;">
+								<b><span id="datos" /></b>&nbsp;&nbsp;
+								<img id="usuario-img" src="<c:url value="recursos/images/icons/users_32x32.png"/>" />
+							</p>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" align="right">
+							<a href="<c:url value="/usuario"/>"><h4>Cambiar de Clave</h4></a>
+						</td>
 					</tr>
 				</table>		
 			</h1>

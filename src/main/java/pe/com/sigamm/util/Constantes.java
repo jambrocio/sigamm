@@ -41,6 +41,13 @@ public class Constantes {
 	public static final String SIN_CONCEPTOS_OBLIGATORIO	= "Debe de agregar conceptos para poder grabar.";
 	public static final String FECHA_FACTURACION_OBLIGATORIO	= "Debe de ingresar la fecha de facturacion.";
 	
+	public static final String CLAVE_ACTUAL_OBLIGATORIO			= "La clave actual es obligatorio.";
+	public static final String CLAVE_NUEVA_OBLIGATORIO			= "La nueva clave es obligatorio.";
+	public static final String CLAVE_NUEVA_REPETIR_OBLIGATORIO	= "La nueva clave (repetir) es obligatorio.";
+	
+	public static final String CLAVE_NUEVA_REPETIR_NO_IGUAL		= "La nueva clave y nueva clave(repetir) deben ser iguales.";
+	public static final String CLAVE_ACTUAL_NO_IGUAL			= "La clave actual es incorrecta.";
+	
 	public static final String ETIQUETA_USUARIO			= "lblusuario";
 	public static final String ETIQUETA_DNI				= "lbldni";
 	public static final String ETIQUETA_APEPAT			= "lblapepat";
@@ -57,6 +64,10 @@ public class Constantes {
 	public static final String ETIQUETA_PADRON			= "lblpadron";
 	public static final String ETIQUETA_COMPROBANTE		= "lblcomprobante";
 	public static final String ETIQUETA_FECHA_FACTURACION	= "lblfechafacturacion";
+	
+	public static final String ETIQUETA_CLAVE_ACTUAL	= "lblclaveActual";
+	public static final String ETIQUETA_CLAVE_NUEVA		= "lblnuevaClave";
+	public static final String ETIQUETA_CLAVE_NUEVA_REPETIR	= "lblnuevaClaveRepetir";
 	
 	//--- ETIQUETAS RECIBO AGUA
 	public static final String ETIQUETA_PERIODO			  = "lblperiodo";

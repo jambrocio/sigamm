@@ -36,6 +36,11 @@
 		<put-attribute name="titulo" value="Detalle del Usuario" />
 	</definition>
 	
+	<definition name="usuario" extends="main">
+		<put-attribute name="contenido" value="/vistas/usuario.jsp" />
+		<put-attribute name="titulo" value="Cambio de clave" />
+	</definition>
+	
 	<!-- REPORTES -->
 	<definition name="reportes/reporte_egreso" extends="main">
 		<put-attribute name="contenido" value="/vistas/reportes/reporte_egreso.jsp" />
@@ -86,6 +91,10 @@
 	<definition name="mantenimiento/concepto" extends="main">
 		<put-attribute name="contenido" value="/vistas/mantenimiento/concepto.jsp" />
 		<put-attribute name="titulo" value="Reporte de Conceptos" />
+	</definition>
+	<definition name="mantenimiento/menuUsuario" extends="main">
+		<put-attribute name="contenido" value="/vistas/mantenimiento/menu.jsp" />
+		<put-attribute name="titulo" value="Menu de Usuario" />
 	</definition>
 	
 	<!-- FACTURACION -->

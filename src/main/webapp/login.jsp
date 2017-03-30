@@ -27,7 +27,7 @@
 	</style>
 	<script>
 	$(function() {
-		
+		$("#j_username").focus();
 	});
 	</script>
 </head>
@@ -51,7 +51,7 @@
 									<td>
 										<div class="input-group">
 									      <div class="input-group-addon"><img src="recursos/images/icons/correo_16x16.png" border="0" /></div>
-									      <input class="form-control" type="text" name="j_username" placeholder="Ingrese su usuario">
+									      <input class="form-control" type="text" name="j_username" id="j_username" placeholder="Ingrese su usuario">
 									    </div>
 									</td>
 									<td width="30px">&nbsp;</td>

@@ -7,8 +7,10 @@ public class MenuPrincipal {
 	String descMenu;
 	int ordenMenu;
 	String descSubMenu;
+	int ordenSubMenu;
 	String link;
 	int nivel;
+	int subMenuAsignado;
 	
 	public int getCodigoMenu() {
 		return codigoMenu;
@@ -40,6 +42,12 @@ public class MenuPrincipal {
 	public void setDescSubMenu(String descSubMenu) {
 		this.descSubMenu = descSubMenu;
 	}
+	public int getOrdenSubMenu() {
+		return ordenSubMenu;
+	}
+	public void setOrdenSubMenu(int ordenSubMenu) {
+		this.ordenSubMenu = ordenSubMenu;
+	}
 	public String getLink() {
 		return link;
 	}
@@ -52,5 +60,11 @@ public class MenuPrincipal {
 	public void setNivel(int nivel) {
 		this.nivel = nivel;
 	}
-	
+	public int getSubMenuAsignado() {
+		return subMenuAsignado;
+	}
+	public void setSubMenuAsignado(int subMenuAsignado) {
+		this.subMenuAsignado = subMenuAsignado;
+	}
+		
 }

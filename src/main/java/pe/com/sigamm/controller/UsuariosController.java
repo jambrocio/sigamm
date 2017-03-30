@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URLDecoder;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,8 +32,12 @@ import com.google.gson.reflect.TypeToken;
 
 import pe.com.sigamm.bean.CamposObligatorios;
 import pe.com.sigamm.bean.Imei;
+import pe.com.sigamm.bean.MenuUsuarios;
 import pe.com.sigamm.bean.ResponseListBean;
 import pe.com.sigamm.bus.UsuarioBus;
+import pe.com.sigamm.modelo.FacturacionCabecera;
+import pe.com.sigamm.modelo.FacturacionDetalle;
+import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.modelo.Rol;
 import pe.com.sigamm.modelo.Unidad;
 import pe.com.sigamm.modelo.Usuario;
@@ -40,13 +45,14 @@ import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.Constantes;
 import pe.com.sigamm.util.LoggerCustom;
 import pe.com.sigamm.util.OperadoresUtil;
+import pe.com.sigamm.util.Seguridad;
 import pe.com.sigamm.util.Util;
 import pe.com.sigamm.util.Validar;
 
 @Controller
 public class UsuariosController {
 	
-private static final Logger log = Logger.getLogger(ReporteRegistrosController.class);
+	private static final Logger log = Logger.getLogger(ReporteRegistrosController.class);
 	
 	@Autowired
 	private UsuarioBus usuarioBus;
@@ -54,10 +60,27 @@ private static final Logger log = Logger.getLogger(ReporteRegistrosController.cl
 	@Autowired
 	private DatosSession datosSession;
 	
+	@Autowired
+	private UsuarioBus mantenimientoBus;
+	
 	@RequestMapping(value = "/usuarios", method=RequestMethod.GET)
-	public String reporteVisitas(HttpServletRequest request) {
+	public String mantenimientoUsuario(HttpServletRequest request) {
 		
 		return "mantenimiento/usuarios";
+	
+	}
+	
+	@RequestMapping(value = "/menuUsuario", method=RequestMethod.GET)
+	public String menuUsuario(HttpServletRequest request) {
+		
+		return "mantenimiento/menuUsuario";
+	
+	}
+	
+	@RequestMapping(value = "/usuario", method=RequestMethod.GET)
+	public String usuario(HttpServletRequest request) {
+		
+		return "usuario";
 	
 	}
 
@@ -87,7 +110,7 @@ private static final Logger log = Logger.getLogger(ReporteRegistrosController.cl
 	}
 	
 	@RequestMapping(value = "/listar-rol.json", method = RequestMethod.POST, produces="application/json")
-	public @ResponseBody ResponseListBean<Rol> listarUsuarios(@RequestParam(value = "codigoUnidad", defaultValue = "0") Integer codigoUnidad){
+	public @ResponseBody ResponseListBean<Rol> listarRol(@RequestParam(value = "codigoUnidad", defaultValue = "0") Integer codigoUnidad){
 		
 		ResponseListBean<Rol> response = new ResponseListBean<Rol>();
 		response.setRows(usuarioBus.listaRol(codigoUnidad));
@@ -330,5 +353,88 @@ private static final Logger log = Logger.getLogger(ReporteRegistrosController.cl
 			@RequestParam(value = "dni", defaultValue = "0") String dni){
 		
 		return usuarioBus.buscarUsuario(dni);
+	}
+	
+	@RequestMapping(value = "/buscar-menu-usuario.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String buscarMenuUsuario(
+			@RequestParam(value = "codigoUsuario", defaultValue = "0") int codigoUsuario){
+		
+		return usuarioBus.buscarMenuUsuario(codigoUsuario);
+	}
+	
+	@RequestMapping(value = "/listar-usuarios.json", method = RequestMethod.GET, produces="application/json")
+	public @ResponseBody String listarUsuariosAll(){
+		
+		return usuarioBus.listarUsuarios();
+	}
+	
+	@RequestMapping(value = "/grabar-menu-usuario.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String grabarMenuUsuarios(@RequestParam(value = "menuDetalle", defaultValue = "") String menuDetalle){
+		
+		Gson gson = new Gson();
+		Type type = new TypeToken<List<MenuUsuarios>>(){}.getType();
+		List<MenuUsuarios> lista = gson.fromJson(menuDetalle, type);
+		
+		usuarioBus.grabarMenuUsuario(lista);
+		
+		String resultado = "{\"retorno\":\"" + "00" + "\", \"mensaje\":\"" + "Se realizo el registro satisfactoriamente." + "\"}";
+		return resultado;
+	}
+	
+	@RequestMapping(value = "/grabar-cambiar-clave.json", method = RequestMethod.POST, produces="application/json")
+	public @ResponseBody String grabarCambiarClave(
+			@RequestParam(value = "claveActual", defaultValue = "") String claveActual,
+			@RequestParam(value = "nuevaClave", defaultValue = "") String nuevaClave,
+			@RequestParam(value = "nuevaClaveRepetir", defaultValue = "") String nuevaClaveRepetir) throws NoSuchAlgorithmException{
+		
+		Gson gson = new Gson();
+		List<CamposObligatorios> camposObligatorios = new ArrayList<CamposObligatorios>();
+		
+		int lclaveActual 		= claveActual.trim().length();
+		int lnuevaClave 		= nuevaClave.trim().length();
+		int lnuevaClaveRepetir 	= nuevaClaveRepetir.trim().length(); 
+		
+		if(lclaveActual == 0)
+			camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_CLAVE_ACTUAL, Constantes.CLAVE_ACTUAL_OBLIGATORIO));
+		
+		if(lnuevaClave == 0)
+			camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_CLAVE_NUEVA, Constantes.CLAVE_NUEVA_OBLIGATORIO));
+		
+		if(lnuevaClaveRepetir == 0)
+			camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_CLAVE_NUEVA_REPETIR, Constantes.CLAVE_NUEVA_REPETIR_OBLIGATORIO));
+		
+		if(!nuevaClave.equals(nuevaClaveRepetir))
+			camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_CLAVE_NUEVA_REPETIR, Constantes.CLAVE_NUEVA_REPETIR_NO_IGUAL));
+		
+		String claveEncriptada = Seguridad.fn_sEncrypting("PASSWORD", claveActual.toUpperCase());
+		
+		if(!datosSession.getClave().equals(claveEncriptada))
+			camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_CLAVE_ACTUAL, Constantes.CLAVE_ACTUAL_NO_IGUAL));
+		
+		String listaObligatorios = gson.toJson(camposObligatorios);
+		String resultado = "";
+		if(camposObligatorios.size() > 0){
+			
+			resultado = "{\"idFacturacion\":" + 0 + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + "Error" + "\"}";
+			
+		}else{
+			
+			String respuesta = mantenimientoBus.resetearClave(datosSession.getCodigoUsuario(), nuevaClave.toUpperCase());
+			String mensaje = "";
+			int codigo = 0;
+			if(respuesta.equals("00")){
+				mensaje = "El cambio de clave se realizo satisfactoriamente.";
+				codigo = 1;
+			}else{
+				mensaje = "El cambio de clave tuvo problemas, vuelva a intertar.";
+				codigo = 0;
+			}
+			
+			resultado = "{\"codigo\":" + codigo + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + mensaje + "\"}";
+			
+		}
+		
+		return resultado;
+		
 	}
 }

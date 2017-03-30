@@ -4,8 +4,6 @@ import java.sql.Types;
 import java.util.List;
 import java.util.Map;
 
-import oracle.jdbc.OracleTypes;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,8 +13,11 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 
+import oracle.jdbc.OracleTypes;
 import pe.com.sigamm.bean.Imei;
 import pe.com.sigamm.dao.UsuariosDao;
+import pe.com.sigamm.modelo.MenuPrincipal;
+import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.modelo.Rol;
 import pe.com.sigamm.modelo.Unidad;
 import pe.com.sigamm.modelo.Usuario;
@@ -236,6 +237,77 @@ public class UsuariosDaoImpl implements UsuariosDao {
 		
 		return  usuario;
 		
+	}
+
+	@Override
+	public List<MenuPrincipal> buscarMenuUsuario(int codigoUsuario) {
+		
+		jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+		jdbcCall.withCatalogName("PKG_USUARIOS");
+		jdbcCall.withProcedureName("SP_BUSCAR_MENU_USUARIO");
+		jdbcCall.addDeclaredParameter(new SqlOutParameter("vo_result", OracleTypes.CURSOR,new BeanPropertyRowMapper(MenuPrincipal.class)));
+		
+		MapSqlParameterSource parametros = new MapSqlParameterSource();
+		parametros.addValue("vi_codigo_usuario", codigoUsuario);
+		
+		Map<String,Object> results = jdbcCall.execute(parametros);
+		List<MenuPrincipal> lista = (List<MenuPrincipal>) results.get("vo_result");
+		return  lista;
+		
+	}
+
+	@Override
+	public List<Usuario> listarUsuarios() {
+		
+		jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+		jdbcCall.withCatalogName("PKG_USUARIOS");
+		jdbcCall.withProcedureName("SP_LISTAR_USUARIOS");
+		jdbcCall.addDeclaredParameter(new SqlOutParameter("vo_result", OracleTypes.CURSOR,new BeanPropertyRowMapper(Usuario.class)));
+		
+		Map<String,Object> results = jdbcCall.execute();
+		List<Usuario> lista = (List<Usuario>) results.get("vo_result");
+		return  lista;
+		
+	}
+
+	@Override
+	public Retorno grabarMenuUsuario(int codigoUsuario, int isChecked, int codigoSubMenu) {
+		Retorno retorno = new Retorno();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_USUARIOS");
+			jdbcCall.withProcedureName("SP_GRABAR_MENU_USUARIO").declareParameters(
+				new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
+				new SqlParameter("vi_is_checked", 				Types.INTEGER),
+				new SqlParameter("vi_codigo_sub_menu", 			Types.INTEGER),
+				
+				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
+				new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
+				
+            
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_usuario", 			codigoUsuario);
+			parametros.addValue("vi_is_checked", 				isChecked);
+			parametros.addValue("vi_codigo_sub_menu", 			codigoSubMenu);
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
 	}
 
 }
