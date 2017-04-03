@@ -33,7 +33,6 @@ import com.google.gson.Gson;
 
 import pe.com.sigamm.bus.BalanceContableBus;
 import pe.com.sigamm.modelo.BalanceContable;
-import pe.com.sigamm.modelo.ReciboLuzSocio;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.Constantes;
