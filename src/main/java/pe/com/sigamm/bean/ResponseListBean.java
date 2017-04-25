@@ -3,7 +3,7 @@ package pe.com.sigamm.bean;
 import java.util.List;
 
 public class ResponseListBean<T> {
-	
+	private String flag;
 	private Integer page;
 	private Integer total;
 	private Integer records;
@@ -32,4 +32,11 @@ public class ResponseListBean<T> {
 	public void setRows(List<T> rows) {
 		this.rows = rows;
 	}
+	public String getFlag() {
+		return flag;
+	}
+	public void setFlag(String flag) {
+		this.flag = flag;
+	}
+
 }

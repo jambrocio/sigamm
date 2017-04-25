@@ -207,10 +207,12 @@ public class ReciboAguaController {
 			@RequestParam(value = "puestoSocio", defaultValue = "0") String puestoSocio,
 			@RequestParam(value = "codigoRecibo", defaultValue = "0") Integer codigoRecibo) {
 
+		String flagPagado = System.getProperty("flag_pagado") != null ? System.getProperty("flag_pagado") : "0";		
 		ResponseListBean<ReciboAguaSocio> response = new ResponseListBean<ReciboAguaSocio>();
 		ReporteReciboAguaSocio reporte = reciboAguaSocioBus.reportePuestoAguaSocio(pagina, registros, puestoSocio, codigoRecibo);
 		Integer totalReciboPuestoAgua = reporte.getTotalRegistros();
 
+		response.setFlag(flagPagado);
 		response.setPage(pagina);
 		response.setRecords(totalReciboPuestoAgua);
 

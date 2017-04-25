@@ -567,6 +567,9 @@ function cargarReciboAguaSocio1(codigoRecibo){
 	var ruta = obtenerContexto();
 	var formatterBotones = function(cellVal,options,rowObject)
 	{	
+		//console.log("FLAG1 : " + request("flag") );
+		//console.log("FLAG2 : " + request.getFlag());
+		
 		var opciones = "<center>";		
 
 		if (rowObject.pagado != 1) {			
@@ -585,12 +588,12 @@ function cargarReciboAguaSocio1(codigoRecibo){
 			if (rowObject.reciboAguaCreado != 0) {
 				opciones += "&nbsp;&nbsp;";
 				
-				/*opciones += "<a href=javascript:pagarReciboAguaXSocio('";
+				opciones += "<a href=javascript:pagarReciboAguaXSocio('";
 				opciones += rowObject.codigoReciboAgua + "','" + rowObject.nroPuesto + "'," + rowObject.codigoSocio + ") >";
 				opciones += "<img src='/"+ruta+"/recursos/images/icons/money_activo_24x24.png' border='0' title='PAGAR Recibo de Agua por Socio'/>";
 				opciones += "</a>";
 				
-				opciones += "&nbsp;&nbsp;";*/
+				opciones += "&nbsp;&nbsp;";
 				
 				opciones += "<a href=javascript:eliminarReciboAguaXSocio('";
 				opciones += rowObject.codigoReciboAgua + "','" + rowObject.nroPuesto + "'," + rowObject.codigoSocio + ") >";
