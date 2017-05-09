@@ -182,6 +182,7 @@ public class ReciboSocioAguaDaoImpl implements ReciboAguaSocioDao {
 					new SqlParameter("vi_codigo_servicio_detalle", Types.NUMERIC),
 					new SqlParameter("vi_corte_agua", 			Types.NUMERIC),
 					new SqlParameter("vi_suspendido", 			Types.NUMERIC),
+					new SqlParameter("vi_fec_periodo", 			Types.VARCHAR),
 					
 					new SqlOutParameter("vo_codigo_socio",  		Types.INTEGER),
 					new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
@@ -210,6 +211,7 @@ public class ReciboSocioAguaDaoImpl implements ReciboAguaSocioDao {
 			parametros.addValue("vi_codigo_servicio_detalle", reciboAguaSocio.getCodigoServicioDetalle());
 			parametros.addValue("vi_corte_agua", 		reciboAguaSocio.getCorteAgua());
 			parametros.addValue("vi_suspendido", 		reciboAguaSocio.getSuspendido());
+			parametros.addValue("vi_fec_periodo",       reciboAguaSocio.getPeriodoSocio());
 			
 			Map<String,Object> result = jdbcCall.execute(parametros); 
 			

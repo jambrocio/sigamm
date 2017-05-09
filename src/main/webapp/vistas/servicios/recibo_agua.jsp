@@ -750,8 +750,8 @@ function editarReciboAguaXSocio(original, puesto){
 		            	$("#codigoServicioDetalle").val(val.codigoServicioDetalle);
 		            	$("#alcantarilladoSocio").val(val.alcantarillado);
 		            	
-		            	$("#totalSocio").text(val.total + val.deudaAnterior); //OJO, Verificar este tema
-		            	//$("#totalSocioGrabar").text(val.total);
+		            	//$("#totalSocio").text(val.total + val.deudaAnterior); //OJO, Verificar este tema
+		            	$("#totalSocioGrabar").text(val.total);
 		            	
 		            	$("#correlativo").val(val.correlativo);
 		            	$("#mantenimientoSocio").val(val.servicioMantenimiento);
@@ -1180,9 +1180,10 @@ function guardarRecibo(){
 	parametros.alcantarillado = parseFloat($("#alcantarilladoSocio").val());
 	parametros.servicioMantenimiento = parseFloat($("#mantenimientoSocio").val());
 	parametros.reconexion = 0;
-	parametros.total = parseFloat($("#totalSocio").text()) - parseFloat($("#deudaAnteriorSocio").val());
+	parametros.total = parseFloat($("#totalSocio").text()) //- parseFloat($("#deudaAnteriorSocio").val());
 	parametros.correlativo = $("#correlativo").val();
 	parametros.suspendido =  $("#suspendido").val();
+	parametros.periodoSocio = $("#periodoSocio").text();
 		
 	$.ajax({
 		type: "POST",
