@@ -64,7 +64,20 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 
 		Document doc = new Document();
 		PdfWriter docWriter = null;
-		String path = UtilPDF.RUTA_PDF + UtilPDF.getDatePDF() + ".pdf";
+		
+		String ruta_pdf_linux = System.getProperty("ruta_reportes_linux") != null ? System.getProperty("ruta_reportes_linux") : "";
+		String ruta_pdf_windows = System.getProperty("ruta_reportes_windows") != null ? System.getProperty("ruta_reportes_windows") : "";		
+		String sSistemaOperativo = System.getProperty("os.name");
+		System.out.println(sSistemaOperativo);
+		
+		String path = "";
+		
+		if(!sSistemaOperativo.toUpperCase().contains("WINDOW")){
+			path = ruta_pdf_linux + UtilPDF.getDatePDF() + ".pdf";
+		}else{
+			path = ruta_pdf_windows + UtilPDF.getDatePDF() + ".pdf";
+		}		
+
 
 		ReporteReciboLuzSocio reporte = reciboLuzSocioDao.reporteReciboLuzSocio(codigoReciboLuzSocio, periodo);
 
