@@ -107,7 +107,21 @@ $(document).ready(function(){
 	montoTotalDiario();
 });
 
-
+function montoTotalDiario(){
+	
+	$.ajax({
+        type: "POST",
+        async:false,
+        url: "monto-total-diario.json",
+        cache : false,
+        success: function(result){
+            //console.log("monto : " + result.monto);
+        	//alert("Resultado : [" + result + "]");
+        	//total = parseFloat(result.monto);
+            $("#totalFacturacion").html(result.monto);
+        }
+    });
+}
 
 function colorEtiquetas(){
 	
@@ -201,7 +215,7 @@ function visualizar(codigoFacturacionCab){
         	$.each(result, function(keyM, serv) {
         		
         		var nombreDetalle = serv.nombreDetalle;
-        		var monto = parseInt(serv.monto);
+        		var monto = parseFloat(serv.monto);
         		var fecPeriodo = serv.fecPeriodo;
         		
         		dataTabla += "<tr>" +

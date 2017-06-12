@@ -204,6 +204,8 @@ function visualizar(codigoFacturacionCab){
         		var monto = parseInt(serv.monto);
         		var fecPeriodo = serv.fecPeriodo;
         		
+        		//console.log("Monto : " + monto);
+        		
         		dataTabla += "<tr>" +
 		           	"<td align='center'></td>" + 
   		           	"<td align='left' class='tamanioPrinter12'><b>" + nombreDetalle + "</b><br>" + fecPeriodo + "</td>" +
