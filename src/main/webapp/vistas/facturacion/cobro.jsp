@@ -837,7 +837,7 @@ function openNewWindowForJasperWithChartsOthers(){
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 			</button>
 		</td>
-		<td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;<span id="facturacionImprimir" style="display:none;"><b>Código : <span id="idFacturacion" /></span></b></td>
+		<td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;<span id="facturacionImprimir" style="display:none; font-size:18px;"><font color="red"><b>Código : <span id="idFacturacion"/></span></b></font></td>
 	</tr>
 	<tr>
 		<td colspan="9"><hr /></td>
