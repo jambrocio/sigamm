@@ -60,12 +60,12 @@ public class CobrosFacturadosController {
 		String rutaJASPER = ruta + "Reporte_Facturacion_por_Fechas" + ".jasper";
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("ReportTitle", Constantes.IREPORT_TITULO_FACTURACION_DIARIO);
-		parameters.put("Author", Constantes.IREPORT_AUTOR);
+		//parameters.put("ReportTitle", Constantes.IREPORT_TITULO_FACTURACION_DIARIO);
+		//parameters.put("Author", Constantes.IREPORT_AUTOR);
 		parameters.put("SUBREPORT_DIR", ruta);
-		parameters.put("P_CODIGO_USUARIO", datosSession.getCodigoUsuario());
-		parameters.put("P_FECHA_INICIAL", fechaIni);
-		parameters.put("P_FECHA_FINAL", fechaFin);
+		//parameters.put("P_CODIGO_USUARIO", datosSession.getCodigoUsuario());
+		parameters.put("FECHA_INICIAL", fechaIni);
+		parameters.put("FECHA_FINAL", fechaFin);
 		
 		Connection con = null;
 		

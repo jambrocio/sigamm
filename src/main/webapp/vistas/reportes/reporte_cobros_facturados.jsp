@@ -88,9 +88,12 @@ $(function() {
 function reporte(){
 	var fechaInicial = $("#fechainicial").val();
 	var fechaFinal = $("#fechafinal").val();
-	//window.open("/sigamm/reportarEgresoExcel?fechaInicial="+fechaInicial+"&fechaFinal="+fechaFinal, 'Descarga', 'width=100px,height=50px,toolbar=no', '1');
+	//window.open("/sigamm/reportarCobrosFacturados?fechaInicial="+fechaInicial+"&fechaFinal="+fechaFinal, 'Descarga', 'width=100px,height=50px,toolbar=no', '1');	
+	var url  = "/sigamm/reportarCobrosFacturados?fechaInicial="+fechaInicial+"&fechaFinal="+fechaFinal;
+	window.open(url,"_blank", "menubar=no,location=0,height=500,width=800");
+	
 	//Reporte se muestra en la misma hoja
-	window.location = "/sigamm/reportarCobrosFacturados?fechaInicial="+fechaInicial+"&fechaFinal="+fechaFinal;
+	//window.location = "/sigamm/reportarCobrosFacturados?fechaInicial="+fechaInicial+"&fechaFinal="+fechaFinal;
 }
 
 </script>
