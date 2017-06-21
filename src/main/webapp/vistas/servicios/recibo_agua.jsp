@@ -586,12 +586,12 @@ function cargarReciboAguaSocio1(codigoRecibo){
 			opciones += "</a>";			
  
 			if (rowObject.reciboAguaCreado != 0) {
-				opciones += "&nbsp;&nbsp;";
+				/*opciones += "&nbsp;&nbsp;";
 				
 				opciones += "<a href=javascript:pagarReciboAguaXSocio('";
 				opciones += rowObject.codigoReciboAgua + "','" + rowObject.nroPuesto + "'," + rowObject.codigoSocio + ") >";
 				opciones += "<img src='/"+ruta+"/recursos/images/icons/money_activo_24x24.png' border='0' title='PAGAR Recibo de Agua por Socio'/>";
-				opciones += "</a>";
+				opciones += "</a>";*/
 				
 				opciones += "&nbsp;&nbsp;";
 				
@@ -1180,7 +1180,7 @@ function guardarRecibo(){
 	parametros.alcantarillado = parseFloat($("#alcantarilladoSocio").val());
 	parametros.servicioMantenimiento = parseFloat($("#mantenimientoSocio").val());
 	parametros.reconexion = 0;
-	parametros.total = parseFloat($("#totalSocio").text()) //- parseFloat($("#deudaAnteriorSocio").val());
+	parametros.total = parseFloat($("#totalSocio").text()) - parseFloat($("#deudaAnteriorSocio").val());
 	parametros.correlativo = $("#correlativo").val();
 	parametros.suspendido =  $("#suspendido").val();
 	parametros.periodoSocio = $("#periodoSocio").text();
