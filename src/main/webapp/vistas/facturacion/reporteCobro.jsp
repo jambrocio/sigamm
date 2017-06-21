@@ -672,6 +672,40 @@ function cerrar(){
 	
 }
 
+function buscarPuesto(){
+	
+	var parametros=new Object();
+	parametros.puesto = $("#nroPuesto").val();
+	parametros.nombres = "";
+	
+	$("#grilla").jqGrid('setGridParam',
+	{
+		url : 'reporte-facturacion.json',
+		datatype : "json",
+		postData:parametros,
+		page:1
+	}).trigger('reloadGrid');
+	
+	$("#nombres").val("");
+}
+
+function buscarNombres(){
+	
+	var parametros=new Object();
+	parametros.puesto = "";
+	parametros.nombres = $("#nombres").val();
+	
+	$("#grilla").jqGrid('setGridParam',
+	{
+		url : 'reporte-facturacion.json',
+		datatype : "json",
+		postData:parametros,
+		page:1
+	}).trigger('reloadGrid');
+	
+	$("#nroPuesto").val("");
+}
+
 </script>
 </head>
 <body id="body">
@@ -688,7 +722,7 @@ function cerrar(){
 		<td width="10">:</td>
 		<td width="200"><input type="text" id="nroPuesto" class="form-control" maxlength="5" /></td>
 		<td>&nbsp;&nbsp;
-			<button type="button" class="btn btn-primary">
+			<button type="button" class="btn btn-primary" onclick="buscarPuesto()">
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 			</button>&nbsp;&nbsp;
 			
@@ -702,6 +736,18 @@ function cerrar(){
 				<img src="recursos/images/icons/pdf_16x16.png" alt="Reporte Facturación Diario" />&nbsp;Generar PDF
 			</button>
 			
+		</td>
+		<td width="80">&nbsp;</td>
+		<td width="80">&nbsp;</td>
+	</tr>
+	<tr>
+		<td width="150"><b>Nombres<b/></td>
+		<td width="10">:</td>
+		<td width="200"><input type="text" id="nombres" class="form-control" maxlength="100" /></td>
+		<td>&nbsp;&nbsp;
+			<button type="button" class="btn btn-primary" onclick="buscarNombres()">
+				<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
+			</button>&nbsp;&nbsp;
 		</td>
 		<td width="80">&nbsp;</td>
 		<td width="80">&nbsp;</td>

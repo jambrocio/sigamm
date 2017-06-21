@@ -385,12 +385,12 @@ public class FacturacionController {
 	public @ResponseBody ResponseListBean<VistaFacturacion> reporteSocios(
 			@RequestParam(value = "page", defaultValue = "1") Integer pagina,
 			@RequestParam(value = "rows", defaultValue = "20") Integer registros,
-			@RequestParam(value = "dni", defaultValue = "0") String dni,
-			@RequestParam(value = "nombre", defaultValue = "") String nombre){
+			@RequestParam(value = "puesto", defaultValue = "") String puesto,
+			@RequestParam(value = "nombres", defaultValue = "") String nombres){
 		
 		ResponseListBean<VistaFacturacion> response = new ResponseListBean<VistaFacturacion>();
 		
-		ReporteFacturacion reporte = facturacionBus.reporteFacturacion(pagina, registros, dni, nombre, 0);
+		ReporteFacturacion reporte = facturacionBus.reporteFacturacion(pagina, registros, puesto, nombres, 0);
 		
 		Integer totalSocios = reporte.getTotalRegistros(); 
 		

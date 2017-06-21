@@ -44,7 +44,7 @@ public interface FacturacionBus {
 	
 	public Retorno anularEgreso(Egreso egreso);
 	
-	public ReporteFacturacion reporteFacturacion(int pagina, int registros, String dni, String nombre, int exportar);
+	public ReporteFacturacion reporteFacturacion(int pagina, int registros, String puesto, String nombres, int exportar);
 	
 	public String montoTotalDiario();
 	

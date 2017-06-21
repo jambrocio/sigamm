@@ -123,9 +123,9 @@ public class FacturacionBusImpl implements FacturacionBus {
 	}
 
 	@Override
-	public ReporteFacturacion reporteFacturacion(int pagina, int registros, String dni, String nombre, int exportar) {
+	public ReporteFacturacion reporteFacturacion(int pagina, int registros, String puesto, String nombres, int exportar) {
 		
-		return facturacionDao.reporteFacturacion(pagina, registros, dni, nombre, exportar);
+		return facturacionDao.reporteFacturacion(pagina, registros, puesto, nombres, exportar);
 	}
 
 	@Override

@@ -520,7 +520,7 @@ public class FacturacionDaoImpl implements FacturacionDao {
 	}
 
 	@Override
-	public ReporteFacturacion reporteFacturacion(int pagina, int registros, String dni, String nombre, int exportar) {
+	public ReporteFacturacion reporteFacturacion(int pagina, int registros, String puesto, String nombres, int exportar) {
 		
 		ReporteFacturacion reporte = new ReporteFacturacion();
 		try{
@@ -529,8 +529,8 @@ public class FacturacionDaoImpl implements FacturacionDao {
 			jdbcCall.withProcedureName("SP_REPORTE_FACTURACION_DIARIO").declareParameters(
 					new SqlParameter("vi_pagina", 					Types.INTEGER),
 					new SqlParameter("vi_registros", 				Types.INTEGER),
-					new SqlParameter("vi_dni", 						Types.VARCHAR),
-					new SqlParameter("vi_nombre",					Types.VARCHAR),
+					new SqlParameter("vi_puesto",					Types.VARCHAR),
+					new SqlParameter("vi_nombres",					Types.VARCHAR),
 					new SqlParameter("vi_exportar", 				Types.INTEGER),
 					new SqlParameter("vi_codigo_usuario", 			Types.INTEGER),
 					
@@ -540,8 +540,8 @@ public class FacturacionDaoImpl implements FacturacionDao {
 			MapSqlParameterSource parametros = new MapSqlParameterSource();
 			parametros.addValue("vi_pagina", 			pagina);
 			parametros.addValue("vi_registros", 		registros);
-			parametros.addValue("vi_dni", 				dni);
-			parametros.addValue("vi_nombre", 			nombre);
+			parametros.addValue("vi_puesto",			puesto);
+			parametros.addValue("vi_nombres", 			nombres);
 			parametros.addValue("vi_exportar", 			exportar);
 			parametros.addValue("vi_codigo_usuario", 	datosSession.getCodigoUsuario());
 			
