@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.naming.Context;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -76,6 +78,7 @@ public class EstadoCuentaController {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("ReportTitle", "Reporte de Operaciones Bancarias");
 		parameters.put("Author", "SIGAMM");
+		parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
 		
 		Connection con = null;
 		
@@ -133,6 +136,7 @@ public class EstadoCuentaController {
 		parameters.put("ReportTitle", "Reporte de Recibos de Agua de los Asociados");
 		parameters.put("Author", "SIGAMM");
 		parameters.put("CODIGO_SOCIO", soc.getCodigoSocio());
+		parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
 		
 		Connection con = null;
 		

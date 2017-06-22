@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.naming.Context;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -84,6 +86,7 @@ public class BalanceContableController {
 			parameters.put("FECHA_INI", fechaIni);
 			parameters.put("FECHA_FIN", fechaFin);
 			parameters.put("SUBREPORT_DIR", ruta);
+			parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
 			
 			Connection con = null;
 			
