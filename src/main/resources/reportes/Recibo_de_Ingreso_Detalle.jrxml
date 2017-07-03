@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Recibo_de_Ingreso_Detalle" language="groovy" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c1ee4f7f-302a-49e3-8f2d-6aa24cbb42f3">
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="CODIGO_FACTURACION" class="java.math.BigDecimal"/>
+	<queryString>
+		<![CDATA[SELECT codigo_facturacion_cab, codigo_socio, fecha_creacion, nombres_full, nro_puesto, nombre_giro, nombre_sector, serie, secuencia,
+nombre_detalle || ', ' || fec_periodo AS descripcion, monto FROM(
+SELECT codigo_facturacion_cab, codigo_socio, fecha_creacion, nombres_full, nro_puesto, nombre_giro, nombre_sector, serie, secuencia,
+REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(fec_periodo, 'ENERO', 'ENE'), 'FEBRERO', 'FEB'), 'MARZO', 'MAR'), 'ABRIL', 'ABR'), 'MAYO', 'MAY'), 'JUNIO', 'JUN'), 'JULIO', 'JUL'), 'AGOSTO', 'AGO'), 'SETIEMBRE', 'SET'), 'OCTUBRE', 'OCT'), 'NOVIEMBRE', 'NOV'), 'DICIEMBRE', 'DIC') AS fec_periodo,
+monto, nombre_detalle
+FROM(
+    SELECT c.codigo_facturacion_cab, c.codigo_socio, TO_CHAR(c.fecha_creacion, 'DD/MM/YYYY') AS fecha_creacion, s.apellido_paterno || ' ' || s.apellido_materno || ', ' || s.nombres AS nombres_full, s.nro_puesto,
+    g.nombre_giro, se.nombre_sector, c.serie, c.secuencia
+    , CASE WHEN d.codigo_deuda_socio = 0 THEN 'FORMATO DE SOLICITUD' ELSE ds.fec_periodo END AS fec_periodo,
+              d.monto,
+              CASE WHEN d.codigo_deuda_socio = 0 THEN 'FORMATO DE SOLICITUD' ELSE sd.nombre_detalle END AS nombre_detalle
+    FROM sis_facturacion_cab c
+    LEFT JOIN sis_facturacion_det d ON c.codigo_facturacion_cab = d.codigo_facturacion_cab
+    LEFT JOIN sis_deuda_socio ds ON d.codigo_deuda_socio = ds.codigo_deuda_socio
+    LEFT JOIN sis_servicio_detalle sd ON ds.codigo_servicio_detalle = sd.codigo_servicio_detalle
+    LEFT JOIN sis_socio s ON c.codigo_socio = s.codigo_socio
+    LEFT JOIN sis_giro_comercial g ON s.codigo_giro = g.codigo_giro
+    LEFT JOIN sis_sector se ON g.codigo_sector = se.codigo_sector
+    WHERE c.codigo_facturacion_cab = $P{CODIGO_FACTURACION}
+    AND c.estado = 1
+)
+)]]>
+	</queryString>
+	<field name="CODIGO_FACTURACION_CAB" class="java.math.BigDecimal"/>
+	<field name="CODIGO_SOCIO" class="java.math.BigDecimal"/>
+	<field name="FECHA_CREACION" class="java.lang.String"/>
+	<field name="NOMBRES_FULL" class="java.lang.String"/>
+	<field name="NRO_PUESTO" class="java.lang.String"/>
+	<field name="NOMBRE_GIRO" class="java.lang.String"/>
+	<field name="NOMBRE_SECTOR" class="java.lang.String"/>
+	<field name="SERIE" class="java.lang.String"/>
+	<field name="SECUENCIA" class="java.lang.String"/>
+	<field name="DESCRIPCION" class="java.lang.String"/>
+	<field name="MONTO" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="60" y="0" width="199" height="15" uuid="81ef07b2-c507-4f6e-be60-83099c08619f"/>
+				<textElement>
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESCRIPCION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00">
+				<reportElement x="315" y="0" width="50" height="15" uuid="5636c7a0-fbca-4997-805b-164847a02911"/>
+				<textElement textAlignment="Right">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MONTO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

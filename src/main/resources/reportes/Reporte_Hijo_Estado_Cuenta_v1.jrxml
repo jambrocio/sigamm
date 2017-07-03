@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reporte_Recibo_Luz" language="groovy" pageWidth="555" pageHeight="802" columnWidth="535" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="72b5ec0b-8e67-4397-85b2-1d04f25c46a3">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="CODIGO_SOCIO" class="java.lang.String">
+		<defaultValueExpression><![CDATA[320]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select FP.CODIGO_SERVICIO_DETALLE, FP.NOMBRE_DETALLE, FP.IMPORTE, sum(FP.CANTIDAD) CANTIDAD, sum(FP.MONTO) MONTO, FP.ESTADO from (
+SELECT ds.CODIGO_SERVICIO_DETALLE, sd.NOMBRE_DETALLE, ds.FEC_PERIODO, ds.IMPORTE, ds.CANTIDAD, fd.MONTO, 'PAGADO' ESTADO
+FROM SIS_DEUDA_SOCIO ds
+  INNER JOIN SIS_FACTURACION_DET fd ON fd.CODIGO_DEUDA_SOCIO = ds.CODIGO_DEUDA_SOCIO
+  INNER JOIN SIS_FACTURACION_CAB fc ON fc.CODIGO_FACTURACION_CAB = fd.CODIGO_FACTURACION_CAB
+  INNER JOIN SIS_SERVICIO_DETALLE sd ON sd.CODIGO_SERVICIO_DETALLE = ds.CODIGO_SERVICIO_DETALLE
+WHERE ds.CODIGO_SOCIO = $P{CODIGO_SOCIO} AND fc.ESTADO <> 2 AND ds.CODIGO_SERVICIO_DETALLE in (16,1) ) FP
+group by FP.CODIGO_SERVICIO_DETALLE, FP.NOMBRE_DETALLE, FP.IMPORTE, FP.CANTIDAD, FP.MONTO, FP.ESTADO
+UNION ALL
+select FP.CODIGO_SERVICIO_DETALLE, FP.NOMBRE_DETALLE, FP.IMPORTE, sum(FP.CANTIDAD) CANTIDAD, (FP.IMPORTE * sum(FP.CANTIDAD)) MONTO, FP.ESTADO from (
+SELECT ds.CODIGO_SERVICIO_DETALLE, sd.NOMBRE_DETALLE, ds.FEC_PERIODO, ds.IMPORTE, ds.CANTIDAD, nvl(fd.MONTO,0) MONTO, 'PENDIENTE' ESTADO
+FROM SIS_DEUDA_SOCIO ds
+  LEFT JOIN SIS_FACTURACION_DET fd ON fd.CODIGO_DEUDA_SOCIO = ds.CODIGO_DEUDA_SOCIO
+  INNER JOIN SIS_SERVICIO_DETALLE sd ON sd.CODIGO_SERVICIO_DETALLE = ds.CODIGO_SERVICIO_DETALLE
+WHERE ds.CODIGO_SOCIO = $P{CODIGO_SOCIO} AND fd.MONTO IS NULL AND ds.CODIGO_SERVICIO_DETALLE in (16,1) ) FP
+group by FP.CODIGO_SERVICIO_DETALLE, FP.NOMBRE_DETALLE, FP.IMPORTE, FP.MONTO, FP.ESTADO
+UNION ALL
+select FP.CODIGO_SERVICIO_DETALLE, FP.NOMBRE_DETALLE, FP.IMPORTE, sum(FP.CANTIDAD) CANTIDAD, sum(FP.MONTO) MONTO, FP.ESTADO from (
+SELECT ds.CODIGO_SERVICIO_DETALLE, sd.NOMBRE_DETALLE, ds.FEC_PERIODO, ds.IMPORTE, ds.CANTIDAD, fd.MONTO, 'PAGADO' ESTADO
+FROM SIS_DEUDA_SOCIO ds
+  INNER JOIN SIS_FACTURACION_DET fd ON fd.CODIGO_DEUDA_SOCIO = ds.CODIGO_DEUDA_SOCIO
+  INNER JOIN SIS_FACTURACION_CAB fc ON fc.CODIGO_FACTURACION_CAB = fd.CODIGO_FACTURACION_CAB
+  INNER JOIN SIS_SERVICIO_DETALLE sd ON sd.CODIGO_SERVICIO_DETALLE = ds.CODIGO_SERVICIO_DETALLE
+WHERE ds.CODIGO_SOCIO = $P{CODIGO_SOCIO} AND fc.ESTADO <> 2 AND ds.CODIGO_SERVICIO_DETALLE not in (16,1) ) FP--Factura Anulada
+group by FP.CODIGO_SERVICIO_DETALLE, FP.NOMBRE_DETALLE, FP.IMPORTE, FP.CANTIDAD, FP.MONTO, FP.ESTADO
+UNION ALL
+select FP.CODIGO_SERVICIO_DETALLE, FP.NOMBRE_DETALLE, sum(FP.IMPORTE) IMPORTE, FP.CANTIDAD, (sum(FP.IMPORTE) * FP.CANTIDAD) MONTO, FP.ESTADO from (
+SELECT ds.CODIGO_SERVICIO_DETALLE, sd.NOMBRE_DETALLE, ds.FEC_PERIODO, ds.IMPORTE, ds.CANTIDAD, nvl(fd.MONTO,0) MONTO, 'PENDIENTE' ESTADO
+FROM SIS_DEUDA_SOCIO ds
+  LEFT JOIN SIS_FACTURACION_DET fd ON fd.CODIGO_DEUDA_SOCIO = ds.CODIGO_DEUDA_SOCIO
+  INNER JOIN SIS_SERVICIO_DETALLE sd ON sd.CODIGO_SERVICIO_DETALLE = ds.CODIGO_SERVICIO_DETALLE
+WHERE ds.CODIGO_SOCIO = $P{CODIGO_SOCIO} AND fd.MONTO IS NULL AND ds.CODIGO_SERVICIO_DETALLE not in (16,1) ) FP
+group by FP.CODIGO_SERVICIO_DETALLE, FP.NOMBRE_DETALLE, FP.CANTIDAD, FP.MONTO, FP.ESTADO
+ORDER BY 2]]>
+	</queryString>
+	<field name="CODIGO_SERVICIO_DETALLE" class="java.math.BigDecimal"/>
+	<field name="NOMBRE_DETALLE" class="java.lang.String"/>
+	<field name="IMPORTE" class="java.math.BigDecimal"/>
+	<field name="CANTIDAD" class="java.math.BigDecimal"/>
+	<field name="MONTO" class="java.math.BigDecimal"/>
+	<field name="ESTADO" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="0" width="553" height="24" uuid="e7c93566-cb1c-40f1-a980-c27f55e73716"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[INFORMACIÓN CONSOLIDADA :]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="1" y="30" width="555" height="1" uuid="6b18a4a9-3653-452e-bc84-324e30e9b16d"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="19" y="0" width="167" height="20" uuid="3f062b2b-7a5b-42c8-8f5f-bf2a692c449a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SERVICIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="67" height="20" uuid="3163f5d5-3e02-42cc-a930-c7f839b46367"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[IMPORTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="267" y="0" width="66" height="20" uuid="4e03c062-4d67-4cf4-84ea-73f85aaf549e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CANTIDAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="323" y="0" width="100" height="20" uuid="9399a617-aa7a-4e89-b7c7-7fc27840ff2c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MONTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="423" y="0" width="116" height="20" uuid="dc8d006b-e50a-4385-a814-43457819d923"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ESTADO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="19" y="0" width="167" height="15" uuid="273e1145-b616-4ffb-9db5-6e78aadc38b4"/>
+				<textFieldExpression><![CDATA[$F{NOMBRE_DETALLE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="200" y="0" width="48" height="13" uuid="c90e8950-9909-4ccc-94e9-0ebb775d6f12"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{IMPORTE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0" isBlankWhenNull="true">
+				<reportElement x="267" y="0" width="34" height="15" uuid="8b1a5637-8c9d-4da3-922e-e96df9ba10b7"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{CANTIDAD}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="323" y="0" width="76" height="15" uuid="ae9491ed-9a31-48ee-8491-8ba7895de9ed"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{MONTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="423" y="0" width="116" height="15" uuid="f01905d8-19cc-44b2-8dcf-863653f16db0"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{ESTADO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="100" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="344" y="72" width="200" height="20" uuid="6755dea5-8b42-4a5b-9e06-1236ae35ce84"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENCARGADO RECEPCIÓN]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="344" y="66" width="200" height="1" uuid="efc8ecc5-cfe2-47fb-ad41-0bb54c302967"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Title" x="10" y="72" width="200" height="20" uuid="53dbd422-80d6-4aaf-9986-24a3688576bb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENCARGADO ENTREGA]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="10" y="66" width="200" height="1" uuid="14b809d8-d435-4181-9b6b-dea09658054a"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="4" y="5" width="550" height="1" uuid="8d9b3c24-bf64-4970-8633-a871d4d66b26"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

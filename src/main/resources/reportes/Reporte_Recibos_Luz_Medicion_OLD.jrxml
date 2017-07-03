@@ -22,7 +22,7 @@ FROM SIS_RECIBO_LUZ_SOCIO ls
 WHERE CODIGORECIBO = (
   SELECT COD_ORGRECIBO_LUZ
   FROM SIS_RECIBO_LUZ
-  WHERE FEC_PERIODO = $P{PeriodoReciboLuz} and NUM_ESTADO = 1
+  WHERE FEC_PERIODO = $P{PeriodoReciboLuz}
 	--TO_NUMBER(CONCAT(CONCAT(SUBSTR(FECEMISION,7,4),SUBSTR(FECEMISION,4,2)),SUBSTR(FECEMISION,1,2))) = (
    -- SELECT MAX( TO_NUMBER(CONCAT(CONCAT(SUBSTR(FECEMISION,7,4),SUBSTR(FECEMISION,4,2)),SUBSTR(FECEMISION,1,2))) )
    -- FROM SIS_RECIBO_LUZ )
@@ -41,27 +41,31 @@ ORDER BY s.NRO_PUESTO]]>
 		<variableExpression><![CDATA[$V{ROW_COUNT}+1]]></variableExpression>
 		<initialValueExpression><![CDATA[new Integer(0)]]></initialValueExpression>
 	</variable>
-	<variable name="ESTADO" class="java.lang.String">
-		<variableExpression><![CDATA[( $F{SUSPENDIDOS} == "SI" ? "SUSPENDIDO" : "" )]]></variableExpression>
-	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="70" splitType="Stretch">
 			<staticText>
-				<reportElement style="Title" x="0" y="0" width="555" height="33" uuid="e7c93566-cb1c-40f1-a980-c27f55e73716"/>
+				<reportElement style="Title" x="0" y="0" width="553" height="33" uuid="e7c93566-cb1c-40f1-a980-c27f55e73716"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="24"/>
 				</textElement>
 				<text><![CDATA[REPORTE DEL RECIBO DE LUZ - MEDICION]]></text>
 			</staticText>
+			<staticText>
+				<reportElement style="Title" x="2" y="33" width="279" height="20" uuid="1474ca25-9313-4090-94e3-3913883c68e5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[PERIODO - ]]></text>
+			</staticText>
 			<textField>
-				<reportElement x="1" y="33" width="554" height="20" uuid="52cdd6df-b71a-4dea-8f01-041038eafc0f"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<reportElement x="292" y="33" width="221" height="20" uuid="52cdd6df-b71a-4dea-8f01-041038eafc0f"/>
+				<textElement verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["PERIODO - " + $P{FECHA}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{FECHA}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -197,13 +201,6 @@ ORDER BY s.NRO_PUESTO]]>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{SUSPENDIDOS}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="485" y="0" width="68" height="12" uuid="f6f57a8e-2608-4074-a656-d3ab10b354e7"/>
-				<textElement>
-					<font size="9" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{ESTADO}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

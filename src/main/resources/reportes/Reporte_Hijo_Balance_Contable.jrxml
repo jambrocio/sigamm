@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reporte_Hijo_Balance_Contable" language="groovy" pageWidth="555" pageHeight="802" columnWidth="535" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="72b5ec0b-8e67-4397-85b2-1d04f25c46a3">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="FECHA_INI" class="java.lang.String">
+		<defaultValueExpression><![CDATA["01/01/2015"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="FECHA_FIN" class="java.lang.String">
+		<defaultValueExpression><![CDATA["31/07/2015"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select t4.CONCEPTO, sum(t4.TOTAL) TOTAL
+from (
+  SELECT t3.CONCEPTO, t3.TOTAL
+  FROM (
+    SELECT sd.NOMBRE_DETALLE, 'INGRESOS' CONCEPTO, SUM(fd.MONTO) TOTAL
+    FROM SIS_FACTURACION_CAB fc
+      INNER JOIN SIS_FACTURACION_DET fd ON fd.CODIGO_FACTURACION_CAB = fc.CODIGO_FACTURACION_CAB
+      INNER JOIN SIS_SERVICIO_DETALLE sd ON sd.CODIGO_SERVICIO_DETALLE = fd.CODIGO_SERVICIO_DETALLE
+    WHERE (fc.FECHA_CREACION BETWEEN $P{FECHA_INI} and $P{FECHA_FIN})
+    GROUP BY sd.NOMBRE_DETALLE
+    UNION ALL
+    select t2.OTROS_SERVICIOS, 'INGRESOS' CONCEPTO, sum(t2.total) TOTAL
+    from (
+      select t1.CODIGO_SERVICIO_OTROS, 'BAÑOS' OTROS_SERVICIOS, t1.FECHA, (t1.SOBRANTE + t1.SUB_TOTAL) TOTAL
+      from (
+        select sod.CODIGO_SERVICIO_OTROS, so.FECHA, replace(so.IMPORTE_SOBRANTE,'.',',') SOBRANTE,  sum((((sod.RANGO_FIN - sod.RANGO_INICIO) + 1) * IMPORTE)) SUB_TOTAL
+        from SIS_SERVICIO_OTROS_DETALLE sod
+          INNER JOIN SIS_SERVICIO_DETALLE sd ON  sd.CODIGO_SERVICIO_DETALLE = sod.CODIGO_SERVICIO_DETALLE
+          INNER JOIN SIS_SERVICIO_OTROS so ON so.CODIGO_SERVICIO_OTROS = sod.CODIGO_SERVICIO_OTROS
+        --where sod.CODIGO_SERVICIO_OTROS = 121
+        group by sod.CODIGO_SERVICIO_OTROS, so.FECHA, so.IMPORTE_SOBRANTE
+      ) t1
+    )t2
+    where to_date(t2.fecha,'DD/MM/YYYY') BETWEEN to_date($P{FECHA_INI},'DD/MM/YYYY') and to_date($P{FECHA_FIN},'DD/MM/YYYY')
+    group by otros_servicios
+    order by 1
+  ) t3
+  union all
+  SELECT 'EGRESOS' CONCEPTO, SUM(e.TOTAL) TOTAL
+  FROM SIS_EGRESO e
+    INNER JOIN sis_concepto c ON c.CODIGO_CONCEPTO = e.TIPO_DOCUMENTO
+  WHERE e.ESTADO <> 2 and (e.fecha BETWEEN $P{FECHA_INI} and $P{FECHA_FIN})
+  GROUP BY c.NOMBRE_CONCEPTO
+) t4
+GROUP BY t4.CONCEPTO]]>
+	</queryString>
+	<field name="CONCEPTO" class="java.lang.String"/>
+	<field name="TOTAL" class="java.math.BigDecimal"/>
+	<variable name="TOTAL_EGRESOS" class="java.math.BigDecimal" calculation="Sum"/>
+	<variable name="TOTAL_INGRESOS" class="java.math.BigDecimal" calculation="First">
+		<variableExpression><![CDATA[$F{TOTAL}]]></variableExpression>
+	</variable>
+	<variable name="SALDO" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="0" width="380" height="24" uuid="e7c93566-cb1c-40f1-a980-c27f55e73716"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[INFORMACIÓN CONSOLIDADA :]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="1" y="30" width="380" height="1" uuid="6b18a4a9-3653-452e-bc84-324e30e9b16d"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="79" y="0" width="149" height="20" uuid="d041a871-3d3d-4dbd-baab-ce7312a0b876"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CONCEPTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="0" width="40" height="20" uuid="ccca4dfd-9290-4962-b633-14ff8a7ffc5e"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NRO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="245" y="0" width="120" height="20" uuid="8a537a41-c3c9-472a-aff1-4ddd673c52d8"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="79" y="0" width="149" height="15" uuid="6c4e01fe-9a75-45bd-8c1a-fe7f22e69ce8"/>
+				<textFieldExpression><![CDATA[$F{CONCEPTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="18" y="0" width="40" height="15" uuid="a8bc7bb0-c705-48a1-be7f-e85d56477bc4"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="245" y="0" width="84" height="15" uuid="e352b3ad-a030-4634-8132-87defb5238cb"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="280" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="344" y="250" width="200" height="20" uuid="6755dea5-8b42-4a5b-9e06-1236ae35ce84"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENCARGADO RECEPCIÓN]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="344" y="244" width="200" height="1" uuid="efc8ecc5-cfe2-47fb-ad41-0bb54c302967"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Title" x="10" y="250" width="200" height="20" uuid="53dbd422-80d6-4aaf-9986-24a3688576bb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENCARGADO ENTREGA]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="10" y="244" width="200" height="1" uuid="14b809d8-d435-4181-9b6b-dea09658054a"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="4" y="5" width="380" height="1" uuid="8d9b3c24-bf64-4970-8633-a871d4d66b26"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="79" y="5" width="100" height="20" uuid="071179cc-5548-4660-b106-7cc30113f4c1"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SALDO (S/.) :]]></text>
+			</staticText>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="179" y="5" width="150" height="20" uuid="d1e4124e-3a7c-4265-a117-2be1278706c2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.00").format(
+  new Double((
+( $F{CONCEPTO}.isEmpty() ? 0 : $V{TOTAL_INGRESOS} ).doubleValue() -
+( $F{CONCEPTO}.equals( "EGRESOS" ) ? $F{TOTAL} : 0 ).doubleValue()
+)) )]]></textFieldExpression>
+			</textField>
+			<pie3DChart>
+				<chart>
+					<reportElement x="18" y="36" width="508" height="160" uuid="4353e16e-fefa-450a-9795-2bbe77569a12"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<keyExpression><![CDATA[$F{CONCEPTO}]]></keyExpression>
+					<valueExpression><![CDATA[$F{TOTAL}]]></valueExpression>
+				</pieDataset>
+				<pie3DPlot>
+					<plot/>
+					<itemLabel/>
+				</pie3DPlot>
+			</pie3DChart>
+		</band>
+	</summary>
+</jasperReport>

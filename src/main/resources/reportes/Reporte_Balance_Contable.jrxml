@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reporte_Balance_Contable" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" uuid="72b5ec0b-8e67-4397-85b2-1d04f25c46a3">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="FECHA_INI" class="java.lang.String">
+		<defaultValueExpression><![CDATA["01/01/2015"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="FECHA_FIN" class="java.lang.String">
+		<defaultValueExpression><![CDATA["31/07/2015"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA["D:\\Proyectos\\MMH\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT t3.NOMBRE_DETALLE, t3.CONCEPTO, t3.TOTAL
+FROM (
+  SELECT sd.NOMBRE_DETALLE, 'INGRESOS' CONCEPTO, SUM(fd.MONTO) TOTAL
+  FROM SIS_FACTURACION_CAB fc
+    INNER JOIN SIS_FACTURACION_DET fd ON fd.CODIGO_FACTURACION_CAB = fc.CODIGO_FACTURACION_CAB
+    INNER JOIN SIS_SERVICIO_DETALLE sd ON sd.CODIGO_SERVICIO_DETALLE = fd.CODIGO_SERVICIO_DETALLE
+  WHERE (fc.FECHA_CREACION BETWEEN $P{FECHA_INI} and $P{FECHA_FIN})
+  GROUP BY sd.NOMBRE_DETALLE
+  UNION ALL
+  select t2.OTROS_SERVICIOS, 'INGRESOS' CONCEPTO, sum(t2.total) TOTAL
+  from (
+    select t1.CODIGO_SERVICIO_OTROS, 'BAÑOS' OTROS_SERVICIOS, t1.FECHA, (t1.SOBRANTE + t1.SUB_TOTAL) TOTAL
+    from (
+      select sod.CODIGO_SERVICIO_OTROS, so.FECHA, replace(so.IMPORTE_SOBRANTE,'.',',') SOBRANTE,  sum((((sod.RANGO_FIN - sod.RANGO_INICIO) + 1) * IMPORTE)) SUB_TOTAL
+      from SIS_SERVICIO_OTROS_DETALLE sod
+        INNER JOIN SIS_SERVICIO_DETALLE sd ON  sd.CODIGO_SERVICIO_DETALLE = sod.CODIGO_SERVICIO_DETALLE
+        INNER JOIN SIS_SERVICIO_OTROS so ON so.CODIGO_SERVICIO_OTROS = sod.CODIGO_SERVICIO_OTROS
+      --where sod.CODIGO_SERVICIO_OTROS = 121
+      group by sod.CODIGO_SERVICIO_OTROS, so.FECHA, so.IMPORTE_SOBRANTE
+    ) t1
+  )t2
+  where to_date(t2.fecha,'DD/MM/YYYY') BETWEEN to_date($P{FECHA_INI},'DD/MM/YYYY') and to_date($P{FECHA_FIN},'DD/MM/YYYY')
+  group by otros_servicios
+  order by 1
+) t3
+UNION ALL
+SELECT c.NOMBRE_CONCEPTO NOMBRE_DETALLE, 'EGRESOS' CONCEPTO, SUM(e.TOTAL) TOTAL
+FROM SIS_EGRESO e
+  INNER JOIN sis_concepto c ON c.CODIGO_CONCEPTO = e.TIPO_DOCUMENTO
+WHERE e.ESTADO <> 2 and (e.fecha BETWEEN $P{FECHA_INI} and $P{FECHA_FIN})
+GROUP BY c.NOMBRE_CONCEPTO
+ORDER BY 2,1]]>
+	</queryString>
+	<field name="NOMBRE_DETALLE" class="java.lang.String"/>
+	<field name="CONCEPTO" class="java.lang.String"/>
+	<field name="TOTAL" class="java.math.BigDecimal"/>
+	<variable name="TOTAL_1" class="java.math.BigDecimal" resetType="Group" resetGroup="CONCEPTO" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL}]]></variableExpression>
+	</variable>
+	<group name="CONCEPTO">
+		<groupExpression><![CDATA[$F{CONCEPTO}]]></groupExpression>
+		<groupHeader>
+			<band height="30">
+				<rectangle>
+					<reportElement x="9" y="6" width="534" height="20" backcolor="#CCCCCC" uuid="f314508e-461d-46c4-99f6-58a0b129dd2d"/>
+				</rectangle>
+				<textField>
+					<reportElement x="9" y="6" width="544" height="20" backcolor="#CCCCCC" uuid="16588ba2-756f-4b5d-836b-0178f5fe1521"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["CONCEPTO: " + $F{CONCEPTO}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="23">
+				<textField pattern="#,##0.00">
+					<reportElement x="394" y="3" width="122" height="20" uuid="1c3bd0b0-cca1-4550-9c8b-a3055213f7c7"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TOTAL_1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="327" y="3" width="67" height="20" uuid="9c48f3be-12bb-40e3-8ea5-2f177c42e157"/>
+					<textElement textAlignment="Right">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[(S/.)]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="113" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="1" y="43" width="554" height="20" uuid="1474ca25-9313-4090-94e3-3913883c68e5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[ESTADO CONTABLE DE INGRESOS Y EGRESOS PERIODO]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="1" y="112" width="555" height="1" uuid="74840f42-d650-4080-bd23-d95469a2fbe4"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="1" y="0" width="552" height="35" uuid="ff692cbd-f188-4164-9334-d3064006daca"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BALANCE CONTABLE - INGRESOS/EGRESOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="268" y="92" width="51" height="20" uuid="e84cd32d-7afd-491c-b18d-619e75fceb47"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA :]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="178" y="63" width="90" height="20" uuid="93eef78c-d4b3-44d9-81e1-e203eb555068"/>
+				<textElement verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FECHA_INI}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="319" y="63" width="100" height="20" uuid="8b80229b-a01b-4cc2-8b83-d897726a37cb"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FECHA_FIN}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="268" y="63" width="51" height="20" uuid="e82cd266-3171-45d1-97ca-369c24fc4600"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[-]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="319" y="92" width="197" height="20" uuid="2eb3f78c-f499-458e-aaec-87999002274c"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="8" y="0" width="42" height="20" uuid="3a2daa8a-d535-4fdb-880c-d8b6555d6707"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NRO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="83" y="0" width="311" height="20" uuid="3d58779e-fc02-4b58-9bad-78516a68f50a"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE DETALLE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="429" y="0" width="100" height="20" uuid="eeaa1749-de50-417b-a512-7a5d19e68368"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField>
+				<reportElement x="83" y="0" width="311" height="15" uuid="76c0d839-ec68-455d-be2c-e68d687993d8"/>
+				<textFieldExpression><![CDATA[$F{NOMBRE_DETALLE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="9" y="0" width="41" height="15" uuid="d33640b5-eba5-4c92-a1e8-6acac81ca4ec"/>
+				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="429" y="0" width="87" height="15" uuid="f0c942f0-2e44-429b-beb2-16bd015cb09f"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="7" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="823a46e3-0ed8-4846-a6d8-e3e5a442ad8d"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="117092fe-1968-465b-80cc-4064d1f07d0a"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="abe03bb9-ff48-4e6c-9294-9e8ebd875df7"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="bbcbf37e-13bb-4107-b49d-e2cd4f36d464"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Title" x="197" y="0" width="197" height="20" uuid="dbaf02fb-2e83-462c-87cc-189f0d565dcc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[MERCADO MODELO DE HUARAL]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="79" splitType="Stretch">
+			<subreport>
+				<reportElement x="1" y="0" width="552" height="79" uuid="cebaa4d4-d3e7-40d4-83e8-99eee3fbb740"/>
+				<subreportParameter name="FECHA_INI">
+					<subreportParameterExpression><![CDATA[$P{FECHA_INI}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="FECHA_FIN">
+					<subreportParameterExpression><![CDATA[$P{FECHA_FIN}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "Reporte_Hijo_Balance_Contable.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>

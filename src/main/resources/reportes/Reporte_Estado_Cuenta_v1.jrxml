@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reporte_Recibo_Luz" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="72b5ec0b-8e67-4397-85b2-1d04f25c46a3">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="CODIGO_SOCIO" class="java.lang.String">
+		<defaultValueExpression><![CDATA[320]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT s.DNI, CONCAT(CONCAT(CONCAT(CONCAT(s.APELLIDO_PATERNO, ' '), s.APELLIDO_MATERNO),', '),s.NOMBRES) NOMBRE_FULL, s.NRO_PUESTO, ds.CODIGO_SERVICIO_DETALLE, sd.NOMBRE_DETALLE, ds.FEC_PERIODO, ds.IMPORTE, ds.CANTIDAD, (ds.IMPORTE * ds.CANTIDAD) MONTO,
+  'PAGADO' ESTADO, gc.NOMBRE_GIRO, gc.CODIGO_SECTOR,
+   (CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'ENERO') THEN '01' ELSE
+    CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'FEBRERO') THEN '02' ELSE
+      CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'MARZO') THEN '03' ELSE
+        CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'ABRIL') THEN '04' ELSE
+          CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'MAYO') THEN '05' ELSE
+            CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'JUNIO') THEN '06' ELSE
+              CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'JULIO') THEN '07' ELSE
+                CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'AGOSTO') THEN '08' ELSE
+                  CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'SETIEMBRE') THEN '09' ELSE
+                    CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'SEPTIEMBRE') THEN '09' ELSE
+                      CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'OCTUBRE') THEN '10' ELSE
+                        CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'NOVIEMBRE') THEN '11' ELSE
+                          CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'DICIEMBRE') THEN '12'
+                            END END END END END END END END END END END END END) MES, SUBSTR(SUBSTR(ds.FEC_PERIODO,INSTR(ds.FEC_PERIODO,' ')),2,4) ANHIO, SUBSTR(SUBSTR(ds.FEC_PERIODO,INSTR(ds.FEC_PERIODO,' ')),9) SEMANA
+FROM SIS_DEUDA_SOCIO ds
+  INNER JOIN SIS_FACTURACION_DET fd ON fd.CODIGO_DEUDA_SOCIO = ds.CODIGO_DEUDA_SOCIO
+  INNER JOIN SIS_FACTURACION_CAB fc ON fc.CODIGO_FACTURACION_CAB = fd.CODIGO_FACTURACION_CAB
+  INNER JOIN SIS_SERVICIO_DETALLE sd ON sd.CODIGO_SERVICIO_DETALLE = ds.CODIGO_SERVICIO_DETALLE
+  INNER JOIN SIS_SOCIO s ON s.CODIGO_SOCIO = ds.CODIGO_SOCIO
+  INNER JOIN SIS_GIRO_COMERCIAL gc ON gc.CODIGO_GIRO = s.CODIGO_GIRO
+WHERE ds.CODIGO_SOCIO = $P{CODIGO_SOCIO} AND fc.ESTADO <> 2--Factura Anulada
+UNION ALL
+SELECT s.DNI, CONCAT(CONCAT(CONCAT(CONCAT(s.APELLIDO_PATERNO, ' '), s.APELLIDO_MATERNO),', '),s.NOMBRES) NOMBRE_FULL, s.NRO_PUESTO, ds.CODIGO_SERVICIO_DETALLE, sd.NOMBRE_DETALLE, ds.FEC_PERIODO, ds.IMPORTE, ds.CANTIDAD, (ds.IMPORTE * ds.CANTIDAD) MONTO,
+  (CASE WHEN FN_ESTADO_DOCUMENTOS(s.CODIGO_SOCIO,ds.FEC_PERIODO,ds.CODIGO_SERVICIO_DETALLE) = 1 THEN 'PAGADO' ELSE 'PENDIENTE' END) ESTADO, gc.NOMBRE_GIRO, gc.CODIGO_SECTOR,
+   (CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'ENERO') THEN '01' ELSE
+    CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'FEBRERO') THEN '02' ELSE
+      CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'MARZO') THEN '03' ELSE
+        CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'ABRIL') THEN '04' ELSE
+          CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'MAYO') THEN '05' ELSE
+            CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'JUNIO') THEN '06' ELSE
+              CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'JULIO') THEN '07' ELSE
+                CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'AGOSTO') THEN '08' ELSE
+                  CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'SETIEMBRE') THEN '09' ELSE
+                    CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'SEPTIEMBRE') THEN '09' ELSE
+                      CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'OCTUBRE') THEN '10' ELSE
+                        CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'NOVIEMBRE') THEN '11' ELSE
+                          CASE WHEN (TRIM(SUBSTR(ds.FEC_PERIODO,1,INSTR(ds.FEC_PERIODO,' '))) = 'DICIEMBRE') THEN '12'
+                            END END END END END END END END END END END END END) MES, SUBSTR(SUBSTR(ds.FEC_PERIODO,INSTR(ds.FEC_PERIODO,' ')),2,4) ANHIO, SUBSTR(SUBSTR(ds.FEC_PERIODO,INSTR(ds.FEC_PERIODO,' ')),9) SEMANA
+FROM SIS_DEUDA_SOCIO ds
+  LEFT JOIN SIS_FACTURACION_DET fd ON fd.CODIGO_DEUDA_SOCIO = ds.CODIGO_DEUDA_SOCIO
+  INNER JOIN SIS_SERVICIO_DETALLE sd ON sd.CODIGO_SERVICIO_DETALLE = ds.CODIGO_SERVICIO_DETALLE
+  INNER JOIN SIS_SOCIO s ON s.CODIGO_SOCIO = ds.CODIGO_SOCIO
+  INNER JOIN SIS_GIRO_COMERCIAL gc ON gc.CODIGO_GIRO = s.CODIGO_GIRO
+WHERE ds.CODIGO_SOCIO = $P{CODIGO_SOCIO} AND fd.MONTO IS NULL
+ORDER BY NOMBRE_DETALLE, ANHIO, MES, SEMANA]]>
+	</queryString>
+	<field name="DNI" class="java.lang.String"/>
+	<field name="NOMBRE_FULL" class="java.lang.String"/>
+	<field name="NRO_PUESTO" class="java.lang.String"/>
+	<field name="CODIGO_SERVICIO_DETALLE" class="java.math.BigDecimal"/>
+	<field name="NOMBRE_DETALLE" class="java.lang.String"/>
+	<field name="FEC_PERIODO" class="java.lang.String"/>
+	<field name="IMPORTE" class="java.math.BigDecimal"/>
+	<field name="CANTIDAD" class="java.math.BigDecimal"/>
+	<field name="MONTO" class="java.math.BigDecimal"/>
+	<field name="ESTADO" class="java.lang.String"/>
+	<field name="NOMBRE_GIRO" class="java.lang.String"/>
+	<field name="CODIGO_SECTOR" class="java.math.BigDecimal"/>
+	<field name="MES" class="java.lang.String"/>
+	<field name="ANHIO" class="java.lang.String"/>
+	<field name="SEMANA" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="130" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="0" width="553" height="33" uuid="e7c93566-cb1c-40f1-a980-c27f55e73716"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[ESTADO DE CUENTA DEL ASOCIADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Title" x="1" y="40" width="150" height="20" uuid="1474ca25-9313-4090-94e3-3913883c68e5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[ASOCIADO :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Title" x="0" y="60" width="151" height="20" uuid="a0e8e084-6668-4bc2-94a9-eceb71b6ac7e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[DNI :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Title" x="0" y="80" width="151" height="20" uuid="f1e71fc3-051d-42ff-93c3-487da3530ecb"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[GIRO COMERCIAL  :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Title" x="0" y="100" width="151" height="20" uuid="68ad83a0-3018-4043-8168-1e7bc061433b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[NRO. PUESTO :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="160" y="40" width="393" height="20" uuid="ef925042-d26d-41e4-8216-293ac767e759"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_FULL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="160" y="60" width="132" height="20" uuid="eb77835c-8cd9-4168-b6d8-8bb75b9a2903"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DNI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="160" y="80" width="393" height="20" uuid="3cd9ff90-e8a8-48b3-a5d0-1d004941d913"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_GIRO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="160" y="100" width="100" height="20" uuid="57af1bfd-9922-4434-9c4f-420ca6ee7345"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NRO_PUESTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Title" x="282" y="100" width="151" height="20" uuid="9705de42-5572-429d-91e8-2a627d1a72c3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[SECTOR :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="443" y="100" width="110" height="20" uuid="77f02382-350d-4ace-8cea-b989681eb457"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CODIGO_SECTOR}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="1" y="123" width="555" height="1" uuid="74840f42-d650-4080-bd23-d95469a2fbe4"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="-93" width="555" height="1" uuid="7b047480-e403-40f7-8209-1ab3b85aa410"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="3" y="0" width="100" height="20" uuid="6b4ae652-6b44-4a26-86e0-b885e122d582"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SERVICIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="0" width="150" height="20" uuid="4f965257-8cb9-407c-a03d-1c5fdd03671f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PERIODO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="268" y="0" width="58" height="20" uuid="8156d642-60d4-430a-97b5-26902b6f27ef"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[IMPORTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="339" y="0" width="67" height="20" uuid="fb0e39e4-27ce-4e10-b2a7-770c6cd7f341"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CANTIDAD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="419" y="0" width="61" height="20" uuid="e0695d04-26ae-4b20-9428-705e540d8196"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MONTO]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="18" width="555" height="1" uuid="969375fb-6d99-472a-962b-13d8294669b5"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="480" y="0" width="73" height="20" uuid="82fa1c2e-df46-4e63-87e5-0ea1797444c8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[ESTADO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField>
+				<reportElement x="3" y="0" width="100" height="15" uuid="42a83e00-e9c6-49c2-86dc-1e75de012ae7"/>
+				<textFieldExpression><![CDATA[$F{NOMBRE_DETALLE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="110" y="0" width="150" height="15" uuid="3585f1a7-da5d-45db-a6f6-4cc712df787c"/>
+				<textFieldExpression><![CDATA[$F{FEC_PERIODO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="268" y="0" width="41" height="15" uuid="0a3aca11-f7bd-4160-95fe-3de270a4514b"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{IMPORTE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0" isBlankWhenNull="true">
+				<reportElement x="339" y="0" width="40" height="15" uuid="b4f6bf9d-edda-492d-9460-1e285dc6008d"/>
+				<textElement textAlignment="Right" verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{CANTIDAD}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="419" y="0" width="49" height="15" uuid="5e2d7c4c-e254-45eb-9522-2df914ac7520"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{MONTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="480" y="0" width="73" height="15" uuid="24bcc182-f8c0-4f86-b2b0-ba3a4c599323"/>
+				<textFieldExpression><![CDATA[$F{ESTADO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="20" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="823a46e3-0ed8-4846-a6d8-e3e5a442ad8d"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="117092fe-1968-465b-80cc-4064d1f07d0a"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="abe03bb9-ff48-4e6c-9294-9e8ebd875df7"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="bbcbf37e-13bb-4107-b49d-e2cd4f36d464"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Title" x="197" y="0" width="197" height="20" uuid="dbaf02fb-2e83-462c-87cc-189f0d565dcc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[MERCADO MODELO DE HUARAL]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="80" splitType="Stretch">
+			<subreport>
+				<reportElement x="1" y="0" width="552" height="78" uuid="fc1036cf-f742-4884-8e6c-936cb454e23b"/>
+				<subreportParameter name="CODIGO_SOCIO">
+					<subreportParameterExpression><![CDATA[$P{CODIGO_SOCIO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["/usr/share/jboss-eap-6.1/ireport/Reporte_Hijo_Estado_Cuenta.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>

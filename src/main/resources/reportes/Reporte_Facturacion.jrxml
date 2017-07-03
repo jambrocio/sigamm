@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reporte_Recibo_Luz" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="72b5ec0b-8e67-4397-85b2-1d04f25c46a3">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="ReportTitle" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\Proyectos\\MMH\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT codigo_facturacion_cab, dni, nro_puesto, concat(concat(concat(concat(apellido_paterno,' '), apellido_materno),', '), nombres) nombre_full, fecha_creacion, TRIM(TO_CHAR(SUM(monto), '999999.99')) AS monto, codigo_facturacion_cab AS codigo_fact_cab_alt, secuencia FROM(
+    SELECT c.codigo_facturacion_cab, s.dni, s.nro_puesto, s.apellido_paterno, s.apellido_materno, s.nombres, TO_CHAR(c.fecha_creacion, 'DD/MM/YYYY') AS fecha_creacion,
+      SUM(d.monto) AS monto, c.SECUENCIA
+    FROM sis_facturacion_cab c
+      LEFT JOIN sis_facturacion_det d ON c.codigo_facturacion_cab = d.codigo_facturacion_cab
+      LEFT JOIN sis_deuda_socio ds ON d.codigo_deuda_socio = ds.codigo_deuda_socio
+      LEFT JOIN sis_socio s ON ds.codigo_socio = s.codigo_socio
+      LEFT JOIN sis_servicio_detalle sd ON ds.codigo_servicio_detalle = sd.codigo_servicio_detalle
+    WHERE /*TO_CHAR(c.fecha_creacion, 'DD/MM/YYYY')= TO_CHAR(SYSDATE, 'DD/MM/YYYY')
+      AND*/ c.estado = 1
+      AND s.estado = 1
+    GROUP BY c.codigo_facturacion_cab, s.dni, s.nro_puesto, s.apellido_paterno, s.apellido_materno, s.nombres, c.fecha_creacion, c.SECUENCIA
+    UNION
+    SELECT c.codigo_facturacion_cab, s.dni, s.nro_puesto, s.apellido_paterno, s.apellido_materno, s.nombres, TO_CHAR(c.fecha_creacion, 'DD/MM/YYYY') AS fecha_creacion,
+      SUM(d.monto) AS monto, c.SECUENCIA
+    FROM sis_facturacion_cab c
+      LEFT JOIN sis_facturacion_det d ON c.codigo_facturacion_cab = d.codigo_facturacion_cab
+      LEFT JOIN sis_socio s ON c.codigo_socio = s.codigo_socio
+      LEFT JOIN sis_servicio_detalle sd ON d.codigo_servicio = sd.codigo_servicio
+    WHERE /*TO_CHAR(c.fecha_creacion, 'DD/MM/YYYY')= TO_CHAR(SYSDATE, 'DD/MM/YYYY')
+      AND*/ c.estado = 1
+      AND s.estado = 1
+      AND d.codigo_deuda_socio = 0
+    GROUP BY c.codigo_facturacion_cab, s.dni, s.nro_puesto, s.apellido_paterno, s.apellido_materno, s.nombres, c.fecha_creacion, c.secuencia
+)
+GROUP BY codigo_facturacion_cab, dni, nro_puesto, apellido_paterno, apellido_materno, nombres, fecha_creacion, secuencia
+ORDER BY fecha_creacion, secuencia]]>
+	</queryString>
+	<field name="CODIGO_FACTURACION_CAB" class="java.math.BigDecimal"/>
+	<field name="DNI" class="java.lang.String"/>
+	<field name="NRO_PUESTO" class="java.lang.String"/>
+	<field name="NOMBRE_FULL" class="java.lang.String"/>
+	<field name="FECHA_CREACION" class="java.lang.String"/>
+	<field name="MONTO" class="java.lang.Double"/>
+	<field name="CODIGO_FACT_CAB_ALT" class="java.math.BigDecimal"/>
+	<field name="SECUENCIA" class="java.lang.String"/>
+	<variable name="TOTAL" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{MONTO}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="0" width="553" height="33" uuid="e7c93566-cb1c-40f1-a980-c27f55e73716"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[REPORTE FACTURACIÓN]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="16" width="555" height="1" uuid="b5c7eabc-90a2-4c19-97b8-0862ab4eef2b"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="0" y="0" width="25" height="20" uuid="544d8ba8-8df8-448c-9961-6c84b37acb1b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[COD.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="25" y="0" width="57" height="20" uuid="d7a4485b-4c90-4c9c-b9e0-239b64c5255a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DNI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="85" y="0" width="44" height="20" uuid="a8532ba4-e9ad-49b9-9147-55f402f5b671"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PUESTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="129" y="0" width="201" height="20" uuid="df91acf8-2b9c-4436-b041-ea481c3d6d36"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="331" y="0" width="75" height="20" uuid="78090ad2-518a-49f6-b01e-adc315ce9ed5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="479" y="0" width="74" height="20" uuid="4c40fb26-5f1c-4789-adb2-9b314d6830a4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MONTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="407" y="0" width="71" height="20" uuid="2a4341b5-7f7f-40f8-b408-0d9accb1949c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[COMPROB.]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="78" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="25" height="15" uuid="e2721685-586e-41e6-bea2-66ead7a988de"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{CODIGO_FACTURACION_CAB}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="25" y="0" width="57" height="15" uuid="afd5e571-2602-484c-beba-28164f9b5ad1"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{DNI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="85" y="0" width="44" height="15" uuid="036df135-2650-4a24-9829-e7cb7f4bccc0"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{NRO_PUESTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="129" y="0" width="201" height="15" uuid="7e287c75-eacd-4121-9ba5-190450240adb"/>
+				<textFieldExpression><![CDATA[$F{NOMBRE_FULL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="331" y="0" width="75" height="15" uuid="ad4d188e-cef6-488c-be75-7d29993e251c"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{FECHA_CREACION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="479" y="0" width="56" height="15" uuid="1bd45208-818e-4db9-b848-bedb09665114"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{MONTO}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="8" y="10" width="534" height="63" uuid="b59002fc-48ce-48dc-b006-d9f6ec35eba5"/>
+				<subreportParameter name="CODIGO_FACTURA">
+					<subreportParameterExpression><![CDATA[$F{CODIGO_FACTURACION_CAB}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "Reporte_Hijo_Facturacion.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement x="407" y="0" width="71" height="15" uuid="a53e9de8-4477-4daf-a286-7df29685a7b4"/>
+				<textFieldExpression><![CDATA[$F{SECUENCIA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="20" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="823a46e3-0ed8-4846-a6d8-e3e5a442ad8d"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="117092fe-1968-465b-80cc-4064d1f07d0a"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="abe03bb9-ff48-4e6c-9294-9e8ebd875df7"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="bbcbf37e-13bb-4107-b49d-e2cd4f36d464"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Title" x="197" y="0" width="197" height="20" uuid="dbaf02fb-2e83-462c-87cc-189f0d565dcc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[MERCADO MODELO DE HUARAL]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="120" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="8" y="90" width="200" height="1" uuid="6abab002-b391-409f-ba73-bfbbea689fc9"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Title" x="8" y="96" width="200" height="20" uuid="f0d7beb3-79f1-4f75-91a4-19826b05bf46"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENCARGADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Title" x="342" y="96" width="200" height="20" uuid="77711414-b22a-4fb6-a52d-f876825dcfb1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENCARGADO LECTURA]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="342" y="90" width="200" height="1" uuid="1961b275-c38c-4f0c-b9f0-e0daf3020103"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="443" y="0" width="82" height="20" uuid="c381639f-cb25-451d-845d-5f63265ee967"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Title" x="246" y="0" width="197" height="20" uuid="e6c0c8be-d6a6-4084-b1da-7e6b6a47c5fa"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL :]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

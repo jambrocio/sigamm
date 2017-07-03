@@ -7,6 +7,7 @@
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
 	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="ReportTitle" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT (SELECT ENTIDAD_BANCARIA FROM SIS_CUENTAS_BANCARIAS WHERE ID_CUENTA = b.NUMERO_CUENTA) ENTIDAD_BANCARIA,
 (SELECT NUMERO_CUENTA FROM SIS_CUENTAS_BANCARIAS WHERE ID_CUENTA = b.NUMERO_CUENTA) NUMERO_CUENTA,
@@ -62,10 +63,14 @@ ORDER BY OPERACION, b.FECHA]]>
 	<title>
 		<band height="70" splitType="Stretch">
 			<staticText>
-				<reportElement style="Title" x="0" y="0" width="553" height="64" uuid="88532a83-488d-43d9-bb2f-181f0d0b77e0"/>
+				<reportElement style="Title" x="0" y="0" width="553" height="38" uuid="88532a83-488d-43d9-bb2f-181f0d0b77e0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[REPORTE DE OPERACIONES BANCARIAS]]></text>
+				<text><![CDATA[REPORTE OPERACIONES BANCARIAS]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="3" y="50" width="550" height="20" uuid="a2fa670c-147f-4b67-8276-24e01cf5e814"/>
+				<textFieldExpression><![CDATA[$P{ReportTitle}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -148,7 +153,7 @@ ORDER BY OPERACION, b.FECHA]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{VOUCHER}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00">
+			<textField>
 				<reportElement x="402" y="0" width="43" height="13" uuid="4feed783-22f7-461a-b31d-1beaadc2dac7"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>

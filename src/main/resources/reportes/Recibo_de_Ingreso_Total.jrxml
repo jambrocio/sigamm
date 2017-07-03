@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Recibo_de_Ingreso_Total" language="groovy" pageWidth="60" pageHeight="15" columnWidth="60" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="752aa65e-fdb0-4b06-b7ad-7c302d3b60aa">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="CODIGO_FACTURACION" class="java.math.BigDecimal"/>
+	<queryString>
+		<![CDATA[SELECT SUM(monto) AS total FROM sis_facturacion_det
+WHERE codigo_facturacion_cab = $P{CODIGO_FACTURACION}]]>
+	</queryString>
+	<field name="TOTAL" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="13" splitType="Stretch">
+			<textField pattern="###0.00">
+				<reportElement x="0" y="0" width="50" height="12" uuid="f8bd13e0-2093-402a-837b-616faf9f7b5c"/>
+				<textElement textAlignment="Right">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+</jasperReport>

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Recibo_Ingreso" language="groovy" pageWidth="396" pageHeight="325" orientation="Landscape" columnWidth="374" leftMargin="11" rightMargin="11" topMargin="20" bottomMargin="20" uuid="8aa48749-1a17-4c95-9a64-eaaee3b6b70c">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_IMPRIME" class="java.lang.String">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\Proyectos\\MMH\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT c.codigo_facturacion_cab, c.codigo_socio, TO_CHAR(c.fecha_creacion, 'DD/MM/YYYY') AS fecha_creacion, s.apellido_paterno || ' ' || s.apellido_materno || ', ' || s.nombres AS nombres_full, s.nro_puesto,
+          g.nombre_giro, se.nombre_sector
+          FROM sis_facturacion_cab c
+          LEFT JOIN sis_socio s ON c.codigo_socio = s.codigo_socio
+          LEFT JOIN sis_giro_comercial g ON s.codigo_giro = g.codigo_giro
+          LEFT JOIN sis_sector se ON g.codigo_sector = se.codigo_sector
+          WHERE c.codigo_facturacion_cab = 37
+          AND c.estado = 1]]>
+	</queryString>
+	<field name="CODIGO_FACTURACION_CAB" class="java.math.BigDecimal"/>
+	<field name="CODIGO_SOCIO" class="java.math.BigDecimal"/>
+	<field name="FECHA_CREACION" class="java.lang.String"/>
+	<field name="NOMBRES_FULL" class="java.lang.String"/>
+	<field name="NRO_PUESTO" class="java.lang.String"/>
+	<field name="NOMBRE_GIRO" class="java.lang.String"/>
+	<field name="NOMBRE_SECTOR" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="241" y="0" width="133" height="74" uuid="16259adc-aa16-4b84-bb12-4bdd5071e194"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="241" y="28" width="132" height="20" backcolor="#CCCCCC" uuid="8da00a40-9a44-40e6-b200-a9f7ef4d0068"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="67" y="8" width="169" height="16" uuid="da590589-7ef5-4313-8758-5bc68cdb33e6">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ASOCIACIÓN DE COMERCIANTES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="67" y="23" width="169" height="16" uuid="fd428e20-f19e-4902-9b3c-4efbb4389910">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DEL MERCADO MODELO DE HUARAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="67" y="38" width="169" height="16" uuid="bcb448df-e62b-41e6-822c-2ecb1e7354e5">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Fundado el 13 de Noviembre de 1996]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="67" y="48" width="169" height="16" uuid="d75d0803-bf75-44a7-a423-9e69f88dbe80"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Ficha Registral Nº 7214]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="67" y="58" width="173" height="16" uuid="69f7502e-2597-4d76-ac6f-505a8e9e96e1">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Camino Viejo Jesús del Valle s/n - Huaral - Lima]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="242" y="28" width="133" height="20" forecolor="#000000" backcolor="#CCCCCC" uuid="57a6c74e-c086-481e-94ae-480c111057ec">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Narrow" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RECIBO DE INGRESO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="241" y="4" width="133" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="2235a5d7-05db-4aed-8c56-ce3d56fac1ce">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Narrow" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[R.U.C. Nº 20530606334]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="4" width="71" height="12" uuid="c2a7b328-30e5-4891-afa8-1ae5295e9736">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Asociado (a):]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="71" y="4" width="191" height="12" uuid="db09cbdd-eadb-42dc-81eb-7f2878d2d5a5"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRES_FULL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="268" y="4" width="34" height="12" uuid="f5efa9d9-7714-4850-8361-80aa1fe57139">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="302" y="4" width="71" height="12" uuid="80e554f8-a3c4-4d72-b4c4-c108803557c6"/>
+				<textElement textAlignment="Center">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_CREACION}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="20" width="71" height="12" uuid="cc25384d-6a56-4408-966e-3b415b4cd76b">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nº de Puesto:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="71" y="20" width="49" height="12" uuid="ac752bcc-324a-45be-9c53-5da720bfde6d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NRO_PUESTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="132" y="20" width="39" height="12" uuid="c1e29cf5-b049-4d83-a331-4982ef6b820d">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sector:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="171" y="20" width="29" height="12" uuid="2d60476b-bc2c-47af-9593-d46952ad90d1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_SECTOR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="212" y="20" width="39" height="12" uuid="a799425e-aaed-49b7-908e-c585d4266975">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Giro:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="251" y="20" width="122" height="12" uuid="3febad19-3b24-4947-8555-a152cb28dd97"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_GIRO}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="0" y="32" width="373" height="20" backcolor="#CCCCCC" uuid="2422b978-1f33-4687-94a7-49dca4649e01">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="36" width="39" height="20" uuid="8991878e-3b38-446c-bd04-a6ae999e0ee7">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CANT.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="39" y="36" width="252" height="20" uuid="7401d041-88d3-4989-a6ee-52936a8bdcd4">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[D E S C R I P C I O N]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="291" y="36" width="82" height="20" uuid="80ff1f8f-400e-4c99-b285-135ccd1e296c">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[IMPORTE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="99" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="373" height="99" uuid="e8f64a77-a0f0-4cff-a07d-90f1ba8e913e"/>
+				<subreportParameter name="P_CODIGO_FACTURA">
+					<subreportParameterExpression><![CDATA[$F{CODIGO_FACTURACION_CAB}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "Recibo_Ingreso_Detalle.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

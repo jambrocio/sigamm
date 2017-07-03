@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reporte_Recibo_Luz" language="groovy" pageWidth="555" pageHeight="802" columnWidth="535" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="72b5ec0b-8e67-4397-85b2-1d04f25c46a3">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="CODIGO_SOCIO" class="java.lang.String">
+		<defaultValueExpression><![CDATA[320]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT T3.NOMBRE_SERVICIO, SUM(T3.MONTO) TOTAL, T3.CONDICION FROM (
+
+SELECT s.DNI, CONCAT(CONCAT(CONCAT(CONCAT(s.APELLIDO_PATERNO, ' '), s.APELLIDO_MATERNO),', '),s.NOMBRES) NOMBRE_FULL, s.NRO_PUESTO, gc.NOMBRE_GIRO, gc.CODIGO_SECTOR, t2.CODIGO_DEUDA_SOCIO, t2.NOMBRE_SERVICIO, t2.FEC_PERIODO, t2.IMPORTE, t2.CANTIDAD, t2.MONTO, t2.CONDICION
+FROM SIS_SOCIO s INNER JOIN (
+        SELECT ds.CODIGO_SOCIO, ds.CODIGO_DEUDA_SOCIO, s.NOMBRE_SERVICIO, ds.FEC_PERIODO, ds.IMPORTE, ds.CANTIDAD, (ds.IMPORTE * ds.CANTIDAD) MONTO, 'PENDIENTE' CONDICION
+        FROM SIS_DEUDA_SOCIO ds INNER JOIN SIS_SERVICIO s ON s.CODIGO_SERVICIO = ds.CODIGO_SERVICIO_DETALLE
+        WHERE CODIGO_SOCIO =
+$P{CODIGO_SOCIO} and not exists (  SELECT *
+                                                   FROM SIS_DEUDA_SOCIO sds RIGHT JOIN (
+                                                      select fd.CODIGO_DEUDA_SOCIO, sd.NOMBRE_DETALLE NOMBRE_SERVICIO, fd.MONTO, 'PAGADO' CONDICION
+                                                      from SIS_FACTURACION_CAB fc
+                                                        INNER JOIN SIS_FACTURACION_DET fd ON fd.CODIGO_FACTURACION_CAB = fc.CODIGO_FACTURACION_CAB
+                                                        INNER JOIN SIS_SERVICIO_DETALLE sd ON sd.CODIGO_SERVICIO_DETALLE = fd.CODIGO_SERVICIO_DETALLE
+                                                      where fc.CODIGO_SOCIO =
+$P{CODIGO_SOCIO} and fc.ESTADO = 1) t1 ON t1.CODIGO_DEUDA_SOCIO = sds.CODIGO_DEUDA_SOCIO -- NO ESTE ANULADO
+                                                   WHERE t1.CODIGO_DEUDA_SOCIO = ds.CODIGO_DEUDA_SOCIO
+                                                )
+      UNION ALL
+        SELECT nvl(ds.CODIGO_SOCIO,$P{CODIGO_SOCIO}), t1.CODIGO_DEUDA_SOCIO, t1.NOMBRE_SERVICIO, nvl(ds.FEC_PERIODO,' '), nvl(ds.IMPORTE,t1.MONTO), nvl(ds.CANTIDAD,1), t1.MONTO, t1.CONDICION
+        FROM SIS_DEUDA_SOCIO ds RIGHT JOIN (
+          select fd.CODIGO_DEUDA_SOCIO, sd.NOMBRE_DETALLE NOMBRE_SERVICIO, fd.MONTO, 'PAGADO' CONDICION
+          from SIS_FACTURACION_CAB fc
+            INNER JOIN SIS_FACTURACION_DET fd ON fd.CODIGO_FACTURACION_CAB = fc.CODIGO_FACTURACION_CAB
+            INNER JOIN SIS_SERVICIO_DETALLE sd ON sd.CODIGO_SERVICIO_DETALLE = fd.CODIGO_SERVICIO_DETALLE
+          where fc.CODIGO_SOCIO =
+$P{CODIGO_SOCIO} and fc.ESTADO = 1) t1 ON t1.CODIGO_DEUDA_SOCIO = ds.CODIGO_DEUDA_SOCIO -- NO ESTE ANULADO
+      UNION ALL
+        SELECT ds.CODIGO_SOCIO, t1.CODIGO_DEUDA_SOCIO, t1.NOMBRE_SERVICIO, ds.FEC_PERIODO, ds.IMPORTE, ds.CANTIDAD, t1.MONTO, t1.CONDICION
+        FROM SIS_DEUDA_SOCIO ds RIGHT JOIN (
+          select fd.CODIGO_DEUDA_SOCIO, sd.NOMBRE_DETALLE NOMBRE_SERVICIO, fd.MONTO, 'ANULADO' CONDICION
+          from SIS_FACTURACION_CAB fc
+            INNER JOIN SIS_FACTURACION_DET fd ON fd.CODIGO_FACTURACION_CAB = fc.CODIGO_FACTURACION_CAB
+            INNER JOIN SIS_SERVICIO_DETALLE sd ON sd.CODIGO_SERVICIO_DETALLE = fd.CODIGO_SERVICIO_DETALLE
+          where fc.CODIGO_SOCIO =
+$P{CODIGO_SOCIO} and fc.ESTADO = 2) t1 ON t1.CODIGO_DEUDA_SOCIO = ds.CODIGO_DEUDA_SOCIO) t2 ON t2.codigo_socio = s.codigo_socio -- ESTE ANULADO
+  INNER JOIN SIS_GIRO_COMERCIAL gc ON gc.CODIGO_GIRO = s.CODIGO_GIRO
+ORDER BY CONDICION
+
+) t3
+GROUP BY T3.NOMBRE_SERVICIO, T3.CONDICION
+ORDER BY CONDICION]]>
+	</queryString>
+	<field name="NOMBRE_SERVICIO" class="java.lang.String"/>
+	<field name="TOTAL" class="java.math.BigDecimal"/>
+	<field name="CONDICION" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="0" width="553" height="24" uuid="e7c93566-cb1c-40f1-a980-c27f55e73716"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[INFORMACIÓN CONSOLIDADA :]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="1" y="30" width="555" height="1" uuid="6b18a4a9-3653-452e-bc84-324e30e9b16d"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="19" y="0" width="261" height="20" uuid="3f062b2b-7a5b-42c8-8f5f-bf2a692c449a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SERVICIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="323" y="0" width="100" height="20" uuid="9399a617-aa7a-4e89-b7c7-7fc27840ff2c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MONTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="423" y="0" width="116" height="20" uuid="dc8d006b-e50a-4385-a814-43457819d923"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CONDICION]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="19" y="0" width="292" height="15" uuid="273e1145-b616-4ffb-9db5-6e78aadc38b4"/>
+				<textFieldExpression><![CDATA[$F{NOMBRE_SERVICIO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="323" y="0" width="76" height="15" uuid="ae9491ed-9a31-48ee-8491-8ba7895de9ed"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="423" y="0" width="116" height="15" uuid="f01905d8-19cc-44b2-8dcf-863653f16db0"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{CONDICION}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="105" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="344" y="69" width="200" height="20" uuid="6755dea5-8b42-4a5b-9e06-1236ae35ce84"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENCARGADO RECEPCIÓN]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="344" y="63" width="200" height="1" uuid="efc8ecc5-cfe2-47fb-ad41-0bb54c302967"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Title" x="10" y="69" width="200" height="20" uuid="53dbd422-80d6-4aaf-9986-24a3688576bb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENCARGADO ENTREGA]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="10" y="63" width="200" height="1" uuid="14b809d8-d435-4181-9b6b-dea09658054a"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="4" y="5" width="550" height="1" uuid="8d9b3c24-bf64-4970-8633-a871d4d66b26"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

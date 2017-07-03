@@ -20,7 +20,7 @@ public class UtilPDF {
 	public static final String LEYENDA_RECIBO_LUZ = "RECIBO DE LUZ NRO: ";
 	public static final String LEYENDA_RECIBO_VIGILANCIA = "RECIBO DE VIGILANCIA NRO: "; 
 	public static final String RUTA_PDF = "/usr/share/jboss-eap-6.1/reportes/";
-	public static final String RUTA_PDF_WINDOWS = "C:\\tools\\jboss-eap-6.1\\standalone\\reportes/";
+	public static final String RUTA_PDF_WINDOWS = "D:\\tools\\jboss-eap-6.1_sigamm\\standalone\\reportes/";
 
 	public static void addEmptyLine(Paragraph paragraph, int number) {
 		for (int i = 0; i < number; i++) {

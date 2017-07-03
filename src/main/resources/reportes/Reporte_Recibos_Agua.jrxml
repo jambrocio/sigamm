@@ -17,23 +17,23 @@
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT concat(concat(concat(concat(s.APELLIDO_PATERNO,' '),s.APELLIDO_MATERNO),' '),s.NOMBRES) NOMBRE_FULL, s.NRO_PUESTO,
-rl.LECTURAINICIAL, rl.LECTURAFINAL, rl.CONSUMOMES, rl.TOTAL,
+rl.LECTURA_INICIAL, rl.LECTURA_FINAL, rl.CONSUMO_MES, rl.TOTAL,
 (case when rl.estado=1 then 'CREADO' else 'ELIMINADO' end) ESTADO,
 (case when (rl.estado=1 AND rl.pagado=1) then 'SI' else 'NO' end) PAGADO,
 (case when (rl.estado=1 AND rl.suspendido=1) then 'SI' else 'NO' end) SUSPENDIDO,
-(select SUM(a.total) from SIS_RECIBO_LUZ_SOCIO a where a.CODIGORECIBO = rl.CODIGORECIBO and a.PAGADO = 1) TOTAL_PAGADO,
-(select SUM(a.total) from SIS_RECIBO_LUZ_SOCIO a where a.CODIGORECIBO = rl.CODIGORECIBO and a.PAGADO = 0) PENDIENTE_PAGADO
-FROM SIS_RECIBO_LUZ_SOCIO rl
-  INNER JOIN SIS_SOCIO s ON s.CODIGO_SOCIO = rl.CODIGOSOCIO
-  INNER JOIN SIS_RECIBO_LUZ l ON l.COD_ORGRECIBO_LUZ = rl.CODIGORECIBO
+(select SUM(a.total) from SIS_RECIBO_AGUA_SOCIO a where a.CODIGO_RECIBO = rl.CODIGO_RECIBO and a.PAGADO = 1) TOTAL_PAGADO,
+(select SUM(a.total) from SIS_RECIBO_AGUA_SOCIO a where a.CODIGO_RECIBO = rl.CODIGO_RECIBO and a.PAGADO = 0) PENDIENTE_PAGADO
+FROM SIS_RECIBO_AGUA_SOCIO rl
+  INNER JOIN SIS_SOCIO s ON s.CODIGO_SOCIO = rl.CODIGO_SOCIO
+  INNER JOIN SIS_RECIBO_AGUA l ON l.CODIGO_RECIBO_AGUA = rl.CODIGO_RECIBO
 WHERE l.NUM_ESTADO = 1 AND l.FEC_PERIODO = $P{FECHA} AND rl.PAGADO like $P{ESTADO} AND rl.SUSPENDIDO like $P{SUSPENDIDO}
 ORDER BY to_number(s.NRO_PUESTO)]]>
 	</queryString>
 	<field name="NOMBRE_FULL" class="java.lang.String"/>
 	<field name="NRO_PUESTO" class="java.lang.String"/>
-	<field name="LECTURAINICIAL" class="java.math.BigDecimal"/>
-	<field name="LECTURAFINAL" class="java.math.BigDecimal"/>
-	<field name="CONSUMOMES" class="java.math.BigDecimal"/>
+	<field name="LECTURA_INICIAL" class="java.math.BigDecimal"/>
+	<field name="LECTURA_FINAL" class="java.math.BigDecimal"/>
+	<field name="CONSUMO_MES" class="java.math.BigDecimal"/>
 	<field name="TOTAL" class="java.math.BigDecimal"/>
 	<field name="ESTADO" class="java.lang.String"/>
 	<field name="PAGADO" class="java.lang.String"/>
@@ -56,7 +56,7 @@ ORDER BY to_number(s.NRO_PUESTO)]]>
 			<staticText>
 				<reportElement style="Title" x="0" y="0" width="553" height="33" uuid="e7c93566-cb1c-40f1-a980-c27f55e73716"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[REPORTE DEL RECIBO DE LUZ]]></text>
+				<text><![CDATA[REPORTE DEL RECIBO DE AGUA]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="Title" x="2" y="33" width="273" height="20" uuid="1474ca25-9313-4090-94e3-3913883c68e5"/>
@@ -65,7 +65,7 @@ ORDER BY to_number(s.NRO_PUESTO)]]>
 				</textElement>
 				<text><![CDATA[PERIODO - ]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="2" y="50" width="551" height="20" uuid="33b6d04f-7ebb-4058-b7db-a5198488b9c7"/>
 				<textFieldExpression><![CDATA[$P{ReportTitle}]]></textFieldExpression>
 			</textField>
@@ -90,7 +90,7 @@ ORDER BY to_number(s.NRO_PUESTO)]]>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="21" y="0" width="130" height="15" uuid="0aee3df2-4527-4182-b759-19d3aae0de8a"/>
+				<reportElement x="25" y="0" width="149" height="15" uuid="0aee3df2-4527-4182-b759-19d3aae0de8a"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
@@ -163,28 +163,13 @@ ORDER BY to_number(s.NRO_PUESTO)]]>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="21" y="0" width="130" height="13" uuid="e1d70017-2338-41c0-82b9-6671c9e0de81"/>
+				<reportElement x="25" y="0" width="126" height="13" uuid="e1d70017-2338-41c0-82b9-6671c9e0de81"/>
 				<textFieldExpression><![CDATA[$F{NOMBRE_FULL}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="151" y="0" width="46" height="13" uuid="22fe0829-19c5-4286-beba-95b770be8dd4"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{NRO_PUESTO}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="208" y="0" width="50" height="13" uuid="3022706f-d454-45ae-8896-b55fe121ad4e"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{LECTURAINICIAL}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="260" y="0" width="42" height="13" uuid="78495f74-af93-45fe-9aa2-bfcbb457e7d8"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{LECTURAFINAL}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="305" y="0" width="54" height="13" uuid="b70a1b7e-6846-4085-a161-3fe9ee27aeb2"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{CONSUMOMES}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="414" y="0" width="45" height="13" uuid="a563c802-5348-48c8-af8d-31dc00e91d9d"/>
@@ -207,8 +192,20 @@ ORDER BY to_number(s.NRO_PUESTO)]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0">
-				<reportElement x="1" y="0" width="20" height="15" uuid="335ca5cd-c9c4-4bd2-b342-184d6efd82bd"/>
+			<textField>
+				<reportElement x="208" y="0" width="50" height="13" uuid="6801ee27-06f0-4410-839c-fee524a1b436"/>
+				<textFieldExpression><![CDATA[$F{LECTURA_INICIAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="0" width="42" height="13" uuid="6c08f940-cac8-4e63-b464-5607068edd43"/>
+				<textFieldExpression><![CDATA[$F{LECTURA_FINAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="305" y="0" width="54" height="13" uuid="75b1cb51-d492-4810-80a2-59dfa551f393"/>
+				<textFieldExpression><![CDATA[$F{CONSUMO_MES}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0" isBlankWhenNull="false">
+				<reportElement x="2" y="0" width="23" height="15" uuid="7b505af7-84dc-4258-b3bd-fab801b05167"/>
 				<textFieldExpression><![CDATA[$V{ROW_COUNT}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -257,74 +254,74 @@ ORDER BY to_number(s.NRO_PUESTO)]]>
 	</pageFooter>
 	<summary>
 		<band height="120" splitType="Stretch">
-			<staticText>
-				<reportElement style="Title" x="176" y="0" width="186" height="20" uuid="921c7693-3a0e-4104-9a29-140ae2cc50b7"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[TOTAL A RECUADAR :]]></text>
-			</staticText>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement x="371" y="0" width="100" height="20" uuid="998c7e0a-28c3-431e-b823-d3e81a82a331"/>
+				<reportElement x="371" y="0" width="100" height="20" uuid="79847135-743c-47a9-9d41-c771616938e1"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{REPORT_TOTAL}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement x="372" y="20" width="100" height="20" uuid="5df5b143-c29b-495d-810c-51a3ba1c16ad"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{TOTAL_PAGADO}]]></textFieldExpression>
-			</textField>
 			<staticText>
-				<reportElement style="Title" x="10" y="96" width="200" height="20" uuid="e3a681cf-d9a4-40a6-85a8-809f338f1ee6"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<reportElement style="Title" x="174" y="0" width="186" height="20" uuid="4d9cb3bf-d616-40a4-b007-7e5c1ae70e13"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[ENCARGADO]]></text>
+				<text><![CDATA[TOTAL A RECUADAR :]]></text>
 			</staticText>
 			<line>
-				<reportElement positionType="FixRelativeToBottom" x="10" y="90" width="200" height="1" uuid="cef5c5c9-c186-482d-ae10-428e3c8fc8e2"/>
+				<reportElement positionType="FixRelativeToBottom" x="8" y="90" width="200" height="1" uuid="6abab002-b391-409f-ba73-bfbbea689fc9"/>
 				<graphicElement>
 					<pen lineWidth="0.5" lineColor="#999999"/>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement style="Title" x="175" y="40" width="186" height="20" uuid="337f9ee9-2149-4cea-9791-920d4e755743"/>
+				<reportElement style="Title" x="8" y="96" width="200" height="20" uuid="f0d7beb3-79f1-4f75-91a4-19826b05bf46"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENCARGADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Title" x="342" y="96" width="200" height="20" uuid="77711414-b22a-4fb6-a52d-f876825dcfb1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENCARGADO LECTURA]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="342" y="90" width="200" height="1" uuid="1961b275-c38c-4f0c-b9f0-e0daf3020103"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Title" x="174" y="20" width="186" height="20" uuid="63bf9b5c-9208-4880-9d61-a9f9e5d11972"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PAGADO :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Title" x="174" y="40" width="186" height="20" uuid="a71caee2-d1a0-4d0f-a0da-e9b9dc4ea759"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PENDIENTE DE PAGO :]]></text>
 			</staticText>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement x="372" y="40" width="100" height="20" uuid="77f69a67-334f-4b45-9ee1-72eab1dd853c"/>
+				<reportElement x="371" y="20" width="100" height="20" uuid="bef31af6-1424-4860-94fe-965bd0dbdfa3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TOTAL_PAGADO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="371" y="40" width="100" height="20" uuid="87374126-aec6-4eda-b9f2-04893afe26cc"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{PENDIENTE_PAGADO}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement style="Title" x="175" y="20" width="186" height="20" uuid="07f3f008-a4df-469e-a96d-8837e6947894"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[PAGADO :]]></text>
-			</staticText>
-			<line>
-				<reportElement positionType="FixRelativeToBottom" x="344" y="90" width="200" height="1" uuid="3165473c-4709-4499-adbf-6db3ee473257"/>
-				<graphicElement>
-					<pen lineWidth="0.5" lineColor="#999999"/>
-				</graphicElement>
-			</line>
-			<staticText>
-				<reportElement style="Title" x="344" y="96" width="200" height="20" uuid="855de4eb-ad5a-4515-a598-dc05e03ab886"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[ENCARGADO LECTURA]]></text>
-			</staticText>
 		</band>
 	</summary>
 </jasperReport>

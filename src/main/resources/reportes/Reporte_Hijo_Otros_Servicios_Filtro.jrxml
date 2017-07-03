@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reporte_Recibo_Luz" language="groovy" pageWidth="555" pageHeight="802" columnWidth="535" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="72b5ec0b-8e67-4397-85b2-1d04f25c46a3">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="CODIGO_SERVICIO_OTROS" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[25]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT sed.nombre_detalle, sd.rango_inicio || ' - ' || sd.rango_fin AS rangos,
+  CASE WHEN SUBSTR((sd.rango_fin - sd.rango_inicio + 1) * sed.importe,1,1) = ',' THEN '0' || TRIM(TO_CHAR((sd.rango_fin - sd.rango_inicio + 1) * sed.importe, '999999.99')) ELSE TRIM(TO_CHAR((sd.rango_fin - sd.rango_inicio + 1) * sed.importe, '999999.99')) END as importe_total,
+  ' ' AS observacion
+FROM sis_servicio_otros s
+  LEFT JOIN sis_servicio_otros_detalle sd ON s.codigo_servicio_otros = sd.codigo_servicio_otros
+  LEFT JOIN sis_servicio se ON s.codigo_servicio = se.codigo_servicio
+  LEFT JOIN sis_servicio_detalle sed ON sd.codigo_servicio_detalle = sed.codigo_servicio_detalle
+WHERE s.estado = 1
+  AND se.flag_otros = 1
+  AND s.codigo_servicio_otros = $P{CODIGO_SERVICIO_OTROS}
+UNION
+SELECT 'IMPORTE SOBRANTE' AS nombre_detalle, ' ' AS rangos,
+  CASE WHEN SUBSTR(to_number(trim(replace(s.importe_sobrante,'.',','))),1,1) = ',' THEN '0' || TRIM(TO_CHAR(to_number(trim(replace(s.importe_sobrante,'.',','))), '999999.99')) ELSE TRIM(TO_CHAR(to_number(trim(replace(s.importe_sobrante,'.',','))), '999999.99')) END as importe_total,
+  s.observacion
+FROM sis_servicio_otros s
+WHERE s.estado = 1
+  AND s.codigo_servicio_otros = $P{CODIGO_SERVICIO_OTROS}]]>
+	</queryString>
+	<field name="NOMBRE_DETALLE" class="java.lang.String"/>
+	<field name="RANGOS" class="java.lang.String"/>
+	<field name="IMPORTE_TOTAL" class="java.lang.String"/>
+	<field name="OBSERVACION" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="15" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="14" y="0" width="135" height="20" uuid="c6b292ef-2443-4743-9f94-ea45e292ee38"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DETALLE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="149" y="0" width="110" height="20" uuid="62f6bc3d-6a3d-425c-be83-9b7db5ab5f0c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RANGOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="271" y="0" width="83" height="20" uuid="e3fea263-ef3d-40b1-bfe1-8375d831a0d4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="371" y="0" width="160" height="20" uuid="17bfa657-9739-4105-b914-1878afe05527"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[OBSERVACIONES]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="14" y="0" width="135" height="15" uuid="e511d737-c223-4f47-bca8-2326c6cd33ec"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_DETALLE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="149" y="0" width="110" height="15" uuid="6f057aa9-79b8-44d6-b305-ac562d8a3be2"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RANGOS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="271" y="0" width="73" height="15" uuid="f6506320-e9c8-428e-96d2-846d7ca42552"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{IMPORTE_TOTAL}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="371" y="0" width="160" height="15" uuid="4a8040de-b6b8-4fd9-b0bb-2fbc92b291a2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OBSERVACION}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="5" y="4" width="540" height="1" uuid="13ffab5a-0d75-41c8-9c03-95b5d51eccb6"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

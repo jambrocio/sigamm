@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Recibo_Ingreso_Detalle" language="groovy" pageWidth="396" pageHeight="325" columnWidth="396" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="acea63fb-1044-4e06-8ea6-df06f7ea0252">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_CODIGO_FACTURA" class="java.math.BigDecimal"/>
+	<queryString>
+		<![CDATA[SELECT CASE WHEN d.codigo_deuda_socio = 0 THEN 'FORMATO DE SOLICITUD' ELSE ds.fec_periodo END AS fec_periodo,
+          TRIM(TO_CHAR(d.monto, '999999.99')) AS monto,
+          CASE WHEN d.codigo_deuda_socio = 0 THEN 'FORMATO DE SOLICITUD' ELSE sd.nombre_detalle END AS nombre_detalle
+          FROM sis_facturacion_det d
+          LEFT JOIN sis_deuda_socio ds ON d.codigo_deuda_socio = ds.codigo_deuda_socio
+          LEFT JOIN sis_servicio_detalle sd ON ds.codigo_servicio_detalle = sd.codigo_servicio_detalle
+          WHERE d.codigo_facturacion_cab = $P{P_CODIGO_FACTURA}
+          ORDER BY d.codigo_facturacion_det]]>
+	</queryString>
+	<field name="FEC_PERIODO" class="java.lang.String"/>
+	<field name="MONTO" class="java.lang.String"/>
+	<field name="NOMBRE_DETALLE" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="94" height="20" uuid="b577f869-ce7c-44ea-92be-14b1f4de66fc"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_DETALLE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="94" y="0" width="161" height="20" uuid="b1612c49-35f2-4ab4-941d-2da0311d6eae"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FEC_PERIODO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="255" y="0" width="70" height="20" uuid="5d47b6ee-4407-42cf-812a-ce035e3cb77d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MONTO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<staticText>
+				<reportElement x="155" y="0" width="100" height="20" uuid="23044165-7e68-4c5b-b846-e71f9e968f09"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL S/.]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

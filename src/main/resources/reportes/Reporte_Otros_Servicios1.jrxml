@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reporte_Recibo_Luz" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="72b5ec0b-8e67-4397-85b2-1d04f25c46a3">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\Proyectos\\MMH\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT codigo_servicio_otros, nombre_servicio, dni_responsable, nombre_responsable, fecha_registro, asociado,
+  CASE WHEN SUBSTR(importe_total + to_number(trim(replace(importe_sobrante,'.',','))),1,1) = ',' THEN '0' || TRIM(TO_CHAR(importe_total + to_number(trim(replace(importe_sobrante,'.',','))), '999999.99')) ELSE TRIM(TO_CHAR(importe_total + to_number(trim(replace(importe_sobrante,'.',','))), '999999.99')) END as importe_total
+FROM(
+    SELECT s.codigo_servicio_otros, s.codigo_servicio, se.nombre_servicio, s.codigo_socio, s.dni_responsable, s.nombre_responsable, s.codigo_usuario, s.fecha AS fecha_registro,
+      SUM((sd.rango_fin - sd.rango_inicio + 1) * sed.importe) AS importe_total,
+      s.codigo_servicio_otros AS codigo_serv_otros_alt, s.importe_sobrante,
+      so.apellido_paterno || ' ' || so.apellido_materno || ', ' || so.nombres AS asociado, sd.codigo_banio
+    FROM sis_servicio_otros s
+      LEFT JOIN sis_servicio_otros_detalle sd ON s.codigo_servicio_otros = sd.codigo_servicio_otros
+      LEFT JOIN sis_servicio se ON s.codigo_servicio = se.codigo_servicio
+      LEFT JOIN sis_servicio_detalle sed ON sd.codigo_servicio_detalle = sed.codigo_servicio_detalle
+      LEFT JOIN sis_socio so ON s.codigo_socio = so.codigo_socio
+    WHERE s.estado = 1
+      AND se.flag_otros = 1
+      GROUP BY s.codigo_servicio_otros, s.codigo_servicio, se.nombre_servicio, s.codigo_socio, s.dni_responsable, s.nombre_responsable, s.codigo_usuario, s.fecha,
+      so.apellido_paterno || ' ' || so.apellido_materno || ', ' || so.nombres, s.importe_sobrante, sd.codigo_banio
+      ORDER BY s.fecha, sd.codigo_banio
+)]]>
+	</queryString>
+	<field name="CODIGO_SERVICIO_OTROS" class="java.math.BigDecimal"/>
+	<field name="NOMBRE_SERVICIO" class="java.lang.String"/>
+	<field name="DNI_RESPONSABLE" class="java.lang.String"/>
+	<field name="NOMBRE_RESPONSABLE" class="java.lang.String"/>
+	<field name="FECHA_REGISTRO" class="java.lang.String"/>
+	<field name="ASOCIADO" class="java.lang.String"/>
+	<field name="IMPORTE_TOTAL" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="0" y="0" width="553" height="33" uuid="e7c93566-cb1c-40f1-a980-c27f55e73716"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[REPORTE OTROS SERVICIOS]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="22" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="-3" width="555" height="1" uuid="7cdcce1f-4640-454f-8357-ed8d0497110c"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="8" y="0" width="46" height="20" uuid="c0925050-d76a-4b9c-bdca-c8e672fdaa0d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CODIGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="64" y="0" width="72" height="20" uuid="20419293-a771-47f4-84f7-ec973e87a6b0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SERVICIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="136" y="0" width="47" height="20" uuid="d55694cf-e7b0-4eae-a27b-164fab6dfbde"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DNI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="186" y="0" width="112" height="20" uuid="a91f4449-c987-4ea1-80c6-73f388f5edce"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[RESPONSABLE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="365" y="0" width="148" height="20" uuid="fcb22c1f-cbfc-44b1-87a1-6f68fcab9822"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ASOCIADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="306" y="0" width="54" height="20" uuid="9327f747-6947-4abd-8c48-489baea05eb1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="513" y="0" width="40" height="20" uuid="b89bfa0c-464f-44c7-b8d1-fa72bb45081b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="59" splitType="Stretch">
+			<textField>
+				<reportElement x="6" y="4" width="46" height="15" uuid="e041021c-7479-41ad-ad5b-8d13cb481fe3"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{CODIGO_SERVICIO_OTROS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="62" y="4" width="72" height="15" uuid="f61d2781-a923-4db1-bd84-72a033ba6cb2"/>
+				<textFieldExpression><![CDATA[$F{NOMBRE_SERVICIO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="134" y="4" width="47" height="15" uuid="d27e805f-db89-4007-987b-a8784f57e72f"/>
+				<textFieldExpression><![CDATA[$F{DNI_RESPONSABLE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="184" y="4" width="112" height="15" uuid="dba9415e-eb96-4dcc-b138-1d5798174e5c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_RESPONSABLE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="304" y="5" width="54" height="15" uuid="eddfcff2-1e64-4b7b-88a1-504d4244f957"/>
+				<textFieldExpression><![CDATA[$F{FECHA_REGISTRO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="363" y="4" width="148" height="15" uuid="4ca63c64-981a-48ca-83dd-d2fba7674822"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ASOCIADO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="511" y="4" width="40" height="15" uuid="e9333032-c227-4ca0-b828-40e7153c9ce9"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{IMPORTE_TOTAL}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="6" y="20" width="545" height="34" uuid="578606ce-443a-4b1f-9b6d-6bafab1c39b0"/>
+				<subreportParameter name="CODIGO_SERVICIO_OTROS">
+					<subreportParameterExpression><![CDATA[$F{CODIGO_SERVICIO_OTROS}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "Reporte_Hijo_Otros_Servicios.jasper"]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="4" y="2" width="550" height="1" uuid="255e7dc8-b648-45e0-846f-cc7c1944c98e"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="10" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="-1" y="4" width="555" height="1" uuid="823a46e3-0ed8-4846-a6d8-e3e5a442ad8d"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="117092fe-1968-465b-80cc-4064d1f07d0a"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="abe03bb9-ff48-4e6c-9294-9e8ebd875df7"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="bbcbf37e-13bb-4107-b49d-e2cd4f36d464"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Title" x="197" y="0" width="197" height="20" uuid="dbaf02fb-2e83-462c-87cc-189f0d565dcc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[MERCADO MODELO DE HUARAL]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="10" y="29" width="200" height="20" uuid="59f0352a-5ab9-48af-8d74-8139760a07e7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENCARGADO ENTREGA]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="344" y="23" width="200" height="1" uuid="716b073f-efd9-4b5a-9e7e-380699a06214"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="10" y="23" width="200" height="1" uuid="9e3b2998-cec9-4677-8ca2-10bfcfa02f10"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Title" x="344" y="29" width="200" height="20" uuid="38bbb096-1330-46b0-b908-119e15429355"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENCARGADO RECEPCIÓN]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

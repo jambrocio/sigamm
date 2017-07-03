@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reporte_Recibo_Luz" language="groovy" pageWidth="555" pageHeight="802" columnWidth="535" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="72b5ec0b-8e67-4397-85b2-1d04f25c46a3">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="CODIGO_FACTURA" class="java.lang.String">
+		<defaultValueExpression><![CDATA[25]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT codigo_facturacion_cab, TRIM(TO_CHAR(monto, '999999.99')) AS monto, fec_periodo, nombre_detalle FROM(
+    SELECT c.codigo_facturacion_cab, s.dni, s.nro_puesto, s.apellido_paterno, s.apellido_materno, s.nombres, TO_CHAR(c.fecha_creacion, 'DD/MM/YYYY') AS fecha_creacion,
+      d.monto, ds.fec_periodo, sd.nombre_detalle
+    FROM sis_facturacion_cab c
+      LEFT JOIN sis_facturacion_det d ON c.codigo_facturacion_cab = d.codigo_facturacion_cab
+      LEFT JOIN sis_deuda_socio ds ON d.codigo_deuda_socio = ds.codigo_deuda_socio
+      LEFT JOIN sis_socio s ON ds.codigo_socio = s.codigo_socio
+      LEFT JOIN sis_servicio_detalle sd ON ds.codigo_servicio_detalle = sd.codigo_servicio_detalle
+    WHERE /*TO_CHAR(c.fecha_creacion, 'DD/MM/YYYY')= TO_CHAR(SYSDATE, 'DD/MM/YYYY')
+      AND*/ c.estado = 1
+      AND s.estado = 1
+    UNION
+    SELECT c.codigo_facturacion_cab, s.dni, s.nro_puesto, s.apellido_paterno, s.apellido_materno, s.nombres, TO_CHAR(c.fecha_creacion, 'DD/MM/YYYY') AS fecha_creacion,
+      d.monto, sd.nombre_detalle AS fec_periodo, sd.nombre_detalle
+    FROM sis_facturacion_cab c
+      LEFT JOIN sis_facturacion_det d ON c.codigo_facturacion_cab = d.codigo_facturacion_cab
+      LEFT JOIN sis_socio s ON c.codigo_socio = s.codigo_socio
+      LEFT JOIN sis_servicio_detalle sd ON d.codigo_servicio = sd.codigo_servicio
+    WHERE /*TO_CHAR(c.fecha_creacion, 'DD/MM/YYYY')= TO_CHAR(SYSDATE, 'DD/MM/YYYY')
+      AND*/ c.estado = 1
+      AND s.estado = 1
+      AND d.codigo_deuda_socio = 0
+) WHERE codigo_facturacion_cab = $P{CODIGO_FACTURA}]]>
+	</queryString>
+	<field name="CODIGO_FACTURACION_CAB" class="java.math.BigDecimal"/>
+	<field name="MONTO" class="java.lang.String"/>
+	<field name="FEC_PERIODO" class="java.lang.String"/>
+	<field name="NOMBRE_DETALLE" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="15" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="19" y="0" width="100" height="20" uuid="7780d102-c9ec-4998-852f-60ecd2dc690f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CODIGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="140" y="0" width="100" height="20" uuid="264bdeaa-ea60-4796-8b52-083bba21cc07"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MONTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="268" y="0" width="100" height="20" uuid="9a387fc4-2ff9-4b3b-8cdb-d8a5c25e8197"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PERIODO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="391" y="0" width="100" height="20" uuid="5d1829a0-5d0c-4e67-80e4-0ca019523273"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DETALLE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="19" y="0" width="100" height="15" uuid="9ef15074-6790-4500-97e8-6b4bf716fcd3"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CODIGO_FACTURACION_CAB}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="140" y="0" width="100" height="15" uuid="c9d4b3ab-7a66-4e40-9dea-079a5cc1b6ba"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MONTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="268" y="0" width="100" height="15" uuid="879faf67-8b6b-49f0-a84a-7a49122321ff"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FEC_PERIODO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="391" y="0" width="100" height="15" uuid="610d412e-c751-4088-b010-dbb6afedc755"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_DETALLE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="5" y="4" width="540" height="1" uuid="13ffab5a-0d75-41c8-9c03-95b5d51eccb6"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

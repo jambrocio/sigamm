@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Recibo_de_Ingreso" language="groovy" pageWidth="595" pageHeight="842" columnWidth="570" leftMargin="5" rightMargin="20" topMargin="20" bottomMargin="20" uuid="efa74997-8386-4e38-93bf-7bc04876d26e">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_IMPRIME" class="java.lang.String">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CODIGO_FACTURACION" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT codigo_facturacion_cab, codigo_socio, fecha_creacion, nombres_full, nro_puesto, nombre_giro, nombre_sector, serie, secuencia,
+nombre_detalle || ', ' || fec_periodo AS descripcion, monto FROM(
+SELECT codigo_facturacion_cab, codigo_socio, fecha_creacion, nombres_full, nro_puesto, nombre_giro, nombre_sector, serie, secuencia,
+REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(fec_periodo, 'ENERO', 'ENE'), 'FEBRERO', 'FEB'), 'MARZO', 'MAR'), 'ABRIL', 'ABR'), 'MAYO', 'MAY'), 'JUNIO', 'JUN'), 'JULIO', 'JUL'), 'AGOSTO', 'AGO'), 'SETIEMBRE', 'SET'), 'OCTUBRE', 'OCT'), 'NOVIEMBRE', 'NOV'), 'DICIEMBRE', 'DIC') AS fec_periodo,
+monto, nombre_detalle
+FROM(
+    SELECT c.codigo_facturacion_cab, c.codigo_socio, TO_CHAR(c.fecha_creacion, 'DD/MM/YYYY') AS fecha_creacion, s.apellido_paterno || ' ' || s.apellido_materno || ', ' || s.nombres AS nombres_full, s.nro_puesto,
+    g.nombre_giro, se.nombre_sector, c.serie, c.secuencia
+    , CASE WHEN d.codigo_deuda_socio = 0 THEN 'FORMATO DE SOLICITUD' ELSE ds.fec_periodo END AS fec_periodo,
+              d.monto,
+              CASE WHEN d.codigo_deuda_socio = 0 THEN 'FORMATO DE SOLICITUD' ELSE sd.nombre_detalle END AS nombre_detalle
+    FROM sis_facturacion_cab c
+    LEFT JOIN sis_facturacion_det d ON c.codigo_facturacion_cab = d.codigo_facturacion_cab
+    LEFT JOIN sis_deuda_socio ds ON d.codigo_deuda_socio = ds.codigo_deuda_socio
+    LEFT JOIN sis_servicio_detalle sd ON ds.codigo_servicio_detalle = sd.codigo_servicio_detalle
+    LEFT JOIN sis_socio s ON c.codigo_socio = s.codigo_socio
+    LEFT JOIN sis_giro_comercial g ON s.codigo_giro = g.codigo_giro
+    LEFT JOIN sis_sector se ON g.codigo_sector = se.codigo_sector
+    WHERE c.codigo_facturacion_cab = $P{CODIGO_FACTURACION}
+    AND c.estado = 1
+)
+)]]>
+	</queryString>
+	<field name="CODIGO_FACTURACION_CAB" class="java.math.BigDecimal"/>
+	<field name="CODIGO_SOCIO" class="java.math.BigDecimal"/>
+	<field name="FECHA_CREACION" class="java.lang.String"/>
+	<field name="NOMBRES_FULL" class="java.lang.String"/>
+	<field name="NRO_PUESTO" class="java.lang.String"/>
+	<field name="NOMBRE_GIRO" class="java.lang.String"/>
+	<field name="NOMBRE_SECTOR" class="java.lang.String"/>
+	<field name="SERIE" class="java.lang.String"/>
+	<field name="SECUENCIA" class="java.lang.String"/>
+	<field name="DESCRIPCION" class="java.lang.String"/>
+	<field name="MONTO" class="java.math.BigDecimal"/>
+	<variable name="MONTO_TOTAL" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{MONTO}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="68" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="236" y="1" width="133" height="66" uuid="4b8826d6-013c-4d96-90b9-26909f2a4a3d">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="26" y="51" width="173" height="16" uuid="ef364f0f-6b9b-4ffc-ad06-053be3f05ad6">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Camino Viejo Jesús del Valle s/n - Huaral - Lima]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="290" y="49" width="78" height="18" uuid="4bb15e42-9a55-4e77-a20e-123aaec9c766"/>
+				<textElement>
+					<font fontName="Lucida Console" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SECUENCIA}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="236" y="29" width="133" height="20" backcolor="#CCCCCC" uuid="31cad7ab-50d2-4964-8ae1-adc5c4393121">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Transparent" x="235" y="29" width="134" height="20" forecolor="#000000" backcolor="#CCCCCC" uuid="fc5b6645-c740-4c2c-a9a3-0f35b48f4ed4">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Narrow" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RECIBO DE INGRESO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="41" width="169" height="16" uuid="6bfa6198-7316-466b-a29e-01b3a8b93193">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Ficha Registral Nº 7214]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="1" width="169" height="16" uuid="9f954ff4-6861-4d69-ab74-37bee4f354a4">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ASOCIACIÓN DE COMERCIANTES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="236" y="5" width="133" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="efe00b1a-7533-485d-92e1-164605fd7224">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Narrow" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[R.U.C. Nº 20530606334]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="26" y="16" width="169" height="16" uuid="f5e78191-5e1f-430d-8a4a-b644dc7c4c4b">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DEL MERCADO MODELO DE HUARAL]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="238" y="49" width="52" height="18" uuid="1f9bec9d-f464-4f9d-89ed-c9f98cfea707">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Lucida Console" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SERIE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="26" y="31" width="169" height="16" uuid="c5783aa1-dcf4-4350-ba22-6e878577c14d">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Fundado el 13 de Noviembre de 1996]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="53" splitType="Stretch">
+			<staticText>
+				<reportElement x="135" y="16" width="39" height="12" uuid="1195d63e-ff83-400a-94e7-4691cfef93fe">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sector:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="215" y="16" width="35" height="12" uuid="aee1502a-29b4-4e91-b3c9-b4c12d2d51eb">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Giro:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="0" width="71" height="12" uuid="e8bd4e9c-5fe2-4583-aa74-471435ad6328">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Asociado (a):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="271" y="0" width="34" height="12" uuid="2495957f-4bb1-4721-9d23-9616209b5992">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="16" width="71" height="12" uuid="90d284a7-cbfc-42b2-8004-841572d3d809">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Courier New" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nº de Puesto:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="3" y="32" width="373" height="20" backcolor="#CCCCCC" uuid="86077cef-01ec-4347-ae57-bad21f8aed5b">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="45" y="35" width="252" height="17" uuid="1101d9e7-c082-451b-b58b-fe6d09302fd5">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[D E S C R I P C I O N]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="74" y="0" width="186" height="12" uuid="2c887b58-5a1c-4bbe-b177-c1800d405ec3"/>
+				<textElement>
+					<font fontName="Lucida Console" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRES_FULL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="305" y="1" width="71" height="12" uuid="2b4fb1bb-c052-4d1b-b7a8-9d27a0de7c51"/>
+				<textElement>
+					<font fontName="Lucida Console" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_CREACION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="74" y="16" width="43" height="12" uuid="9df61eb3-f7ca-4bed-beb0-23da9b6d6eb8"/>
+				<textElement>
+					<font fontName="Lucida Console" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NRO_PUESTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="248" y="17" width="128" height="12" uuid="2b0eaeec-f570-4462-af77-6d6a1199566a"/>
+				<textElement>
+					<font fontName="Lucida Console" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_GIRO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="175" y="17" width="25" height="12" uuid="13e41b6b-d363-4d1d-98f2-65a5363cdcb1"/>
+				<textElement>
+					<font fontName="Lucida Console" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE_SECTOR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="6" y="37" width="39" height="15" uuid="a0c643f6-ecea-4bb1-9353-834ed05e8ddf">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CANT.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="294" y="35" width="82" height="17" uuid="4ef67f13-4527-4509-9d51-99a4a77b8e97">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[IMPORTE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<summary>
+		<band height="207" splitType="Stretch">
+			<rectangle>
+				<reportElement x="3" y="-1" width="373" height="90" backcolor="#FFFFFF" uuid="acf41ff2-5bb8-4098-957f-5570c8c04718">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="313" y="112" width="63" height="20" backcolor="#CCCCCC" uuid="72f69eb2-1461-4666-9eb7-6776b5296165">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="260" y="114" width="53" height="15" uuid="4fe7e762-4d23-4d90-ae2b-557ce9827327">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Courier New" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL S/.]]></text>
+			</staticText>
+			<textField pattern="dd">
+				<reportElement x="128" y="114" width="20" height="15" uuid="239eb4f8-24dc-4986-b283-e983c4b84674"/>
+				<textElement textAlignment="Right">
+					<font fontName="Lucida Console" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMMM">
+				<reportElement x="168" y="114" width="35" height="15" uuid="c05799dc-47c6-46df-87a7-490924c12a12"/>
+				<textElement>
+					<font fontName="Lucida Console" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(new java.text.SimpleDateFormat("MMMM",new Locale("es", "ES"))).format(new Date())]]></textFieldExpression>
+			</textField>
+			<textField pattern="yy">
+				<reportElement x="238" y="114" width="20" height="15" uuid="0688a5eb-5a83-4174-bd10-31cdb6b5d77c"/>
+				<textElement>
+					<font fontName="Lucida Console" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="148" y="114" width="20" height="15" uuid="7f0663e6-7320-43e8-9d7e-aed803836bb3">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Lucida Console" size="9"/>
+				</textElement>
+				<text><![CDATA[de]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="203" y="114" width="35" height="15" uuid="4b6dcd93-9f02-4ea4-8685-670ff85bd007">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Lucida Console" size="9"/>
+				</textElement>
+				<text><![CDATA[del 20]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="92" width="27" height="15" uuid="4ee676b8-9552-474d-a5c1-cacfd57c22b0">
+					<printWhenExpression><![CDATA[$P{P_IMPRIME}.toString() == '1']]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Courier New" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Son:]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="30" y="92" width="180" height="15" uuid="6b9d143b-e497-46c9-b488-b6747fcf70ef"/>
+				<subreportParameter name="CODIGO_FACTURACION_CAB">
+					<subreportParameterExpression><![CDATA[$F{CODIGO_FACTURACION_CAB}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "Recibo_de_Ingreso_Letras_Lucida.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="4" y="0" width="373" height="90" uuid="7875684e-7b43-44a7-96f0-872d77e1c8cd"/>
+				<subreportParameter name="CODIGO_FACTURACION">
+					<subreportParameterExpression><![CDATA[$F{CODIGO_FACTURACION_CAB}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "Recibo_de_Ingreso_Detalle_Lucida.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="313" y="114" width="60" height="15" uuid="a283082b-bf9c-4ab4-b7b2-bb2713ce65d6"/>
+				<subreportParameter name="CODIGO_FACTURACION">
+					<subreportParameterExpression><![CDATA[$F{CODIGO_FACTURACION_CAB}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "Recibo_de_Ingreso_Total_Lucida.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>
