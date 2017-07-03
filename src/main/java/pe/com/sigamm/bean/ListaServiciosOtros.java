@@ -19,6 +19,7 @@ public class ListaServiciosOtros {
 	String rangos;
 	String asociado;
 	String observacion;
+	int estado;
 	
 	public int getCodigoServicioOtros() {
 		return codigoServicioOtros;
@@ -121,6 +122,12 @@ public class ListaServiciosOtros {
 	}
 	public void setObservacion(String observacion) {
 		this.observacion = observacion;
+	}
+	public int getEstado() {
+		return estado;
+	}
+	public void setEstado(int estado) {
+		this.estado = estado;
 	}
 				
 }

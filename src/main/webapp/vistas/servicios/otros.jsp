@@ -579,7 +579,7 @@ function eliminarOtrosServicios(codigoServicioOtros){
 					time: ''
 				});
 	            
-	            //cargarPuestos();
+	            cargarServiciosOtros();
 		            
 			}
 		});
@@ -597,17 +597,19 @@ function cargarServiciosOtros(){
 		nombre = replaceAll(nombreFull, " ", "#");
 		var opciones = "<center>";
 			
-			opciones += "<a href=javascript:editarOtrosServicios(";
-			opciones += rowObject.codigoServOtrosAlt + ") >";
-			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Otros Servicios'/>";
-			opciones += "</a>";
+			if(rowObject.estado == 1){
+				opciones += "<a href=javascript:editarOtrosServicios(";
+				opciones += rowObject.codigoServOtrosAlt + ") >";
+				opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Otros Servicios'/>";
+				opciones += "</a>";
+				
+				opciones += "&nbsp;&nbsp;";
 			
-			opciones += "&nbsp;&nbsp;";
-		
-			opciones += "<a href=javascript:eliminarOtrosServicios(";
-			opciones += rowObject.codigoServOtrosAlt + ") >";
-			opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Otros Servicios'/>";
-			opciones += "</a>";
+				opciones += "<a href=javascript:eliminarOtrosServicios(";
+				opciones += rowObject.codigoServOtrosAlt + ") >";
+				opciones += "<img src='/"+ruta+"/recursos/images/icons/eliminar_24x24.png' border='0' title='Eliminar Otros Servicios'/>";
+				opciones += "</a>";
+			}
 			
 			opciones += "</center>";
 			
@@ -682,6 +684,20 @@ function cargarServiciosOtros(){
 		viewrecords : true,
 		sortorder : "codigoServicioOtros",				
 		caption : "Servicios Otros",				
+		
+		afterInsertRow: function(rowId, data, item){
+			//alert(rowId + ' - ' + data + ' - ' + item.total);
+			if (item.estado == 2){
+				$("#grilla").setCell(rowId, 'codigoServOtrosAlt', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grilla").setCell(rowId, 'nombreServicio', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grilla").setCell(rowId, 'asociado', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grilla").setCell(rowId, 'dniResponsable', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grilla").setCell(rowId, 'nombreResponsable', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grilla").setCell(rowId, 'importeTotal', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+				$("#grilla").setCell(rowId, 'fechaRegistro', '', { 'background-color':'#F5A9A9','color':'white','font-weight':'bold' });
+			}
+
+		},
 		
 		multiselect: false,
 		subGrid: true,
