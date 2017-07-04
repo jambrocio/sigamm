@@ -83,7 +83,7 @@ public class OtrosServiciosBusImpl implements OtrosServiciosBus {
 		parameters.put("SUBREPORT_DIR", ruta);
 		parameters.put("FECHA_INICIO", fechaIni);
 		parameters.put("FECHA_FIN", fechaFin);
-		parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
+		//parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
 		
 		Connection con = null;
 		

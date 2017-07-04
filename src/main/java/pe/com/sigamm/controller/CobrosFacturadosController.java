@@ -68,7 +68,7 @@ public class CobrosFacturadosController {
 		//parameters.put("P_CODIGO_USUARIO", datosSession.getCodigoUsuario());
 		parameters.put("FECHA_INICIAL", fechaIni);
 		parameters.put("FECHA_FINAL", fechaFin);
-		parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
+		//parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
 		
 		Connection con = null;
 		

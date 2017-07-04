@@ -554,7 +554,7 @@ public class FacturacionController {
 		parameters.put("Author", Constantes.IREPORT_AUTOR);
 		parameters.put("SUBREPORT_DIR", ruta);
 		parameters.put("P_CODIGO_USUARIO", datosSession.getCodigoUsuario());
-		parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
+		//parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
 		
 		Connection con = null;
 		
@@ -613,7 +613,7 @@ public class FacturacionController {
 		parameters.put("ReportTitle", 	Constantes.IREPORT_TITULO_SERVICIOS_OTROS);
 		parameters.put("Author", 		Constantes.IREPORT_AUTOR);
 		parameters.put("SUBREPORT_DIR", ruta);
-		parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
+		//parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
 		
 		Connection con = null;
 		
@@ -671,7 +671,7 @@ public class FacturacionController {
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("P_IMPRIME", "0");
-		parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
+		//parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
 		
 		Connection con = null;
 		
@@ -734,7 +734,7 @@ public class FacturacionController {
 		parameters.put("P_IMPRIME", imprime);
 		parameters.put("CODIGO_FACTURACION", codigo);
 		parameters.put("SUBREPORT_DIR", ruta);
-		parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
+		//parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
 		
 		Connection con = null;
 		

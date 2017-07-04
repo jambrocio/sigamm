@@ -78,7 +78,7 @@ public class EstadoCuentaController {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("ReportTitle", "Reporte de Operaciones Bancarias");
 		parameters.put("Author", "SIGAMM");
-		parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
+		//parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
 		
 		Connection con = null;
 		
@@ -136,7 +136,7 @@ public class EstadoCuentaController {
 		parameters.put("ReportTitle", "Reporte de Recibos de Agua de los Asociados");
 		parameters.put("Author", "SIGAMM");
 		parameters.put("CODIGO_SOCIO", soc.getCodigoSocio());
-		parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
+		//parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
 		
 		Connection con = null;
 		

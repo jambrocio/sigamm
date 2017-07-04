@@ -86,7 +86,7 @@ public class BalanceContableController {
 			parameters.put("FECHA_INI", fechaIni);
 			parameters.put("FECHA_FIN", fechaFin);
 			parameters.put("SUBREPORT_DIR", ruta);
-			parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
+			//parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
 			
 			Connection con = null;
 			

@@ -404,7 +404,7 @@ public class ReciboLuzController {
 		parameters.put("FECHA", fechaInicial.trim());
 		parameters.put("ESTADO", estado.trim());
 		parameters.put("SUSPENDIDO", suspendido.trim());
-		parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
+		//parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
 		
 		Connection con = null;
 		
@@ -511,7 +511,7 @@ public class ReciboLuzController {
 		parameters.put("Author", "SIGAMM");
 		parameters.put("FECHA", periodoReciboLuzActual);
 		parameters.put("PeriodoReciboLuz", periodoReciboLuz);
-		parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
+		//parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
 		
 		Connection con = null;
 		
