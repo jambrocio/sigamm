@@ -424,6 +424,9 @@ public class FacturacionController {
 	@RequestMapping(value = "/grabar-servicio-otros.json", method = RequestMethod.POST, produces="application/json")
 	public @ResponseBody String grabarServicioOtros(ServicioOtrosCabecera servicio){
 		
+		String codigoAsociado = System.getProperty("codigo_asociado") != null ? System.getProperty("codigo_asociado") : "";
+		servicio.setCodigoSocio(Integer.parseInt(codigoAsociado));
+		
 		Gson gson = new Gson();
 		Type type = new TypeToken<List<ServicioOtrosDetalle>>(){}.getType();
 		List<ServicioOtrosDetalle> lista = gson.fromJson(servicio.getServicioOtrosDetalle(), type);

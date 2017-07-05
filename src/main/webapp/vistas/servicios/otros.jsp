@@ -70,7 +70,7 @@ $(document).ready(function(){
         yearSuffix: ''
     };
     $.datepicker.setDefaults($.datepicker.regional['es']);
-    
+
 	$.ajax({
         type: "POST",
         async: false,
@@ -869,7 +869,7 @@ function mostrarIreport(){
 							<td><select id="cboServicio" class="form-control" onchange="cargarServiciosDetalle();" /></td>
 							<td valign="top"><img id="lblcboServicio-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 						</tr>
-						<tr>
+						<!-- tr>
 							<td width="10px">&nbsp;</td>
 							<td><span id="lblfecnac"><b>Asociado (*)</b></span></td>
 							<td width="5px">&nbsp;</td>
@@ -877,7 +877,7 @@ function mostrarIreport(){
 							<td width="5px">&nbsp;</td>
 							<td><input type="text" id="responsable" class="form-control" maxlength="100"/></td>
 							<td valign="top"><img id="lblresponsable-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
-						</tr>
+						</tr -->
 						<tr>
 							<td width="10px">&nbsp;</td>
 							<td><span id="lblfecingreso"><b>DNI Responsable (*)</b></span></td>
