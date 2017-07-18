@@ -316,4 +316,44 @@ public class ProcesosDaoImpl implements ProcesosDao {
 		return retorno;
 	}
 
+	@Override
+	public Retorno eliminarProcesamiento(Procesamiento procesamiento) {
+
+		Retorno retorno = new Retorno();
+		try{
+			jdbcCall = new SimpleJdbcCall(jdbcTemplate.getDataSource());
+			jdbcCall.withCatalogName("PKG_PROCESAMIENTO");
+			jdbcCall.withProcedureName("SP_ELIMINAR_PROCESAMIENTO").declareParameters(
+				new SqlParameter("vi_codigo_procesamiento",		Types.INTEGER),
+				new SqlParameter("vi_codigo_usuario",			Types.INTEGER),
+				
+				new SqlOutParameter("vo_indicador", 			Types.VARCHAR),
+				new SqlOutParameter("vo_mensaje", 				Types.VARCHAR));
+				
+            
+			MapSqlParameterSource parametros = new MapSqlParameterSource();
+			parametros.addValue("vi_codigo_procesamiento",		procesamiento.getCodigoProcesamiento());
+			parametros.addValue("vi_codigo_usuario", 			datosSession.getCodigoUsuario());
+			
+			Map<String,Object> result = jdbcCall.execute(parametros); 
+			
+			String indicador = (String) result.get("vo_indicador");
+			String mensaje = (String) result.get("vo_mensaje");
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador(indicador);
+			retorno.setMensaje(mensaje);
+			
+		}catch(Exception e){
+			
+			retorno.setCodigo(0);
+			retorno.setIndicador("");
+			retorno.setMensaje("");
+			LoggerCustom.errorApp(this, "", e);
+		}
+		
+		return retorno;
+		
+	}
+
 }

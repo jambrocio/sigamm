@@ -25,6 +25,7 @@ import pe.com.sigamm.modelo.Egreso;
 import pe.com.sigamm.modelo.FacturacionCabecera;
 import pe.com.sigamm.modelo.FacturacionDetalle;
 import pe.com.sigamm.modelo.Procesamiento;
+import pe.com.sigamm.modelo.ReciboLuzSocio;
 import pe.com.sigamm.modelo.Retorno;
 import pe.com.sigamm.session.DatosSession;
 import pe.com.sigamm.util.Constantes;
@@ -142,4 +143,22 @@ public class ProcesoController {
 		return resultado;
 		
 	}
+	
+	
+	@RequestMapping(value = "/eliminar-procesamiento.json", method = RequestMethod.POST, produces = "application/json")
+	public @ResponseBody
+	String eliminarProcesamiento(Procesamiento procesamiento) {
+
+		Gson gson = new Gson();
+
+		Retorno retorno = procesosBus.eliminarProcesamiento(procesamiento);
+		int codigo = retorno.getCodigo();
+		String mensaje = retorno.getMensaje();
+		
+		String resultado = "{\"idUsuario\":" + codigo + ",\"mensaje\":\"" + mensaje + "\"}";
+
+		return resultado;
+	}
+
+	
 }

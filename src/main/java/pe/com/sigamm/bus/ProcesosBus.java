@@ -32,4 +32,6 @@ public interface ProcesosBus {
 	
 	public Retorno grabarProceso(String periodo, String fechaVencimiento);
 	
+	public Retorno eliminarProcesamiento(Procesamiento procesamiento);
+	
 }

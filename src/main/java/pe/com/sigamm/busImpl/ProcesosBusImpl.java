@@ -82,4 +82,10 @@ public class ProcesosBusImpl implements ProcesosBus {
 		return procesosDao.grabarProceso(periodo, fechaVencimiento);
 	}
 
+	@Override
+	public Retorno eliminarProcesamiento(Procesamiento procesamiento) {
+
+		return procesosDao.eliminarProcesamiento(procesamiento);
+	}
+
 }

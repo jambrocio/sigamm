@@ -507,6 +507,56 @@ function grabarProceso(){
 	});
 	
 }
+
+function eliminarProcesamiento(codigoProcesamiento) {
+	
+	var ruta = obtenerContexto();
+	mensaje = "Desea eliminar el registro cuyo código es  " + codigoProcesamiento + "... ?"; 
+	
+	$("#mensajeEliminar").html(mensaje);
+	
+	$('#alerta_eliminar_modal').modal({
+		backdrop: 'static',
+		keyboard: false
+	}).one('click', '#aceptar', function() {
+        
+		jsonObj = [];
+		var parametros = new Object();
+		parametros.codigoProcesamiento = codigoProcesamiento;
+			
+		$.ajax({
+			type: "POST",
+		    async:false,
+		    url: "eliminar-procesamiento.json",
+		    cache : false,
+		    data: parametros,
+		    success: function(result){
+		            
+		        $('#alerta_eliminar_modal').modal('hide');
+	            	
+	            $.gritter.add({
+					// (string | mandatory) the heading of the notification
+					title: 'Mensaje',
+					// (string | mandatory) the text inside the notification
+					text: result.mensaje,
+					// (string | optional) the image to display on the left
+					image: "/" + ruta + "/recursos/images/confirm.png",
+					// (bool | optional) if you want it to fade out on its own or just sit there
+					sticky: false,
+					// (int | optional) the time you want it to be alive for before fading out
+					time: ''
+				});
+	            
+	            cargarProcesos();
+		            
+			}
+		});
+		
+    });
+	
+}
+
+
 </script>
 </head>
 <body id="body">
@@ -611,6 +661,33 @@ function grabarProceso(){
 				<table border="0">
 					<tr>
 						<td><img src="recursos/images/icons/exclamation_32x32.png" border="0" />&nbsp;<b><span id="mensajeProcesar" /></b></td>
+					</tr>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" id="aceptar">Si</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+			</div>
+		</div>
+		  
+	</div>
+</div>
+
+
+<div class="modal fade" id="alerta_eliminar_modal" role="dialog" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header modal-header-primary">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Eliminar Egreso</h4>
+			</div>
+			<div class="modal-body">
+					
+				<table border="0">
+					<tr>
+						<td><img src="recursos/images/icons/exclamation_32x32.png" border="0" />&nbsp;<b><span id="mensajeEliminar" /></b></td>
 					</tr>
 				</table>
 			</div>
