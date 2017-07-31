@@ -104,6 +104,10 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				fuente1.setStyle(Font.BOLD);
 				fuente1.setSize(20);
 				
+				Font fuente2 = new Font();
+				fuente1.setStyle(Font.NORMAL);
+				fuente1.setSize(16);
+				
 				Image logo = Image.getInstance(getClass().getClassLoader().getResource("imagenes/logo.png"));
 				doc.add(logo);
 				
@@ -135,7 +139,7 @@ public class ReciboLuzSocioBusImpl implements ReciboLuzSocioBus {
 				Paragraph p2 = new Paragraph("ASOCIADO (A)", fuente);
 				PdfPCell celda2 = new PdfPCell(p2);
 				table1.addCell(celda2);
-				Paragraph p3 = new Paragraph(reporte.getListaReciboLuzSocio().get(aw).getNombreFull() + "", fuente);
+				Paragraph p3 = new Paragraph(reporte.getListaReciboLuzSocio().get(aw).getNombreFull() + "", fuente2);
 				PdfPCell celda3 = new PdfPCell(p3);
 				celda3.setHorizontalAlignment(Element.ALIGN_LEFT);
 				table1.addCell(celda3);
