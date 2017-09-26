@@ -25,6 +25,7 @@ import pe.com.sigamm.bus.ReciboAguaSocioBus;
 import pe.com.sigamm.dao.ReciboAguaSocioDao;
 import pe.com.sigamm.modelo.ReciboAguaSocio;
 import pe.com.sigamm.modelo.Retorno;
+import pe.com.sigamm.util.LoggerCustom;
 import pe.com.sigamm.util.UtilPDF;
 
 @Service
@@ -395,7 +396,6 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 		String ruta_pdf_linux = System.getProperty("ruta_reportes_linux") != null ? System.getProperty("ruta_reportes_linux") : "";
 		String ruta_pdf_windows = System.getProperty("ruta_reportes_windows") != null ? System.getProperty("ruta_reportes_windows") : "";		
 		String sSistemaOperativo = System.getProperty("os.name");
-		System.out.println(sSistemaOperativo);
 		
 		String path = "";
 		
@@ -404,6 +404,8 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 		}else{
 			path = ruta_pdf_windows + UtilPDF.getDatePDF() + ".pdf";
 		}
+		System.out.println("SistemaOperativo:" + sSistemaOperativo);
+		System.out.println("Ruta Path:" + path);
 		
 		try {
 			
@@ -634,7 +636,7 @@ public class ReciboAguaSocioBusImpl implements ReciboAguaSocioBus {
 			
 			
 		} catch (Exception e) {
-			log.error("Ocurrio un error al generar PDF");
+			LoggerCustom.errorApp(this, "", e);
 		} finally {
 			if (doc != null) {
 				doc.close();

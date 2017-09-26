@@ -87,7 +87,7 @@ $(function() {
 
 function openNewWindowForJasperWithCharts(){
 	var numeroPuesto = $("#numeropuesto").val();
-	var url  = "/sigamm/recibosEstadoCuenta?nroPuesto="+numeroPuesto;
+	var url  = "/sigamm/recibosEstadoCuenta?numeroPuesto="+numeroPuesto;
 	var strWindowFeatures = "menubar=no,location=no,width=800,height=500";
 	window.open(url,"_blank", "location=0,height=500,width=800");
 }

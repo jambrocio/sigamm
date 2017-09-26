@@ -116,26 +116,31 @@ public class EstadoCuentaController {
 	
 	
 	@RequestMapping(value = "/recibosEstadoCuenta", method = RequestMethod.GET)
-    public void reporterecibosAguaPdf(Socio socio,
+    public void reporteestadoCuentaPdf(
+    		@RequestParam(value = "numeroPuesto", defaultValue = "0002") String numeroPuesto,
     		HttpServletRequest request, HttpServletResponse response) throws IOException {
         
         	
 		String ruta = System.getProperty("ruta_ireport") != null ? System.getProperty("ruta_ireport") : ""; 
+		String estadodecuenta = System.getProperty("estado_de_cuenta") != null ? System.getProperty("estado_de_cuenta") : "";
 		
-		String rutaJRXML = ruta + "Reporte_Estado_Cuenta.jrxml";
-		String rutaJASPER = ruta + "Reporte_Estado_Cuenta.jasper";
+		/*String rutaJRXML = ruta + "Reporte_Estado_Cuenta.jrxml";
+		String rutaJASPER = ruta + "Reporte_Estado_Cuenta.jasper";*/
+		String rutaJRXML = ruta + estadodecuenta + ".jrxml"; 
+		String rutaJASPER = ruta + estadodecuenta + ".jasper";
 		
 		log.info("Ruta JRXML : " + rutaJRXML);
 		log.info("Ruta JASPER : " + rutaJASPER);
 		
 		
-		Socio soc = socioBus.buscarSocioPuesto(socio);
+		//Socio soc = socioBus.buscarSocioPuesto(socio);
 		
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("ReportTitle", "Reporte de Recibos de Agua de los Asociados");
+		parameters.put("ReportTitle", "Reporte de Estado de Cuenta de los Asociados");
 		parameters.put("Author", "SIGAMM");
-		parameters.put("CODIGO_SOCIO", soc.getCodigoSocio());
+		//parameters.put("CODIGO_SOCIO", soc.getCodigoSocio());
+		parameters.put("NUMERO_PUESTO", numeroPuesto);
 		//parameters.put(JRParameter.REPORT_LOCALE, Locale.US);
 		
 		Connection con = null;

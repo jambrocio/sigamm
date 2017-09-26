@@ -110,6 +110,8 @@ public class UtilPDF {
 			numero = id[1] + id[0].replace("AGOSTO", "08") + String.format("%09d", correlativo);
 		} else if (id[0].contains("SEPTIEMBRE")) {
 			numero = id[1] + id[0].replace("SEPTIEMBRE", "09") + String.format("%09d", correlativo);
+		/*} else if (id[0].contains("SETIEMBRE")) {
+			numero = id[1] + id[0].replace("SETIEMBRE", "09") + String.format("%09d", correlativo);*/			
 		} else if (id[0].contains("OCTUBRE")) {
 			numero = id[1] + id[0].replace("OCTUBRE", "10") + String.format("%09d", correlativo);
 		} else if (id[0].contains("NOVIEMBRE")) {
