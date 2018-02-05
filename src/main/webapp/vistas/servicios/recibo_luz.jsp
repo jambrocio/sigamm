@@ -664,14 +664,14 @@ function cargarReciboLuzSocio(codigoRecibo){
 			opciones += "</a>";						
 			
 			if (rowObject.reciboLuzCreado != 0) {
-				/*opciones += "&nbsp;&nbsp;";
-				
+				opciones += "&nbsp;&nbsp;";
+				/*
 				opciones += "<a href=javascript:pagarReciboLuzXSocio('";
 				opciones += rowObject.codigoReciboOriginal + "','" + rowObject.nroPuesto + "'," + rowObject.codigoSocio + ") >";
 				opciones += "<img src='/"+ruta+"/recursos/images/icons/money_activo_24x24.png' border='0' title='PAGAR Recibo de Luz por Socio'/>";
-				opciones += "</a>";*/
+				opciones += "</a>";
 				
-				opciones += "&nbsp;&nbsp;";
+				opciones += "&nbsp;&nbsp;";*/
 				
 				opciones += "<a href=javascript:eliminarReciboLuzXSocio('";
 				opciones += rowObject.codigoReciboOriginal + "','" + rowObject.nroPuesto + "'," + rowObject.codigoSocio + ") >";

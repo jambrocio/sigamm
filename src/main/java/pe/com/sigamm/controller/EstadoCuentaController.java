@@ -126,6 +126,7 @@ public class EstadoCuentaController {
 		
 		/*String rutaJRXML = ruta + "Reporte_Estado_Cuenta.jrxml";
 		String rutaJASPER = ruta + "Reporte_Estado_Cuenta.jasper";*/
+		//estadodecuenta = "Reporte_Estado_Cuenta_v3";
 		String rutaJRXML = ruta + estadodecuenta + ".jrxml"; 
 		String rutaJASPER = ruta + estadodecuenta + ".jasper";
 		
