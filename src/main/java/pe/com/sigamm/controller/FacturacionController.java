@@ -144,16 +144,18 @@ public class FacturacionController {
 		
 		String serie = "";
 		String secuencia = "";
+		/*
 		String[] comprobante = facturacion.getSerie().split("-");
 		if(comprobante.length == 2){
 			serie = comprobante[0] != null ? comprobante[0] : "";
 			secuencia = comprobante[1] != null ? comprobante[1] : "";
 		}
+		*/
 		String fechaFacturacion = facturacion.getFechaCreacion() != null ? facturacion.getFechaCreacion() : ""; 
 		int lserie = serie.trim().length();
 		int lsecuencia = secuencia.trim().length();
 		int lfechafacturacion = fechaFacturacion.trim().length(); 
-		
+		/*
 		if(lserie == 0){
 			camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_COMPROBANTE, Constantes.COMPROBANTE_OBLIGATORIO));
 		}else{
@@ -171,7 +173,7 @@ public class FacturacionController {
 				camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_COMPROBANTE, Constantes.SECUENCIA_OBLIGATORIO));
 			}
 		}
-		
+		*/
 		if(lista.size() == 0){
 			camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_COMPROBANTE, Constantes.SIN_CONCEPTOS_OBLIGATORIO));
 		}
@@ -191,7 +193,8 @@ public class FacturacionController {
 			Retorno retorno = facturacionBus.grabarFacturacion(facturacion, lista, serie, secuencia);
 			
 			//resultado = "{\"idFacturacion\":" + retorno.getCodigo() + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + retorno.getMensaje() + "\"}";
-			resultado = "{\"idFacturacion\":" + retorno.getCodigo() + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + retorno.getMensaje() + "\",\"comprobante\":\"" + facturacion.getSerie() + "\"}";
+			//resultado = "{\"idFacturacion\":" + retorno.getCodigo() + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + retorno.getMensaje() + "\",\"comprobante\":\"" + facturacion.getSerie() + "\"}";
+			resultado = "{\"idFacturacion\":" + retorno.getCodigo() + ",\"camposObligatorios\":" + listaObligatorios + ",\"mensaje\":\"" + "Se registro satisfactoriamente la facturacion." + "\",\"comprobante\":\"" + retorno.getMensaje() + "\"}";
 			
 		}
 		

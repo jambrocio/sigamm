@@ -201,13 +201,13 @@ function visualizar(codigoFacturacionCab){
         	$.each(result, function(keyM, serv) {
         		
         		var nombreDetalle = serv.nombreDetalle;
-        		var monto = parseInt(serv.monto);
+        		var monto = parseFloat(serv.monto);
         		var fecPeriodo = serv.fecPeriodo;
         		
         		//console.log("Monto : " + monto);
         		
         		dataTabla += "<tr>" +
-		           	"<td align='center'></td>" + 
+		           	"<td align='center'>1</td>" + 
   		           	"<td align='left' class='tamanioPrinter12'><b>" + nombreDetalle + "</b><br>" + fecPeriodo + "</td>" +
   		           	"<td align='right' class='tamanioPrinter12'>S/. " + formatearImporte(monto) + "</td>" +
   		          	"<td align='right' class='tamanioPrinter12' style='display:none;'>" + monto + "</td>" +

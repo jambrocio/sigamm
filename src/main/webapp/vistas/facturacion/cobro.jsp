@@ -133,11 +133,11 @@ $(document).ready(function(){
 function colorEtiquetas(){
 	
 	$("#lblservicio").css("color", "black");
-	$("#lblcomprobante").css("color", "black");
+	//$("#lblcomprobante").css("color", "black");
 	$("#lblfechafacturacion").css("color", "black");
 	
 	$("#lblservicio-img").hide();
-	$("#lblcomprobante-img").hide();
+	//$("#lblcomprobante-img").hide();
 	$("#lblfechafacturacion-img").hide();
 	
 }
@@ -160,7 +160,7 @@ function nuevoCobro(){
 	$("#apeMaterno").val("");
 	$("#nombres").val("");
 	$("#telefono").val("");
-	$("#comprobante").val("");
+	//$("#comprobante").val("");
 	$("#fechaFacturacion").val("");
 	
 	limpiarTablaDeudas();
@@ -174,6 +174,10 @@ function nuevoCobro(){
 	$("#btnGuardar").attr("disabled", false);
 	
 	$("#codigoFacturacion").val(0);
+	$("#txtServicio").val("");
+	$("#codigoServicios").val(0);
+	$("#txtServicio").typeahead('destroy');
+
 }
 
 function guardar(){
@@ -279,8 +283,10 @@ function guardar(){
     					$("#servicio").attr("disabled", true);
     					
     					limpiarTablaFacturacion();
+    					limpiarTablaFacturacion2();
     					
     					$("#correlativo").html(result.comprobante);
+    					$("#correlativo2").html(result.comprobante);
     					$("#codigoFacturacion").val(result.idFacturacion);
     					
     					dataTabla = "";
@@ -312,7 +318,7 @@ function guardar(){
     				        	var importe = monto * 1;
     				        	
     					    	dataTabla += "<tr>";
-    					    	dataTabla += "<td>&nbsp;</td>";
+    					    	dataTabla += "<td align='center'>1</td>";
     					    	dataTabla += "<td class='tamanioPrinter10'><b>" + tipoConcepto + "</b><br>" + desConcepto + "</td>";
     					    	dataTabla += "<td align='right' class='tamanioPrinter10'>S/. " + formatearImporte(importe) + "</td>";
     					    	dataTabla += "</tr>";
@@ -338,11 +344,19 @@ function guardar(){
     					dataTabla1 = dataTabla;
     					dataTabla1 += "<tr>";
     			    	dataTabla1 += "<td>&nbsp;</td>";
-    			    	dataTabla1 += "<td class='tamanioPrinter10' id='noMostrar'><b>TOTAL</b></td>";
+    			    	dataTabla1 += "<td class='tamanioPrinter10' ><b>TOTAL</b></td>";
     			    	dataTabla1 += "<td align='right' class='tamanioPrinter10'><b>S/. <span id='totalImpresion'/></b></td>";
     			    	dataTabla1 += "</tr>";
+    			    	
+    			    	dataTabla2 = dataTabla;
+    					dataTabla2 += "<tr>";
+    			    	dataTabla2 += "<td>&nbsp;</td>";
+    			    	dataTabla2 += "<td class='tamanioPrinter10' ><b>TOTAL</b></td>";
+    			    	dataTabla2 += "<td align='right' class='tamanioPrinter10'><b>S/. <span id='totalImpresion2'/></b></td>";
+    			    	dataTabla2 += "</tr>";
     			    			    	
     					$('#tablaFacturacionDetalle tbody tr:last').after(dataTabla1);
+    					$('#tablaFacturacionDetalle2 tbody tr:last').after(dataTabla2);
     					
     					calculoTotal();
     					
@@ -391,14 +405,23 @@ function buscarPuesto(){
         	$("#telefono").val(result.telefono);
         	$("#codigoSocio").val(result.codigoSocio);
         	$("#puesto").val(result.nroPuesto);
-        	$("#comprobante").val(result.numeroComprobante);
+        	//$("#comprobante").val(result.numeroComprobante);
         	
         	$("#printAsociado").html(result.apellidoPaterno + " " + result.apellidoMaterno + ", " + result.nombres);
+        	$("#printAsociado2").html(result.apellidoPaterno + " " + result.apellidoMaterno + ", " + result.nombres);
         	$("#printPuesto").html(result.nroPuesto);
+        	$("#printPuesto2").html(result.nroPuesto);
         	$("#printGiro").html(result.nombreGiro);
+        	$("#printGiro2").html(result.nombreGiro);
         	$("#printSector").html(pad(result.nombreSector, 2));
+        	$("#printSector2").html(pad(result.nombreSector, 2));
         	$("#printFecha").html(fecha);
+        	$("#printFecha2").html(fecha);
         	//$("#printFecha").html($("#fechaFacturacion").val());
+        	$("#txtServicio").val("");
+        	$("#codigoServicios").val(0);
+        	
+        	$("#fechaFacturacion").val(fechaSistema());
         	
         	cargarServicios();
         	
@@ -423,23 +446,49 @@ function cargarServicios(){
         data: parametros,
         success: function(result){
         	
-        	var optionServicios = "<option value=0>SELECCIONAR</option>";
-        	$.each(result, function(keyM, serv) {
-        		
-        		optionServicios += "<option value=" + serv.codigoServicio + ">" + serv.nombreServicio + "</option>";
-        		
+        	$("#txtServicio").typeahead({
+                source: result,
+                displayField: 'nombreServicio',
+                valueField: 'codigoServicio',
+             	scrollBar: true,
+                alignWidth: false,
+                menu: '<ul class="typeahead dropdown-menu"></ul>',
+                item: '<li><a href="#"></a></li>',
+                onSelect: displayResult
         	});
         	
-        	$("#servicio").html(optionServicios);
-    		
         }
     });
-	
+}
+
+function displayResult(item) {
+    //alert('You selected <strong>' + item.value + '</strong>: <strong>' + item.text + '</strong>');
+    $("#codigoServicios").val(item.value);
+    $("#tituloServicios").val(item.text);
+    
+    buscarDeudasCodigoSocio(item.value);
 }
 
 function limpiarTablaFacturacion(){
 	
 	var tabla = document.getElementById("tablaFacturacionDetalle");
+	var filasTabla = tabla.rows.length;
+	
+	for(var i = 0; i < filasTabla; i++) {
+		
+		if(i > 0){
+ 			
+ 			tabla.deleteRow(1);
+ 			
+ 		}
+ 		
+ 	}
+	
+}
+
+function limpiarTablaFacturacion2(){
+	
+	var tabla = document.getElementById("tablaFacturacionDetalle2");
 	var filasTabla = tabla.rows.length;
 	
 	for(var i = 0; i < filasTabla; i++) {
@@ -487,11 +536,13 @@ function limpiarTablaResultado(){
 	
 	$("#totalesLetras").html("");
 	$("#totalLetras").html("");
+	$("#totalLetras2").html("");
 	$("#totales").html("");
 	$("#totalImpresion").html("");
+	$("#totalImpresion2").html("");
 	
 }
-
+/*
 function buscarDeudasSocio(){
 	
 	var ruta = obtenerContexto();
@@ -518,8 +569,9 @@ function buscarDeudasSocio(){
 	        				"<td align='center'><input type='checkbox' id='chk_" + serv.codigoDeudaSocio + "'></td>" +
 	        	            "<td align='left'>" + serv.fecPeriodo + "</td>" +
 	        				"<td align='right' id='importeVariable'>" + serv.importe + "</td>" +
-	        				"<td style='display:none;'>" + $("#servicio").val() + "</td>" +
+	        				"<td style='display:none;'>" + $("#codigoServicios").val() + "</td>" +
 	        				"<td style='display:none;'>" + serv.codigoServicioDetalle + "</td>" +
+	        				"<td style='display:none;'>" + $("#tituloServicios").val() + "</td>" +
 	        				"<td align='center'><img src='/"+ruta+"/recursos/images/icons/plus_24x24.png' border='0' title='Agregar Importe' onclick='mostrarVentanaImporte();' /></td>" +
 	        				"</tr>");
         		}else{
@@ -529,9 +581,63 @@ function buscarDeudasSocio(){
 	        				"<td align='center'><input type='checkbox' id='chk_" + serv.codigoDeudaSocio + "'></td>" +
 	        	            "<td align='left'>" + serv.fecPeriodo + "</td>" +
 	        				"<td align='right'>" + serv.importe + "</td>" +
-	        				"<td style='display:none;'>" + $("#servicio").val() + "</td>" +
+	        				"<td style='display:none;'>" + $("#codigoServicios").val() + "</td>" +
 	        				"<td style='display:none;'>" + serv.codigoServicioDetalle + "</td>" +
-	        				"<td align='center'></td>" +
+	        				"<td style='display:none;'>" + $("#tituloServicios").val() + "</td>" +
+	        				"<td style='display:none;'></td>" +
+	        				"</tr>");
+        		}        		
+        		
+        	});
+        	
+        }
+    });
+	
+}
+*/
+
+function buscarDeudasCodigoSocio(codigoServicio){
+	
+	var ruta = obtenerContexto();
+	limpiarTablaDeudas();
+	
+	var parametros = new Object();
+	parametros.codigoSocio = $("#codigoSocio").val();
+	parametros.codigoServicioDetalle = codigoServicio;
+	
+	$.ajax({
+        type: "POST",
+        async: false,
+        url: "buscar-deuda-socio-concepto.json",
+        cache: false,
+        data: parametros,
+        success: function(result){
+        	
+        	$.each(result, function(keyM, serv) {
+        		
+        		if(serv.flagImporteVariable == 1){
+	        		$('#tabla_deudas_socio tbody tr:last').after(
+	        				"<tr>" +
+	        				"<td style='display:none;'>" + serv.codigoDeudaSocio + "</td>" +
+	        				"<td align='center'><input type='checkbox' id='chk_" + serv.codigoDeudaSocio + "'></td>" +
+	        	            "<td align='left'>" + serv.fecPeriodo + "</td>" +
+	        				"<td align='right' id='importeVariable'>" + serv.importe + "</td>" +
+	        				"<td style='display:none;'>" + $("#codigoServicios").val() + "</td>" +
+	        				"<td style='display:none;'>" + serv.codigoServicioDetalle + "</td>" +
+	        				"<td style='display:none;'>" + $("#tituloServicios").val() + "</td>" +
+	        				"<td align='center'><img src='/"+ruta+"/recursos/images/icons/plus_24x24.png' border='0' title='Agregar Importe' onclick='mostrarVentanaImporte();' /></td>" +
+	        				"</tr>");
+        		}else{
+        			$('#tabla_deudas_socio tbody tr:last').after(
+	        				"<tr>" +
+	        				"<td style='display:none;'>" + serv.codigoDeudaSocio + "</td>" +
+	        				"<td align='center'><input type='checkbox' id='chk_" + serv.codigoDeudaSocio + "'></td>" +
+	        	            "<td align='left'>" + serv.fecPeriodo + "</td>" +
+	        				"<td align='right'>" + serv.importe + "</td>" +
+	        				"<td style='display:none;'>" + $("#codigoServicios").val() + "</td>" +
+	        				"<td style='display:none;'>" + serv.codigoServicioDetalle + "</td>" +
+	        				"<td style='display:none;'>" + $("#tituloServicios").val() + "</td>" +
+	        				"<td style='display:none;'></td>" +
 	        				"</tr>");
         		}        		
         		//console.log("Periodo : " + serv.fecPeriodo + "\nImporte : " + serv.importe);
@@ -575,8 +681,10 @@ function calculoTotal(){
 	
 	$("#totalesLetras").html(NumeroALetras(total));
 	$("#totalLetras").html(NumeroALetras(total));
+	$("#totalLetras2").html(NumeroALetras(total));
 	$("#totales").html(total.toFixed(2));
 	$("#totalImpresion").html(total.toFixed(2));
+	$("#totalImpresion2").html(total.toFixed(2));
 }
 
 function eliminarFila(t){
@@ -606,13 +714,14 @@ function agregarDeuda(){
 	codigoPuesto = $("#codigoPuesto").val();
 	
 	$("#tabla_deudas_socio tbody tr").each(function (item) {
-        var this_row = $(this);
-        var codigoDeuda = $.trim(this_row.find('td:eq(0)').html());
-        var check = $.trim(this_row.find('td:eq(1)').html());
-        var concepto = $.trim(this_row.find('td:eq(2)').html());
-        var importe = $.trim(this_row.find('td:eq(3)').html());
-        var codigoServicio = $.trim(this_row.find('td:eq(4)').html());
-        var codigoServicioDetalle = $.trim(this_row.find('td:eq(5)').html());
+        var this_row 				= $(this);
+        var codigoDeuda 			= $.trim(this_row.find('td:eq(0)').html());
+        var check 					= $.trim(this_row.find('td:eq(1)').html());
+        var concepto 				= $.trim(this_row.find('td:eq(2)').html());
+        var importe 				= $.trim(this_row.find('td:eq(3)').html());
+        var codigoServicio 			= $.trim(this_row.find('td:eq(4)').html());
+        var codigoServicioDetalle	= $.trim(this_row.find('td:eq(5)').html());
+        var tituloServicio 			= $.trim(this_row.find('td:eq(6)').html());
         
         if(importe != "Importe"){
 	        
@@ -624,11 +733,12 @@ function agregarDeuda(){
         		var existe = 0;
         		$("#tabla_resultado tbody tr").each(function (itemResultado) {
         	        var this_row_resultado = $(this);
-        	        var codigoDeudaResultado = $.trim(this_row_resultado.find('td:eq(1)').html());
-        	        var conceptoResultado = $.trim(this_row_resultado.find('td:eq(2)').html());
+        	        var codigoDeudaResultado 	= $.trim(this_row_resultado.find('td:eq(1)').html());
+        	        var conceptoResultado 		= $.trim(this_row_resultado.find('td:eq(2)').html());
+        	        var descConceptoResultado 	= $.trim(this_row_resultado.find('td:eq(3)').html());
         	        
         	        if(codigoDeuda == codigoDeudaResultado){
-        	        	if(concepto == conceptoResultado){
+        	        	if(concepto == descConceptoResultado){
         	        		existe = existe + 1;	
         	        	}        	        	
         	        }
@@ -639,7 +749,7 @@ function agregarDeuda(){
 	        				"<tr>" +
 	        	            "<td align='right'>1</td>" + 
 	        	            "<td align='center' style='display:none;'>" + codigoDeuda + "</td>" +
-	        	            "<td align='left'>" + $("#servicio option:selected").html() + "</td>" +
+	        	            "<td align='left'>" + tituloServicio + "</td>" +
 	        				"<td align='left'>" + concepto + "</td>" +
 	        				"<td align='right'>" + importe + "</td>" +
 	        				"<td align='center' style='display:none;'>" + codigoPuesto + "</td>" +
@@ -647,8 +757,8 @@ function agregarDeuda(){
 	        				"<button type='button' class='boton btnEliminar' onclick='eliminarFila(this);'>" +
 	        					"<img src='/"+ruta+"/recursos/images/icons/eliminar_16x16.png' alt='Eliminar' />" +
 	        				"</button></td>" +
-	        				"<td align='center' style='display:none;'>" + codigoServicio + "</td>" +
-	        				"<td align='center' style='display:none;'>" + codigoServicioDetalle + "</td>" +
+	        				"<td align='center' style='display:none' >" + codigoServicio + "</td>" +
+	        				"<td align='center' style='display:none' >" + codigoServicioDetalle + "</td>" +
 	        				"</tr>");
         		}
         		
@@ -698,11 +808,13 @@ function openNewWindowForJasperWithChartsOthers(){
 </head>
 <body id="body">
 <input type="hidden" id="codigoFacturacion" />
+<input type="hidden" id="codigoServicios" />
+<input type="hidden" id="tituloServicios" />
 <div class="modal fade" id="visualizacion_modal" role="dialog" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog">
 		
 		<!-- Modal content-->
-		<div class="modal-content">
+		<div class="modal-content" style="width: 1150px; ">
 			<div class="modal-header modal-header-primary">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<h4 class="modal-title">Visualización</h4>
@@ -710,62 +822,121 @@ function openNewWindowForJasperWithChartsOthers(){
 			<div class="modal-body">
 					
 				<div id="myPrintArea">
-					<table border="0" style="width: 500px; " cellpadding="0" cellspacing="0">
+					<table border="0" style="width: 1100px; " cellpadding="0" cellspacing="0">
 						<tr>
 							<td valign="top">
-								<div> 
 								<table border="0" width="100%" >
 									<tr>
-										<td colspan="4" align="center" class="tamanioPrinter12" id="noMostrar"><b>ASOCIACIÓN DE COMERCIANTES DEL MERCADO MODELO<BR>DE HUARAL<BR>Fundado el 13 de Noviembre de 1996<BR>R.U.C. 20530606334</b></td>
-									</tr>
-									<tr>
-										<td colspan="4">&nbsp;</td>
-									</tr>
-									<tr>
-										<td colspan="4" align="center" class="tamanioPrinter12"><b><span id="noMostrar">RECIBO PROVISIONAL N° </span><span id="correlativo" /></b></td>
-									</tr>
-									<tr>
-										<td colspan="4" style="height: 35px; ">&nbsp;</td>
-									</tr>
-									<tr>
-										<td class="tamanioPrinter10" id="noMostrar" ><b>Asociado (a):</b></td>
-										<td class="tamanioPrinter10" width="300px"><span id="printAsociado"/></td>
-										<td class="tamanioPrinter10" id="noMostrar" ><b>Fecha:</b></td>
-										<td class="tamanioPrinter10"><span id="printFecha"/></td>
-									</tr>
-									<tr>
-										<td class="tamanioPrinter10" id="noMostrar" ><b>Nº de Puesto:</b></td>
-										<td colspan="3" valign="top">
-											<table border="0" width="100%" cellpadding="0" cellspacing="0" id="tablaDatos">
+										<td width="49%" valign="top">
+											<table border="0" width="100%" >
 												<tr>
-													<td class="tamanioPrinter10" width="70px"><span id="printPuesto"/></td>
-													<td class="tamanioPrinter10" id="noMostrar" style="width: 35px; "><b>Sector:</b></td>
-													<td class="tamanioPrinter10" width="70px"><span id="printSector"/></td>
-													<td class="tamanioPrinter10" id="noMostrar" style="width: 35px; "><b>Giro:</b></td>
-													<td class="tamanioPrinter10" width="200px"><span id="printGiro"/></td>
+													<td colspan="4" align="center" class="tamanioPrinter12" ><b>ASOCIACIÓN DE COMERCIANTES DEL MERCADO MODELO<BR>DE HUARAL<BR>Fundado el 13 de Noviembre de 1996<BR>R.U.C. 20530606334</b></td>
+												</tr>
+												<tr>
+													<td colspan="4">&nbsp;</td>
+												</tr>
+												<tr>
+													<td colspan="4" align="center" class="tamanioPrinter12"><b>RECIBO PROVISIONAL N° <span id="correlativo" /></b></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="height: 35px; ">&nbsp;</td>
+												</tr>
+												<tr>
+													<td class="tamanioPrinter10" ><b>Asociado (a):</b></td>
+													<td class="tamanioPrinter10" width="300px"><span id="printAsociado"/></td>
+													<td class="tamanioPrinter10" ><b>Fecha:</b></td>
+													<td class="tamanioPrinter10"><span id="printFecha"/></td>
+												</tr>
+												<tr>
+													<td class="tamanioPrinter10" ><b>Nº de Puesto:</b></td>
+													<td colspan="3" valign="top">
+														<table border="0" width="100%" cellpadding="0" cellspacing="0" id="tablaDatos">
+															<tr>
+																<td class="tamanioPrinter10" width="70px"><span id="printPuesto"/></td>
+																<td class="tamanioPrinter10" style="width: 35px; "><b>Sector:</b></td>
+																<td class="tamanioPrinter10" width="70px"><span id="printSector"/></td>
+																<td class="tamanioPrinter10" style="width: 35px; "><b>Giro:</b></td>
+																<td class="tamanioPrinter10" width="200px"><span id="printGiro"/></td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+												<tr>
+													<td colspan="4">
+														<table border="1" width="100%" cellspacing="5" cellpadding="5" class="tabla" id="tablaFacturacionDetalle">
+															<tr>
+																<td width="40px" align="center" class="tamanioPrinter10" ><b>CANT.</b></td>
+																<td align="center" class="tamanioPrinter10" ><b>DESCRIPCION</b></td>
+																<td width="90px" align="center" class="tamanioPrinter10" ><b>IMPORTE</b></td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+												<tr>
+													<td colspan="4">&nbsp;</td>
+												</tr>
+												<tr>
+													<td colspan="4" class="tamanioPrinter10"><b>Son: <span id="totalLetras" /></b></td>
 												</tr>
 											</table>
 										</td>
-									</tr>
-									<tr>
-										<td colspan="4">
-											<table border="1" width="100%" cellspacing="5" cellpadding="5" class="tabla" id="tablaFacturacionDetalle">
+										<td width="2%">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+										<!-- SEGUNDA PARTE -->
+										<td width="49%" valign="top">
+											<table border="0" width="100%" >
 												<tr>
-													<td width="40px" align="center" class="tamanioPrinter10" id="noMostrar"><b>CANT.</b></td>
-													<td align="center" class="tamanioPrinter10" id="noMostrar"><b>DESCRIPCION</b></td>
-													<td width="90px" align="center" class="tamanioPrinter10" id="noMostrar"><b>IMPORTE</b></td>
+													<td colspan="4" align="center" class="tamanioPrinter12" ><b>ASOCIACIÓN DE COMERCIANTES DEL MERCADO MODELO<BR>DE HUARAL<BR>Fundado el 13 de Noviembre de 1996<BR>R.U.C. 20530606334</b></td>
+												</tr>
+												<tr>
+													<td colspan="4">&nbsp;</td>
+												</tr>
+												<tr>
+													<td colspan="4" align="center" class="tamanioPrinter12"><b>RECIBO PROVISIONAL N° <span id="correlativo2" /></b></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="height: 35px; ">&nbsp;</td>
+												</tr>
+												<tr>
+													<td class="tamanioPrinter10" ><b>Asociado (a):</b></td>
+													<td class="tamanioPrinter10" width="300px"><span id="printAsociado2"/></td>
+													<td class="tamanioPrinter10" ><b>Fecha:</b></td>
+													<td class="tamanioPrinter10"><span id="printFecha2"/></td>
+												</tr>
+												<tr>
+													<td class="tamanioPrinter10" ><b>Nº de Puesto:</b></td>
+													<td colspan="3" valign="top">
+														<table border="0" width="100%" cellpadding="0" cellspacing="0" id="tablaDatos">
+															<tr>
+																<td class="tamanioPrinter10" width="70px"><span id="printPuesto2"/></td>
+																<td class="tamanioPrinter10" style="width: 35px; "><b>Sector:</b></td>
+																<td class="tamanioPrinter10" width="70px"><span id="printSector2"/></td>
+																<td class="tamanioPrinter10" style="width: 35px; "><b>Giro:</b></td>
+																<td class="tamanioPrinter10" width="200px"><span id="printGiro2"/></td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+												<tr>
+													<td colspan="4">
+														<table border="1" width="100%" cellspacing="5" cellpadding="5" class="tabla" id="tablaFacturacionDetalle2">
+															<tr>
+																<td width="40px" align="center" class="tamanioPrinter10" ><b>CANT.</b></td>
+																<td align="center" class="tamanioPrinter10" ><b>DESCRIPCION</b></td>
+																<td width="90px" align="center" class="tamanioPrinter10" ><b>IMPORTE</b></td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+												<tr>
+													<td colspan="4">&nbsp;</td>
+												</tr>
+												<tr>
+													<td colspan="4" class="tamanioPrinter10"><b>Son: <span id="totalLetras2" /></b></td>
 												</tr>
 											</table>
 										</td>
-									</tr>
-									<tr>
-										<td colspan="4">&nbsp;</td>
-									</tr>
-									<tr>
-										<td colspan="4" class="tamanioPrinter10"><b><span id="noMostrar">Son: </span><span id="totalLetras" /></b></td>
 									</tr>
 								</table>
-								</div>
 							</td>
 						</tr>
 					</table>
@@ -773,29 +944,26 @@ function openNewWindowForJasperWithChartsOthers(){
 				
 			</div>
 			<div class="modal-footer">
-				<!-- 
+				 
 				<button type="button" id="btnImprimir" class="btn btn-primary" onclick="imprimir();">
 					<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;Imprimir
 				</button>
-				 -->
 				
+				<!-- 
 				<a href="javascript:openNewWindowForJasperWithCharts();">
 					<button type="button" class="btn btn-primary">
 						<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;Imprimir
 					</button>&nbsp;&nbsp;
 				</a>
-				
-				
+				 -->
+				<!-- 
 				<a href="javascript:openNewWindowForJasperWithChartsOthers();">
 					<button type="button" class="btn btn-primary">
 						<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;Imprimir Others
 					</button>&nbsp;&nbsp;
 				</a>
-				<!-- 
-				<button type="button" class="btn btn-primary">
-					<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;<a href="" onclick="openNewWindowForJasperWithCharts();" style="color:white">Imprimir</a>
-				</button>
 				 -->
+				
 			</div>
 		</div>
 		  
@@ -814,7 +982,7 @@ function openNewWindowForJasperWithChartsOthers(){
 			</button>
 			&nbsp;
 			<button type="button" id="btnGuardar" class="btn btn-primary" onclick="guardar()">
-				<img src="recursos/images/icons/guardar_16x16.png" alt="Buscar" />&nbsp;Guardar
+				<img src="recursos/images/icons/guardar_16x16.png" alt="Guardar" />&nbsp;Guardar
 			</button>
 			&nbsp;
 			<button type="button" id="btnVisualizacion" class="btn btn-primary" onclick="visualizacion();">
@@ -837,7 +1005,13 @@ function openNewWindowForJasperWithChartsOthers(){
 				<img src="recursos/images/icons/buscar_16x16.png" alt="Buscar" />&nbsp;Buscar
 			</button>
 		</td>
-		<td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;<span id="facturacionImprimir" style="display:none; font-size:18px;"><font color="red"><b>Código : <span id="idFacturacion"/></span></b></font></td>
+		<td colspan="2">
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<!-- 
+			<span id="facturacionImprimir" style="display:none; font-size:18px;"><font color="red"><b>Código : <span id="idFacturacion"/></span></b></font>
+			 -->
+		</td>
+		
 	</tr>
 	<tr>
 		<td colspan="9"><hr /></td>
@@ -908,10 +1082,16 @@ function openNewWindowForJasperWithChartsOthers(){
 		<td width="5px">&nbsp;</td>
 		<td><b>:</b></td>
 		<td width="5px">&nbsp;</td>
-		<td><select id="servicio" class="form-control" onchange=buscarDeudasSocio();></select></td>
+		<td>
+			<!-- 
+			<select id="servicio" class="form-control" onchange=buscarDeudasSocio();></select>
+			-->
+			<input type="text" id="txtServicio" class="col-md-12 form-control" autocomplete="off" />
+		</td>
 		<td valign="top"><img id="lblservicio-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 		<td colspan="2">&nbsp;</td>
 	</tr>
+	<!-- 
 	<tr>
 		<td width="10px">&nbsp;</td>
 		<td><span id="lblcomprobante"><b>N° Comprobante</b></span></td>
@@ -922,6 +1102,7 @@ function openNewWindowForJasperWithChartsOthers(){
 		<td valign="top"><img id="lblcomprobante-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
 		<td colspan="2">&nbsp;</td>
 	</tr>
+	 -->
 	<tr>
 		<td width="10px">&nbsp;</td>
 		<td><span id="lblfechafacturacion"><b>Fecha Facturación</b></span></td>
@@ -958,6 +1139,7 @@ function openNewWindowForJasperWithChartsOthers(){
 								<td align="center" class="tablaCabecera" width="100px">Importe</td>
 								<td align="center" class="tablaCabecera" width="20px" style="display:none;">Cod.Servicio</td>
 								<td align="center" class="tablaCabecera" width="20px" style="display:none;">Cod.Servicio Detalle</td>
+								<td align="center" class="tablaCabecera" width="20px" style="display:none;">Titulo.Servicio</td>
 							</tr>
 						</table>
 					</td>

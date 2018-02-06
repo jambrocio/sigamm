@@ -42,3 +42,21 @@ function pad (str, max) {
 function formatearImporte (num) {
     return num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 }
+
+function fechaSistema(){
+	var hoy = new Date();
+	var dd = hoy.getDate();
+	var mm = hoy.getMonth()+1; //hoy es 0!
+	var yyyy = hoy.getFullYear();
+
+	if(dd<10) {
+	    dd='0'+dd
+	} 
+
+	if(mm<10) {
+	    mm='0'+mm
+	} 
+
+	hoy = dd+'/'+mm+'/'+yyyy;
+	return hoy;
+}

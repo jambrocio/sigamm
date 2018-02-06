@@ -20,9 +20,6 @@
 <script type="text/javascript" src="recursos/js/jqgrid/grid.locale-es.js"></script>
 <script type="text/javascript" src="recursos/js/jqgrid/jquery.jqGrid.min.js"></script>
 
-<script type="text/javascript" src="recursos/js/mapmarker.jquery.js"></script>
-<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-
 <script type="text/javascript" src="recursos/js/jquery.gritter.js"></script>
 <script type="text/javascript" src="recursos/js/jquery.blockUI.js"></script>
 <script type="text/javascript" src="recursos/js/jquery.autocomplete.js"></script>
@@ -31,6 +28,7 @@
 <script type="text/javascript" src="recursos/js/convertidor.js"></script>
 <script type="text/javascript" src="recursos/js/jquery.alerts.js" charset="utf-8" ></script>
 <script type="text/javascript" src="recursos/js/jquery.PrintArea.js" charset="utf-8" ></script>
+<script type="text/javascript" src="recursos/js/bootstrap-typeahead.js" charset="utf-8" ></script>
 
 <link rel="stylesheet" type="text/css" media="screen" href="recursos/js/jqgrid/css/ui.jqgrid.css" />
 
