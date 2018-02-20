@@ -87,7 +87,8 @@ $(function() {
 
 function openNewWindowForJasperWithCharts(){
 	var numeroPuesto = $("#numeropuesto").val();
-	var url  = "/sigamm/recibosEstadoCuenta?numeroPuesto="+numeroPuesto;
+	var fechaInicial = $("#fechainicial").val();
+	var url  = "/sigamm/recibosEstadoCuenta?numeroPuesto="+numeroPuesto+"&fechaInicial="+fechaInicial;
 	var strWindowFeatures = "menubar=no,location=no,width=800,height=500";
 	window.open(url,"_blank", "location=0,height=500,width=800");
 }
@@ -119,7 +120,7 @@ function openNewWindowForJasperWithCharts(){
 								</td>
 								<td width="30px">&nbsp;</td>
 							</tr>
-							<!-- tr>
+							<tr>
 								<td width="30px">&nbsp;</td>
 								<td>
 									<div class="input-group">
@@ -129,7 +130,7 @@ function openNewWindowForJasperWithCharts(){
 								</td>
 								<td width="30px">&nbsp;</td>
 							</tr>
-							<tr>
+							<!--tr>
 								<td width="30px">&nbsp;</td>
 								<td>
 									<div class="input-group">

@@ -118,6 +118,7 @@ public class EstadoCuentaController {
 	@RequestMapping(value = "/recibosEstadoCuenta", method = RequestMethod.GET)
     public void reporteestadoCuentaPdf(
     		@RequestParam(value = "numeroPuesto", defaultValue = "0002") String numeroPuesto,
+    		@RequestParam(value = "fechaInicial", defaultValue = "01/07/2017") String fechaInicial,
     		HttpServletRequest request, HttpServletResponse response) throws IOException {
         
         	
