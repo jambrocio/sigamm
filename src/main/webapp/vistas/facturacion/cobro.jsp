@@ -810,7 +810,7 @@ function openNewWindowForJasperWithChartsOthers(){
 <input type="hidden" id="codigoFacturacion" />
 <input type="hidden" id="codigoServicios" />
 <input type="hidden" id="tituloServicios" />
-<div class="modal fade" id="visualizacion_modal" role="dialog" data-keyboard="false" data-backdrop="static">
+<div class="modal fade" id="visualizacion_modal" role="dialog" data-keyboard="true" data-backdrop="static">
 	<div class="modal-dialog">
 		
 		<!-- Modal content-->
@@ -945,10 +945,13 @@ function openNewWindowForJasperWithChartsOthers(){
 			</div>
 			<div class="modal-footer">
 				 
-				<button type="button" id="btnImprimir" class="btn btn-primary" onclick="imprimir();">
+				<button type="button" id="btnImprimir" class="btn btn-primary  pull-left" onclick="imprimir();">
 					<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;Imprimir
 				</button>
 				
+				<button type="button" id="btnCerrar" data-dismiss="modal" class="btn btn-default pull-left">
+					Cerrar
+				</button>
 				<!-- 
 				<a href="javascript:openNewWindowForJasperWithCharts();">
 					<button type="button" class="btn btn-primary">
