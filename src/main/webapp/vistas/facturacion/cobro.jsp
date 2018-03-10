@@ -823,7 +823,10 @@ function openNewWindowForJasperWithChartsOthers(){
 			<div class="modal-body">
 					
 				<div id="myPrintArea">
+					<!-- 
 					<table border="0" style="width: 1100px; " cellpadding="0" cellspacing="0">
+					 -->
+					<table border="0" style="width: 1250px; " cellpadding="0" cellspacing="0">
 						<tr>
 							<td valign="top">
 								<table border="0" width="100%" >
@@ -945,9 +948,13 @@ function openNewWindowForJasperWithChartsOthers(){
 				
 			</div>
 			<div class="modal-footer">
-				 
-				<button type="button" id="btnImprimir" class="btn btn-primary" onclick="imprimir();">
+				
+				<button type="button" id="btnImprimir" class="btn btn-primary  pull-left" onclick="imprimir();">
 					<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;Imprimir
+				</button>
+				
+				<button type="button" id="btnCerrar" data-dismiss="modal" class="btn btn-default pull-left">
+					Cerrar
 				</button>
 				
 				<!-- 
