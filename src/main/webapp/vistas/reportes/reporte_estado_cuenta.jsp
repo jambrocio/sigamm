@@ -88,7 +88,13 @@ $(function() {
 function openNewWindowForJasperWithCharts(){
 	var numeroPuesto = $("#numeropuesto").val();
 	var fechaInicial = $("#fechainicial").val();
-	var url  = "/sigamm/recibosEstadoCuenta?numeroPuesto="+numeroPuesto+"&fechaInicial="+fechaInicial;
+	var condicion = $("#checkCondicion").is(':checked');
+	//alert(condicion);
+	
+
+
+
+	var url  = "/sigamm/recibosEstadoCuenta?numeroPuesto="+numeroPuesto+"&fechaInicial="+fechaInicial+"&checkCondicion="+condicion;
 	var strWindowFeatures = "menubar=no,location=no,width=800,height=500";
 	window.open(url,"_blank", "location=0,height=500,width=800");
 }
@@ -127,6 +133,16 @@ function openNewWindowForJasperWithCharts(){
 								      <div class="input-group-addon"><img src="recursos/images/icons/calendar_16x16.png" border="0" /></div>
 								      <input class="form-control" type="text" id="fechainicial" placeholder="Ingrese la fecha inicial">
 								    </div>
+								</td>
+								<td width="30px">&nbsp;</td>
+							</tr>
+							<tr>
+								<td width="30px">&nbsp;</td>
+								<td>
+									<div class="form-check">
+									  <input type="checkbox" class="form-check-input" id="checkCondicion" onchange="openNewWindowForJasperWithCharts()" />
+									  <label class="form-check-label" for="exampleCheck1">PAGOS PENDIENTES</label>
+									</div>
 								</td>
 								<td width="30px">&nbsp;</td>
 							</tr>
