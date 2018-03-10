@@ -24,8 +24,9 @@
     .tamanioPrinter10
     {
         color:black;
-        font-family: Calibri;
-		font-size: 12px;    
+        /*font-family: Calibri;*/
+        font-family:Tahoma, Geneva, sans-serif;
+		font-size: 10px;    
     }
     
     .modal-header-primary {
@@ -383,7 +384,7 @@ function guardar(){
 function buscarPuesto(){
 	
 	var f = new Date();
-	var fecha = pad(f.getDate(), 2) + "/" + pad((f.getMonth() +1), 2) + "/" + f.getFullYear();
+	var fecha = pad(f.getDate(), 2) + "/" + pad((f.getMonth() +1), 2) + "/" + f.getFullYear() + " " + f.getHours() + ":" + f.getMinutes();
 	
 	puesto = $("#puestoBuscar").val();
 	
@@ -836,7 +837,7 @@ function openNewWindowForJasperWithChartsOthers(){
 													<td colspan="4">&nbsp;</td>
 												</tr>
 												<tr>
-													<td colspan="4" align="center" class="tamanioPrinter12"><b>RECIBO PROVISIONAL N° <span id="correlativo" /></b></td>
+													<td colspan="4" align="center" class="tamanioPrinter12"><b>RECIBO N° <span id="correlativo" /></b></td>
 												</tr>
 												<tr>
 													<td colspan="4" style="height: 35px; ">&nbsp;</td>
@@ -891,7 +892,7 @@ function openNewWindowForJasperWithChartsOthers(){
 													<td colspan="4">&nbsp;</td>
 												</tr>
 												<tr>
-													<td colspan="4" align="center" class="tamanioPrinter12"><b>RECIBO PROVISIONAL N° <span id="correlativo2" /></b></td>
+													<td colspan="4" align="center" class="tamanioPrinter12"><b>RECIBO N° <span id="correlativo2" /></b></td>
 												</tr>
 												<tr>
 													<td colspan="4" style="height: 35px; ">&nbsp;</td>
