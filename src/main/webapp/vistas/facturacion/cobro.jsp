@@ -24,8 +24,9 @@
     .tamanioPrinter10
     {
         color:black;
-        font-family: Calibri;
-		font-size: 12px;    
+        /*font-family: Calibri;*/
+        font-family:Tahoma, Geneva, sans-serif;
+		font-size: 10px;    
     }
     
     .modal-header-primary {
@@ -70,7 +71,6 @@
 	}
 	
 	@import url(http://fonts.googleapis.com/css?family=Courier+New);
-
 	body,h1,h2,h3,h4,h5,h6 {
 		font-family: 'Bree Serif', serif;
 	}
@@ -129,7 +129,6 @@ $(document).ready(function(){
     	this.value = (this.value + '').replace(/[^0-9.]/g, '');
 	});
 });
-
 function colorEtiquetas(){
 	
 	$("#lblservicio").css("color", "black");
@@ -141,7 +140,6 @@ function colorEtiquetas(){
 	$("#lblfechafacturacion-img").hide();
 	
 }
-
 function nuevoCobro(){
 	
 	$("#facturacionImprimir").hide();
@@ -177,9 +175,7 @@ function nuevoCobro(){
 	$("#txtServicio").val("");
 	$("#codigoServicios").val(0);
 	$("#txtServicio").typeahead('destroy');
-
 }
-
 function guardar(){
 	
 	var ruta = obtenerContexto();
@@ -379,11 +375,10 @@ function guardar(){
     }
     
 }
-
 function buscarPuesto(){
 	
 	var f = new Date();
-	var fecha = pad(f.getDate(), 2) + "/" + pad((f.getMonth() +1), 2) + "/" + f.getFullYear();
+	var fecha = pad(f.getDate(), 2) + "/" + pad((f.getMonth() +1), 2) + "/" + f.getFullYear() + " " + f.getHours() + ":" + f.getMinutes();
 	
 	puesto = $("#puestoBuscar").val();
 	
@@ -431,8 +426,6 @@ function buscarPuesto(){
         }
     });
 }
-
-
 function cargarServicios(){
 	
 	var parametros = new Object();
@@ -460,7 +453,6 @@ function cargarServicios(){
         }
     });
 }
-
 function displayResult(item) {
     //alert('You selected <strong>' + item.value + '</strong>: <strong>' + item.text + '</strong>');
     $("#codigoServicios").val(item.value);
@@ -468,7 +460,6 @@ function displayResult(item) {
     
     buscarDeudasCodigoSocio(item.value);
 }
-
 function limpiarTablaFacturacion(){
 	
 	var tabla = document.getElementById("tablaFacturacionDetalle");
@@ -485,7 +476,6 @@ function limpiarTablaFacturacion(){
  	}
 	
 }
-
 function limpiarTablaFacturacion2(){
 	
 	var tabla = document.getElementById("tablaFacturacionDetalle2");
@@ -502,7 +492,6 @@ function limpiarTablaFacturacion2(){
  	}
 	
 }
-
 function limpiarTablaDeudas(){
 	
 	var tabla = document.getElementById("tabla_deudas_socio");
@@ -518,7 +507,6 @@ function limpiarTablaDeudas(){
  		
  	}
 }
-
 function limpiarTablaResultado(){
 	
 	var tabla = document.getElementById("tabla_resultado");
@@ -595,7 +583,6 @@ function buscarDeudasSocio(){
 	
 }
 */
-
 function buscarDeudasCodigoSocio(codigoServicio){
 	
 	var ruta = obtenerContexto();
@@ -648,7 +635,6 @@ function buscarDeudasCodigoSocio(codigoServicio){
     });
 	
 }
-
 function mostrarVentanaImporte(){
 	
 	$('#importe_modal').modal({
@@ -656,7 +642,6 @@ function mostrarVentanaImporte(){
 		keyboard: false
 	});
 }
-
 function agregarImporte(){
 	
 	importeTemp = $("#importeVariableExtra").val();
@@ -665,7 +650,6 @@ function agregarImporte(){
 	$("#importeVariable").html(res);
 	
 }
-
 function calculoTotal(){
 	
 	var total = 0;
@@ -686,9 +670,7 @@ function calculoTotal(){
 	$("#totalImpresion").html(total.toFixed(2));
 	$("#totalImpresion2").html(total.toFixed(2));
 }
-
 function eliminarFila(t){
-
 	var td = t.parentNode;
     var tr = td.parentNode;
     var table = tr.parentNode;
@@ -696,7 +678,6 @@ function eliminarFila(t){
 	calculoTotal();
 	
 }
-
 function validarSiNumero(numero){
 	
 	//if (!/^([0-9])*$/.test(numero)){
@@ -707,7 +688,6 @@ function validarSiNumero(numero){
 	}
 	
 }
-
 function agregarDeuda(){
 	
 	var ruta = obtenerContexto();
@@ -771,7 +751,6 @@ function agregarDeuda(){
 	
 	calculoTotal();
 }
-
 function visualizacion(){
 	//$("div#myPrintArea").printArea();
 	
@@ -780,13 +759,11 @@ function visualizacion(){
 		keyboard: false
 	});
 }
-
 function imprimir(){
 	
 	$("div#myPrintArea").printArea();
 	
 }
-
 function openNewWindowForJasperWithCharts(){
 	
 	var url  = "/sigamm/imprimirFactura?codigoFacturacion=" + $("#codigoFacturacion").val();
@@ -794,8 +771,6 @@ function openNewWindowForJasperWithCharts(){
 	window.open(url,"_blank", "location=0,height=500,width=800");
 	
 }
-
-
 function openNewWindowForJasperWithChartsOthers(){
 	
 	var url  = "/sigamm/imprimirFacturaOthers?codigoFacturacion=" + $("#codigoFacturacion").val();
@@ -803,14 +778,13 @@ function openNewWindowForJasperWithChartsOthers(){
 	window.open(url,"_blank", "location=0,height=500,width=800");
 	
 }
-
 </script>
 </head>
 <body id="body">
 <input type="hidden" id="codigoFacturacion" />
 <input type="hidden" id="codigoServicios" />
 <input type="hidden" id="tituloServicios" />
-<div class="modal fade" id="visualizacion_modal" role="dialog" data-keyboard="true" data-backdrop="static">
+<div class="modal fade" id="visualizacion_modal" role="dialog" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog">
 		
 		<!-- Modal content-->
@@ -822,7 +796,10 @@ function openNewWindowForJasperWithChartsOthers(){
 			<div class="modal-body">
 					
 				<div id="myPrintArea">
+					<!-- 
 					<table border="0" style="width: 1100px; " cellpadding="0" cellspacing="0">
+					 -->
+					<table border="0" style="width: 1250px; " cellpadding="0" cellspacing="0">
 						<tr>
 							<td valign="top">
 								<table border="0" width="100%" >
@@ -836,7 +813,7 @@ function openNewWindowForJasperWithChartsOthers(){
 													<td colspan="4">&nbsp;</td>
 												</tr>
 												<tr>
-													<td colspan="4" align="center" class="tamanioPrinter12"><b>RECIBO PROVISIONAL N° <span id="correlativo" /></b></td>
+													<td colspan="4" align="center" class="tamanioPrinter12"><b>RECIBO N° <span id="correlativo" /></b></td>
 												</tr>
 												<tr>
 													<td colspan="4" style="height: 35px; ">&nbsp;</td>
@@ -891,7 +868,7 @@ function openNewWindowForJasperWithChartsOthers(){
 													<td colspan="4">&nbsp;</td>
 												</tr>
 												<tr>
-													<td colspan="4" align="center" class="tamanioPrinter12"><b>RECIBO PROVISIONAL N° <span id="correlativo2" /></b></td>
+													<td colspan="4" align="center" class="tamanioPrinter12"><b>RECIBO N° <span id="correlativo2" /></b></td>
 												</tr>
 												<tr>
 													<td colspan="4" style="height: 35px; ">&nbsp;</td>
@@ -944,7 +921,7 @@ function openNewWindowForJasperWithChartsOthers(){
 				
 			</div>
 			<div class="modal-footer">
-				 
+				
 				<button type="button" id="btnImprimir" class="btn btn-primary  pull-left" onclick="imprimir();">
 					<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;Imprimir
 				</button>
@@ -952,6 +929,7 @@ function openNewWindowForJasperWithChartsOthers(){
 				<button type="button" id="btnCerrar" data-dismiss="modal" class="btn btn-default pull-left">
 					Cerrar
 				</button>
+				
 				<!-- 
 				<a href="javascript:openNewWindowForJasperWithCharts();">
 					<button type="button" class="btn btn-primary">
