@@ -263,6 +263,7 @@ function guardar(){
 	parametros.nombreDetalle 			= $("#nombre").val();
 	parametros.importe 					= $("#importe").val();
 	parametros.flagImporteVariable 		= $(":input[name=importeVariable]:checked").val();
+	parametros.flagGenerarCobro 		= $(":input[name=generarCobro]:checked").val();
 	
 	//console.log("importeVariable : " + $(":input[name=importeVariable]:checked").val());
 	
@@ -432,6 +433,18 @@ function cambiarImporte(){
 							<td width="5px">&nbsp;</td>
 							<td><input type="text" id="importe" class="form-control" maxlength="8" style="width: 80px"/></td>
 							<td valign="top"><img id="lblimporte-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+						</tr>
+						<tr>
+							<td width="10px">&nbsp;</td>
+							<td><span id="lblGenerarCobro"><b>Generar cobro por unica vez</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td>
+								<input type="radio" name="generarCobro" id="generarCobroSi" value="1">&nbsp;Si&nbsp;&nbsp;
+  								<input type="radio" name="generarCobro" id="generarCobroNo" value="0" checked="checked">&nbsp;No
+							</td>
+							<td valign="top">&nbsp;</td>
 						</tr>
 						<tr>
 							<td colspan="7">&nbsp;</td>

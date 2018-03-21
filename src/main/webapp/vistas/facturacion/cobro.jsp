@@ -29,38 +29,6 @@
 		font-size: 10px;    
     }
     
-    .modal-header-primary {
-		color:#fff;
-		padding:9px 15px;
-		border-bottom:1px solid #eee;
-		background-color: #428bca;
-		-webkit-border-top-left-radius: 5px;
-		-webkit-border-top-right-radius: 5px;
-		-moz-border-radius-topleft: 5px;
-		-moz-border-radius-topright: 5px;
-		 border-top-left-radius: 5px;
-		 border-top-right-radius: 5px;
-	}
-	.boton {
-		background:none;
-	  	border:0;
-	  	margin:0;
-	  	padding:0;
-	  	outline:0 none;
-	}
-	
-	.tablaCabecera{
-		background-color: #428bca;
-		color:white;
-        /*font-family:Tahoma, Geneva, sans-serif;*/
-        /*font-size:12px;*/
-        font-weight: bold;
-	}
-	
-	.modal-dialog {
-  		width: 600px;
-	}
-	
 	.marca-de-agua {
 	    background-image: url("../recursos/images/logo.png");
 	    background-repeat: no-repeat;
@@ -70,13 +38,15 @@
 	    margin: auto;
 	}
 	
-	@import url(http://fonts.googleapis.com/css?family=Courier+New);
-	body,h1,h2,h3,h4,h5,h6 {
-		font-family: 'Bree Serif', serif;
-	}
 </style>
 <script>
 $(document).ready(function(){	
+	
+	usuarioLogin = '${sessionScope.datosSession.usuario}';
+	$("#printUsuario").html(usuarioLogin);
+	$("#printUsuario2").html(usuarioLogin);
+	
+	console.log(usuarioLogin);
 	
 	$('[data-toggle="popover"]').popover({ placement : 'right', trigger: "hover" });
 	$("#btnVisualizacion").hide();
@@ -129,6 +99,7 @@ $(document).ready(function(){
     	this.value = (this.value + '').replace(/[^0-9.]/g, '');
 	});
 });
+
 function colorEtiquetas(){
 	
 	$("#lblservicio").css("color", "black");
@@ -140,7 +111,16 @@ function colorEtiquetas(){
 	$("#lblfechafacturacion-img").hide();
 	
 }
+
 function nuevoCobro(){
+	
+	$("#cobrosExternos").val("0");
+	$("#trBuscarPuesto").show();
+	
+	$("#apePaterno").attr("disabled", true);
+	$("#apeMaterno").attr("disabled", true);
+	$("#nombres").attr("disabled", true);
+	$("#dni").attr("disabled", true);
 	
 	$("#facturacionImprimir").hide();
 	
@@ -176,6 +156,7 @@ function nuevoCobro(){
 	$("#codigoServicios").val(0);
 	$("#txtServicio").typeahead('destroy');
 }
+
 function guardar(){
 	
 	var ruta = obtenerContexto();
@@ -375,6 +356,7 @@ function guardar(){
     }
     
 }
+
 function buscarPuesto(){
 	
 	var f = new Date();
@@ -426,6 +408,7 @@ function buscarPuesto(){
         }
     });
 }
+
 function cargarServicios(){
 	
 	var parametros = new Object();
@@ -453,6 +436,7 @@ function cargarServicios(){
         }
     });
 }
+
 function displayResult(item) {
     //alert('You selected <strong>' + item.value + '</strong>: <strong>' + item.text + '</strong>');
     $("#codigoServicios").val(item.value);
@@ -460,6 +444,7 @@ function displayResult(item) {
     
     buscarDeudasCodigoSocio(item.value);
 }
+
 function limpiarTablaFacturacion(){
 	
 	var tabla = document.getElementById("tablaFacturacionDetalle");
@@ -476,6 +461,7 @@ function limpiarTablaFacturacion(){
  	}
 	
 }
+
 function limpiarTablaFacturacion2(){
 	
 	var tabla = document.getElementById("tablaFacturacionDetalle2");
@@ -492,6 +478,7 @@ function limpiarTablaFacturacion2(){
  	}
 	
 }
+
 function limpiarTablaDeudas(){
 	
 	var tabla = document.getElementById("tabla_deudas_socio");
@@ -507,6 +494,7 @@ function limpiarTablaDeudas(){
  		
  	}
 }
+
 function limpiarTablaResultado(){
 	
 	var tabla = document.getElementById("tabla_resultado");
@@ -530,6 +518,7 @@ function limpiarTablaResultado(){
 	$("#totalImpresion2").html("");
 	
 }
+
 /*
 function buscarDeudasSocio(){
 	
@@ -635,13 +624,12 @@ function buscarDeudasCodigoSocio(codigoServicio){
     });
 	
 }
+
 function mostrarVentanaImporte(){
 	
-	$('#importe_modal').modal({
-		backdrop: 'static',
-		keyboard: false
-	});
+	$('#importe_modal').modal();
 }
+
 function agregarImporte(){
 	
 	importeTemp = $("#importeVariableExtra").val();
@@ -650,6 +638,7 @@ function agregarImporte(){
 	$("#importeVariable").html(res);
 	
 }
+
 function calculoTotal(){
 	
 	var total = 0;
@@ -670,6 +659,7 @@ function calculoTotal(){
 	$("#totalImpresion").html(total.toFixed(2));
 	$("#totalImpresion2").html(total.toFixed(2));
 }
+
 function eliminarFila(t){
 	var td = t.parentNode;
     var tr = td.parentNode;
@@ -678,6 +668,7 @@ function eliminarFila(t){
 	calculoTotal();
 	
 }
+
 function validarSiNumero(numero){
 	
 	//if (!/^([0-9])*$/.test(numero)){
@@ -688,6 +679,7 @@ function validarSiNumero(numero){
 	}
 	
 }
+	
 function agregarDeuda(){
 	
 	var ruta = obtenerContexto();
@@ -751,19 +743,38 @@ function agregarDeuda(){
 	
 	calculoTotal();
 }
+
 function visualizacion(){
 	//$("div#myPrintArea").printArea();
 	
+	valorExterno = $("#cobrosExternos").val();
+	if(valorExterno == "1"){
+		
+		nombresAsociado = $("#apePaterno").val() + " " + $("#apeMaterno").val() + ", " + $("#nombres").val();
+		
+		$("#printAsociado").html(nombresAsociado.toUpperCase());
+		$("#printAsociado2").html(nombresAsociado.toUpperCase());
+		$("#printPuesto").html("-");
+		$("#printPuesto2").html("-");
+		$("#printSector").html("-");
+		$("#printSector2").html("-");
+		$("#printGiro").html("-");
+		$("#printGiro2").html("-");
+		
+	}
+	
 	$('#visualizacion_modal').modal({
 		backdrop: 'static',
-		keyboard: false
+		keyboard: true
 	});
 }
+
 function imprimir(){
 	
 	$("div#myPrintArea").printArea();
 	
 }
+
 function openNewWindowForJasperWithCharts(){
 	
 	var url  = "/sigamm/imprimirFactura?codigoFacturacion=" + $("#codigoFacturacion").val();
@@ -771,6 +782,7 @@ function openNewWindowForJasperWithCharts(){
 	window.open(url,"_blank", "location=0,height=500,width=800");
 	
 }
+
 function openNewWindowForJasperWithChartsOthers(){
 	
 	var url  = "/sigamm/imprimirFacturaOthers?codigoFacturacion=" + $("#codigoFacturacion").val();
@@ -778,17 +790,43 @@ function openNewWindowForJasperWithChartsOthers(){
 	window.open(url,"_blank", "location=0,height=500,width=800");
 	
 }
+
+function cobroExterno(){
+	
+	nuevoCobro();
+	
+	$("#cobrosExternos").val("1");
+	
+	$("#puestoBuscar").val("8888");
+	
+	buscarPuesto();
+	
+	$("#apePaterno").attr("disabled", false);
+	$("#apeMaterno").attr("disabled", false);
+	$("#nombres").attr("disabled", false);
+	$("#dni").attr("disabled", false);
+	
+	$("#apePaterno").val("");
+	$("#apeMaterno").val("");
+	$("#nombres").val("");
+	$("#dni").val("");
+	
+	$("#trBuscarPuesto").hide();
+		
+}
+
 </script>
 </head>
 <body id="body">
 <input type="hidden" id="codigoFacturacion" />
 <input type="hidden" id="codigoServicios" />
 <input type="hidden" id="tituloServicios" />
+<input type="hidden" id="cobrosExternos" />
+<!-- 
 <div class="modal fade" id="visualizacion_modal" role="dialog" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog">
 		
-		<!-- Modal content-->
-		<div class="modal-content" style="width: 1150px; ">
+		<div class="modal-content" style="width: 1300px; ">
 			<div class="modal-header modal-header-primary">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<h4 class="modal-title">Visualización</h4>
@@ -796,9 +834,6 @@ function openNewWindowForJasperWithChartsOthers(){
 			<div class="modal-body">
 					
 				<div id="myPrintArea">
-					<!-- 
-					<table border="0" style="width: 1100px; " cellpadding="0" cellspacing="0">
-					 -->
 					<table border="0" style="width: 1250px; " cellpadding="0" cellspacing="0">
 						<tr>
 							<td valign="top">
@@ -820,9 +855,7 @@ function openNewWindowForJasperWithChartsOthers(){
 												</tr>
 												<tr>
 													<td class="tamanioPrinter10" ><b>Asociado (a):</b></td>
-													<td class="tamanioPrinter10" width="300px"><span id="printAsociado"/></td>
-													<td class="tamanioPrinter10" ><b>Fecha:</b></td>
-													<td class="tamanioPrinter10"><span id="printFecha"/></td>
+													<td class="tamanioPrinter10" colspan="3"><span id="printAsociado"/></td>
 												</tr>
 												<tr>
 													<td class="tamanioPrinter10" ><b>Nº de Puesto:</b></td>
@@ -832,11 +865,15 @@ function openNewWindowForJasperWithChartsOthers(){
 																<td class="tamanioPrinter10" width="70px"><span id="printPuesto"/></td>
 																<td class="tamanioPrinter10" style="width: 35px; "><b>Sector:</b></td>
 																<td class="tamanioPrinter10" width="70px"><span id="printSector"/></td>
-																<td class="tamanioPrinter10" style="width: 35px; "><b>Giro:</b></td>
-																<td class="tamanioPrinter10" width="200px"><span id="printGiro"/></td>
+																<td class="tamanioPrinter10" style="width: 35px; "><b>Fecha:</b></td>
+																<td class="tamanioPrinter10" width="200px"><span id="printFecha"/></td>
 															</tr>
 														</table>
 													</td>
+												</tr>
+												<tr>
+													<td class="tamanioPrinter10" ><b>Giro:</b></td>
+													<td class="tamanioPrinter10" colspan="3"><span id="printGiro"/></td>
 												</tr>
 												<tr>
 													<td colspan="4">
@@ -855,10 +892,13 @@ function openNewWindowForJasperWithChartsOthers(){
 												<tr>
 													<td colspan="4" class="tamanioPrinter10"><b>Son: <span id="totalLetras" /></b></td>
 												</tr>
+												<tr>
+													<td colspan="4" class="tamanioPrinter10"><b>Usuario: <span id="printUsuario" /></b></td>
+												</tr>
 											</table>
 										</td>
 										<td width="2%">&nbsp;&nbsp;&nbsp;&nbsp;</td>
-										<!-- SEGUNDA PARTE -->
+										
 										<td width="49%" valign="top">
 											<table border="0" width="100%" >
 												<tr>
@@ -875,9 +915,7 @@ function openNewWindowForJasperWithChartsOthers(){
 												</tr>
 												<tr>
 													<td class="tamanioPrinter10" ><b>Asociado (a):</b></td>
-													<td class="tamanioPrinter10" width="300px"><span id="printAsociado2"/></td>
-													<td class="tamanioPrinter10" ><b>Fecha:</b></td>
-													<td class="tamanioPrinter10"><span id="printFecha2"/></td>
+													<td class="tamanioPrinter10" colspan="3"><span id="printAsociado2"/></td>
 												</tr>
 												<tr>
 													<td class="tamanioPrinter10" ><b>Nº de Puesto:</b></td>
@@ -887,11 +925,15 @@ function openNewWindowForJasperWithChartsOthers(){
 																<td class="tamanioPrinter10" width="70px"><span id="printPuesto2"/></td>
 																<td class="tamanioPrinter10" style="width: 35px; "><b>Sector:</b></td>
 																<td class="tamanioPrinter10" width="70px"><span id="printSector2"/></td>
-																<td class="tamanioPrinter10" style="width: 35px; "><b>Giro:</b></td>
-																<td class="tamanioPrinter10" width="200px"><span id="printGiro2"/></td>
+																<td class="tamanioPrinter10" style="width: 35px; "><b>Fecha:</b></td>
+																<td class="tamanioPrinter10" width="200px"><span id="printFecha2"/></td>
 															</tr>
 														</table>
 													</td>
+												</tr>
+												<tr>
+													<td class="tamanioPrinter10" ><b>Giro:</b></td>
+													<td class="tamanioPrinter10" colspan="3"><span id="printGiro2"/></td>
 												</tr>
 												<tr>
 													<td colspan="4">
@@ -910,6 +952,9 @@ function openNewWindowForJasperWithChartsOthers(){
 												<tr>
 													<td colspan="4" class="tamanioPrinter10"><b>Son: <span id="totalLetras2" /></b></td>
 												</tr>
+												<tr>
+													<td colspan="4" class="tamanioPrinter10"><b>Usuario: <span id="printUsuario2" /></b></td>
+												</tr>
 											</table>
 										</td>
 									</tr>
@@ -922,35 +967,20 @@ function openNewWindowForJasperWithChartsOthers(){
 			</div>
 			<div class="modal-footer">
 				
-				<button type="button" id="btnImprimir" class="btn btn-primary  pull-left" onclick="imprimir();">
+				<button type="button" id="btnImprimir" class="btn btn-primary pull-left" onclick="imprimir();">
 					<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;Imprimir
 				</button>
 				
 				<button type="button" id="btnCerrar" data-dismiss="modal" class="btn btn-default pull-left">
 					Cerrar
 				</button>
-				
-				<!-- 
-				<a href="javascript:openNewWindowForJasperWithCharts();">
-					<button type="button" class="btn btn-primary">
-						<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;Imprimir
-					</button>&nbsp;&nbsp;
-				</a>
-				 -->
-				<!-- 
-				<a href="javascript:openNewWindowForJasperWithChartsOthers();">
-					<button type="button" class="btn btn-primary">
-						<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;Imprimir Others
-					</button>&nbsp;&nbsp;
-				</a>
-				 -->
-				
 			</div>
 		</div>
 		  
 	</div>
 </div>
-
+ -->
+ 
 <input type="hidden" id="codigoSocio" />
 <table border="0" style="width: 900px;">
 	<tr>
@@ -960,6 +990,10 @@ function openNewWindowForJasperWithChartsOthers(){
 		<td colspan="9" align="left">
 			<button type="button" id="btnNuevo" class="btn btn-primary" onclick="nuevoCobro()">
 				<img src="recursos/images/icons/nuevo_16x16.png" alt="Nuevo" />&nbsp;Nuevo
+			</button>
+			&nbsp;
+			<button type="button" id="btnNuevo" class="btn btn-primary" onclick="cobroExterno()">
+				<img src="recursos/images/icons/out_16x16.png" alt="Externos" />&nbsp;Externos
 			</button>
 			&nbsp;
 			<button type="button" id="btnGuardar" class="btn btn-primary" onclick="guardar()">
@@ -974,7 +1008,7 @@ function openNewWindowForJasperWithChartsOthers(){
 	<tr>
 		<td colspan="9">&nbsp;</td>
 	</tr>
-	<tr>
+	<tr id="trBuscarPuesto">
 		<td width="10px" align="left">&nbsp;</td>
 		<td width="120px" align="left"><span id="lblNumeroPuesto"><b>Nro.Puesto</b></span></td>
 		<td width="5px">&nbsp;</td>
@@ -1153,57 +1187,223 @@ function openNewWindowForJasperWithChartsOthers(){
 	</tr>
 </table>	
 
-<div class="modal fade" id="importe_modal" role="dialog" data-keyboard="false" data-backdrop="static">
-	<div class="modal-dialog">
-		
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header modal-header-primary">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
+<div class="modal fade" id="importe_modal" role="dialog">
+	<div class="modal-dialog modal-sm" role="document">
+    	<div class="modal-content">
+      		<div class="modal-header-primary">
+        		<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<h4 class="modal-title">Agregar Importe</h4>
-			</div>
-			<div class="modal-body">
+      		</div>
+      		<div class="modal-body">
+      		
+        		<table border="0" width="100%">
+					<tr>
+						<td colspan="7" align="right">&nbsp;</td>
+					</tr>
+					<tr>
+						<td colspan="7" align="left">
+							<button type="button" class="btn btn-primary" onclick="agregarImporte()">
+								<img src="recursos/images/icons/guardar_16x16.png" alt="Agregar" />&nbsp;Agregar
+							</button>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="7" align="right">&nbsp;</td>
+					</tr>
+					<tr>
+						<td width="10px">&nbsp;</td>
+						<td><span id="lblimporteVariableExtra"><b>Importe (*)</b></span></td>
+						<td width="5px">&nbsp;</td>
+						<td><b>:</b></td>
+						<td width="5px">&nbsp;</td>
+						<td><input type="text" id="importeVariableExtra" class="form-control" maxlength="8" style="width: 80px"/></td>
+						<td valign="top"><img id="lblimporteVariableExtra-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+					</tr>
+					<tr>
+						<td colspan="7">&nbsp;</td>
+					</tr>
+					<tr>
+						<td width="10px">&nbsp;</td>
+						<td colspan="6"><b>(*) Campos Obligatorios</b></td>
+					</tr>
+				</table>
 				
-					<table border="0" style="width: 650px;">
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      		</div>
+    	</div>
+  	</div>
+</div>
+ 
+ <div class="modal fade" id="visualizacion_modal" role="dialog">
+	<div class="modal-dialog" role="document" style="width:1300px">
+		<div class="modal-content">
+    		<div class="modal-header-primary">
+        		<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Visualización</h4>
+      		</div>
+      		<div class="modal-body">
+      		
+        		<div id="myPrintArea">
+					<table border="0" width="100%" cellpadding="0" cellspacing="0">
 						<tr>
-							<td colspan="7" align="right">&nbsp;</td>
-						</tr>
-						<tr>
-							<td colspan="7" align="left">
-								<button type="button" class="btn btn-primary" onclick="agregarImporte()">
-									<img src="recursos/images/icons/guardar_16x16.png" alt="Agregar" />&nbsp;Agregar
-								</button>
+							<td valign="top">
+								<table border="0" width="100%" >
+									<tr>
+										<td width="49%" valign="top">
+											<table border="0" width="100%" >
+												<tr>
+													<td colspan="4" align="center" class="tamanioPrinter12" ><b>ASOCIACIÓN DE COMERCIANTES DEL MERCADO MODELO<BR>DE HUARAL<BR>Fundado el 13 de Noviembre de 1996<BR>R.U.C. 20530606334</b></td>
+												</tr>
+												<tr>
+													<td colspan="4">&nbsp;</td>
+												</tr>
+												<tr>
+													<td colspan="4" align="center" class="tamanioPrinter12"><b>RECIBO N° <span id="correlativo" /></b></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="height: 35px; ">&nbsp;</td>
+												</tr>
+												<tr>
+													<td class="tamanioPrinter10" ><b>Asociado (a):</b></td>
+													<td class="tamanioPrinter10" colspan="3"><span id="printAsociado"/></td>
+												</tr>
+												<tr>
+													<td class="tamanioPrinter10" ><b>Nº de Puesto:</b></td>
+													<td colspan="3" valign="top">
+														<table border="0" width="100%" cellpadding="0" cellspacing="0" id="tablaDatos">
+															<tr>
+																<td class="tamanioPrinter10" width="70px"><span id="printPuesto"/></td>
+																<td class="tamanioPrinter10" style="width: 35px; "><b>Sector:</b></td>
+																<td class="tamanioPrinter10" width="70px"><span id="printSector"/></td>
+																<td class="tamanioPrinter10" style="width: 35px; "><b>Fecha:</b></td>
+																<td class="tamanioPrinter10" width="200px"><span id="printFecha"/></td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+												<tr>
+													<td class="tamanioPrinter10" ><b>Giro:</b></td>
+													<td class="tamanioPrinter10" colspan="3"><span id="printGiro"/></td>
+												</tr>
+												<tr>
+													<td colspan="4">
+														<table border="1" width="100%" cellspacing="5" cellpadding="5" class="tabla" id="tablaFacturacionDetalle">
+															<tr>
+																<td width="40px" align="center" class="tamanioPrinter10" ><b>CANT.</b></td>
+																<td align="center" class="tamanioPrinter10" ><b>DESCRIPCION</b></td>
+																<td width="90px" align="center" class="tamanioPrinter10" ><b>IMPORTE</b></td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+												<tr>
+													<td colspan="4">&nbsp;</td>
+												</tr>
+												<tr>
+													<td colspan="4" class="tamanioPrinter10"><b>Son: <span id="totalLetras" /></b></td>
+												</tr>
+												<tr>
+													<td colspan="4" class="tamanioPrinter10"><b>Usuario: <span id="printUsuario" /></b></td>
+												</tr>
+											</table>
+										</td>
+										<td width="2%">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+										<!-- SEGUNDA PARTE -->
+										<td width="49%" valign="top">
+											<table border="0" width="100%" >
+												<tr>
+													<td colspan="4" align="center" class="tamanioPrinter12" ><b>ASOCIACIÓN DE COMERCIANTES DEL MERCADO MODELO<BR>DE HUARAL<BR>Fundado el 13 de Noviembre de 1996<BR>R.U.C. 20530606334</b></td>
+												</tr>
+												<tr>
+													<td colspan="4">&nbsp;</td>
+												</tr>
+												<tr>
+													<td colspan="4" align="center" class="tamanioPrinter12"><b>RECIBO N° <span id="correlativo2" /></b></td>
+												</tr>
+												<tr>
+													<td colspan="4" style="height: 35px; ">&nbsp;</td>
+												</tr>
+												<tr>
+													<td class="tamanioPrinter10" ><b>Asociado (a):</b></td>
+													<td class="tamanioPrinter10" colspan="3"><span id="printAsociado2"/></td>
+												</tr>
+												<tr>
+													<td class="tamanioPrinter10" ><b>Nº de Puesto:</b></td>
+													<td colspan="3" valign="top">
+														<table border="0" width="100%" cellpadding="0" cellspacing="0" id="tablaDatos">
+															<tr>
+																<td class="tamanioPrinter10" width="70px"><span id="printPuesto2"/></td>
+																<td class="tamanioPrinter10" style="width: 35px; "><b>Sector:</b></td>
+																<td class="tamanioPrinter10" width="70px"><span id="printSector2"/></td>
+																<td class="tamanioPrinter10" style="width: 35px; "><b>Fecha:</b></td>
+																<td class="tamanioPrinter10" width="200px"><span id="printFecha2"/></td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+												<tr>
+													<td class="tamanioPrinter10" ><b>Giro:</b></td>
+													<td class="tamanioPrinter10" colspan="3"><span id="printGiro2"/></td>
+												</tr>
+												<tr>
+													<td colspan="4">
+														<table border="1" width="100%" cellspacing="5" cellpadding="5" class="tabla" id="tablaFacturacionDetalle2">
+															<tr>
+																<td width="40px" align="center" class="tamanioPrinter10" ><b>CANT.</b></td>
+																<td align="center" class="tamanioPrinter10" ><b>DESCRIPCION</b></td>
+																<td width="90px" align="center" class="tamanioPrinter10" ><b>IMPORTE</b></td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+												<tr>
+													<td colspan="4">&nbsp;</td>
+												</tr>
+												<tr>
+													<td colspan="4" class="tamanioPrinter10"><b>Son: <span id="totalLetras2" /></b></td>
+												</tr>
+												<tr>
+													<td colspan="4" class="tamanioPrinter10"><b>Usuario: <span id="printUsuario2" /></b></td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
 							</td>
 						</tr>
-						<tr>
-							<td colspan="7" align="right">&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lblimporteVariableExtra"><b>Importe (*)</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td><input type="text" id="importeVariableExtra" class="form-control" maxlength="8" style="width: 80px"/></td>
-							<td valign="top"><img id="lblimporteVariableExtra-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
-						</tr>
-						<tr>
-							<td colspan="7">&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td colspan="6"><b>(*) Campos Obligatorios</b></td>
-						</tr>
 					</table>
-
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-			</div>
-		</div>
-		  
-	</div>
-</div> 
+				</div>
+				
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" id="btnImprimir" class="btn btn-primary pull-left" onclick="imprimir();">
+					<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;Imprimir
+				</button>
+				
+				<button type="button" id="btnCerrar" data-dismiss="modal" class="btn btn-default pull-left">
+					Cerrar
+				</button>
+				
+				<!-- 
+				<a href="javascript:openNewWindowForJasperWithCharts();">
+					<button type="button" class="btn btn-primary">
+						<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;Imprimir
+					</button>&nbsp;&nbsp;
+				</a>
+				 -->
+				<!-- 
+				<a href="javascript:openNewWindowForJasperWithChartsOthers();">
+					<button type="button" class="btn btn-primary">
+						<img src="recursos/images/icons/print_16x16.png" alt="Imprimir" />&nbsp;Imprimir Others
+					</button>&nbsp;&nbsp;
+				</a>
+				 -->
+      		</div>
+    	</div>
+  	</div>
+</div>
 
 </body>
 </html>

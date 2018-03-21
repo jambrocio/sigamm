@@ -14,6 +14,7 @@ public class ServiciosDetalle {
 	int flag_otros;
 	int usuario;
 	int flagImporteVariable;
+	int flagGenerarCobro;
 	
 	public int getCodigoServicio() {
 		return codigoServicio;
@@ -86,6 +87,12 @@ public class ServiciosDetalle {
 	}
 	public void setFlagImporteVariable(int flagImporteVariable) {
 		this.flagImporteVariable = flagImporteVariable;
+	}
+	public int getFlagGenerarCobro() {
+		return flagGenerarCobro;
+	}
+	public void setFlagGenerarCobro(int flagGenerarCobro) {
+		this.flagGenerarCobro = flagGenerarCobro;
 	}
 				
 }
