@@ -868,6 +868,12 @@ public class FacturacionController {
 			}
 		}
 		
+		if(servicio.getFlagGenerarCobro() == 1){
+			if(servicio.getPeriodo().equals("") || servicio.getPeriodo().length() == 0){
+				camposObligatorios.add(Util.retornarObjeto(Constantes.ETIQUETA_SERVICIO_PERIODO, Constantes.PERIODO_SERVICIO_OBLIGATORIO));
+			}
+		}
+		
 		String listaObligatorios = gson.toJson(camposObligatorios);
 		String resultado = "";
 		if(camposObligatorios.size() > 0){

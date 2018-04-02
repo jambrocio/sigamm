@@ -52,17 +52,35 @@
 $(document).ready(function(){		
 	
 	$('[data-toggle="popover"]').popover({ placement : 'right', trigger: "hover" });
-	cargarServicios();
+	$.datepicker.setDefaults($.datepicker.regional['es']);
 	
+	$("#periodo").datepicker({
+		dateFormat: 'MM yy',
+		changeMonth: true,
+		changeYear: false,
+		numberOfMonths: 1,
+		dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+		monthNames: ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO',
+			'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE',
+		    'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'],
+		monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr',
+			'May', 'Jun', 'Jul', 'Ago',
+		    'Sep', 'Oct', 'Nov', 'Dic'] 
+	});
+	
+	cargarServicios();
+		
 });
 
 function colorEtiquetas(){
 	
 	$("#lblnombre").css("color", "black");
 	$("#lblimporte").css("color", "black");
+	$("#lblperiodo").css("color", "black");
 	
 	$("#lblnombre-img").hide();
 	$("#lblimporte-img").hide();
+	$("#lblperiodo-img").hide();
 		
 }
 
@@ -78,14 +96,20 @@ function nuevoServicioDetalle(){
 	$("#codigo").html("<b>0</b>");
 	$("#nombre").val("");
 	$("#importe").val("");
+	$("#importeVariableNo").prop("checked", true);
+	$("#importe").prop("disabled", false);
 	
 	colorEtiquetas();
 	
 	$("#codigoServicio").val(0);
 	$("#codigoServicioDetalle").val(0);
+	
+	$("#opcionPeriodo").hide();
+	$("#periodo").val("");
+	$("#generarCobroNo").prop("checked", true);
 }
 
-function editarServicioDetalle(codigoServicio, codigoServicioDetalle, nombreServicioDetalle, importe, flagImporteVariable){
+function editarServicioDetalle(codigoServicio, codigoServicioDetalle, nombreServicioDetalle, importe, flagImporteVariable, flagGenerarCobro, periodo){
 	
 	$('#servicio_modal').modal({
 		backdrop: 'static',
@@ -97,13 +121,29 @@ function editarServicioDetalle(codigoServicio, codigoServicioDetalle, nombreServ
 	$("#codigo").html("<b>" + codigoServicioDetalle + "</b>");
 	$("#nombre").val(replaceAll(nombreServicioDetalle, "#", " "));
 	if(flagImporteVariable == 1){
-		$("#importeVariableSi").attr("checked", true);
+		$("#importeVariableSi").prop("checked", true);
 		$("#importe").val(0);
-		$("#importe").attr("disabled", true);
+		$("#importe").prop("disabled", true);
 	}else{
-		$("#importeVariableNo").attr("checked", true);
+		$("#importeVariableNo").prop("checked", true);
 		$("#importe").val(importe);
-		$("#importe").attr("disabled", false);
+		$("#importe").prop("disabled", false);
+	}
+	
+	//console.log("flagGenerarCobro : [" + flagGenerarCobro + "]");
+	
+	if(flagGenerarCobro == 1){
+		//console.log("flagGenerarCobro SI : [" + flagGenerarCobro + "]");
+		$("#generarCobroSi").prop("checked", true);
+		$("#periodo").val(replaceAll(periodo, "#", " "));
+		$("#opcionPeriodo").show();
+		$("#opcionImporte").hide();
+	}else{
+		//console.log("flagGenerarCobro NO : [" + flagGenerarCobro + "]");
+		$("#generarCobroNo").prop("checked", true);
+		$("#periodo").val("");
+		$("#opcionPeriodo").hide();
+		$("#opcionImporte").show();
 	}
 	
 	$("#codigoServicio").val(codigoServicio);
@@ -182,14 +222,17 @@ function cargarServicios(){
 	var ruta = obtenerContexto();
 	var formatterBotones = function(cellVal,options,rowObject)
 	{	
-		codigoServicio = rowObject.codigoServicio;
-		codigoServicioDetalle = rowObject.codigoServicioDetalle;
-		nombreDetalle = replaceAll(rowObject.nombreDetalle, " ", "#");
-		importe = rowObject.importe;
-		importeVariable = rowObject.flagImporteVariable;
+		codigoServicio 			= rowObject.codigoServicio;
+		codigoServicioDetalle 	= rowObject.codigoServicioDetalle;
+		nombreDetalle 			= replaceAll(rowObject.nombreDetalle, " ", "#");
+		importe 				= rowObject.importe;
+		importeVariable 		= rowObject.flagImporteVariable;
+		periodo 				= replaceAll(rowObject.periodo, " ", "#");
+		generarCobro			= rowObject.flagGenerarCobro;
+		mensajeGenerarCobro		= rowObject.mensajeFlagGenerarCobro;
 		var opciones = "<center>";
 			
-			opciones += "<a href=\"javascript:editarServicioDetalle(" + codigoServicio + ", " + codigoServicioDetalle + ", '" + nombreDetalle + "', " + importe + ", " + importeVariable + "); \">";
+			opciones += "<a href=\"javascript:editarServicioDetalle(" + codigoServicio + ", " + codigoServicioDetalle + ", '" + nombreDetalle + "', " + importe + ", " + importeVariable + ", " + generarCobro + ",'" + periodo + "'); \">";
 			opciones += "<img src='/"+ruta+"/recursos/images/icons/edit_24x24.png' border='0' title='Editar Servicio'/>";
 			opciones += "</a>";
 			
@@ -213,7 +256,7 @@ function cargarServicios(){
 		datatype : "json",
 		mtype: 'POST',
 		height: 'auto',
-		colNames : ['Código', 'Nombre', 'Importe', 'Opciones'],
+		colNames : ['Código', 'Nombre', 'Importe', 'Importe variable', 'Cobro por unica vez', 'Opciones'],
 		colModel : [{
 			name : 'codigoServicioDetalle',
 			index: 'codigoServicioDetalle',
@@ -232,6 +275,18 @@ function cargarServicios(){
 			sortable:false,
 			width: 100,
 			align: 'right'
+		},{
+			name : 'mensajeFlagImporteVariable',
+			index: 'mensajeFlagImporteVariable',
+			sortable:false,
+			width: 100,
+			align: 'center'
+		},{
+			name : 'mensajeFlagGenerarCobro',
+			index: 'mensajeFlagGenerarCobro',
+			sortable:false,
+			width: 100,
+			align: 'center'
 		},{					
 			name:'codigoServicioDetalle',
 			index:'codigoServicioDetalle',
@@ -264,6 +319,7 @@ function guardar(){
 	parametros.importe 					= $("#importe").val();
 	parametros.flagImporteVariable 		= $(":input[name=importeVariable]:checked").val();
 	parametros.flagGenerarCobro 		= $(":input[name=generarCobro]:checked").val();
+	parametros.periodo 					= $("#periodo").val();
 	
 	//console.log("importeVariable : " + $(":input[name=importeVariable]:checked").val());
 	
@@ -313,7 +369,7 @@ function guardar(){
                         
                 	$("#" + obj.nombreCampo).css("color", "red");
                     $("#" + obj.nombreCampo + "-img").show();
-                    $("#" + obj.nombreCampo + "-img").attr("data-content", obj.descripcion);
+                    $("#" + obj.nombreCampo + "-img").prop("data-content", obj.descripcion);
                         
 				});
                 	
@@ -333,11 +389,30 @@ function cambiarImporte(){
 	importeVariable = $(":input[name=importeVariable]:checked").val();
 	if(importeVariable == 1){
 		$("#importe").val(0);
-		$("#importe").attr("disabled", true);
+		$("#importe").prop("disabled", true);
 	}else{
 		$("#importe").val("");
-		$("#importe").attr("disabled", false);
+		$("#importe").prop("disabled", false);
 	}
+}
+
+function ocultarFecha(){
+	generarCobro = $(":input[name=generarCobro]:checked").val();
+	if(generarCobro == 1){
+		$("#opcionPeriodo").show();
+		$("#opcionImporte").hide();
+		$("#importeVariableNo").prop("checked", true);
+		$("#importeVariableSi").prop("disabled", true);
+		$("#importe").val("");
+		$("#importe").prop("disabled", false);
+	}else{
+		$("#opcionPeriodo").hide();
+		$("#opcionImporte").show();
+		$("#importeVariableSi").prop("disabled", false);
+		$("#importeVariableNo").prop("checked", true);
+		$("#importe").val("");
+	}
+	$("#periodo").val("");
 }
 
 </script>
@@ -415,6 +490,27 @@ function cambiarImporte(){
 						</tr>
 						<tr>
 							<td width="10px">&nbsp;</td>
+							<td><span id="lblGenerarCobro"><b>Generar cobro por unica vez</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td>
+								<input type="radio" name="generarCobro" id="generarCobroSi" value="1" onclick="ocultarFecha();">&nbsp;Si&nbsp;&nbsp;
+  								<input type="radio" name="generarCobro" id="generarCobroNo" value="0" checked="checked" onclick="ocultarFecha();">&nbsp;No
+							</td>
+							<td valign="top">&nbsp;</td>
+						</tr>
+						<tr id="opcionPeriodo" style="display:none; ">
+							<td width="10px">&nbsp;</td>
+							<td><span id="lblperiodo"><b>Periodo (*)</b></span></td>
+							<td width="5px">&nbsp;</td>
+							<td><b>:</b></td>
+							<td width="5px">&nbsp;</td>
+							<td><input type="text" id="periodo" class="form-control" maxlength="8" style="width: 180px" readonly /></td>
+							<td valign="top"><img id="lblperiodo-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
+						</tr>
+						<tr id="opcionImporte">
+							<td width="10px">&nbsp;</td>
 							<td><span id="lblimporteVariable"><b>Importe variable</b></span></td>
 							<td width="5px">&nbsp;</td>
 							<td><b>:</b></td>
@@ -433,18 +529,6 @@ function cambiarImporte(){
 							<td width="5px">&nbsp;</td>
 							<td><input type="text" id="importe" class="form-control" maxlength="8" style="width: 80px"/></td>
 							<td valign="top"><img id="lblimporte-img" src="recursos/images/icons/error_20x20.png" style="display:none;" border="0" data-toggle="popover" /></td>
-						</tr>
-						<tr>
-							<td width="10px">&nbsp;</td>
-							<td><span id="lblGenerarCobro"><b>Generar cobro por unica vez</b></span></td>
-							<td width="5px">&nbsp;</td>
-							<td><b>:</b></td>
-							<td width="5px">&nbsp;</td>
-							<td>
-								<input type="radio" name="generarCobro" id="generarCobroSi" value="1">&nbsp;Si&nbsp;&nbsp;
-  								<input type="radio" name="generarCobro" id="generarCobroNo" value="0" checked="checked">&nbsp;No
-							</td>
-							<td valign="top">&nbsp;</td>
 						</tr>
 						<tr>
 							<td colspan="7">&nbsp;</td>

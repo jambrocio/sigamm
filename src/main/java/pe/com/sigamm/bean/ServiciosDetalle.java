@@ -15,6 +15,9 @@ public class ServiciosDetalle {
 	int usuario;
 	int flagImporteVariable;
 	int flagGenerarCobro;
+	String periodo;
+	String mensajeFlagGenerarCobro;
+	String mensajeFlagImporteVariable;
 	
 	public int getCodigoServicio() {
 		return codigoServicio;
@@ -93,6 +96,24 @@ public class ServiciosDetalle {
 	}
 	public void setFlagGenerarCobro(int flagGenerarCobro) {
 		this.flagGenerarCobro = flagGenerarCobro;
+	}
+	public String getPeriodo() {
+		return periodo;
+	}
+	public void setPeriodo(String periodo) {
+		this.periodo = periodo;
+	}
+	public String getMensajeFlagGenerarCobro() {
+		return mensajeFlagGenerarCobro;
+	}
+	public void setMensajeFlagGenerarCobro(String mensajeFlagGenerarCobro) {
+		this.mensajeFlagGenerarCobro = mensajeFlagGenerarCobro;
+	}
+	public String getMensajeFlagImporteVariable() {
+		return mensajeFlagImporteVariable;
+	}
+	public void setMensajeFlagImporteVariable(String mensajeFlagImporteVariable) {
+		this.mensajeFlagImporteVariable = mensajeFlagImporteVariable;
 	}
 				
 }

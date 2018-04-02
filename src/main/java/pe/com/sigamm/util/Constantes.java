@@ -97,7 +97,10 @@ public class Constantes {
 	//--- ETIQUETAS SERVICIOS
 	public static final String ETIQUETA_SERVICIO_NOMBRE		= "lblnombre";
 	public static final String ETIQUETA_SERVICIO_IMPORTE	= "lblimporte";
-	
+	public static final String ETIQUETA_SERVICIO_PERIODO	= "lblperiodo";
+		
 	public static final String NOMBRE_SERVICIO_OBLIGATORIO		= "El nombre del servicio es obligatorio.";
 	public static final String IMPORTE_SERVICIO_OBLIGATORIO		= "El importe del servicio es obligatorio.";
+	public static final String PERIODO_SERVICIO_OBLIGATORIO		= "El periodo del servicio es obligatorio.";
+	
 }
