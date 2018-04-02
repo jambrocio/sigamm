@@ -58,8 +58,8 @@ public class CobrosFacturadosController {
 
 		String ruta = System.getProperty("ruta_ireport") != null ? System.getProperty("ruta_ireport") : ""; 
 		
-		String rutaJRXML = ruta + "Reporte_Facturacion_por_Fechas" + ".jrxml";
-		String rutaJASPER = ruta + "Reporte_Facturacion_por_Fechas" + ".jasper";
+		String rutaJRXML = ruta + "Reporte_Facturacion_por_Fechas_solo" + ".jrxml";
+		String rutaJASPER = ruta + "Reporte_Facturacion_por_Fechas_solo" + ".jasper";
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		//parameters.put("ReportTitle", Constantes.IREPORT_TITULO_FACTURACION_DIARIO);
